@@ -2,9 +2,9 @@
 
 namespace Zofe\Rapyd;
 
-
 class Url
 {
+
     public $url;
     protected $semantic = array(
         'pag', 'orderby',
@@ -43,15 +43,15 @@ class Url
         return $url;
     }
 
-    public function getArray() {
+    public function getArray()
+    {
         if ($this->url == '') {
-            $this->url =  $this->current();
-        } 
+            $this->url = $this->current();
+        }
         parse_str(parse_url($this->url, PHP_URL_QUERY), $params);
         return $params;
     }
-    
-    
+
     public function append($key, $value)
     {
         $url = $this->get();
@@ -146,4 +146,5 @@ class Url
             return (isset($params[$key])) ? $params[$key] : $default;
         }
     }
+
 }
