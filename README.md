@@ -8,7 +8,7 @@ This is a laravel 4 package port of rapyd-framework crud widgets
 ## install 
 
 
-To `composer.json` add: `"desmart/pagination": "1.1.*"` 
+To `composer.json` add: `"zofe/rapyd": "dev-master"` 
 and then run: `$ composer update zofe/rapyd`.
 
 In `app/config/app.php` add this service provider: `'Zofe\Rapyd\RapydServiceProvider',`.
