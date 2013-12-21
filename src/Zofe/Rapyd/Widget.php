@@ -45,55 +45,6 @@ class Widget
 		}
 	}
 
-    
-	/**
-	 * dynamic getter & setter 
-	 * 
-	 * it's used basically to ensure method chaining and to get & set widget's properties
-	 * it also enable "short array" syntax  so you can use $widget->method('param|param') and it will call
-	 * $widget->setMethod('param','param')
-	 * 
-	 * @param string $method
-	 * @param array $arguments
-	 * @return object $this 
-	 */
-	/*public function __call($method, $arguments)
-	{
-		$prefix = strtolower(substr($method, 0, 3));
-		$property = strtolower(substr($method, 3));
-		if (method_exists($this, 'set' . ucfirst($method)))
-		{
-			return call_user_func_array(array($this, 'set' . ucfirst($method)), $arguments);
-		}
-
-		if (empty($prefix) || empty($property))
-		{
-			return;
-		}
-
-		if ($prefix == "get" && isset($this->$property))
-		{
-			return $this->$property;
-		}
-
-		if ($prefix == "set")
-		{
-			if
-			(
-					!in_array($property, array('cell_template', 'pattern'))
-					AND is_string($arguments[0])
-					AND strpos($arguments[0], '|')
-			)
-			{
-				$this->$property = explode('|', $arguments[0]);
-			} else
-			{
-				$this->$property = $arguments[0];
-			}
-			return $this;
-		}
-	}*/
-    
 	/**
 	 * "echo $widget" automatically call build() it and display $widget->output
 	 * however explicit build is preferred for a clean code
