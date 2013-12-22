@@ -21,7 +21,7 @@ It add the ability to order result and keep persistence of all params in query s
 i.e.:
 ```
 /myroute?page=2&ord=-name   will get page 2 order by "name" descending
-/myroute?page=3&ord=name&other=xx   will get page 3 order by "name" ascending  and keeping "other=xx"  in all generated links
+/myroute?page=3&ord=name&other=xx  will get page 3 order by "name" ascending and keeping "other=xx"
 ```
 
 in a controller 
