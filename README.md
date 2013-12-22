@@ -17,7 +17,7 @@ In `app/config/app.php` add this service provider: `'Zofe\Rapyd\RapydServiceProv
 
 in a controller 
 ```
-   //using db table name
+   //using db table name or query
   $dataset = DataSet::source("tablename")->paginate(10)->getSet();
   //or using eloquent
   $dataset = DataSet::source(Article::with("comments"))->paginate(10)->getSet();
