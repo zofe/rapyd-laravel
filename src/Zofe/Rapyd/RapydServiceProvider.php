@@ -18,7 +18,7 @@ class RapydServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('zofe/rapyd');
+		$this->package('zofe/rapyd','rapyd');
         include __DIR__.'/../../routes.php';
 	}
 
