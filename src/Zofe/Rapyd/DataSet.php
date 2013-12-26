@@ -37,7 +37,7 @@ class DataSet extends Widget
         $ins->source = $source;
         
         //inherit cid from datafilter
-        if (is_object($ins->source)) {
+        if (is_object($ins->source) && is_a($ins->source,"\Zofe\Rapyd\DataFilter")) {
             $ins->cid = $ins->source->cid;
         }
         //generate new component id
@@ -80,7 +80,7 @@ class DataSet extends Widget
             $this->type = "query";
             $this->query = $this->table($this->source);
         }
-        elseif (is_a($this->source, "\Illuminate\Database\Eloquent\Model") || is_a($this->source,"\Illuminate\Database\Eloquent\Builder")) {
+        elseif (is_a($this->source, "\Illuminate\Database\Eloquent\Model") || is_a($this->source,"\Illuminate\Database\Eloquent\Builder")  || is_a($this->source,"\Illuminate\Database\Query\Builder")) {
            $this->type = "model";
            $this->query = $this->source;
         }
