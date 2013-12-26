@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-
-
 use Illuminate\Support\Facades\Paginator;
+use Zofe\Rapyd\Exceptions\DataSetException;
+
 class DataSet extends Widget
 {
 
@@ -87,7 +87,11 @@ class DataSet extends Widget
         //array
         elseif (is_array($this->source)) {
             $this->type = "array";
-        } 
+        } else {
+             throw new DataSetException(' "source" must be a table name, an eloquent model or an eloquent builder.');
+        }
+        
+        
 
         //build orderby urls
         $this->orderby_uri_asc = $this->url->remove('page' . $this->cid)->remove('reset' . $this->cid)->append('ord' . $this->cid, "-field-")->get() . $this->hash;;
