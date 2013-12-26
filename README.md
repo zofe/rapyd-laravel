@@ -27,10 +27,12 @@ i.e.:
 in a controller 
 
 ```php
-   //using db table name or query
+   //using table name
    $dataset = DataSet::source("tablename")->paginate(10)->getSet();
+   //or using query
+   $dataset = DataSet::source(DB::table('users')->select('name', 'email'))->paginate(10)->getSet();
    //or using eloquent
-   $dataset = DataSet::source(Article::with("comments"))->paginate(10)->getSet();
+   $dataset = DataSet::source(Article::all())->paginate(10)->getSet();
    //or using array
    $dataset = DataSet::source($multidimensional_array)->paginate(10)->getSet();
 ```
