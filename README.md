@@ -55,10 +55,32 @@ in a view you can use
 ```
 
 
+
 ## DataGrid
 
-todo
+DataGrid extend DataSet to make data-grid output with few lines of fluent code.  
+It build a bootstrap triped table, with pagination at bottom and order-by links on table header.
+  
+in a controller 
 
+```php
+   //you can use seme source types of DataSet 
+   $dataset = DataGrid::source("articles");
+   $datagrid->add('title','Title', true); //sortable column
+   $datagrid->add('sef','Url Segment');
+   $datagrid->paginate(10);
+   $grid = $datagrid->getGrid();
+
+  //or if you're unsatisfied of default grid output
+   $grid = $datagrid->getGrid("my-custom-view"); 
+
+```
+
+in a view you can just output
+
+```php
+    {{ $grid }}
+```
 
 ## DataEdit
 
