@@ -32,19 +32,23 @@ class DataGrid extends DataSet
             }
         }
         $this->rows = $this->data;
-        /*foreach ($this->data as $tablerow) {
+        
+        foreach ($this->data as $tablerow) {
+            
             foreach ($this->columns as $column) {
+                
+                var_dump($tablerow);
+                die;
 
-                if $column is closure unset($cell);
-                $column->setRow($tablerow);
-                $cell = get_object_vars($column);
-                $cell["value"] = $column->getValue();
-                $cell["type"] = $column->column_type;
+                //$column->setRow($tablerow);
+                //$cell = get_object_vars($column);
+                //$cell["value"] = $column->getValue();
                 $row[] = $cell;
+                
             }
             $this->rows[] = $row;
             unset($row);
-        }*/
+        }
         if ($view == '') $view = 'rapyd::datagrid';
         return View::make($view, array('dg' => $this));
     }
