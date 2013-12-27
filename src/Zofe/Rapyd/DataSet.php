@@ -33,7 +33,7 @@ class DataSet extends Widget
     
     public static function source($source)
     {
-        $ins = new self;
+        $ins = new static;
         $ins->source = $source;
         
         //inherit cid from datafilter
