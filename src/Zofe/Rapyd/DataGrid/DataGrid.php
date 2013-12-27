@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
+use Zofe\Rapyd\DataSet;
 use Zofe\Rapyd\DataGrid\Column;
 use Zofe\Rapyd\Exceptions\DataGridException;
 
