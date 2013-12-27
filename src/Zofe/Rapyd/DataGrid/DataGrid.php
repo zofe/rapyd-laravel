@@ -3,8 +3,8 @@
 
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
-use Zofe\Rapyd\DataSet;
-use Zofe\Rapyd\DataGrid\Column;
+use Zofe\Rapyd\DataSet as DataSet;
+use Zofe\Rapyd\DataGrid\Column as Column;
 use Zofe\Rapyd\Exceptions\DataGridException;
 
 class DataGrid extends DataSet
