@@ -3,7 +3,7 @@
 
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
-use Zofe\Rapyd\DataGrid\Column as Column;
+use Zofe\Rapyd\DataGrid\Column;
 use Zofe\Rapyd\Exceptions\DataGridException;
 
 class DataGrid extends DataSet
@@ -13,27 +13,15 @@ class DataGrid extends DataSet
     public $columns = array();
     public $rows = array();
     public $output = "";
-    public $row_as = null;
-
-    
-    public function setColumn($name, $label = null, $orderby = false)
+   
+    public function add($name, $label = null, $orderby = false)
     {
-        $config['row_as'] = $this->row_as;
-        $config['pattern'] = $name;
-        $config['label'] = ($label != "") ? $label : $name;
-        $config['orderby'] = $orderby;
-
-        $column = new Column($config);
+        $column = new Column($name, $label, $orderby);
         $this->columns[] = $column;
         return $this;
     }
-    
-    public function add($name, $label = null, $orderby = false)
-    {
-        return $this->setColumn($name, $label, $orderby);
-    }
 
-    public function buildGrid($view='rapyd::datagrid')
+    public function build($view)
     {
         parent::build();
 
@@ -43,12 +31,11 @@ class DataGrid extends DataSet
                 $column->orderby_desc_url = $this->orderbyLink($column->orderby, 'desc');
             }
         }
-        
-        foreach ($this->data as $tablerow) {
-            unset($row);
+        $this->rows = $this->data;
+        /*foreach ($this->data as $tablerow) {
             foreach ($this->columns as $column) {
 
-                unset($cell);
+                if $column is closure unset($cell);
                 $column->setRow($tablerow);
                 $cell = get_object_vars($column);
                 $cell["value"] = $column->getValue();
@@ -56,14 +43,15 @@ class DataGrid extends DataSet
                 $row[] = $cell;
             }
             $this->rows[] = $row;
-        }
+            unset($row);
+        }*/
 
         return View::make($view, array('dg' => $this));
     }
 
-    public function getGrid($type = 'Grid')
+    public function getGrid($view='rapyd::datagrid')
     {
-        $this->build($type);
+        $this->output = $this->build($view);
         return $this->output;
     }
 

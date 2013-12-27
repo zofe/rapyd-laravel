@@ -42,6 +42,7 @@ class RapydServiceProvider extends ServiceProvider {
           $loader = \Illuminate\Foundation\AliasLoader::getInstance();
           //$loader->alias('Rapyd', 'Zofe\Rapyd\Facades\Rapyd');
           $loader->alias('DataSet', 'Zofe\Rapyd\Facades\DataSet');
+          $loader->alias('DataGrid', 'Zofe\Rapyd\Facades\DataGrid');
         });
 	}
 
@@ -52,7 +53,7 @@ class RapydServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('dataset');
+		return array('dataset','datagrid');
 	}
 
 }
