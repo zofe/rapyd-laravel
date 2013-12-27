@@ -59,7 +59,7 @@ in a view you can use
 ## DataGrid
 
 DataGrid extend DataSet to make data-grid output with few lines of fluent code.  
-It build a bootstrap triped table, with pagination at bottom and order-by links on table header.
+It build a bootstrap striped table, with pagination at bottom and order-by links on table header.
   
 in a controller 
 
