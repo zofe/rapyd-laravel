@@ -33,9 +33,9 @@ class DataGrid extends DataSet
             }
         }
         $this->rows = $this->data;
-        
+        $row = array();
         foreach ($this->data as $tablerow) {
-            
+            unset($row);
             foreach ($this->columns as $column) {
                 
                 if (is_object($tablerow) && !property_exists($tablerow, $column->name))
@@ -47,7 +47,6 @@ class DataGrid extends DataSet
                 
             }
             $this->rows[] = $row;
-            unset($row);
         }
         if ($view == '') $view = 'rapyd::datagrid';
         return View::make($view, array('dg' => $this));
