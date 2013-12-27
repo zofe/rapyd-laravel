@@ -11,7 +11,6 @@ class Column extends Widget
     public $attributes = array();
     public $tr_attributes = array();
     public $tr_attr = array();
-    public $column_type = "normal"; //orderby, detail
     public $orderby = null;
     public $orderby_asc_url;
     public $orderby_desc_url;
@@ -22,18 +21,19 @@ class Column extends Widget
     protected $field_name = null;
     protected $field_list = array();
 
-    public function __construct()
+    public function __construct($name, $label = null, $orderby = false)
     {
-        $this->check_pattern();
+        $this->name = $name;
+        $this->label($label);
+        $this->orderby($label);
     }
-
 
     protected function label($label)
     {
         $this->label = $label;
     }
 
-    public function orderby($orderby)
+    protected function orderby($orderby)
     {
         $this->orderby = $orderby;
         return $this;
