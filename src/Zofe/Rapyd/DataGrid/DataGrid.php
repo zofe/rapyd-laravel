@@ -38,13 +38,12 @@ class DataGrid extends DataSet
             
             foreach ($this->columns as $column) {
                 
-                var_dump($tablerow);
-                die;
+                if (is_object($tablerow) && !property_exists($tablerow, $column->name))
 
                 //$column->setRow($tablerow);
                 //$cell = get_object_vars($column);
                 //$cell["value"] = $column->getValue();
-                $row[] = $cell;
+                $row[] =  $tablerow->{$column->name};
                 
             }
             $this->rows[] = $row;
