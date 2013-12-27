@@ -2,7 +2,7 @@
 
 
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\View as View;
 use Zofe\Rapyd\DataSet as DataSet;
 use Zofe\Rapyd\DataGrid\Column as Column;
 use Zofe\Rapyd\Exceptions\DataGridException;
@@ -26,24 +26,27 @@ class DataGrid extends DataSet
     {
         parent::build();
 
-        foreach ($this->columns as & $column) {
+        foreach ($this->columns as $column) {
             if (isset($column->orderby)) {
                 $column->orderby_asc_url = $this->orderbyLink($column->orderby, 'asc');
                 $column->orderby_desc_url = $this->orderbyLink($column->orderby, 'desc');
             }
         }
-        $this->rows = $this->data;
-        $row = array();
+       // $this->rows = $this->data;
+        
+       
         foreach ($this->data as $tablerow) {
-            unset($row);
+            $row = array(); 
             foreach ($this->columns as $column) {
-                
-                if (is_object($tablerow) && !property_exists($tablerow, $column->name))
 
-                //$column->setRow($tablerow);
-                //$cell = get_object_vars($column);
-                //$cell["value"] = $column->getValue();
-                $row[] =  $tablerow->{$column->name};
+                //todo: move in a setdata > getvalue to the column class
+                if (is_object($tablerow) && property_exists($tablerow, $column->name))
+                {
+                    $row[] =  $tablerow->{$column->name};
+                } elseif(is_array($tablerow) && isset($tablerow[$column->name])) {
+                    $row[] = $tablerow[$column->name];
+                }
+                
                 
             }
             $this->rows[] = $row;

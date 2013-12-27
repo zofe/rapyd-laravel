@@ -51,10 +51,12 @@ class Widget
      * 
      * @return string 
      */
-    function __toString()
+    public function __toString()
     {
         if ($this->output == "")
+        {    
             $this->build();
+        }
         return $this->output;
     }
 

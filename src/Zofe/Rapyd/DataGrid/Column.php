@@ -25,7 +25,7 @@ class Column extends Widget
     {
         $this->name = $name;
         $this->label($label);
-        $this->orderby($label);
+        $this->orderby($orderby);
     }
 
     protected function label($label)

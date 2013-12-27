@@ -3,15 +3,11 @@
 <table class="table table-striped">
  
     <tr>
-     @foreach ($dg->columns as column)
+     @foreach ($dg->columns as $column)
             <th>
-            @if $column->orderby
-                 <a href="{{ $dg->orderby_link($column->orderby_field,'asc') }}">
-                     <i class="fa fa-angle-up"></i>
-                 </a>
-                 <a href="{{ $dg->orderby_link($column->orderby_field,'desc') }}">
-                     <i class="fa fa-angle-down"></i>
-                 </a> 
+            @if ($column->orderby)
+                 <a href="{{ $dg->orderbyLink($column->name,'asc') }}"><span class="glyphicon glyphicon-arrow-up"></span></a>
+                 <a href="{{ $dg->orderbyLink($column->name,'desc') }}"><span class="glyphicon glyphicon-arrow-down"></span></a> 
                 {{ $column->label }}
             @else
                 {{ $column->label }}
