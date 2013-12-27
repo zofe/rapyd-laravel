@@ -23,7 +23,7 @@
     @foreach ($dg->rows as $row)
         <tr>
             @foreach ($row as $cell)
-            <td>{{ cell->value }}</td>
+            <td>{{ $cell }}</td>
             @endforeach
         </tr>
     @endforeach
