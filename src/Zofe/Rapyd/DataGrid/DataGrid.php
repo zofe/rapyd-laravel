@@ -21,7 +21,7 @@ class DataGrid extends DataSet
         return $this;
     }
 
-    public function build($view)
+    public function build($view='')
     {
         parent::build();
 
@@ -45,11 +45,11 @@ class DataGrid extends DataSet
             $this->rows[] = $row;
             unset($row);
         }*/
-
+        if ($view == '') $view = 'rapyd::datagrid';
         return View::make($view, array('dg' => $this));
     }
 
-    public function getGrid($view='rapyd::datagrid')
+    public function getGrid($view='')
     {
         $this->output = $this->build($view);
         return $this->output;
