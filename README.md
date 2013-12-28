@@ -13,7 +13,7 @@ Default way to create a CRUD for an entity with laravel  is to make a controller
 - update record (pre-filled form)
 - delete record
  
-Not a lot of stuff, and Eloquent ORM is easy to bind to get & edit data, then there is artisan & generator package to make a lot of code in few console commands...   
+Eloquent to get & edit data, then there is artisan & generator package to make a lot of code in few console commands...   
 But what about Views? You've to write at least 3-4 views, for each entity you need to manage.
 
 Rapyd use a different approach, widget based.  
