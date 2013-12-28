@@ -212,9 +212,8 @@ class Field extends Widget
             $this->value = $this->update_value;
         } elseif (($this->status == "show") && ($this->show_value != null)) {
             $this->value = $this->show_value;
-        } elseif ((isset($this->model)) && ($this->model->loaded) && (!isset($_POST[$this->name])) && (isset($this->db_name))) {
-            $name = $this->db_name;
-            $this->value = $this->model->get($name);
+        } elseif ((isset($this->model))  && (!isset($_POST[$this->name])) && (isset($this->db_name))) {
+            $this->value = $this->model->{ $this->db_name};
         }
         $this->getMode();
     }
@@ -350,9 +349,9 @@ class Field extends Widget
                 return true;
             }
             if (isset($this->new_value)) {
-                $this->model->set($this->db_name, $this->new_value);
+                $this->model->{$this->db_name} = $this->new_value;
             } else {
-                $this->model->set($this->db_name, $this->value);
+                $this->model->{$this->db_name} = $this->value;
             }
             if ($save) {
                 return $this->model->save();

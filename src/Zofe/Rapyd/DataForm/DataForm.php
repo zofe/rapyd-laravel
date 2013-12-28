@@ -37,6 +37,12 @@ class DataForm extends Widget
         $this->fields[$name] = $field_obj;
         return $field_obj;
     }
+    
+    public function submit($label)
+    {
+        $field_obj = $this->add('submit',$label, "submit");
+        return $field_obj;
+    }
 
     public function &field($field_name)
     {
