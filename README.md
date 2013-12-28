@@ -66,7 +66,7 @@ in a controller
 ```php
    //you can use same source types of DataSet 
    $datagrid = DataGrid::source("articles");
-   $datagrid->add('title','Title', true); //sortable column
+   $datagrid->add('title','Title', true); //name, label, sortable
    $datagrid->add('sef','Url Segment');
    $datagrid->paginate(10);
    $grid = $datagrid->getGrid();
