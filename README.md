@@ -90,10 +90,10 @@ in a view you can just write
 ```php
    //empty form
    $dataform = DataForm::create();
-   //associated to a eloquent model (empty or loaded)
+   //associated with an eloquent model (empty or loaded)
    $dataform = DataForm::source(Article::find(1));
    
-   $dataform->add('nome','Nome', 'text');
+   $dataform->add('nome','Nome', 'text');  //name, label, type
    $dataform->add('sef','Url', 'text');
    $form = $dataform->getForm();
 
