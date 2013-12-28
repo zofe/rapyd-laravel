@@ -4,28 +4,6 @@ rapyd-laravel
 This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.
 
-## In short
-
-Default way to create a CRUD for an entity with laravel  is to make a controller, with a method for each action:
-
-- show records (usually a grid with pagination)
-- create record (empty form & validation)
-- update record (pre-filled form)
-- delete record
- 
-Eloquent to get & edit data, then there is artisan & generator package to make a lot of code in few console commands...   
-But what about Views? You've to write at least 3-4 views, for each entity you need to manage.
-
-Rapyd use a different approach, widget based.  
-
-_You need to "show" and "edit" record from an entity?_  
-Ok so you need a controller with two methods :
-- one for a DataGrid 
-- one for a DataEdit
-
-For both  you need only to define fields to display / manage.
-
-
 ## install 
 
 
@@ -129,3 +107,26 @@ in a view you can just write
  _* in development *_
  
 
+
+
+
+## In short
+
+Default way to create a CRUD for an entity with laravel  is to make a controller, with a method for each action:
+
+- show records (usually a grid with pagination)
+- create record (empty form & validation)
+- update record (pre-filled form)
+- delete record
+ 
+Eloquent to get & edit data, then there is artisan & generator package to make a lot of code in few console commands...   
+But what about Views? You've to write at least 3-4 views, for each entity you need to manage.
+
+Rapyd use a different approach, widget based.  
+
+_You need to "show" and "edit" record from an entity?_  
+Ok so you need a controller with two methods :
+- one for a DataGrid 
+- one for a DataEdit
+
+For both  you need only to define fields to display / manage.
