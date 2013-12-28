@@ -64,8 +64,8 @@ It build a bootstrap striped table, with pagination at bottom and order-by links
 in a controller 
 
 ```php
-   //you can use seme source types of DataSet 
-   $dataset = DataGrid::source("articles");
+   //you can use same source types of DataSet 
+   $datagrid = DataGrid::source("articles");
    $datagrid->add('title','Title', true); //sortable column
    $datagrid->add('sef','Url Segment');
    $datagrid->paginate(10);
@@ -76,10 +76,10 @@ in a controller
 
 ```
 
-in a view you can just output
+in a view you can just write
 
 ```php
-    {{ $grid }}
+  {{ $grid }}
 ```
 
 ## DataEdit
