@@ -1,6 +1,4 @@
-<?php
-
-namespace Zofe\Rapyd;
+<?php namespace Zofe\Rapyd;
 
 class Widget
 {

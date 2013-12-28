@@ -82,6 +82,23 @@ in a view you can just write
   {{ $grid }}
 ```
 
-## DataEdit
+## DataForm
 
-todo
+ _* in development *_
+ 
+
+```php
+   //empty form
+   $dataform = DataForm::create();
+   //starting from model (empty or loaded)
+   $dataform = DataForm::source(Attrice::find(1));
+   
+   $dataform->add('nome','Nome', 'text');
+   $dataform->add('sef','Url', 'text');
+   $form = $dataform->getForm();
+
+```
+
+```php
+  {{ $form }}
+```

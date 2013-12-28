@@ -43,6 +43,7 @@ class RapydServiceProvider extends ServiceProvider {
           //$loader->alias('Rapyd', 'Zofe\Rapyd\Facades\Rapyd');
           $loader->alias('DataSet', 'Zofe\Rapyd\Facades\DataSet');
           $loader->alias('DataGrid', 'Zofe\Rapyd\Facades\DataGrid');
+          $loader->alias('DataForm', 'Zofe\Rapyd\Facades\DataForm');
         });
 	}
 
