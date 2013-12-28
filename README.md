@@ -10,7 +10,7 @@ Default way to create a CRUD for an entity with laravel  is to make a controller
 
 - show records (usually a grid with pagination)
 - create record (empty form & validation)
-- update existing record (pre-filled form)
+- update record (pre-filled form)
 - delete record
  
 Not a lot of stuff, and Eloquent ORM is easy to bind to get & edit data, then there is artisan & generator package to make a lot of code in few console commands...   
