@@ -94,6 +94,7 @@ in a view you can just write
    
    $dataform->add('nome','Nome', 'text');
    $dataform->add('sef','Url', 'text');
+   $dataform->submit('Save');
    $form = $dataform->getForm();
 
 ```
