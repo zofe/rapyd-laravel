@@ -90,7 +90,7 @@ in a view you can just write
 ```php
    //empty form
    $dataform = DataForm::create();
-   //starting from model (empty or loaded)
+   //associated to a eloquent model (empty or loaded)
    $dataform = DataForm::source(Article::find(1));
    
    $dataform->add('nome','Nome', 'text');
