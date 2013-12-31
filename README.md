@@ -111,7 +111,7 @@ in a view you can just write
 
 ## Including Bootstrap
 
-Rapyd widgets is compatible with Bootstrap 3  
+Rapyd is compatible with Bootstrap 3  
 
 You can use a CDN 
 
