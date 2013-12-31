@@ -213,7 +213,7 @@ class Field extends Widget
         } elseif (($this->status == "show") && ($this->show_value != null)) {
             $this->value = $this->show_value;
         } elseif ((isset($this->model))  && (!isset($_POST[$this->name])) && (isset($this->db_name))) {
-            $this->value = $this->model->{ $this->db_name};
+            $this->value = $this->model->getAttribute($this->db_name);
         }
         $this->getMode();
     }
@@ -268,14 +268,6 @@ class Field extends Widget
                 $this->apply_rules = false;
                 break;
 
-            case "optionalupdate":
-                if ($this->action == "update") {
-                    if (!isset($_POST[$this->name . "CheckBox"])) {
-                        $this->apply_rules = false;
-                    }
-                }
-                break;
-
             case "autoshow":
                 if (($this->status == "create") || ($this->action == "insert")) {
                     $this->status = "hidden";
@@ -311,18 +303,7 @@ class Field extends Widget
     {
         if (is_array($options)) {
             $this->options += $options;
-        } elseif (strpos(strtolower($options), "select") !== FALSE) {
-          /*  rpd::$db->query($options);
-            //$result = rpd::$db->row();
-            while ($row = rpd::$db->row()) {
-                $values = $row; //array_values($row);
-                $this->set_option($values[0], $values[1]);
-                if (count($values) == 4) {
-                    $this->set_option_group($values[0], $values[1], $values[2], $values[3]);
-                }
-            }
-           */
-        }
+        } 
         return $this;
     }
 
@@ -344,14 +325,14 @@ class Field extends Widget
         $this->getValue();
         $this->getNewValue();
 
-        if (is_object($this->model) && isset($this->db_name) && $this->options_table == "") {
-            if (!in_array($this->db_name, $this->model->field_names)) {
+        if (is_object($this->model) && isset($this->db_name)) {
+            if (!$this->model->offsetExists($this->db_name)) {
                 return true;
             }
             if (isset($this->new_value)) {
-                $this->model->{$this->db_name} = $this->new_value;
+                $this->model->setAttribute($this->db_name, $this->new_value);
             } else {
-                $this->model->{$this->db_name} = $this->value;
+                $this->model->setAttribute($this->db_name, $this->value);
             }
             if ($save) {
                 return $this->model->save();

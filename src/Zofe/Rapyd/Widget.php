@@ -9,6 +9,10 @@ class Widget
     public $built = FALSE;
     public $url;
 
+    public $process_status = "idle";
+    public $status = "idle";
+    public $action = "idle";
+    
     public function __construct()
     {
         $this->url = new Url();

@@ -14,6 +14,14 @@ class DataForm extends Widget
     public $hash = "";
     protected $process_url = '';
     
+	public function __construct() {
+		parent::__construct();
+        $this->process_url = $this->url->append('process', 1)->get();
+    }
+
+    
+    
+    
     public function add($name, $label, $type, $validation = '')
     {
 
@@ -69,7 +77,86 @@ class DataForm extends Widget
     }
     
     
-    
+    protected  function is_valid(){
+        
+		//some fields mode can disable or change some rules.
+		foreach($this->fields as $field) {
+			$field->action = $this->action;
+			//$field->get_mode();
+			if (isset($field->rule)) {
+				//if (($field->type != "upload") && $field->apply_rules) {
+				//	$fieldnames[$field->name] = $field->label;
+					$rules[$field->name] = $field->rule;
+				//} else {
+				//	$field->required = false;
+				//}
+			}
+		}
+		if (isset($rules)) {
+            
+            $this->validator = Validator::make(Input::all(), $rules);
+            return !$this->validator->fails();
+		} else {
+			return true;
+		}
+        
+
+    }
+
+
+
+
+
+
+    protected function process() {
+		//database save
+		switch ($this->action) {
+			case "update":
+			case "insert":
+				//validation failed
+				if (!$this->is_valid()) {
+					$this->process_status = "error";
+					foreach($this->fields as $field) {
+						$field->action = "idle";
+					}
+					return false;
+				} else {
+					$this->process_status = "success";
+				}
+				foreach($this->fields as $field) {
+					$field->action = $this->action;
+					$result = $field->autoUpdate();
+					if (!$result) {
+						$this->process_status = "error";
+						return false;
+					}
+				}
+				if (isset($this->model)) {
+					$return = $this->model->save();
+				} else {
+					$return = true;
+				}
+				if (!$return) {
+					$this->process_status = "error";
+				}
+				return $return;
+			break;
+			case "delete":
+				$return = $this->model->delete();
+				if (!$return) {
+					$this->process_status = "error";
+				} else {
+					$this->process_status = "success";
+				}
+			break;
+			case "idle":
+				$this->process_status = "show";
+				return true;
+			break;
+			default:
+				return false;
+		}
+	}
     
     public function build_fields()
     {
@@ -85,16 +172,17 @@ class DataForm extends Widget
 
         //detect form status (output)
         if (isset($this->model)) {
-            $this->status = ($this->model->loaded) ? "modify" : "create";
+            $this->status = ($this->model->exists) ? "modify" : "create";
         } else {
             $this->status = "create";
         }
         //build fields
         $this->build_fields();
         //process only if instance is a dataform
-        if (is_a($this, 'dataform_library')) {
+        if (is_a($this, '\Zofe\Rapyd\DataForm\DataForm')) {
             //build buttons
-            $this->build_buttons();
+            //$this->build_buttons();
+            //
             //sniff action
             if (isset($_POST) && ( $this->url->value('process'))) {
                 $this->action = ($this->status == "modify") ? "update" : "insert";
@@ -119,8 +207,8 @@ class DataForm extends Widget
             $data['form_begin'] = '<div class="form">';
             $data['form_end'] = '</div>';
         } else {
-            $data['form_begin'] =  Form::open(array('class' => "form-horizontal",'role'=>"form"));
-            //($this->process_url, $this->attributes);
+
+            $data['form_begin'] =  Form::open(array('url'=>$this->process_url, 'class' => "form-horizontal",'role'=>"form"));
             $data['form_end'] =   Form::close();
         }
 
