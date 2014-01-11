@@ -198,7 +198,7 @@ class Field extends Widget
     public function getValue()
     {
         if (($this->request_refill == true) && isset($_POST[$this->name])) {
-            if (is_array($_POST[$this->name])) {
+           if (is_array($_POST[$this->name])) {
                 $values = array();
                 $this->value = implode($this->serialization_sep, $values);
             } else {

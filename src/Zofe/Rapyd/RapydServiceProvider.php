@@ -29,14 +29,8 @@ class RapydServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-        /*$this->app['rapyd'] = $this->app->share(function($app)
-        {
-           $rapyd = new Rapyd;
-           $rapyd->setUrlGenerator($app['url']);
-           $rapyd->setRouter($app['router']);
-           $rapyd->setRequest($app['request']);
-           return $rapyd;
-        });*/
+        	Rapyd::setContainer($this->app);
+
         $this->app->booting(function()
         {
           $loader = \Illuminate\Foundation\AliasLoader::getInstance();
@@ -44,6 +38,7 @@ class RapydServiceProvider extends ServiceProvider {
           $loader->alias('DataSet', 'Zofe\Rapyd\Facades\DataSet');
           $loader->alias('DataGrid', 'Zofe\Rapyd\Facades\DataGrid');
           $loader->alias('DataForm', 'Zofe\Rapyd\Facades\DataForm');
+          $loader->alias('DataEdit', 'Zofe\Rapyd\Facades\DataEdit');
         });
 	}
 

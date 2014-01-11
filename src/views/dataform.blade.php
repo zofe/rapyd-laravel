@@ -1,15 +1,14 @@
 
 
 
+
+
 {{ $form_begin }}
 
-@if ($label!="")
 
-{{ $label }}
+@include('rapyd::toolbar', array('label'=>$label, 'buttons'=>$buttons['TR']))
 
-@endif
-
-
+<div>
 @if (isset($groups))
     @foreach ($groups as $group)
 
@@ -38,6 +37,7 @@
                                         <a name="anchor_{{ $field["id"] }}"></a>
                                         <div class="col-sm-10" id="{{ $field["id"] }}">
                                         {{ $field["field"] }}
+                                        
                                     @elseif ($field["type"] == "submit")
                                         
                                         <div class="col-sm-10 col-sm-offset-2">
@@ -46,6 +46,17 @@
                                         <label for="{{ $field["id"] }}" class="col-sm-2 control-label">{{ $field["label"].$field["star"] }}</label>
                                         <div class="col-sm-10" id="div_{{ preg_replace('/[^A-Za-z0-9_]*/', '', $field["id"]) }}">
                                         {{ $field["field"] }}
+                                        
+                                         @if($errors->has($field["id"])) 
+                                            
+                                                @foreach ($errors->get($field["id"]) as $message)
+                                                    <span class="help-block">
+                                                        <span class="glyphicon glyphicon-warning-sign"></span> 
+                                                        {{ $message }}
+                                                    </span>
+                                                @endforeach
+                                            
+                                        @endif
                                     @endif
                             @else
                                    {{ $field["field"] }}
@@ -66,7 +77,9 @@
 
     @endforeach
 @endif
+</div>
 
+@include('rapyd::toolbar', array('buttons'=>$buttons['BL']))
 
 
 {{ $form_end }}

@@ -25,6 +25,7 @@ class Text extends Field {
         } else {
           $output = nl2br(htmlspecialchars($this->value));
         }
+        $output = "<div class='help-block'>".$output."</div>";
         break;
 
       case "create":

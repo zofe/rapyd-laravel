@@ -1,5 +1,8 @@
 <?php namespace Zofe\Rapyd;
 
+use Illuminate\Support\Facades\Form;
+use Illuminate\Support\Facades\HTML;
+
 class Widget
 {
 
@@ -12,6 +15,8 @@ class Widget
     public $process_status = "idle";
     public $status = "idle";
     public $action = "idle";
+    
+    public $button_container = array( "TR"=>array(), "BL"=>array(), "BR"=>array() );
     
     public function __construct()
     {
@@ -47,6 +52,30 @@ class Widget
         }
     }
 
+    
+    function button($name, $position="BL", $attributes=array())
+    {
+        $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
+        
+        $this->button_container[$position][] = Form::button($name, $attributes);
+        return $this;
+    }
+    
+    function link($url, $name, $position="BL", $attributes=array())
+    {
+        $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
+        $this->button_container[$position][] =  Html::link($url, $name, $attributes);
+        return $this;
+    }
+    
+    function linkRoute($route, $name, $parameters=array(), $position="BL", $attributes=array())
+    {
+        $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
+        $this->button_container[$position][] = Html::linkRoute($route, $name, $parameters, $attributes);
+        return $this;
+    }
+
+    
     /**
      * "echo $widget" automatically call build() it and display $widget->output
      * however explicit build is preferred for a clean code

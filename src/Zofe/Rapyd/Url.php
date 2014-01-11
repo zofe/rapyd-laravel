@@ -1,6 +1,6 @@
-<?php
+<?php namespace Zofe\Rapyd;
 
-namespace Zofe\Rapyd;
+use Illuminate\Support\Facades\Request;
 
 class Url
 {
@@ -26,6 +26,7 @@ class Url
 
     public function get()
     {
+        Rapyd::getContainer('url')->to($this->current());
         if ($this->url == '') {
             return $this->current();
         } else {
@@ -37,10 +38,7 @@ class Url
 
     public function current()
     {
-        if (isset($_SERVER['HTTP_X_ORIGINAL_URL']))
-            $_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_ORIGINAL_URL'];
-        $url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : @getenv('REQUEST_URI');
-        return $url;
+        return Request::fullUrl();
     }
 
     public function getArray()
@@ -131,7 +129,7 @@ class Url
         if (strpos($key, '|')) {
             $keys = explode('|', $key);
             foreach ($keys as $k) {
-                $v = $this->valueQS($k, $default);
+                $v = $this->value($k, $default);
                 if ($v != $default)
                     return $v;
             }
