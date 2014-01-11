@@ -142,23 +142,17 @@ class DataEdit extends DataForm
         if ($this->status == "show") {
 
             $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), "modify",  "TR");
-            $this->link($this->url->replace('show' . $this->cid, 'delete' . $this->cid)->get(), "delete",  "TR");
-            //$this->submit('save');
+            //$this->link($this->url->replace('show' . $this->cid, 'delete' . $this->cid)->get(), "delete",  "TR");
         }
         //modify
         if ($this->status == "modify") {
 
             $this->link($this->url->replace('modify' . $this->cid, 'show' . $this->cid)
                                   ->replace('update' . $this->cid, 'show' . $this->cid)->get(), "undo",  "TR");
-            //$this->link($this->url->replace('show' . $this->cid, 'delete' . $this->cid), "delete",  "TR");
             $this->submit('save');
         }
         //modify
         if ($this->status == "create") {
-
-            //$this->link($this->url->replace('create' . $this->cid, 'show' . $this->cid)
-            //                      ->replace('insert' . $this->cid, 'show' . $this->cid)->get(), "undo",  "TR");
-            //$this->link($this->url->replace('show' . $this->cid, 'delete' . $this->cid), "delete",  "TR");
             $this->submit('save');
         }
     }
@@ -168,169 +162,5 @@ class DataEdit extends DataForm
        
         return $this->getForm($view);
     }
-    
-  /*  
-	protected function modify_button($config = null) {
-		$caption = (isset($config['caption'])) ? $config['caption'] : rpd::lang('btn.modify');
-		if ($this->status_is("show") && rpd_url_helper::value('show' . $this->cid)) {
-			$modify_url = rpd_url_helper::replace('show' . $this->cid, 'modify' . $this->cid);
-			$action = "javascript:window.location='" . $modify_url . "'";
-			$this->button("btn_modify", $caption, $action, "TR");
-		}
-	}
 
-	protected function delete_button($config = null) {
-		$caption = (isset($config['caption'])) ? $config['caption'] : rpd::lang('btn.delete');
-		if ($this->status_is("show") && rpd_url_helper::value('show' . $this->cid)) {
-			$delete_url = rpd_url_helper::replace('show' . $this->cid, 'delete' . $this->cid);
-			$action = "javascript:window.location='" . $delete_url . "'";
-			$this->button("btn_delete", $caption, $action, "TR");
-		} elseif ($this->status_is("delete")) {
-			$action = "javascript:window.location='" . $this->process_url . "'";
-			$this->button("btn_delete", $caption, $action, "BL");
-		}
-	}
-	// --------------------------------------------------------------------
-	public function save_button($config = null) {
-		$caption = (isset($config['caption'])) ? $config['caption'] : rpd::lang('btn.save');
-		if ($this->status_is(array("create", "modify"))) {
-			$this->submit("btn_submit", $caption, "BL");
-		}
-	}
-	// --------------------------------------------------------------------
-	protected function undo_button($config = null) {
-		$caption = (isset($config['caption'])) ? $config['caption'] : rpd::lang('btn.undo');
-		if ($this->status_is("create")) {
-			$action = "javascript:window.location='{$this->back_url}'";
-			$this->button("btn_undo", $caption, $action, "TR");
-		} elseif ($this->status_is("modify")) {
-			if (($this->back_cancel_save === FALSE) || ($this->back_cancel === FALSE)) {
-				//is modify
-				if (rpd_url_helper::value('modify' . $this->cid)) {
-					$undo_url = rpd_url_helper::replace('modify' . $this->cid, 'show' . $this->cid);
-				}
-				//is modify on error
-				elseif (rpd_url_helper::value('update' . $this->cid)) {
-					$undo_url = rpd_url_helper::replace('update' . $this->cid, 'show' . $this->cid);
-				}
-				$action = "javascript:window.location='" . $undo_url . "'";
-			} else {
-				$action = "javascript:window.location='{$this->back_url}'";
-			}
-			$this->button("btn_undo", $caption, $action, "TR");
-		} elseif ($this->status_is("delete")) {
-			if (($this->back_cancel_delete === FALSE) || ($this->back_cancel === FALSE)) {
-				$action = "javascript:window.location='{$this->undo_url}'";
-			} else {
-				$action = "javascript:window.location='{$this->back_url}'";
-			}
-			$this->button("btn_undo", $caption, $action, "TR");
-		}
-	}
-
-	protected function back_button($config = null) {
-
-		$caption = (isset($config['caption'])) ? $config['caption'] : rpd::lang('btn.back');
-		if ($this->status_is(array("show", "unknow_record")) || $this->action_is("delete")) {
-			$action = "javascript:window.location='{$this->back_url}'";
-			$this->button("btn_back", $caption, $action, "BL");
-		}
-	}
-*/
-    
-    
-    
-    
-   /* public function build($view = '')
-    {
-        $this->sniffStatus();
-        $this->buildFields();
-        $this->sniffAction();
-        $this->process();
-        return $this->buildForm($view);
-    }*/
-    
-    /*
-
-    function process()
-    {
-        switch ($this->action) {
-            case "update":
-                if ($this->on("error")) {
-                    $this->set_status("modify");
-                    $this->process_url = $this->url->get_url();
-                    return $this->build_form();
-                }
-                if ($this->on("success")) {
-                    $qs = (count($this->model->pk) < 2) ? current($this->model->pk) : $this->model->pk;
-                    $this->postprocess_url = $this->url->append('show' . $this->cid, $qs, $this->postprocess_url);
-                    if ($this->back_save) {
-                        header("Location: " . $this->back_url);
-                        exit();
-                    } else {
-                        header("Location: " . $this->postprocess_url);
-                        exit();
-                    }
-                }
-                break;
-            case "insert":
-                if ($this->on("error")) {
-                    $this->set_status("create");
-                    $this->process_url = $this->url->get_url();
-                    $this->build_buttons();
-                    $this->build_fields(); //rebuild fields to update new status (strictly needed?)
-                    return $this->build_form();
-                }
-                if ($this->on("success")) {
-                    $qs = (count($this->model->pk) < 2) ? reset($this->model->pk) : $this->model->pk;
-                    $this->postprocess_url = $this->url->append('show' . $this->cid, $qs, $this->postprocess_url);
-                    if ($this->back_save) {
-
-                        header("Location: " . $this->back_url);
-                        exit();
-                    } else {
-                        header("Location: " . $this->postprocess_url);
-                        exit();
-                    }
-                }
-                break;
-            case "delete":
-                if ($this->on("error")) {
-                    $this->build_buttons();
-                    return $this->build_message('!errore durante la cancellazione');
-                }
-                if ($this->on("success")) {
-                    $this->build_buttons();
-                    if ($this->back_delete) {
-                        header("Location: " . $this->back_url);
-                        exit();
-                    } else {
-                        return $this->build_message('record cancellato');
-                    }
-                }
-                break;
-                
-        }
-        switch ($this->status) {
-            case "show":
-            case "modify":
-            case "create":
-                $this->build_buttons();
-                return $this->build_form();
-                break;
-            case "delete":
-                $this->build_buttons();
-                return $this->build_message('confermi la cancellazione?');
-                break;
-            case "unknow_record":
-                $this->build_buttons();
-                return $this->build_message('record sconosciuto');
-                break;
-        }
-        
-    }
-*/
-
-    
- 
 }
