@@ -162,17 +162,18 @@ Default way to create a CRUD for an entity with laravel  is to make a controller
 
 - show records (usually a grid with pagination)
 - create record (empty form & validation)
-- update record (pre-filled form)
-- delete record
+- update record (pre-filled form & validation)
+- delete record (an action with a redirect)
  
-Eloquent to get & edit data, then there is artisan & generator package to make a lot of code in few console commands...   
-But what about Views? You've to write at least 3-4 views, for each entity you need to manage.
+Whit artisan and Generator package you can make a lot of code in few console commands...   
+But you've to write/modify at least 3 views for each entity you need to manage.  
+You've to take care about forms, errors, redirects, routes etc. 
 
-Rapyd use a different approach, widget based.  
+Rapyd use a different approach (worst in terms of flexibility but fast/rapid in terms of development and maintenance):
 
 _You need to "show" and "edit" record from an entity?_  
 Ok so you need a controller with two methods :
-- one for a DataGrid 
-- one for a DataEdit
+- one for a DataGrid widget
+- one for a DataEdit widget
 
 For both  you need only to define fields to display / manage.
