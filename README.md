@@ -83,17 +83,20 @@ in a view you can just write
 
 ## DataForm
 
+ DataForm is a form builder, you can add fields, rules and buttons.  
+ It will build a bootstrap form, on submit it  will check rules and if validation pass it'll store new entity.  
  _* in development *_
  
 
 ```php
    //empty form
    $dataform = DataForm::create();
-   //starting from model (empty or loaded)
-   $dataform = DataForm::source(Attrice::find(1));
    
-   $dataform->add('nome','Nome', 'text');
-   $dataform->add('sef','Url', 'text');
+   //or starting from model (empty or loaded)
+   $dataform = DataForm::source(Article::find(1));
+   
+   $dataform->add('title','Title', 'text'); //name, label, type 
+   $dataform->add('sef','Url', 'text')->rule('required');
    $dataform->submit('Save');
    $form = $dataform->getForm();
 
@@ -104,10 +107,32 @@ in a view you can just write
 ```
 
 ## DataEdit
-
+  DataEdit extends DataForm, it's a full CRUD application for given Entity.  
+  It has status (create, modify, show) and actions (insert, update, delete) 
+  It detect status by simple query string semantic:
  _* in development *_
- 
 
+
+```
+  ?create=1			   empty form    to CREATE new records 
+  ?show={record_id}    filled output to READ record (without form)
+  ?modify={record_id}  filled form   to UPDATE a record
+  ?delete={record_id}  perform   record DELETE
+  ...
+```
+
+```php
+   //simple crud for Article entity
+   $dataedit = DataEdit::source(new Article);
+   $dataedit->add('title','Title', 'text')->rule('required');
+   $dataedit->add('sef','Url', 'text');
+   $crud = $dataedit->getEdit();
+
+```
+
+```php
+  {{ $crud }}
+```
 
 ## Including Bootstrap
 
