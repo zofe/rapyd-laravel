@@ -136,9 +136,9 @@ in a view you can just write
 
 ## Including Bootstrap
 
-Rapyd is compatible with Bootstrap 3  
+Rapyd need Bootstrap 3 css (not included) 
 
-You can use a CDN 
+You can use a CDN  and include in your HEAD tags
 
 ```html
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
