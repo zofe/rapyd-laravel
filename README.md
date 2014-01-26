@@ -126,12 +126,14 @@ in a view you can just write
    $dataedit = DataEdit::source(new Article);
    $dataedit->add('title','Title', 'text')->rule('required');
    $dataedit->add('sef','Url', 'text');
-   $crud = $dataedit->getEdit();
+   $form = $dataedit->getForm();   
+   return $dataedit->view('crud', array('form' => $form));
 
 ```
 
 ```php
-  {{ $crud }}
+   #crud.blade.php
+  {{ $form }}
 ```
 
 ## Including Bootstrap
