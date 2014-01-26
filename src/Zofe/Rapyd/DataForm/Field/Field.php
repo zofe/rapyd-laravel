@@ -2,6 +2,7 @@
 
 use Zofe\Rapyd\Widget as Widget;
 use Illuminate\Support\Facades\Form;
+use Illuminate\Support\Facades\Schema;
 
 class Field extends Widget
 {
@@ -326,9 +327,12 @@ class Field extends Widget
         $this->getNewValue();
 
         if (is_object($this->model) && isset($this->db_name)) {
-            if (!$this->model->offsetExists($this->db_name)) {
-                return true;
+
+            if (!Schema::hasColumn($this->model->getTable(), $this->db_name))
+            {
+                 return true;
             }
+            
             if (isset($this->new_value)) {
                 $this->model->setAttribute($this->db_name, $this->new_value);
             } else {

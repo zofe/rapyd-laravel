@@ -6,6 +6,7 @@ use Zofe\Rapyd\DataForm\DataForm;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
 
 class DataEdit extends DataForm
 {
@@ -104,7 +105,7 @@ class DataEdit extends DataForm
 
                     //settare messaggio in sessione o in variabile
                     $this->status = "modify";
-
+                    return Redirect::to($this->url->replace('update' . $this->cid, 'show'. $this->cid)->get());
 				}
                 
 			break;
@@ -115,6 +116,8 @@ class DataEdit extends DataForm
 				}
 				if ($this->on("success")) {
                     $this->status = "show";
+                    
+                    return Redirect::to($this->url->remove('insert' . $this->cid)->append('show'.$this->cid, $this->model->getKey())->get());
 				}
 			break;
 			case "delete":
@@ -159,7 +162,7 @@ class DataEdit extends DataForm
     
     public function getEdit($view = '')
     {
-       
+        
         return $this->getForm($view);
     }
 

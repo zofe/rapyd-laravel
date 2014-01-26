@@ -13,6 +13,7 @@ class DataForm extends Widget
 
     public $model;
     public $output = "";
+    protected $redirect = null;
     protected $source;
     public $fields = array();
     public $hash = "";
@@ -239,11 +240,12 @@ class DataForm extends Widget
     
     public function build($view = '')
     {
+        if ($this->output != '') return;
         if ($view!='') $this->view = $view;
         $this->sniffStatus();
         $this->sniffAction();
         $this->process();
-
+        
         $this->buildFields();
         $this->buildButtons();
         $this->output = $this->buildForm();
@@ -255,6 +257,27 @@ class DataForm extends Widget
         return $this->output;
     }
 
+    
+    public function hasRedirect() {
+        return ($this->redirect != null) ? true : false;
+    }
+    
+    public function getRedirect() {
+        return $this->redirect;
+    } 
+    
+    public function view($viewname, $array=array())
+    {
+        $form = $this->getForm();
+
+        $array['form'] = $form;
+        if ($this->hasRedirect()) return $this->getRedirect();
+        return  View::make($viewname, $array);
+    }
+
+    
+    
+    
     protected function orderFields($fields)
     {
         //prepare nested fields
