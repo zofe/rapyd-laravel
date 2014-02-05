@@ -4,20 +4,6 @@ rapyd-laravel
 This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.
 
-## install 
-
-
-To `composer.json` add: `"zofe/rapyd": "dev-master"` 
-and then run: `$ composer update zofe/rapyd`.
-
-In `app/config/app.php` add this service provider: `'Zofe\Rapyd\RapydServiceProvider',`.
-
-
-## Publish assets
-
-`php artisan asset:publish zofe/rapyd`
-
-
 ## DataSet
 
 DataSet can paginate results starting from query, eloquent collection or multidimensional array.  
@@ -142,6 +128,29 @@ in a view you can just write
    #crud.blade.php
   {{ $form }}
 ```
+
+## Install 
+
+
+To `composer.json` add: `"zofe/rapyd": "dev-master"` 
+and then run: `$ composer update zofe/rapyd`.
+
+In `app/config/app.php` add this service provider: `'Zofe\Rapyd\RapydServiceProvider',`.
+
+
+## Publish & integrate assets
+
+`php artisan asset:publish zofe/rapyd`
+
+then you need to add this to your view's header,  to let rapyd add runtime assets in page:
+
+```php
+<head>
+  ...
+  {{ Rapyd::head() }}
+</head>
+```
+
 
 ## Including Bootstrap
 
