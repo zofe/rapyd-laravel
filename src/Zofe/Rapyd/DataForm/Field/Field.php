@@ -1,6 +1,6 @@
 <?php namespace Zofe\Rapyd\DataForm\Field;
 
-use Zofe\Rapyd\Widget as Widget;
+use Zofe\Rapyd\Widget;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Schema;
 

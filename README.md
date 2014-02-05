@@ -12,6 +12,12 @@ and then run: `$ composer update zofe/rapyd`.
 
 In `app/config/app.php` add this service provider: `'Zofe\Rapyd\RapydServiceProvider',`.
 
+
+## Publish assets
+
+`php artisan asset:publish zofe/rapyd`
+
+
 ## DataSet
 
 DataSet can paginate results starting from query, eloquent collection or multidimensional array.  
