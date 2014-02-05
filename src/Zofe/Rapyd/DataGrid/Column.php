@@ -45,36 +45,7 @@ class Column extends Widget
         $this->img = $img;
         return $this;
     }
-
-    /*
-    public function setRow($data_row)
-    {
-        if (isset($data_row[$this->pattern])) {
-            $this->rpattern = $data_row[$this->pattern];
-        } else {
-            if (isset($this->row_as)) {
-                $data_row =  array($this->row_as => $data_row);
-            } else {
-                $data_row = get_object_vars($data_row);
-            }
-            $this->rpattern = $this->parser->render($this->pattern, $data_row);
-        }
-        
-        if (isset($this->callback_object)) {
-            $this->rpattern = call_user_func(array($this->callback_object, $this->callback), $data_row);
-        } elseif (isset($this->callback)) {
-            $this->rpattern = call_user_func($this->callback, $data_row);
-        }
-        if ($this->url) {
-            if (!isset($this->attributes['style']))
-                $this->attributes['style'] = 'width: 70px; text-align:center; padding-right:5px';
-            $this->link = $this->parser->render($this->url, $data_row);
-        }
-
-        //manage attributes
-    }
-    */
-    
+     
     public function attributes($attributes)
     {
         $this->attributes = $attributes;

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\HTML;
-
+use Illuminate\Support\Facades\App;
 class Widget
 {
 
@@ -21,6 +21,7 @@ class Widget
     public function __construct()
     {
         $this->url = new Url();
+        $this->parser = new Parser(App::make('files'), App::make('path').'/storage/views');
     }
 
     /**
@@ -37,22 +38,6 @@ class Widget
         return (string) self::$identifier++;
     }
 
-    /**
-     * {placeholder} support for pesentation widgets
-     * parse_pattern find all occurences of holders and return a simple array of matches
-     * it's used for example to find "field" placeholders inside a datagrid column pattern
-     * 
-     * @param string $pattern
-     * @return array of matches {placeholders} 
-     */
-    public static function parse_pattern($pattern)
-    {
-        if (preg_match_all('/\{(\w+)\}/is', $pattern, $matches)) {
-            return $matches[1];
-        }
-    }
-
-    
     function button($name, $position="BL", $attributes=array())
     {
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);

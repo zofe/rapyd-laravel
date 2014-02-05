@@ -1,6 +1,5 @@
 <?php namespace Zofe\Rapyd\DataGrid;
 
-
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View as View;
 use Zofe\Rapyd\DataSet as DataSet;
@@ -14,7 +13,7 @@ class DataGrid extends DataSet
     public $columns = array();
     public $rows = array();
     public $output = "";
-   
+
     public function add($name, $label = null, $orderby = false)
     {
         $column = new Column($name, $label, $orderby);
@@ -22,7 +21,7 @@ class DataGrid extends DataSet
         return $this;
     }
 
-    public function build($view='')
+    public function build($view = '')
     {
         parent::build();
 
@@ -32,30 +31,32 @@ class DataGrid extends DataSet
                 $column->orderby_desc_url = $this->orderbyLink($column->orderby, 'desc');
             }
         }
-       // $this->rows = $this->data;
-        
-       
+
         foreach ($this->data as $tablerow) {
-            $row = array(); 
+            $row = array();
+
             foreach ($this->columns as $column) {
 
-                //todo: move in a setdata > getvalue to the column class
-                if (is_object($tablerow) && property_exists($tablerow, $column->name))
-                {
-                    $row[] =  $tablerow->{$column->name};
-                } elseif(is_array($tablerow) && isset($tablerow[$column->name])) {
+
+                if (strpos($column->name, '{{') !== false) {
+                    $row[] = $this->parser->compileString($column->name, (array)$tablerow);
+                } elseif (is_object($tablerow) && property_exists($tablerow, $column->name)) {
+                    $row[] = $tablerow->{$column->name};
+                } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
                     $row[] = $tablerow[$column->name];
+                } else {
+                    $row[] = $column->name;
                 }
-                
-                
             }
             $this->rows[] = $row;
         }
-        if ($view == '') $view = 'rapyd::datagrid';
+
+        if ($view == '')
+            $view = 'rapyd::datagrid';
         return View::make($view, array('dg' => $this));
     }
 
-    public function getGrid($view='')
+    public function getGrid($view = '')
     {
         $this->output = $this->build($view);
         return $this->output;

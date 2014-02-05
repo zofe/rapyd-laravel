@@ -59,14 +59,15 @@ in a view you can use
 
 DataGrid extend DataSet to make data-grid output with few lines of fluent code.  
 It build a bootstrap striped table, with pagination at bottom and order-by links on table header.
-  
+It support also  blade syntax inline. 
+
 in a controller 
 
 ```php
    //you can use same source types of DataSet 
    $datagrid = DataGrid::source("articles");
    $datagrid->add('title','Title', true); //sortable column
-   $datagrid->add('sef','Url Segment');
+   $datagrid->add('{{ strtolower($sef) }}','Url Segment'); //blade syntax
    $datagrid->paginate(10);
    $grid = $datagrid->getGrid();
 
