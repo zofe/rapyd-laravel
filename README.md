@@ -142,7 +142,7 @@ In `app/config/app.php` add this service provider: `'Zofe\Rapyd\RapydServiceProv
 
 `php artisan asset:publish zofe/rapyd`
 
-then you need to add this to your view's header,  to let rapyd add runtime assets in page:
+then you need to add this to your views,  to let rapyd add runtime assets:
 
 ```php
 <head>
