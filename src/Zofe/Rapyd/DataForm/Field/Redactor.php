@@ -36,7 +36,7 @@ class Redactor extends Field {
         $output  = Form::textarea($this->db_name, $this->value, $this->attributes);
         $output .= Rapyd::script("
         $(document).ready(function() {
-                 $('#".$this->name."').redactor();
+                 $('#".$this->name."').redactor( {minHeight: 100} );
         });");
 
         break;

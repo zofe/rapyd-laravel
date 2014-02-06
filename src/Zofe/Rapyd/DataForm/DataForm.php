@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 
 class DataForm extends Widget
 {
@@ -271,7 +272,7 @@ class DataForm extends Widget
         $form = $this->getForm();
 
         $array['form'] = $form;
-        if ($this->hasRedirect()) return $this->getRedirect();
+        if ($this->hasRedirect()) return Redirect::to($this->getRedirect());
         return  View::make($viewname, $array);
     }
 

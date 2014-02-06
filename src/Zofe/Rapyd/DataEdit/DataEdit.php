@@ -102,10 +102,11 @@ class DataEdit extends DataForm
 					//$this->process_url = rpd_url_helper::get_url();
 				}
 				if ($this->on("success")) {
-
+                    
                     //settare messaggio in sessione o in variabile
                     $this->status = "modify";
-                    return Redirect::to($this->url->replace('update' . $this->cid, 'show'. $this->cid)->get());
+                    $this->redirect = $this->url->replace('update' . $this->cid, 'show'. $this->cid)->get();
+                   
 				}
                 
 			break;
@@ -116,8 +117,7 @@ class DataEdit extends DataForm
 				}
 				if ($this->on("success")) {
                     $this->status = "show";
-                    
-                    return Redirect::to($this->url->remove('insert' . $this->cid)->append('show'.$this->cid, $this->model->getKey())->get());
+                     $this->redirect = $this->url->remove('insert' . $this->cid)->append('show'.$this->cid, $this->model->getKey())->get();
 				}
 			break;
 			case "delete":
