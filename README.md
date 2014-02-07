@@ -243,5 +243,31 @@ class AdminController extends BaseController {
 	} 
  
 }
+```
 
+/app/views/admin/edit.php
+```php
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link  href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.js"></script>
+   
+    {{ Rapyd::head() }}
+    
+  </head>
+
+  <body>
+  
+    <div id="wrap">
+      <div class="container">
+   
+        {{ $content }}
+        
+      </div>
+    </div>
+  </body>
+</html>
 ```
