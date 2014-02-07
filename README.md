@@ -216,25 +216,25 @@ Route::controller('admin', 'AdminController');
 ```php
 class AdminController extends BaseController {
 
-	public function getPosts()
+	public function getArticles()
 	{
         $grid = DataGrid::source( Article::with("user"));
-        $grid->link('/admin/post?create=1', "New Article",  "TR");
+        $grid->link('/admin/article?create=1', "New Article",  "TR");
         $grid->add('title','Title', true);
         $grid->add('sef','sef');
         $grid->add('{{ $row->user->email }}','author');
-        $grid->add('<a href="/admin/post?show={{ $id }}">edit</a>','edit');
-        $grid->add('<a href="/admin/post?do_delete={{ $id }}">delete</a>','delete');
+        $grid->add('<a href="/admin/article?show={{ $id }}">edit</a>','edit');
+        $grid->add('<a href="/admin/article?do_delete={{ $id }}">delete</a>','delete');
         $grid->paginate(10);
         $grid = $grid->getGrid();
         return  View::make('admin.edit', array('content' => $grid));
 
 	} 
 
-	public function anyPost()
+	public function anyArticle()
 	{
         $edit = DataEdit::source(new Article);
-        $edit->link('/admin/posts', "Article List",  "TR");
+        $edit->link('/admin/articles', "Article List",  "TR");
         $edit->add('title','Title', 'text')->rule('required');
         $edit->add('description','Description', 'redactor');
         $edit->add('sef','sef', 'text');
