@@ -4,6 +4,8 @@ rapyd-laravel
 This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.
 
+![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
+
 ## DataSet
 
 DataSet can paginate results starting from query, eloquent collection or multidimensional array.  
