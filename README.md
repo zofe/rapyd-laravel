@@ -20,10 +20,14 @@ in a controller
 ```php
    //using table name
    $dataset = DataSet::source("tablename")->paginate(10)->getSet();
+
    //or using query
    $dataset = DataSet::source(DB::table('users')->select('name', 'email'))->paginate(10)->getSet();
-   //or using eloquent
-   $dataset = DataSet::source(Article::all())->paginate(10)->getSet();
+
+   //or using eloquent model or eloquent builder 
+   $dataset = DataSet::source(new Article)->paginate(10)->getSet();
+   $dataset = DataSet::source(Article::with('author'))->paginate(10)->getSet();
+
    //or using array
    $dataset = DataSet::source($multidimensional_array)->paginate(10)->getSet();
 ```
@@ -37,7 +41,12 @@ in a view you can use
     {{ $dataset->orderbyLink('title', 'desc') }}
 
     @foreach ($dataset->data as $item)
+
     {{ $item->title }}<br />
+       
+          //eloquent relation
+         {{ $item->author->name }}<br />
+
     @endforeach
 
     PAGINATION <br />
