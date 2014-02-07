@@ -212,8 +212,8 @@ class AdminController extends BaseController {
 
 	public function getPosts()
 	{
-        $grid = DataGrid::source( Post::with("user"));
-        $grid->link('/admin/post?create=1', "New Post",  "TR");
+        $grid = DataGrid::source( Article::with("user"));
+        $grid->link('/admin/post?create=1', "New Article",  "TR");
         $grid->add('title','Title', true);
         $grid->add('sef','sef');
         $grid->add('{{ $row->user->email }}','author');
@@ -227,8 +227,8 @@ class AdminController extends BaseController {
 
 	public function anyPost()
 	{
-        $edit = DataEdit::source(new Post);
-        $edit->link('/admin/posts', "Post List",  "TR");
+        $edit = DataEdit::source(new Article);
+        $edit->link('/admin/posts', "Article List",  "TR");
         $edit->add('title','Title', 'text')->rule('required');
         $edit->add('description','Description', 'redactor');
         $edit->add('sef','sef', 'text');
