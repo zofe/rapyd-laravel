@@ -36,7 +36,7 @@ in a view you can use
 
 ```php
 <p>
-    ORDER LINKS<br />
+    //order by links
     {{ $dataset->orderbyLink('title', 'asc') }} <br />
     {{ $dataset->orderbyLink('title', 'desc') }}
 
@@ -49,7 +49,7 @@ in a view you can use
 
     @endforeach
 
-    PAGINATION <br />
+    //pagination links
     {{ $dataset->links() }}    
 </p>
 ```
