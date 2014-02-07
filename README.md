@@ -163,9 +163,9 @@ then you need to add this to your views,  to let rapyd add runtime assets:
 
 ## Including Bootstrap
 
-Rapyd need Bootstrap 3 css (not included) 
+Rapyd needs Bootstrap 3 css (not included) 
 
-You can use a CDN  and include in your HEAD tags
+You can use a CDN and include it in your HEAD tags
 
 ```html
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
@@ -217,7 +217,7 @@ class AdminController extends BaseController {
         $grid->add('title','Title', true);
         $grid->add('sef','sef');
         $grid->add('{{ $row->user->email }}','author');
-        $grid->add('<a href="/admin/post?show={{ $id }}"></a>','edit');
+        $grid->add('<a href="/admin/post?show={{ $id }}">edit</a>','edit');
         $grid->add('<a href="/admin/post?do_delete={{ $id }}">delete</a>','delete');
         $grid->paginate(10);
         $grid = $grid->getGrid();
