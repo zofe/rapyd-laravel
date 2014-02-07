@@ -9,6 +9,6 @@ class Rapyd extends Facade {
    *
    * @return string
    */
-  protected static function getFacadeAccessor() { return 'rapyd'; }
+  protected static function getFacadeAccessor() { return 'Zofe\Rapyd\Rapyd'; }
  
 }

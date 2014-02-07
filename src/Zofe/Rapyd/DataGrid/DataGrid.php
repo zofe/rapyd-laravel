@@ -32,28 +32,43 @@ class DataGrid extends DataSet
             }
         }
 
+        
         foreach ($this->data as $tablerow) {
             $row = array();
 
             foreach ($this->columns as $column) {
-
-
+                $cell = '';
+         
                 if (strpos($column->name, '{{') !== false) {
-                    $row[] = $this->parser->compileString($column->name, (array)$tablerow);
-                } elseif (is_object($tablerow) && property_exists($tablerow, $column->name)) {
-                    $row[] = $tablerow->{$column->name};
+                    
+                    if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
+                        $array = $tablerow->getAttributes();
+                        $array['row'] = $tablerow;
+                    } else {
+                        $array = (array)$tablerow;
+                    }
+                    $cell= $this->parser->compileString($column->name, $array);
+                } elseif (is_object($tablerow)) {   
+ 
+                    $cell = $tablerow->{$column->name};
+                    
                 } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
-                    $row[] = $tablerow[$column->name];
+                    $cell = $tablerow[$column->name];
                 } else {
-                    $row[] = $column->name;
+                    $cell = $column->name;
                 }
+                if ($column->link) {
+                    $cell =  '<a href="'.$this->parser->compileString($column->link, (array)$tablerow).'">'.$cell.'</a>'; 
+                }
+                
+                $row[] = $cell;
             }
             $this->rows[] = $row;
         }
 
         if ($view == '')
             $view = 'rapyd::datagrid';
-        return View::make($view, array('dg' => $this));
+        return View::make($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label));
     }
 
     public function getGrid($view = '')

@@ -1,4 +1,5 @@
 
+@include('rapyd::toolbar', array('label'=>$label, 'buttons'=>$buttons['TR']))
 
 <table class="table table-striped">
  

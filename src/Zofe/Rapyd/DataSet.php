@@ -80,15 +80,17 @@ class DataSet extends Widget
             $this->type = "query";
             $this->query = $this->table($this->source);
         }
-        elseif (is_a($this->source, "\Illuminate\Database\Eloquent\Model") || is_a($this->source,"\Illuminate\Database\Eloquent\Builder")  || is_a($this->source,"\Illuminate\Database\Query\Builder")) {
+        elseif (is_a($this->source,"\Illuminate\Database\Eloquent\Model")   ||
+                is_a($this->source,"\Illuminate\Database\Eloquent\Builder") || 
+                is_a($this->source,"\Illuminate\Database\Query\Builder")) {
            $this->type = "model";
            $this->query = $this->source;
         }
         //array
         elseif (is_array($this->source)) {
             $this->type = "array";
-        } else {
-             throw new DataSetException(' "source" must be a table name, an eloquent model or an eloquent builder.');
+        } else { 
+             throw new DataSetException(' "source" must be a table name, an eloquent model or an eloquent builder. you passed: '.  get_class($this->source));
         }
         
         
@@ -137,7 +139,7 @@ class DataSet extends Widget
             case "query":
             case "model":
                 //orderby
-
+                
                 if (isset($this->orderby)) {
                     $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1]);
                 }
@@ -145,7 +147,7 @@ class DataSet extends Widget
                 if (isset($this->limit)) {
                     $this->paginator = $this->query->paginate($this->limit);
                 }
-                
+
                 $this->data = $this->query->get();
                 break;
         }

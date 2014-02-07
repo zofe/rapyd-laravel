@@ -6,7 +6,11 @@ class Column extends Widget
 {
 
     public $url = "";
+    
+    
     public $link = "";
+    public $linkRoute = "";
+    
     public $label = "";
     public $attributes = array();
     public $tr_attributes = array();
