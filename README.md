@@ -206,7 +206,13 @@ Ok so you need a controller with two methods :
 For both  you need only to define fields to display / manage.
 Would you like to see a sample Backend ?  bum:
 
+/app/routes.php
+```php
+...
+Route::controller('admin', 'AdminController');
+```
 
+/app/controllers/AdminController.php
 ```php
 class AdminController extends BaseController {
 
