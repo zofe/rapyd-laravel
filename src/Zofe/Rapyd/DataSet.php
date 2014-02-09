@@ -146,9 +146,12 @@ class DataSet extends Widget
                 //limit-offset
                 if (isset($this->limit)) {
                     $this->paginator = $this->query->paginate($this->limit);
+                    $this->data = $this->paginator;
+                } else {
+                    $this->data = $this->query->get();
                 }
 
-                $this->data = $this->query->get();
+
                 break;
         }
         return $this;
