@@ -32,7 +32,6 @@ class DataGrid extends DataSet
             }
         }
 
-        
         foreach ($this->data as $tablerow) {
             $row = array();
 

@@ -223,7 +223,7 @@ class AdminController extends BaseController {
         $grid = DataGrid::source( Article::with("user"));
         $grid->link('/admin/article?create=1', "New Article",  "TR");
         $grid->add('title','Title', true);
-        $grid->add('sef','sef');
+        $grid->add('sef','Url');
         $grid->add('{{ $row->user->email }}','author');
         $grid->add('<a href="/admin/article?show={{ $id }}">edit</a>','edit');
         $grid->add('<a href="/admin/article?do_delete={{ $id }}">delete</a>','delete');
@@ -238,8 +238,9 @@ class AdminController extends BaseController {
         $edit = DataEdit::source(new Article);
         $edit->link('/admin/articles', "Article List",  "TR");
         $edit->add('title','Title', 'text')->rule('required');
+        $edit->add('sef','Url', 'text');
         $edit->add('description','Description', 'redactor');
-        $edit->add('sef','sef', 'text');
+        $edit->add('user_id','Author','select')->options(User::lists("username", "id"))->rule('required');
         $form = $edit->getForm();
         return $edit->view('admin.edit', array('content' => $form));
 	} 
