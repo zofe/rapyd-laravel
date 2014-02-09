@@ -39,6 +39,7 @@ class Select extends Field
                 } else {
                     $output = $this->description;
                 }
+                $output = "<div class='help-block'>".$output."</div>";
                 break;
 
             case "create":
