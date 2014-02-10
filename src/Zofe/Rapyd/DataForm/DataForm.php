@@ -212,11 +212,12 @@ class DataForm extends Widget
     {
         $data = get_object_vars($this);
         $data['buttons'] = $this->button_container;
-        $form_type = 'open';
+        
+        $form_attr = array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form");
         // See if we need a multipart form
         foreach ($this->fields as $field_obj) {
-            if ($field_obj instanceof upload_field) {
-                $form_type = 'open_multipart';
+            if ($field_obj->type == 'file') {
+                $form_attr['files'] = 'true';
                 break;
             }
         }
@@ -226,7 +227,8 @@ class DataForm extends Widget
             $data['form_end'] = '</div>';
         } else {
 
-            $data['form_begin'] = Form::open(array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form"));
+
+            $data['form_begin'] = Form::open($form_attr);
             $data['form_end'] = Form::close();
         }
         if (isset($this->validator)) {
