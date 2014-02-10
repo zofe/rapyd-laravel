@@ -130,6 +130,8 @@ in a view you can just write
    $dataedit = DataEdit::source(new Article);
    $dataedit->add('title','Title', 'text')->rule('required');
    $dataedit->add('sef','Url', 'text');
+   $dataedit->add('description','Description', 'textarea');
+   $dataedit->add('photo','Photo', 'file')->rule('image')->move('uploads/');
    $form = $dataedit->getForm();   
    return $dataedit->view('crud', array('form' => $form));
 
