@@ -3,6 +3,7 @@
 use Zofe\Rapyd\Widget;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Input;
 
 class Field extends Widget
 {
@@ -198,12 +199,12 @@ class Field extends Widget
 
     public function getValue()
     {
-        if (($this->request_refill == true) && isset($_POST[$this->name])) {
-           if (is_array($_POST[$this->name])) {
+        if (($this->request_refill == true) && Input::get($this->name)) {
+           if (is_array(Input::get($this->name))) {
                 $values = array();
                 $this->value = implode($this->serialization_sep, $values);
             } else {
-                $request_value = self::xssfilter($_POST[$this->name]);
+                $request_value = self::xssfilter(Input::get($this->name));
                 $this->value = $request_value;
             }
             $this->is_refill = true;
@@ -213,7 +214,7 @@ class Field extends Widget
             $this->value = $this->update_value;
         } elseif (($this->status == "show") && ($this->show_value != null)) {
             $this->value = $this->show_value;
-        } elseif ((isset($this->model))  && (!isset($_POST[$this->name])) && (isset($this->db_name))) {
+        } elseif ((isset($this->model))  && (Input::get($this->name)===null) && (isset($this->db_name))) {
             $this->value = $this->model->getAttribute($this->db_name);
         }
         $this->getMode();
@@ -228,14 +229,14 @@ class Field extends Widget
                 $this->action = "update";
             }
 
-            if (is_array($_POST[$this->name])) {
+            if (is_array(Input::get($this->name))) {
                 $values = array();
-                foreach ($_POST[$this->name] as $value) {
+                foreach (Input::get($this->name) as $value) {
                     $values[] = self::xssfilter($value);
                 }
                 $this->new_value = implode($this->serialization_sep, $values);
             } else {
-                $request_value = self::xssfilter($_POST[$this->name]);
+                $request_value = self::xssfilter(Input::get($this->name));
                 $this->new_value = $request_value;
             }
         } elseif (($this->action == "insert") && ($this->insert_value != null)) {
