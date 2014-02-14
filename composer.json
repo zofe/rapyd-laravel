@@ -1,6 +1,8 @@
 {
     "name": "zofe/rapyd",
-    "description": "This is a laravel 4 package port of rapyd-framework crud widgets",
+    "description": "crud widgets for laravel 4, port of rapyd",
+    "homepage": "https://github.com/zofe/rapyd-laravel",
+    "keywords": ["laravel","crud", "rapid"],
     "authors": [
         {
             "name": "zofe",
