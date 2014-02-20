@@ -12,7 +12,7 @@
     "require": {
         "php": ">=5.3.0",
         "illuminate/support": "4.x",
-        "illuminate/view": "4.X"
+        "illuminate/view": "4.x"
     },
     "autoload": {
         "classmap": [
