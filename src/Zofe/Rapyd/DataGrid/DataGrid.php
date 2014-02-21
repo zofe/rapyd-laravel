@@ -14,6 +14,13 @@ class DataGrid extends DataSet
     public $rows = array();
     public $output = "";
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param bool $orderby
+     *
+     * @return $this
+     */
     public function add($name, $label = null, $orderby = false)
     {
         $column = new Column($name, $label, $orderby);

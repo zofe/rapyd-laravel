@@ -20,6 +20,9 @@ class DataSet extends Widget
     public $hash = '';
     public $url;
 
+    /**
+     * @var \Illuminate\Pagination\Paginator
+     */
     public $paginator;
     protected $orderby_field;
     protected $orderby_direction;
@@ -30,14 +33,18 @@ class DataSet extends Widget
     protected $orderby_uri_asc;
     protected $orderby_uri_desc;
 
-    
+    /**
+     * @param $source
+     *
+     * @return static
+     */
     public static function source($source)
     {
         $ins = new static;
         $ins->source = $source;
         
         //inherit cid from datafilter
-        if (is_object($ins->source) && is_a($ins->source,"\Zofe\Rapyd\DataFilter")) {
+        if ($ins->source instanceof \Zofe\Rapyd\DataFilter) {
             $ins->cid = $ins->source->cid;
         }
         //generate new component id
@@ -53,8 +60,14 @@ class DataSet extends Widget
         $this->query = DB::table($table);
         return $this->query;
     }
-    
 
+
+    /**
+     * @param        $field
+     * @param string $dir
+     *
+     * @return mixed
+     */
     public function orderbyLink($field, $dir="asc")
     {
         $url = ($dir == "asc") ? $this->orderby_uri_asc : $this->orderby_uri_desc ;
@@ -64,8 +77,14 @@ class DataSet extends Widget
     public function orderby($field, $direction)
     {
         $this->orderby = array($field, $direction);
+        return $this;
     }
 
+    /**
+     * @param $items
+     *
+     * @return $this
+     */
     public function paginate($items)
     {
         $this->limit =  $items;
@@ -156,17 +175,29 @@ class DataSet extends Widget
         }
         return $this;
     }
-    
+
+    /**
+     * @return $this
+     */
     public function getSet()
     {
         $this->build();
         return $this;
     }
-    
+
+    /**
+     * @return array
+     */
     public function getData()
     {
         return $this->data;
     }
+
+    /**
+     * @param string $view
+     *
+     * @return mixed
+     */
     public function links($view=null)
     {
         if ($this->hash != '')
