@@ -2,7 +2,8 @@
 
 namespace Zofe\Rapyd\DataForm;
 
-use Zofe\Rapyd\Widget as Widget;
+use Illuminate\Database\Eloquent\Model;
+use Zofe\Rapyd\Widget;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
@@ -27,6 +28,14 @@ class DataForm extends Widget
         $this->process_url = $this->url->append('process', 1)->get();
     }
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $type
+     * @param string $validation
+     *
+     * @return mixed
+     */
     public function add($name, $label, $type, $validation = '')
     {
 
@@ -51,6 +60,13 @@ class DataForm extends Widget
         return $field_obj;
     }
 
+    /**
+     * @param string $name
+     * @param string $position
+     * @param array  $options
+     *
+     * @return $this
+     */
     function submit($name, $position = "BL", $options = array())
     {
         $options = array_merge(array("class" => "btn btn-primary"), $options);
@@ -58,6 +74,13 @@ class DataForm extends Widget
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @param string $position
+     * @param array  $options
+     *
+     * @return $this
+     */
     function reset($name, $position = "BL", $options = array())
     {
         $options = array_merge(array("class" => "btn btn-default"), $options);
@@ -78,6 +101,9 @@ class DataForm extends Widget
         }
     }
 
+    /**
+     * @return static
+     */
     public static function create()
     {
         $ins = new static;
@@ -85,16 +111,24 @@ class DataForm extends Widget
         return $ins;
     }
 
-    public static function source($source = '')
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $source
+     *
+     * @return static
+     */
+    public static function source(Model $source = null)
     {
         $ins = new static;
-        if (is_object($source) && is_a($source, "\Illuminate\Database\Eloquent\Model")) {
-            $ins->model = $source;
-        }
+
+        $source and $ins->model = $source;
+
         $ins->cid = $ins->getIdentifier();
         return $ins;
     }
 
+    /**
+     * @return bool
+     */
     protected function isValid()
     {
 
@@ -120,6 +154,11 @@ class DataForm extends Widget
         }
     }
 
+    /**
+     * @param string $process_status
+     *
+     * @return bool
+     */
     public function on($process_status = "false")
     {
         if (is_array($process_status))
@@ -239,8 +278,11 @@ class DataForm extends Widget
         //$data['extra_class'] = $this->extra_class;
         return View::make($this->view, $data);
     }
-    
-    
+
+
+    /**
+     * @param string $view
+     */
     public function build($view = '')
     {
         if ($this->output != '') return;
@@ -254,21 +296,37 @@ class DataForm extends Widget
         $this->output = $this->buildForm();
     }
 
+    /**
+     * @param string $view
+     *
+     * @return string
+     */
     public function getForm($view = '')
     {
         $this->build($view);
         return $this->output;
     }
 
-    
+    /**
+     * @return bool
+     */
     public function hasRedirect() {
         return ($this->redirect != null) ? true : false;
     }
-    
+
+    /**
+     * @return string
+     */
     public function getRedirect() {
         return $this->redirect;
-    } 
-    
+    }
+
+    /**
+     * @param       $viewname
+     * @param array $array
+     *
+     * @return View|Redirect
+     */
     public function view($viewname, $array=array())
     {
         $form = $this->getForm();
@@ -278,9 +336,11 @@ class DataForm extends Widget
         return  View::make($viewname, $array);
     }
 
-    
-    
-    
+    /**
+     * @param $fields
+     *
+     * @return array
+     */
     protected function orderFields($fields)
     {
         //prepare nested fields
@@ -343,5 +403,6 @@ class DataForm extends Widget
 
         return $groups;
     }
+
 
 }

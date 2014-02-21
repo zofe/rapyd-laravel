@@ -38,21 +38,47 @@ class Widget
         return (string) self::$identifier++;
     }
 
+    /**
+     * @param string $name
+     * @param string $position
+     * @param array  $attributes
+     *
+     * @return $this
+     */
     function button($name, $position="BL", $attributes=array())
     {
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
         
         $this->button_container[$position][] = Form::button($name, $attributes);
+
         return $this;
     }
-    
+
+    /**
+     * @param string $url
+     * @param string $name
+     * @param string $position
+     * @param array  $attributes
+     *
+     * @return $this
+     */
     function link($url, $name, $position="BL", $attributes=array())
     {
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
         $this->button_container[$position][] =  Html::link($url, $name, $attributes);
+
         return $this;
     }
-    
+
+    /**
+     * @param string $route
+     * @param string $name
+     * @param array  $parameters
+     * @param string $position
+     * @param array  $attributes
+     *
+     * @return $this
+     */
     function linkRoute($route, $name, $parameters=array(), $position="BL", $attributes=array())
     {
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
