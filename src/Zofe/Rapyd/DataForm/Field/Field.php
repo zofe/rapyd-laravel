@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Input;
 
-class Field extends Widget
+abstract class Field extends Widget
 {
 
     //main properties
