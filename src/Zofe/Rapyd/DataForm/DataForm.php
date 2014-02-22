@@ -3,6 +3,12 @@
 namespace Zofe\Rapyd\DataForm;
 
 use Illuminate\Database\Eloquent\Model;
+use Zofe\Rapyd\DataForm\Field\File;
+use Zofe\Rapyd\DataForm\Field\Redactor;
+use Zofe\Rapyd\DataForm\Field\Select;
+use Zofe\Rapyd\DataForm\Field\Submit;
+use Zofe\Rapyd\DataForm\Field\Text;
+use Zofe\Rapyd\DataForm\Field\Textarea;
 use Zofe\Rapyd\Widget;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\View;
@@ -15,10 +21,11 @@ class DataForm extends Widget
 
     public $model;
     public $output = "";
-    protected $redirect = null;
-    protected $source;
     public $fields = array();
     public $hash = "";
+
+    protected $redirect = null;
+    protected $source;
     protected $process_url = '';
     protected $view = 'rapyd::dataform';
 
@@ -42,16 +49,19 @@ class DataForm extends Widget
         if (strpos($type, "\\")) {
             $field_class = $type;
         } else {
-            $field_class = "\Zofe\Rapyd\DataForm\Field" . "\\" . ucfirst($type);
+            $field_class = '\Zofe\Rapyd\DataForm\Field' . "\\" . ucfirst($type);
         }
+
         $field_obj = new $field_class($name, $label);
         if ($field_obj->type == "file") {
             $this->multipart = true;
         }
+
         //share model
         if (isset($this->model)) {
             $field_obj->model = & $this->model;
         }
+
         //default group
         if (isset($this->default_group) && !isset($field_obj->group)) {
             $field_obj->group = $this->default_group;
@@ -405,4 +415,75 @@ class DataForm extends Widget
     }
 
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return File
+     */
+    public function addFile($name, $label, $validation = '')
+    {
+        return $this->add($name , $label, 'file', $validation);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Redactor
+     */
+    public function addRedactor($name, $label, $validation = '')
+    {
+        return $this->add($name , $label, 'redactor', $validation);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Select
+     */
+    public function addSelect($name, $label, $validation = '')
+    {
+        return $this->add($name , $label, 'select', $validation);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Submit
+     */
+    public function addSubmit($name, $label, $validation = '')
+    {
+        return $this->add($name , $label, 'submit', $validation);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Text
+     */
+    public function addText($name, $label, $validation = '')
+    {
+        return $this->add($name , $label, 'text', $validation);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Textarea
+     */
+    public function addTextarea($name, $label, $validation = '')
+    {
+        return $this->add($name , $label, 'textarea', $validation);
+    }
 }
