@@ -144,15 +144,10 @@ class DataSet extends Widget
                     }
                 }
 
-                //limit-offset
-                if (!isset($this->limit)) {
-                    //force to use paginator
-                     $this->limit = 1000000;
-                    
-                } 
-                $this->paginator = Paginator::make($this->source, count($this->source), $this->limit);
+               // @TODO: must be refactored
+                $this->paginator = Paginator::make($this->source, count($this->source), $this->limit ? $this->limit : 1000000);
                 //find better way 
-                $this->data =  array_slice($this->source, $this->paginator->getFrom()-1,$this->limit);
+                $this->data =  array_slice($this->source, $this->paginator->getFrom()-1, $this->limit);
                 break;
 
             case "query":
@@ -200,10 +195,17 @@ class DataSet extends Widget
      */
     public function links($view=null)
     {
-        if ($this->hash != '')
-            return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->links($view);
-        else
-            return $this->paginator->appends($this->url->remove('page')->getArray())->links($view);
+        if ($this->limit) {
+            if ($this->hash != '')
+                return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->links($view);
+            else
+                return $this->paginator->appends($this->url->remove('page')->getArray())->links($view);
+        }
     }
-     
+
+    public function havePagination()
+    {
+        return (bool) $this->limit;
+    }
+
 }
