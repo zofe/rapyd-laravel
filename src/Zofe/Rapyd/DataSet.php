@@ -44,7 +44,7 @@ class DataSet extends Widget
         $ins->source = $source;
         
         //inherit cid from datafilter
-        if ($ins->source instanceof \Zofe\Rapyd\DataFilter) {
+        if ($ins->source instanceof \Zofe\Rapyd\DataFilter\DataFilter) {
             $ins->cid = $ins->source->cid;
         }
         //generate new component id
