@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Session;
 // to be continued using laravel facades Input - Session  instead of globals...
 
 
-class Persitence {
+class Persistence {
 
 
   public static function get()
@@ -18,7 +18,7 @@ class Persitence {
   public static function save()
   {
     $self = $_SERVER['PHP_SELF'];
-    $page = self::getPersistence();
+    $page = self::get();
 
     if (count($_POST)<1)
     {
