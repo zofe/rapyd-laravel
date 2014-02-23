@@ -1,9 +1,9 @@
 <?php namespace Zofe\Rapyd;
 
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Session;
 
-
-// to be continued  ...
+// to be continued using laravel facades Input - Session  instead of globals...
 
 
 class Session {
