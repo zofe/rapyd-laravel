@@ -6,16 +6,16 @@ use Illuminate\Support\Facades\Session;
 // to be continued using laravel facades Input - Session  instead of globals...
 
 
-class Session {
+class Persitence {
 
 
-  public static function getPersistence()
+  public static function get()
   {
     $self = Request::url();
     return Session::get('rapyd.'.$self, array());
   }
 
-  public static function savePersistence()
+  public static function save()
   {
     $self = $_SERVER['PHP_SELF'];
     $page = self::getPersistence();
@@ -36,7 +36,7 @@ class Session {
 
 	// --------------------------------------------------------------------
 
-  public static function clearPersistence()
+  public static function clear()
   {
     $self = $_SERVER['PHP_SELF'];
     unset($_SESSION['rapyd'][$self]);
