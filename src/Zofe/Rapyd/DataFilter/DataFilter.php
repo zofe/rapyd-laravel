@@ -3,7 +3,7 @@
 namespace Zofe\Rapyd\DataFilter;
 
 use Zofe\Rapyd\DataForm\DataForm;
-use Zofe\Rapyd\Session;
+use Zofe\Rapyd\Persistence;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
@@ -54,22 +54,22 @@ class DataFilter extends DataForm
         if ($this->url->value('search')) {
             $this->action = "search";
             // persistence
-            Session::savePersistence();
+            Persistence::save();
         }
         ///// reset /////
         elseif ($this->url->value("reset")) {
             $this->action = "reset";
             // persistence cleanup
-            Session::clearPersistence();
+            Persistence::clear();
         }
         ///// show /////
         else {
-            $page = Session::getPersistence();
+            $page = Persistence::get();
             if (count($page)) {
                 $this->action = "search";
             }
             // persistence
-            Session::savePersistence();
+            Persistence::save();
         }
     }
     
