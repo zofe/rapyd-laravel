@@ -29,7 +29,7 @@ class DataFilter extends DataForm
      *
      * @return static
      */
-    public static function source($source)
+    public static function source($source = null)
     {
         $ins = new static;
         $ins->source = $source;
