@@ -126,12 +126,12 @@ class DataForm extends Widget
      *
      * @return static
      */
-    public static function source(Model $source = null)
+    public static function source($source = '')
     {
         $ins = new static;
-
-        $source and $ins->model = $source;
-
+        if (is_object($source) && is_a($source, "\Illuminate\Database\Eloquent\Model")) {
+            $ins->model = $source;
+        }
         $ins->cid = $ins->getIdentifier();
         return $ins;
     }
