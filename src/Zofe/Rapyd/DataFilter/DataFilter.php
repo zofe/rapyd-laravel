@@ -33,6 +33,7 @@ class DataFilter extends DataForm
     {
         $ins = new static;
         $ins->source = $source;
+        $ins->query =  $source;
         $ins->cid = $ins->getIdentifier();
         return $ins;
     }
@@ -78,17 +79,22 @@ class DataFilter extends DataForm
         //database save
         switch ($this->action) {
             case "search":
+                
+
                 // prepare the WHERE clause
                 foreach ($this->fields as $field) {
+                    $field->getValue();
+                    $field->getNewValue();
+
                     if ($field->value != "") {
                         if (strpos($field->name, "_copy") > 0) {
                             $name = substr($field->db_name, 0, strpos($field->db_name, "_copy"));
                         } else {
                             $name = $field->db_name;
                         }
-                        $field->get_value();
-                        $field->get_new_value();
+
                         $value = $field->new_value;
+                        
                         switch ($field->clause) {
                             case "like":
                                 $this->query = $this->query->where($name, 'LIKE', '%'.$value.'%');

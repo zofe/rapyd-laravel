@@ -142,6 +142,31 @@ in a view you can just write
   {{ $form }}
 ```
 
+
+## DataFilter
+DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by dafault using 'like' operator).   
+It should be used in conjunction with a DataSet or DataGrid to filter results.  
+ _* in development *_
+
+
+```php
+   $datafilter = DataFilter::source(new Attrice);
+   $datafilter->add('title','Title', 'text');
+   $datafilter->submit('search');
+   $filter = $datafilter->getForm();
+       
+   $datagrid = DataGrid::source($datafilter);
+   $datagrid->add('nome','Title', true);
+   $datagrid->add('sef','Url Segment');
+   $datagrid->paginate(10);
+   $grid = $datagrid->getGrid();
+
+```
+```php
+   # filtered.grid.blade
+   {{ $filter }}
+   {{ $grid }}
+```
 ## Install 
 
 
