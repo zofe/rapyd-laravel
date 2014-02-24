@@ -12,7 +12,7 @@ abstract class Field extends Widget
     public $type = "field";
     public $label;
     public $name;
-    public $attributes = array();
+    public $attributes = array('class' => 'form-control');
     public $output = "";
     public $visible = true;
     public $extra_output = "";
@@ -377,4 +377,8 @@ abstract class Field extends Widget
         }
     }
 
+//    public function generateFormId($id)
+//    {
+//        return preg_replace('/[^A-Za-z0-9_]*/', '',$id);
+//    }
 }
