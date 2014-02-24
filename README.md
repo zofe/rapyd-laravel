@@ -150,7 +150,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 
 ```php
-   $datafilter = DataFilter::source(new Attrice);
+   $datafilter = DataFilter::source(new Article);
    $datafilter->add('title','Title', 'text');
    $datafilter->submit('search');
    $filter = $datafilter->getForm();
