@@ -3,6 +3,7 @@
 namespace Zofe\Rapyd\DataForm;
 
 use Illuminate\Database\Eloquent\Model;
+use Zofe\Rapyd\DataForm\Field\Field;
 use Zofe\Rapyd\DataForm\Field\File;
 use Zofe\Rapyd\DataForm\Field\Redactor;
 use Zofe\Rapyd\DataForm\Field\Select;
@@ -45,7 +46,6 @@ class DataForm extends Widget
      */
     public function add($name, $label, $type, $validation = '')
     {
-
         if (strpos($type, "\\")) {
             $field_class = $type;
         } else {
@@ -53,6 +53,11 @@ class DataForm extends Widget
         }
 
         $field_obj = new $field_class($name, $label);
+
+        if ( ! $field_obj instanceof Field) {
+            throw new \InvalidArgumentException('Third argument («type») must point to class inherited Field class');
+        }
+
         if ($field_obj->type == "file") {
             $this->multipart = true;
         }
@@ -196,7 +201,7 @@ class DataForm extends Widget
 
     protected function buildButtons()
     {
-        
+
     }
 
     protected function sniffAction()
@@ -275,8 +280,6 @@ class DataForm extends Widget
             $data['form_begin'] = '<div class="form">';
             $data['form_end'] = '</div>';
         } else {
-
-
             $data['form_begin'] = Form::open($form_attr);
             $data['form_end'] = Form::close();
         }

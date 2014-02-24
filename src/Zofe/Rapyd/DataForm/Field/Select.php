@@ -8,8 +8,6 @@ class Select extends Field
     public $type = "select";
     public $description = "";
     public $clause = "where";
-    public $css_class = "select";
-
 
     function getValue()
     {
@@ -44,7 +42,7 @@ class Select extends Field
 
             case "create":
             case "modify":
-                $output = Form::select($this->name, $this->options, $this->value) . $this->extra_output;
+                $output = \Form::select($this->name, $this->options, $this->value, $this->attributes) . $this->extra_output;
                 break;
 
             case "hidden":
