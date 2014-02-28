@@ -36,11 +36,14 @@ class Url
         }
     }
 
-    public function current()
+    public function current($uri=false)
     {
+        if ($uri) return Request::url(); 
         return Request::fullUrl();
     }
 
+
+    
     public function getArray()
     {
         if ($this->url == '') {

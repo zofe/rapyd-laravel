@@ -98,9 +98,12 @@ class DataForm extends Widget
      */
     function reset($name, $position = "BL", $options = array())
     {
-        $options = array_merge(array("class" => "btn btn-default"), $options);
-        $this->button_container[$position][] = Form::reset($name, $options);
-        return $this;
+        //$options = array_merge(array("class" => "btn btn-default"), $options);
+        //$this->button_container[$position][] = Form::reset($name, $options);
+        //return $this;
+
+        return $this->link($this->url->current(true),  'Reset', $position);
+
     }
 
     /* public function submit($label)
