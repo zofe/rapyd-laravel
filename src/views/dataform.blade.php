@@ -4,7 +4,7 @@
 
 @include('rapyd::toolbar', array('label'=>$label, 'buttons'=>$buttons['TR']))
 
-<div>
+<div class="form-horizontal">
 @if (isset($groups))
     @foreach ($groups as $group)
 

@@ -101,6 +101,10 @@ in a view you can just write
    
    $dataform->add('title','Title', 'text'); //name, label, type 
    $dataform->add('sef','Url', 'text')->rule('required');
+   //or you can use shorthand methods, which presents for all supported field types
+   $dataform->addText('title','Title'); //name, label, type
+   $dataform->addText('sef','Url')->rule('required');
+
    $dataform->submit('Save');
    $form = $dataform->getForm();
 
@@ -159,6 +163,12 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    $datagrid->add('nome','Title', true);
    $datagrid->add('sef','Url Segment');
    $datagrid->paginate(10);
+
+   $grid->add('<a href="/article?show={{ $id }}">edit</a>','edit');
+   $grid->add('<a href="/article?do_delete={{ $id }}">delete</a>','delete');
+   // Or you can specify printing «stock» action buttons.
+   // You must pass uri which will handle records of your grid
+   $grid->addActions('/article');
    $grid = $datagrid->getGrid();
 
 ```
@@ -252,8 +262,7 @@ class AdminController extends BaseController {
         $grid->add('title','Title', true);
         $grid->add('sef','Url');
         $grid->add('{{ $row->user->email }}','author');
-        $grid->add('<a href="/admin/article?show={{ $id }}">edit</a>','edit');
-        $grid->add('<a href="/admin/article?do_delete={{ $id }}">delete</a>','delete');
+        $grid->addActions('/admin/article');
         $grid->paginate(10);
         $grid = $grid->getGrid();
         return  View::make('admin.edit', array('content' => $grid));
