@@ -1,35 +1,39 @@
 <?php namespace Zofe\Rapyd\DataGrid;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\View as View;
+use Illuminate\Support\Facades\View;
 use Zofe\Rapyd\DataSet as DataSet;
-use Zofe\Rapyd\DataGrid\Column as Column;
 use Zofe\Rapyd\Exceptions\DataGridException;
 
 class DataGrid extends DataSet
 {
 
     protected $fields = array();
+    /** @var Column[]  */
     public $columns = array();
     public $rows = array();
     public $output = "";
+
+    private $uri = null;
 
     /**
      * @param string $name
      * @param string $label
      * @param bool $orderby
      *
-     * @return $this
+     * @return Column
      */
     public function add($name, $label = null, $orderby = false)
     {
         $column = new Column($name, $label, $orderby);
-        $this->columns[] = $column;
-        return $this;
+        $this->columns[$name] = $column;
+        return $column;
     }
 
     public function build($view = '')
     {
+        ($view == '') and $view = 'rapyd::datagrid';
         parent::build();
 
         foreach ($this->columns as $column) {
@@ -44,8 +48,8 @@ class DataGrid extends DataSet
 
             foreach ($this->columns as $column) {
                 $cell = '';
-         
-                if (strpos($column->name, '{{') !== false) {
+
+                 if (strpos($column->name, '{{') !== false) {
                     
                     if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
                         $array = $tablerow->getAttributes();
@@ -66,15 +70,17 @@ class DataGrid extends DataSet
                 if ($column->link) {
                     $cell =  '<a href="'.$this->parser->compileString($column->link, (array)$tablerow).'">'.$cell.'</a>'; 
                 }
-                
+
+                if ($column->name == '__actions' and $this->uri) {
+                    $cell = \View::make('rapyd::datagrid.actions', array('uri' => $this->uri, 'id' => $tablerow->id))->renderSections();
+                    $cell = $cell['actions'];
+                }
                 $row[] = $cell;
             }
             $this->rows[] = $row;
         }
 
-        if ($view == '')
-            $view = 'rapyd::datagrid';
-        return View::make($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label));
+        return \View::make($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label));
     }
 
     public function getGrid($view = '')
@@ -83,4 +89,16 @@ class DataGrid extends DataSet
         return $this->output;
     }
 
+    public function addActions($base_uri)
+    {
+        $this->uri = $base_uri;
+        $this->add('__actions', 'Actions');
+    }
+
+    public function getColumn($column_name)
+    {
+        if (isset($this->columns[$column_name])) {
+            return $this->columns[$column_name];
+        }
+    }
 }

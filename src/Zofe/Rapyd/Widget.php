@@ -31,11 +31,11 @@ class Widget
      */
     protected function getIdentifier()
     {
-        if (self::$identifier < 1) {
-            self::$identifier++;
+        if (static::$identifier < 1) {
+            static::$identifier++;
             return "";
         }
-        return (string) self::$identifier++;
+        return (string) static::$identifier++;
     }
 
     /**
