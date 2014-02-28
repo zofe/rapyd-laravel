@@ -2,44 +2,55 @@
 
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
-
-// to be continued using laravel facades Input - Session  instead of globals...
+use Illuminate\Support\Facades\Input;
 
 
 class Persistence {
 
-
-  public static function get()
+  
+  public static function all()
   {
-    $self = Request::url();
+    $self = strtok(Request::server('REQUEST_URI'),'?');
     return Session::get('rapyd.'.$self, array());
+  }
+  
+  public static function get($key)
+  {
+    /*Session::flush();
+    Session::forget('rapyd');
+    Session::forget('rapyd/index');
+    Session::forget('rapyd/rapyd/grid');*/
+    $self = strtok(Request::server('REQUEST_URI'),'?');
+   
+    //var_export($_POST);
+    
+    //echo "\n\n";
+    //var_export(Session::get('rapyd.'.$self.".back_post.".$key)); 
+    //die;
+
+    return Session::get('rapyd.'.$self.".back_post.".$key, Input::get($key));
+      
   }
 
   public static function save()
   {
-    $self = $_SERVER['PHP_SELF'];
-    $page = self::get();
 
-    if (count($_POST)<1)
-    {
-      if ( isset($page["back_post"]) )
-      {
-        $_POST = $page["back_post"];
-      }
-    } else {
-      $page["back_post"]= $_POST;
-    }
-
+    $self = strtok(Request::server('REQUEST_URI'),'?');
+    $page = self::all();
+    $page["back_post"]= Input::all();
     $page["back_url"]= Request::url();
-    $_SESSION['rapyd'][$self] = $page;
+    Session::put('rapyd.'.$self, $page);
+    
+    //var_export(Session::all());
+    //echo "\n\n..";
+    //var_export(Session::get('rapyd.'.$self.".back_post".".nome")); 
+   //die;
   }
-
-	// --------------------------------------------------------------------
 
   public static function clear()
   {
-    $self = $_SERVER['PHP_SELF'];
-    unset($_SESSION['rapyd'][$self]);
+    $self = strtok(Request::server('REQUEST_URI'),'?');
+    Session::forget('rapyd.'.$self);
   }
 
 

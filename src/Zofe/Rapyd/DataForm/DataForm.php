@@ -24,7 +24,7 @@ class DataForm extends Widget
     public $output = "";
     public $fields = array();
     public $hash = "";
-
+    protected $method = 'POST';
     protected $redirect = null;
     protected $source;
     protected $process_url = '';
@@ -267,7 +267,7 @@ class DataForm extends Widget
         $data = get_object_vars($this);
         $data['buttons'] = $this->button_container;
         
-        $form_attr = array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form");
+        $form_attr = array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form", 'method'=> $this->method);
         // See if we need a multipart form
         foreach ($this->fields as $field_obj) {
             if ($field_obj->type == 'file') {
@@ -282,10 +282,18 @@ class DataForm extends Widget
         } else {
             $data['form_begin'] = Form::open($form_attr);
             $data['form_end'] = Form::close();
+            
+            if ($this->method =="GET")
+            {
+                $data['form_end'] = Form::hidden('search', 1). Form::close();
+            }
         }
         if (isset($this->validator)) {
             $data['errors'] = $this->validator->messages();
         }
+
+        
+        
         //var_dump($this->validator->messages()->all());
         $data['groups'] = $this->regroupFields($this->orderFields($this->fields));
         //$data['extra_class'] = $this->extra_class;
