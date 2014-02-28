@@ -87,7 +87,6 @@ class DataFilter extends DataForm
                     //$field->getNewValue();
 
                      //die( '..'.$field->value);
-                    
                     if ($field->value != "") {
                         if (strpos($field->name, "_copy") > 0) {
                             $name = substr($field->db_name, 0, strpos($field->db_name, "_copy"));

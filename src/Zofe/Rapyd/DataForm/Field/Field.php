@@ -23,7 +23,7 @@ abstract class Field extends Widget
     public $onchange;
     public $style;
     //datafilter related
-    public $operator = "";
+    public $operator = "=";
     public $clause = "like";
     public $orvalue = "";
     //field actions & field status
@@ -199,7 +199,7 @@ abstract class Field extends Widget
 
     public function getValue()
     {
-        if (($this->request_refill == true) && Input::get($this->name)) {
+        if (($this->request_refill == true) && Input::get($this->name) != null) {
            if (is_array(Input::get($this->name))) {
                 $values = array();
                 $this->value = implode($this->serialization_sep, $values);
