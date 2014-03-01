@@ -500,4 +500,16 @@ class DataForm extends Widget
     {
         return $this->add($name , $label, 'textarea', $validation);
     }
+    
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Checkbox
+     */
+    public function addCheckbox($name, $label, $validation = '')
+    {
+        return $this->add($name , $label, 'checkbox', $validation);
+    }
 }

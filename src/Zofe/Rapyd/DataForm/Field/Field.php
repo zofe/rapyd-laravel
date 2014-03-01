@@ -222,7 +222,7 @@ abstract class Field extends Widget
 
     public function getNewValue()
     {
-        if (isset($_POST[$this->name])) {
+        if (Input::get($this->name)) {
             if ($this->status == "create") {
                 $this->action = "insert";
             } elseif ($this->status == "modify") {
