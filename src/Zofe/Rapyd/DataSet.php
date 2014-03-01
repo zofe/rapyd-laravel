@@ -75,7 +75,7 @@ class DataSet extends Widget
         return str_replace('-field-', $field, $url);
     }
 
-    public function orderby($field, $direction)
+    public function orderBy($field, $direction="asc")
     {
         $this->orderby = array($field, $direction);
         return $this;
@@ -127,7 +127,7 @@ class DataSet extends Widget
         if ($orderby) {
             $this->orderby_field = ltrim($orderby, "-");
             $this->orderby_direction = ($orderby[0] === "-") ? "desc" : "asc";
-            $this->orderby($this->orderby_field, $this->orderby_direction);
+            $this->orderBy($this->orderby_field, $this->orderby_direction);
         }
 
         //build subset of data
