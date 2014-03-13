@@ -2,7 +2,7 @@
 @include('rapyd::toolbar', array('label'=>$label, 'buttons'=>$buttons['TR']))
 
 <table class="table table-striped">
- 
+    <thead>
     <tr>
      @foreach ($dg->columns as $column)
             <th>
@@ -28,7 +28,8 @@
             </th> 
      @endforeach
     </tr>
-     
+    </thead>
+    <tbody>
     @foreach ($dg->rows as $row)
         <tr>
             @foreach ($row as $cell)
@@ -36,6 +37,7 @@
             @endforeach
         </tr>
     @endforeach
+    </tbody> 
 </table>
 
 
