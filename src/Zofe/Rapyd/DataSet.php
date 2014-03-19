@@ -138,7 +138,7 @@ class DataSet extends Widget
                     list($field, $direction) = $this->orderby;
                     $column = array();
                     foreach ($this->source as $key => $row) {
-                        $column[$key] = $row[$field];
+                        $column[$key] = is_object($row) ? $row->{$field} : $row[$field];
                     }
                     if ($direction == "asc") {
                         array_multisort($column, SORT_ASC, $this->source);
