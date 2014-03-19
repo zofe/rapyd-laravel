@@ -191,7 +191,7 @@ abstract class Field extends Widget
 
         do {
             $oldstring = $string;
-            $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $string);
+            $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $string);
         } while ($oldstring != $string);
 
         return $string;
