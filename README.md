@@ -148,7 +148,7 @@ in a view you can just write
 note: we use _$edit->view_  method  instead _View::make_ for a reason: DataEdit must manage  redirects. With other widgets you should use View facade as default.    
 
 ## DataFilter
-DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by dafault using 'like' operator).   
+DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by default using 'like' operator).   
 It should be used in conjunction with a DataSet or DataGrid to filter results.  
  _* in development *_
 
@@ -157,20 +157,17 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    $filter = DataFilter::source(new Article);
    $filter->add('title','Title', 'text');
    $filter->submit('search');
-   $filter = $datafilter->getForm();
-       
+   $filter->submit('reset');
+   
    $grid = DataGrid::source($datafilter);
    $grid->add('nome','Title', true);
    $grid->add('sef','Url Segment');
-   $datagrid->paginate(10);
+   $grid->paginate(10);
 
-   $grid->add('<a href="/article?show={{ $id }}">edit</a>','edit');
-   $grid->add('<a href="/article?do_delete={{ $id }}">delete</a>','delete');
-   $grid = $datagrid->getGrid();
-
+   View::make('articles', array('filter'=> $filter->getForm(), 'grid'=> $grid->getGrid()))
 ```
 ```php
-   # filtered.grid.blade
+   # articles.blade
    {{ $filter }}
    {{ $grid }}
 ```
