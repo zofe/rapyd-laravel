@@ -157,7 +157,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    $filter = DataFilter::source(new Article);
    $filter->add('title','Title', 'text');
    $filter->submit('search');
-   $filter->submit('reset');
+   $filter->reset('reset');
    
    $grid = DataGrid::source($filter);
    $grid->add('nome','Title', true);
