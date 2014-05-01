@@ -148,7 +148,7 @@ in a view you can just write
 
 
 ## DataFilter
-DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by dafault using 'like' operator).   
+DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by default using 'like' operator).
 It should be used in conjunction with a DataSet or DataGrid to filter results.  
  _* in development *_
 
@@ -163,10 +163,6 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    $grid->add('nome','Title', true);
    $grid->add('sef','Url Segment');
    $grid->paginate(10);
-
-   //just to join a dataedit if needed
-   $grid->add('<a href="/article?show={{ $id }}">edit</a>','edit');
-   $grid->add('<a href="/article?do_delete={{ $id }}">delete</a>','delete');
 
     View::make('articles', array('filter'=> $filter->getForm(), 'grid'=> $grid->getGrid()))
 ```
