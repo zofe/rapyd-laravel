@@ -131,13 +131,12 @@ in a view you can just write
 
 ```php
    //simple crud for Article entity
-   $dataedit = DataEdit::source(new Article);
-   $dataedit->add('title','Title', 'text')->rule('required');
-   $dataedit->add('sef','Url', 'text');
-   $dataedit->add('description','Description', 'textarea');
-   $dataedit->add('photo','Photo', 'file')->rule('image')->move('uploads/');
-   $form = $dataedit->getForm();   
-   return $dataedit->view('crud', array('form' => $form));
+   $edit = DataEdit::source(new Article);
+   $edit->add('title','Title', 'text')->rule('required');
+   $edit->add('sef','Url', 'text');
+   $edit->add('description','Description', 'textarea');
+   $edit->add('photo','Photo', 'file')->rule('image')->move('uploads/');
+   return $edit->view('crud', array('form' => $edit->getForm() ));
 
 ```
 
@@ -146,9 +145,10 @@ in a view you can just write
   {{ $form }}
 ```
 
+note: we use _$edit->view_  method  instead _View::make_ for a reason: DataEdit must manage  redirects. With other widgets you should use View facade as default.    
 
 ## DataFilter
-DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by default using 'like' operator).
+DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by dafault using 'like' operator).   
 It should be used in conjunction with a DataSet or DataGrid to filter results.  
  _* in development *_
 
@@ -157,17 +157,20 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    $filter = DataFilter::source(new Article);
    $filter->add('title','Title', 'text');
    $filter->submit('search');
-   $filter->reset('reset');
-
-   $grid = DataGrid::source($filter);
+   $filter = $datafilter->getForm();
+       
+   $grid = DataGrid::source($datafilter);
    $grid->add('nome','Title', true);
    $grid->add('sef','Url Segment');
-   $grid->paginate(10);
+   $datagrid->paginate(10);
 
-    View::make('articles', array('filter'=> $filter->getForm(), 'grid'=> $grid->getGrid()))
+   $grid->add('<a href="/article?show={{ $id }}">edit</a>','edit');
+   $grid->add('<a href="/article?do_delete={{ $id }}">delete</a>','delete');
+   $grid = $datagrid->getGrid();
+
 ```
 ```php
-   # articles.blade
+   # filtered.grid.blade
    {{ $filter }}
    {{ $grid }}
 ```
