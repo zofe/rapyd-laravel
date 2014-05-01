@@ -154,26 +154,24 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 
 ```php
-   $datafilter = DataFilter::source(new Article);
-   $datafilter->add('title','Title', 'text');
-   $datafilter->submit('search');
-   $filter = $datafilter->getForm();
-       
-   $datagrid = DataGrid::source($datafilter);
-   $datagrid->add('nome','Title', true);
-   $datagrid->add('sef','Url Segment');
-   $datagrid->paginate(10);
+   $filter = DataFilter::source(new Article);
+   $filter->add('title','Title', 'text');
+   $filter->submit('search');
+   $filter->reset('reset');
 
+   $grid = DataGrid::source($filter);
+   $grid->add('nome','Title', true);
+   $grid->add('sef','Url Segment');
+   $grid->paginate(10);
+
+   //just to join a dataedit if needed
    $grid->add('<a href="/article?show={{ $id }}">edit</a>','edit');
    $grid->add('<a href="/article?do_delete={{ $id }}">delete</a>','delete');
-   // Or you can specify printing «stock» action buttons.
-   // You must pass uri which will handle records of your grid
-   $grid->addActions('/article');
-   $grid = $datagrid->getGrid();
 
+    View::make('articles', array('filter'=> $filter->getForm(), 'grid'=> $grid->getGrid()))
 ```
 ```php
-   # filtered.grid.blade
+   # articles.blade
    {{ $filter }}
    {{ $grid }}
 ```
@@ -200,9 +198,9 @@ then you need to add this to your views,  to let rapyd add runtime assets:
 ```
 
 
-## Including Bootstrap
+## Including Bootstrap & JQuery
 
-Rapyd needs Bootstrap 3 css (not included) 
+Rapyd needs Bootstrap 3+ css and JQuery 1.9+ (not included) 
 
 You can use a CDN and include it in your HEAD tags
 
