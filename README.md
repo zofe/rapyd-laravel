@@ -159,7 +159,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    $filter->submit('search');
    $filter->submit('reset');
    
-   $grid = DataGrid::source($datafilter);
+   $grid = DataGrid::source($filter);
    $grid->add('nome','Title', true);
    $grid->add('sef','Url Segment');
    $grid->paginate(10);
