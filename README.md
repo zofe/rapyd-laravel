@@ -304,3 +304,9 @@ class AdminController extends BaseController {
   </body>
 </html>
 ```
+
+
+
+## License
+
+Rapyd is licensed under the [MIT license](http://opensource.org/licenses/MIT)
