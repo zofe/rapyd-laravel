@@ -68,20 +68,24 @@ in a controller
 
 ```php
    //you can use same source types of DataSet 
-   $datagrid = DataGrid::source("articles");
-   $datagrid->add('title','Title', true); //sortable column
-   $datagrid->add('{{ strtolower($sef) }}','Url Segment'); //blade syntax
-   $datagrid->paginate(10);
+   $grid = DataGrid::source("articles");
+   $grid->add('title','Title', true); //sortable column
+   $grid->add('{{ strtolower($sef) }}','Url Segment'); //blade syntax
+   $grid->paginate(10);
    $grid = $datagrid->getGrid();
+   View::make('articles', array('grid'=>$grid))
 
-  //or if you're unsatisfied of default grid output
-   $grid = $datagrid->getGrid("my-custom-view"); 
+   //since we use also __toString() and is good  practice use the same variable name on a view, you can do..
+   ...
+   $grid->paginate(10);
+   View::make('articles', compact('grid'))
 
 ```
 
 in a view you can just write
 
 ```php
+  #articles.blade.php
   {{ $grid }}
 ```
 
@@ -94,23 +98,22 @@ in a view you can just write
 
 ```php
    //empty form
-   $dataform = DataForm::create();
+   $form = DataForm::create();
    
    //or starting from model (empty or loaded)
-   $dataform = DataForm::source(Article::find(1));
+   $form = DataForm::source(Article::find(1));
    
-   $dataform->add('title','Title', 'text'); //name, label, type 
-   $dataform->add('sef','Url', 'text')->rule('required');
+   $form->add('title','Title', 'text'); //name, label, type
+   $form->add('sef','Url', 'text')->rule('required');
    //or you can use shorthand methods, which presents for all supported field types
-   $dataform->addText('title','Title'); //name, label, type
-   $dataform->addText('sef','Url')->rule('required');
-
-   $dataform->submit('Save');
-   $form = $dataform->getForm();
-
+   $form->addText('title','Title'); //name, label, type
+   $form->addText('sef','Url')->rule('required');
+   $form->submit('Save');
+   View::make('article', compact('form'))
 ```
 
 ```php
+   #article.blade.php
   {{ $form }}
 ```
 
@@ -136,13 +139,13 @@ in a view you can just write
    $edit->add('sef','Url', 'text');
    $edit->add('description','Description', 'textarea');
    $edit->add('photo','Photo', 'file')->rule('image')->move('uploads/');
-   return $edit->view('crud', array('form' => $edit->getForm() ));
+   return $edit->view('crud', compact('edit'));
 
 ```
 
 ```php
    #crud.blade.php
-  {{ $form }}
+  {{ $edit }}
 ```
 
 note: we use _$edit->view_  method  instead _View::make_ for a reason: DataEdit must manage  redirects. With other widgets you should use View facade as default.    
@@ -164,7 +167,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    $grid->add('sef','Url Segment');
    $grid->paginate(10);
 
-   View::make('articles', array('filter'=> $filter->getForm(), 'grid'=> $grid->getGrid()))
+   View::make('articles', compact('filter', 'grid'))
 ```
 ```php
    # articles.blade
@@ -258,8 +261,7 @@ class AdminController extends BaseController {
         $grid->add('{{ $row->user->email }}','author');
         $grid->addActions('/admin/article');
         $grid->paginate(10);
-        $grid = $grid->getGrid();
-        return  View::make('admin.edit', array('content' => $grid));
+        return  View::make('admin.edit', array('content' => $grid->getGrid()));
 
 	} 
 
@@ -271,8 +273,7 @@ class AdminController extends BaseController {
         $edit->add('sef','Url', 'text');
         $edit->add('description','Description', 'redactor');
         $edit->add('user_id','Author','select')->options(User::lists("username", "id"))->rule('required');
-        $form = $edit->getForm();
-        return $edit->view('admin.edit', array('content' => $form));
+        return $edit->view('admin.edit', array('content' => $edit->getForm()) );
 	} 
  
 }

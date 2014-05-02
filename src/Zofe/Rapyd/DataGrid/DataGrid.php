@@ -85,7 +85,16 @@ class DataGrid extends DataSet
 
     public function getGrid($view = '')
     {
-        $this->output = $this->build($view);
+        $this->output = $this->build($view)->render();
+        return $this->output;
+    }
+
+    public function __toString()
+    {
+        if ($this->output == "")
+        {
+            $this->getGrid();
+        }
         return $this->output;
     }
 

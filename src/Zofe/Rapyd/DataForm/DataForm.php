@@ -317,7 +317,7 @@ class DataForm extends Widget
         
         $this->buildFields();
         $this->buildButtons();
-        $this->output = $this->buildForm();
+        $this->output = $this->buildForm()->render();
     }
 
     /**
@@ -328,6 +328,16 @@ class DataForm extends Widget
     public function getForm($view = '')
     {
         $this->build($view);
+        return $this->output;
+    }
+
+
+    public function __toString()
+    {
+        if ($this->output == "")
+        {
+            $this->getForm();
+        }
         return $this->output;
     }
 
