@@ -203,45 +203,24 @@ then you need to add this to your views,  to let rapyd add runtime assets:
 
 Rapyd needs Bootstrap 3+ css and JQuery 1.9+ (not included) 
 
-You can use a CDN and include it in your HEAD tags
+You can use a local copy or a CDN and include it in your HEAD tags before __Rapyd::head()__
 
 ```html
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 ```
-_Or_
-
-[Get latest version](http://getbootstrap.com) then include just like any other css and js files
-
-```php
-{{ HTML::style('path/to/bootstrap.css') }}
-{{ HTML::script('path/to/jquery.js') }}
-{{ HTML::script('path/to/bootstrap.js') }}
-```
-
 
 ## In short
 
-Default way to create a CRUD for an entity with laravel  is to make a controller, with a method for each action:
-
-- show records (usually a grid with pagination)
-- create record (empty form & validation)
-- update record (pre-filled form & validation)
-- delete record (an action with a redirect)
- 
-Whit artisan and Generator package you can make a lot of code in few console commands...   
-But you've to write/modify at least 3 views for each entity you need to manage.  
-You've to take care about forms, errors, redirects, routes etc. 
-
-Rapyd use a different approach (worst in terms of flexibility but fast/rapid in terms of development and maintenance):
+Rapyd use a "widget" approach to make a crud, without "generation".
+(this approach is worst in terms of flexibility but fast/rapid in terms of development and maintenance):
 
 _You need to "show" and "edit" record from an entity?_  
-Ok so you need a controller with two methods :
-- one for a DataGrid widget
-- one for a DataEdit widget
+Ok so you need a DataGrid and DataEdit.
+You can build compoments where you want (even multiple widgets on same route).
+A reasonable way is to make a controller for each entity,  one method for each widget, and at least a view.
 
-For both  you need only to define fields to display / manage.
 Would you like to see a sample Backend ?  bum:
 
 /app/routes.php
@@ -264,7 +243,6 @@ class AdminController extends BaseController {
         $grid->addActions('/admin/article');
         $grid->paginate(10);
         return  View::make('admin.edit', array('content' => $grid->getGrid()));
-
 	} 
 
 	public function anyArticle()
@@ -281,7 +259,7 @@ class AdminController extends BaseController {
 }
 ```
 
-/app/views/admin/edit.php
+/app/views/admin/edit.blade.php
 ```php
 <!DOCTYPE html>
 <html lang="en">
@@ -289,7 +267,7 @@ class AdminController extends BaseController {
     <meta charset="utf-8">
     <link  href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-    <script src="/assets/js/jquery.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     {{ Rapyd::head() }}
   </head>
   <body>
