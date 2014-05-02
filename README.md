@@ -189,27 +189,21 @@ In `app/config/app.php` add this service provider: `'Zofe\Rapyd\RapydServiceProv
 
 `php artisan asset:publish zofe/rapyd`
 
-then you need to add this to your views,  to let rapyd add runtime assets:
+then you need to add this to your views, to let rapyd add runtime assets:
 
 ```php
 <head>
   ...
-  {{ Rapyd::head() }}
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+   {{ Rapyd::head() }}
 </head>
 ```
+note: widget output is in standard with __Boostrap 3+__, and some widget need support of __JQuery 1.9+__
+so be sure to include dependencies as above
 
 
-## Including Bootstrap & JQuery
-
-Rapyd needs Bootstrap 3+ css and JQuery 1.9+ (not included) 
-
-You can use a local copy or a CDN and include it in your HEAD tags before __Rapyd::head()__
-
-```html
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-```
 
 ## In short
 
