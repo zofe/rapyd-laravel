@@ -72,12 +72,11 @@ in a controller
    $grid->add('title','Title', true); //sortable column
    $grid->add('{{ strtolower($sef) }}','Url Segment'); //blade syntax
    $grid->paginate(10);
-   $grid = $datagrid->getGrid();
-   View::make('articles', array('grid'=>$grid))
 
-   //since we use also __toString() and is good  practice use the same variable name on a view, you can do..
+   View::make('articles', array('grid'=>$grid->getGrid()))
+
+   //since we use also __toString() you can do..
    ...
-   $grid->paginate(10);
    View::make('articles', compact('grid'))
 
 ```
@@ -105,10 +104,13 @@ in a view you can just write
    
    $form->add('title','Title', 'text'); //name, label, type
    $form->add('sef','Url', 'text')->rule('required');
+
    //or you can use shorthand methods, which presents for all supported field types
    $form->addText('title','Title'); //name, label, type
    $form->addText('sef','Url')->rule('required');
+
    $form->submit('Save');
+
    View::make('article', compact('form'))
 ```
 
