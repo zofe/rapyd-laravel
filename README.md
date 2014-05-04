@@ -3,7 +3,7 @@ rapyd-laravel
 
 This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.
-Main Website: [rapyd.com](http://www.rapyd.com)  
+Main Website: [rapyd.com](http://www.rapyd.com)
 
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
 
@@ -109,8 +109,14 @@ in a view you can just write
    //or you can use shorthand methods, which presents for all supported field types
    $form->addText('title','Title'); //name, label, type
    $form->addText('sef','Url')->rule('required');
-
    $form->submit('Save');
+
+   //use closure to add stuffs or redirect after save
+   $form->saved(function() use ($form)
+   {
+        $form->message("ok record saved");
+        $form->link("/another/url","Next Step");
+   });
 
    View::make('article', compact('form'))
 ```

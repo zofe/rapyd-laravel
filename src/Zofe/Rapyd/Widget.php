@@ -17,7 +17,8 @@ class Widget
     public $action = "idle";
     
     public $button_container = array( "TR"=>array(), "BL"=>array(), "BR"=>array() );
-    
+    public $message = "";
+
     public function __construct()
     {
         $this->url = new Url();
@@ -86,7 +87,20 @@ class Widget
         return $this;
     }
 
-    
+    /**
+     * @param string $url
+     * @param string $name
+     * @param string $position
+     * @param array  $attributes
+     *
+     * @return $this
+     */
+    function message($message)
+    {
+        $this->message =  $message;
+        return $this;
+    }
+
     /**
      * "echo $widget" automatically call build() it and display $widget->output
      * however explicit build is preferred for a clean code

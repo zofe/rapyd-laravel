@@ -5,7 +5,13 @@
 @include('rapyd::toolbar', array('label'=>$label, 'buttons'=>$buttons['TR']))
 
 <div class="form-horizontal">
-@if (isset($groups))
+
+@if ($message != '')
+
+
+    <div class="alert alert-success">{{ $message}}</div>
+
+@elseif (isset($groups))
     @foreach ($groups as $group)
 
         @if ($group["group_name"] != "ungrouped")

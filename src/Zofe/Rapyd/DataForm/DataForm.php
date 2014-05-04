@@ -76,6 +76,34 @@ class DataForm extends Widget
     }
 
     /**
+     * remove field from list
+     * @param $fieldname
+     * @return $this
+     */
+    public function remove($fieldname)
+    {
+        if (isset($this->fields[$fieldname]))
+            unset($this->fields[$fieldname]);
+        return $this;
+    }
+
+    /**
+     * remove field where type==$type from list
+     * @param $type
+     * @return $this
+     */
+    public function removeType($type)
+    {
+        foreach ($this->fields as $fieldname => $field)
+        {
+            if ($field->type==$type) {
+                unset($this->fields[$fieldname]);
+            }
+        }
+        return $this;
+    }
+
+    /**
      * @param string $name
      * @param string $position
      * @param array  $options
@@ -105,12 +133,6 @@ class DataForm extends Widget
         return $this->link($this->url->current(true),  'Reset', $position);
 
     }
-
-    /* public function submit($label)
-      {
-      $field_obj = $this->add('submit', $label, "submit");
-      return $field_obj;
-      } */
 
     public function &field($field_name)
     {
@@ -149,18 +171,10 @@ class DataForm extends Widget
      */
     protected function isValid()
     {
-
-        //some fields mode can disable or change some rules.
         foreach ($this->fields as $field) {
             $field->action = $this->action;
-            //$field->get_mode();
             if (isset($field->rule)) {
-                //if (($field->type != "upload") && $field->apply_rules) {
-                //	$fieldnames[$field->name] = $field->label;
                 $rules[$field->name] = $field->rule;
-                //} else {
-                //	$field->required = false;
-                //}
             }
         }
         if (isset($rules)) {
@@ -295,11 +309,8 @@ class DataForm extends Widget
             $data['errors'] = $this->validator->messages();
         }
 
-        
-        
-        //var_dump($this->validator->messages()->all());
+        $data['message'] = ($this->process_status == "success") ? $this->message : '';
         $data['groups'] = $this->regroupFields($this->orderFields($this->fields));
-        //$data['extra_class'] = $this->extra_class;
         return View::make($this->view, $data);
     }
 
@@ -368,6 +379,26 @@ class DataForm extends Widget
         $array['form'] = $form;
         if ($this->hasRedirect()) return Redirect::to($this->getRedirect());
         return  View::make($viewname, $array);
+    }
+
+    /**
+     * build form and check if process status is "success" then execute a callable
+     * @param callable $callable
+     * @return callable
+     */
+    function saved( \Closure $callable)
+    {
+        $this->sniffStatus();
+        $this->sniffAction();
+        $this->process();
+
+        if ($this->process_status == "success")
+        {
+           $this->button_container['BL'] = array();
+           $this->removeType('submit');
+           $callable($this);
+        }
+
     }
 
     /**
