@@ -94,8 +94,6 @@ in a view you can just write
 
  DataForm is a form builder, you can add fields, rules and buttons.  
  It will build a bootstrap form, on submit it  will check rules and if validation pass it'll store new entity.  
- _* in development *_
- 
 
 ```php
    //empty form
@@ -131,7 +129,6 @@ in a view you can just write
   DataEdit extends DataForm, it's a full CRUD application for given Entity.  
   It has status (create, modify, show) and actions (insert, update, delete) 
   It detect status by simple query string semantic:
- _* in development *_
 
 
 ```
@@ -163,7 +160,6 @@ note: we use _$edit->view_  method  instead _View::make_ for a reason: DataEdit 
 ## DataFilter
 DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by default using 'like' operator).   
 It should be used in conjunction with a DataSet or DataGrid to filter results.  
- _* in development *_
 
 
 ```php
@@ -187,7 +183,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 ## Install 
 
 
-To `composer.json` add: `"zofe/rapyd": "dev-master"` 
+To `composer.json` add: `"zofe/rapyd": "1.0.*"`
 and then run: `$ composer update zofe/rapyd`.
 
 In `app/config/app.php` add this service provider: `'Zofe\Rapyd\RapydServiceProvider',`.
