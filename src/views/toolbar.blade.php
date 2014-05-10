@@ -1,7 +1,7 @@
 
 
 <div class="btn-toolbar" role="toolbar">
-    <div class="btn-group">
+    <div>
         @foreach ($buttons as $button)
         {{ $button }}
         @endforeach
