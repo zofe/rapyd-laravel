@@ -46,6 +46,9 @@ class DataEdit extends DataForm
                 $this->status = "unknow_record";
             }
             ///// create /////
+        } elseif ($this->url->value('show' . $this->cid ."|modify" . $this->cid ."|create" . $this->cid ."|delete" . $this->cid) === false) {
+            $this->status = "create";
+            $this->process_url = $this->url->append('insert'.$this->cid, 1)->get();
         } elseif ($this->url->value('create' . $this->cid)) {
             $this->status = "create";
             $this->process_url = $this->url->replace('create' . $this->cid, 'insert' . $this->cid)->get();
@@ -57,8 +60,6 @@ class DataEdit extends DataForm
             if (!$this->find($this->url->value('delete' . $this->cid))) {
                 $this->status = "unknow_record";
             }
-        } elseif ($this->url->value('inset' . $this->cid . '|update' . $this->cid . '|do_delete' . $this->cid)) {
-            //status is idle.. action is executed
         } else {
             $this->status = "unknow_record";
         }
@@ -127,6 +128,7 @@ class DataEdit extends DataForm
 					//return $this->build_message('!errore durante la cancellazione');
 				}
 				if ($this->on("success")) {
+                    $this->message("record deleted");
 					/*$this->build_buttons();
 					if ($this->back_delete) {
                         header("Location: ".$this->back_url);
