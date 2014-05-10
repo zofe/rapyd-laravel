@@ -47,7 +47,6 @@ class DataGrid extends DataSet
             $row = array();
 
             foreach ($this->columns as $column) {
-                $cell = '';
 
                  if (strpos($column->name, '{{') !== false) {
                     
@@ -57,17 +56,21 @@ class DataGrid extends DataSet
                     } else {
                         $array = (array)$tablerow;
                     }
+
                     $cell= $this->parser->compileString($column->name, $array);
-                } elseif (is_object($tablerow)) {   
- 
+
+                } elseif (is_object($tablerow)) {
+
                     $cell = $tablerow->{$column->name};
                     
                 } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
+
                     $cell = $tablerow[$column->name];
                 } else {
                     $cell = $column->name;
                 }
                 if ($column->link) {
+
                     $cell =  '<a href="'.$this->parser->compileString($column->link, (array)$tablerow).'">'.$cell.'</a>'; 
                 }
 

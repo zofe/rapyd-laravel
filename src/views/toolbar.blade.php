@@ -1,11 +1,19 @@
 
 
 <div class="btn-toolbar" role="toolbar">
-    <div>
-        @foreach ($buttons as $button)
+    @if (isset($buttons_left) && count($buttons_left))
+    <div class="pull-left">
+        @foreach ($buttons_left as $button)
         {{ $button }}
         @endforeach
     </div>
-   
+    @endif
+    @if (isset($buttons_right) && count($buttons_right))
+    <div class="pull-right">
+        @foreach ($buttons_right as $button)
+        {{ $button }}
+        @endforeach
+    </div>
+    @endif
 </div>
  <br />

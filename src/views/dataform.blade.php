@@ -2,7 +2,7 @@
 {{ $form_begin }}
 
 
-@include('rapyd::toolbar', array('label'=>$label, 'buttons'=>$buttons['TR']))
+@include('rapyd::toolbar', array('label'=>$label, 'buttons_right'=>$buttons['TR']))
 
 <div class="form-horizontal">
 
@@ -89,7 +89,7 @@
 @endif
 </div>
 
-@include('rapyd::toolbar', array('buttons'=>$buttons['BL']))
+@include('rapyd::toolbar', array('buttons_left'=>$buttons['BL'], 'buttons_right'=>$buttons['BR'] ))
 
 
 {{ $form_end }}
