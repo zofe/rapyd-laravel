@@ -283,3 +283,5 @@ class AdminController extends BaseController {
 ## License
 
 Rapyd is licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+If Rapyd saves you time, please consider [tipping via gittip](https://www.gittip.com/zofe)
