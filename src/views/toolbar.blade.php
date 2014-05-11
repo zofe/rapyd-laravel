@@ -2,7 +2,7 @@
 
 <div class="btn-toolbar" role="toolbar">
     @if (isset($buttons_left) && count($buttons_left))
-    <div class="pull-left">
+    <div class="pull-left col-sm-offset-2">
         @foreach ($buttons_left as $button)
         {{ $button }}
         @endforeach
