@@ -7,19 +7,19 @@
      @foreach ($dg->columns as $column)
             <th>
             @if ($column->orderby)
-                @if ($column->name != Input::get('ord'))
-                 <a href="{{ $dg->orderbyLink($column->name,'asc') }}">
-                     <span class="glyphicon glyphicon-arrow-up"></span>
-                 </a>
-                @else
+                @if ($dg->onOrderby($column->name, 'asc'))
                     <span class="glyphicon glyphicon-arrow-up"></span>
-                @endif
-                @if ('-'.$column->name != Input::get('ord'))
-                 <a href="{{ $dg->orderbyLink($column->name,'desc') }}">
-                     <span class="glyphicon glyphicon-arrow-down"></span>
-                 </a>
                 @else
+                    <a href="{{ $dg->orderbyLink($column->name,'asc') }}">
+                        <span class="glyphicon glyphicon-arrow-up"></span>
+                    </a>
+                @endif
+                @if ($dg->onOrderby($column->name, 'desc'))
                     <span class="glyphicon glyphicon-arrow-down"></span>
+                @else
+                    <a href="{{ $dg->orderbyLink($column->name,'desc') }}">
+                        <span class="glyphicon glyphicon-arrow-down"></span>
+                    </a>
                 @endif
                 {{ $column->label }}
             @else

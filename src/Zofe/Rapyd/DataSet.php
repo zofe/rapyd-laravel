@@ -81,6 +81,28 @@ class DataSet extends Widget
         return $this;
     }
 
+    public function onOrderby($field, $direction="")
+    {
+        $orderby = $this->url->value("ord" . $this->cid);
+        if ($orderby){
+            $dir = ($orderby[0] === "-") ? "desc" : "asc";
+            if (ltrim($orderby,'-') == $field)
+            {
+                return ($direction == "" || $dir == $direction) ? true : false;
+            }
+
+        }  else {
+            if (count($this->orderby) && ($this->orderby[0] == $field)){
+                $dir = $this->orderby[1];
+                return ($direction == "" || $dir == $direction) ? true : false;
+            }
+        }
+
+        return false;
+    }
+
+
+
     /**
      * @param $items
      *
