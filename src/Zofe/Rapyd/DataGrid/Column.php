@@ -43,7 +43,7 @@ class Column extends Widget
         return $this;
     }
 
-    public function link($url, $name, $position = 'BL', $attributes = array())
+    public function link($url, $name = '', $position = 'BL', $attributes = array())
     {
         $this->link = $url;
         return $this;
