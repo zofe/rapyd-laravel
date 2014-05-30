@@ -43,9 +43,9 @@ class Column extends Widget
         return $this;
     }
 
-    public function url($url, $img = '')
+    public function link($url, $img = '')
     {
-        $this->url = $url;
+        $this->link = $url;
         $this->img = $img;
         return $this;
     }
