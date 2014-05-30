@@ -70,8 +70,13 @@ class DataGrid extends DataSet
                     $cell = $column->name;
                 }
                 if ($column->link) {
-
-                    $cell =  '<a href="'.$this->parser->compileString($column->link, (array)$tablerow).'">'.$cell.'</a>'; 
+                    if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
+                        $array = $tablerow->getAttributes();
+                        $array['row'] = $tablerow;
+                    } else {
+                        $array = (array)$tablerow;
+                    }
+                    $cell =  '<a href="'.$this->parser->compileString($column->link, $array).'">'.$cell.'</a>';
                 }
 
                 if ($column->name == '__actions' and $this->uri) {
