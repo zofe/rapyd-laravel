@@ -219,7 +219,11 @@ Rapyd use a "widget" approach to make a crud, without "generation".
 _You need to "show" and "edit" record from an entity?_  
 Ok so you need a DataGrid and DataEdit.
 You can build compoments where you want (even multiple widgets on same route).
-A reasonable way is to make a controller for each entity,  one method for each widget, and at least a view.
+A easy way to work with rapyd is:
+    - make a route to a controller for each entity you need to manage
+    - make the entity controller with one method for each widget (one for a datagrid and one for a dataedit)
+    - make an empty view, include bootstrap and display content that rapyd will build for you
+
 
 Would you like to see a sample Backend ?  bum:
 
