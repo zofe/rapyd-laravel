@@ -15,8 +15,6 @@ class DataGrid extends DataSet
     public $rows = array();
     public $output = "";
 
-    private $uri = null;
-
     /**
      * @param string $name
      * @param string $label
@@ -31,6 +29,7 @@ class DataGrid extends DataSet
         return $column;
     }
 
+    //todo: like "field" for DataForm, should be nice to work with "cell" as instance and "row" as collection of cells
     public function build($view = '')
     {
         ($view == '') and $view = 'rapyd::datagrid';
@@ -53,6 +52,7 @@ class DataGrid extends DataSet
                     if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
                         $array = $tablerow->getAttributes();
                         $array['row'] = $tablerow;
+
                     } else {
                         $array = (array)$tablerow;
                     }
@@ -78,10 +78,10 @@ class DataGrid extends DataSet
                     }
                     $cell =  '<a href="'.$this->parser->compileString($column->link, $array).'">'.$cell.'</a>';
                 }
+                if (count($column->actions)>0) {
+                    $key = ($column->key != '')?  $column->key : $this->key;
+                    $cell = \View::make('rapyd::datagrid.actions', array('uri' => $column->uri, 'id' => $tablerow->getAttribute($key), 'actions' => $column->actions));
 
-                if ($column->name == '__actions' and $this->uri) {
-                    $cell = \View::make('rapyd::datagrid.actions', array('uri' => $this->uri, 'id' => $tablerow->id))->renderSections();
-                    $cell = $cell['actions'];
                 }
                 $row[] = $cell;
             }
@@ -106,10 +106,9 @@ class DataGrid extends DataSet
         return $this->output;
     }
 
-    public function addActions($base_uri)
+    public function edit($uri, $label='Edit', $actions='show|modify|delete', $key = '')
     {
-        $this->uri = $base_uri;
-        $this->add('__actions', 'Actions');
+        return $this->add('mena', $label)->actions($uri, explode('|', $actions))->key($key);
     }
 
     public function getColumn($column_name)
@@ -117,5 +116,11 @@ class DataGrid extends DataSet
         if (isset($this->columns[$column_name])) {
             return $this->columns[$column_name];
         }
+    }
+
+    public function addActions($uri, $label='Edit', $actions='show|modify|delete', $key = '')
+    {
+
+        return $this->edit($uri, $label, $actions, $key);
     }
 }

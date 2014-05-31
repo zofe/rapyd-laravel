@@ -21,17 +21,18 @@ class DataSet extends Widget
     public $data = array();
     public $hash = '';
     public $url;
+    public $key = 'id';
 
     /**
      * @var \Illuminate\Pagination\Paginator
      */
     public $paginator;
+
     protected $orderby_field;
     protected $orderby_direction;
     protected $type;
     protected $limit;
     protected $orderby;
-    public $total_rows;
     protected $orderby_uri_asc;
     protected $orderby_uri_desc;
 
@@ -120,14 +121,31 @@ class DataSet extends Widget
             //tablename
             $this->type = "query";
             $this->query = $this->table($this->source);
-        } elseif (is_a($this->source, "\Illuminate\Database\Eloquent\Model") ||
-                is_a($this->source, "\Illuminate\Database\Eloquent\Builder") ||
-                is_a($this->source, "\Illuminate\Database\Query\Builder")) {
+        } elseif (is_a($this->source, "\Illuminate\Database\Eloquent\Model")) {
             $this->type = "model";
             $this->query = $this->source;
+            $this->key = $this->source->getKeyName();
+
+        } elseif ( is_a($this->source, "\Illuminate\Database\Eloquent\Builder")) {
+            $this->type = "model";
+            $this->query = $this->source;
+            $this->key = $this->source->getModel()->getKeyName();
+
+        } elseif ( is_a($this->source, "\Illuminate\Database\Query\Builder")) {
+            $this->type = "model";
+            $this->query = $this->source;
+
+
         } elseif ( is_a($this->source, "\Zofe\Rapyd\DataFilter\DataFilter")) {
            $this->type = "model";
            $this->query = $this->source->query;
+
+            if (is_a($this->query, "\Illuminate\Database\Eloquent\Model")) {
+                $this->key = $this->query->getKeyName();
+            } elseif ( is_a($this->query, "\Illuminate\Database\Eloquent\Builder")) {
+                $this->key = $this->query->getModel()->getKeyName();
+            }
+
         }
         //array
         elseif (is_array($this->source)) {

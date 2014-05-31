@@ -1,5 +1,7 @@
 
+
 @include('rapyd::toolbar', array('label'=>$label, 'buttons_right'=>$buttons['TR']))
+
 
 <table class="table table-striped">
     <thead>
@@ -21,10 +23,8 @@
                         <span class="glyphicon glyphicon-arrow-down"></span>
                     </a>
                 @endif
+             @endif
                 {{ $column->label }}
-            @else
-                {{ $column->label }}
-            @endif
             </th> 
      @endforeach
     </tr>

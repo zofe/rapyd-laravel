@@ -8,6 +8,10 @@ class Column
     public $orderby = null;
     public $attributes = array();
 
+    public $key = 'id';
+    public $uri = null;
+    public $actions = array();
+
     public function __construct($name, $label = null, $orderby = false)
     {
         $this->name = $name;
@@ -37,5 +41,19 @@ class Column
         $this->attributes = $attributes;
         return $this;
     }
-    
+
+    public function actions($uri, $actions)
+    {
+        $this->uri = $uri;
+        $this->actions = $actions;
+        return $this;
+    }
+
+    public function key($key)
+    {
+        $this->key = $key;
+        return $this;
+    }
+
+
 }
