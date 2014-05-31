@@ -145,8 +145,7 @@ in a view you can just write
    //simple crud for Article entity
    $edit = DataEdit::source(new Article);
    $edit->add('title','Title', 'text')->rule('required');
-   $edit->add('sef','Url', 'text');
-   $edit->add('description','Description', 'textarea');
+   $edit->add('body','Body','textarea')->rule('required');
    $edit->add('photo','Photo', 'file')->rule('image')->move('uploads/');
    return $edit->view('crud', compact('edit'));
 
@@ -254,8 +253,7 @@ class AdminController extends BaseController {
         $edit = DataEdit::source(new Article);
         $edit->link('/admin/articles', "Article List",  "TR");
         $edit->add('title','Title', 'text')->rule('required');
-        $edit->add('sef','Url', 'text');
-        $edit->add('description','Description', 'redactor');
+        $edit->add('body','Body', 'redactor');
         $edit->add('user_id','Author','select')->options(User::lists("username", "id"))->rule('required');
         return $edit->view('admin.edit', array('content' => $edit->getForm()) );
 	} 
