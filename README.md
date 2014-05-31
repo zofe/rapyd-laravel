@@ -15,8 +15,8 @@ It add the ability to order result and keep persistence of all params in query s
 
 i.e.:
 ```
-/myroute?page=2&ord=-name   will get page 2 order by "name" descending
-/myroute?page=3&ord=name&other=xx  will get page 3 order by "name" ascending and keeping "other=xx"
+/dataset/uri?page=2&ord=-name   will get page 2 order by "name" descending
+/dataset/uri?page=3&ord=name&other=xx  will get page 3 order by "name" ascending and keeping "other=xx"
 ```
 
 in a controller 
@@ -70,9 +70,10 @@ in a controller
 
 ```php
    //you can use same source types of DataSet 
-   $grid = DataGrid::source("articles");
+   $grid = DataGrid::source(Article::with('author'));
    $grid->add('title','Title', true); //sortable column
-   $grid->add('{{ strtolower($sef) }}','Url Segment'); //blade syntax
+   $grid->add('{{ substr($body,0,5) }}','Body'); //blade syntax
+   $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit
    $grid->paginate(10);
 
    View::make('articles', array('grid'=>$grid->getGrid()))
@@ -103,11 +104,11 @@ in a view you can just write
    $form = DataForm::source(Article::find(1));
    
    $form->add('title','Title', 'text'); //name, label, type
-   $form->add('sef','Url', 'text')->rule('required');
+   $form->add('body','Body', 'textarea')->rule('required'); //validation
 
    //or you can use shorthand methods, which presents for all supported field types
-   $form->addText('title','Title'); //name, label, type
-   $form->addText('sef','Url')->rule('required');
+   $form->addText('title','Title'); //name, label
+   $form->addText('body','Body')->rule('required');
    $form->submit('Save');
 
    //use closure to add stuffs or redirect after save
@@ -132,10 +133,10 @@ in a view you can just write
 
 
 ```
-  ?create=1			   empty form    to CREATE new records 
-  ?show={record_id}    filled output to READ record (without form)
-  ?modify={record_id}  filled form   to UPDATE a record
-  ?delete={record_id}  perform   record DELETE
+  /dataedit/uri                     empty form    to CREATE new records
+  /dataedit/uri?show={record_id}    filled output to READ record (without form)
+  /dataedit/uri?modify={record_id}  filled form   to UPDATE a record
+  /dataedit/uri?delete={record_id}  perform   record DELETE
   ...
 ```
 
@@ -238,7 +239,7 @@ class AdminController extends BaseController {
         $grid->add('title','Title', true);
         $grid->add('sef','Url');
         $grid->add('{{ $row->user->email }}','author');
-        $grid->addActions('/admin/article');
+        $grid->edit('/admin/article', 'Edit','modify|delete');
         $grid->paginate(10);
         return  View::make('admin.edit', array('content' => $grid->getGrid()));
 	} 
