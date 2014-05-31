@@ -72,8 +72,9 @@ in a controller
    //you can use same source types of DataSet 
    $grid = DataGrid::source(Article::with('author'));
    $grid->add('title','Title', true); //sortable column
-   $grid->add('{{ substr($body,0,5) }}','Body'); //blade syntax
-   $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit
+   $grid->add('{{ substr($body,0,20) }}...','Body'); //blade syntax
+   $grid->add('{{ $row->author->name }}','Author'); //blade syntax with related field
+   $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit actions
    $grid->paginate(10);
 
    View::make('articles', array('grid'=>$grid->getGrid()))
