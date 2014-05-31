@@ -171,7 +171,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    
    $grid = DataGrid::source($filter);
    $grid->add('nome','Title', true);
-   $grid->add('sef','Url Segment');
+   $grid->add('{{ substr($body,0,20) }}...','Body');
    $grid->paginate(10);
 
    View::make('articles', compact('filter', 'grid'))
@@ -241,7 +241,7 @@ class AdminController extends BaseController {
         $grid = DataGrid::source( Article::with("user"));
         $grid->link('/admin/article?create=1', "New Article",  "TR");
         $grid->add('title','Title', true);
-        $grid->add('sef','Url');
+        $grid->add('{{ substr($body,0,20) }}...','Body');
         $grid->add('{{ $row->user->email }}','author');
         $grid->edit('/admin/article', 'Edit','modify|delete');
         $grid->paginate(10);
