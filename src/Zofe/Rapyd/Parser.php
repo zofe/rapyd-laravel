@@ -24,15 +24,14 @@ class Parser extends BladeCompiler {
         // will throw it out to the exception handler.
         try
         {
-            eval('?>'.$generated);
+            eval('?>'.$generated.'<?php ');
         }
 
-        // If we caught an exception, we'll silently flush the output
-        // buffer so that no partially rendered views get thrown out
-        // to the client and confuse the user with junk.
+        // If we caught an exception,  return string as is
         catch (\Exception $e)
         {
-            ob_get_clean(); throw $e;
+            ob_get_clean(); //throw $e;
+            return $value;
         }
 
         $content = ob_get_clean();
