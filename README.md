@@ -217,7 +217,7 @@ Rapyd use a "widget" approach to make a crud, without "generation".
 
 _You need to "show" and "edit" record from an entity?_  
 Ok so you need a DataGrid and DataEdit.
-You can build compoments where you want (even multiple widgets on same route).  
+You can build compoments where you want (even multiple widgets on same route).
 An easy way to work with rapyd is:
   * make a route to a controller for each entity you need to manage
   * make the entity controller with one method for each widget (one for a datagrid and one for a dataedit)
@@ -238,24 +238,24 @@ class AdminController extends BaseController {
 
 	public function getArticles()
 	{
-        $grid = DataGrid::source( Article::with("user"));
-        $grid->link('/admin/article?create=1', "New Article",  "TR");
-        $grid->add('title','Title', true);
-        $grid->add('{{ substr($body,0,20) }}...','Body');
-        $grid->add('{{ $row->user->email }}','author');
-        $grid->edit('/admin/article', 'Edit','modify|delete');
-        $grid->paginate(10);
-        return  View::make('admin.edit', array('content' => $grid->getGrid()));
+        $content = DataGrid::source( Article::with("user"));
+        $content->link('/admin/article?create=1', "New Article",  "TR");
+        $content->add('title','Title', true);
+        $content->add('{{ substr($body,0,20) }}...','Body');
+        $content->add('{{ $row->user->email }}','author');
+        $content->edit('/admin/article', 'Edit','modify|delete');
+        $content->paginate(10);
+        return  View::make('admin.edit', compact('content'));
 	} 
 
 	public function anyArticle()
 	{
-        $edit = DataEdit::source(new Article);
-        $edit->link('/admin/articles', "Article List",  "TR");
-        $edit->add('title','Title', 'text')->rule('required');
-        $edit->add('body','Body', 'redactor');
-        $edit->add('user_id','Author','select')->options(User::lists("username", "id"))->rule('required');
-        return $edit->view('admin.edit', array('content' => $edit->getForm()) );
+        $content = DataEdit::source(new Article);
+        $content->link('/admin/articles', "Article List",  "TR");
+        $content->add('title','Title', 'text')->rule('required');
+        $content->add('body','Body', 'redactor');
+        $content->add('user_id','Author','select')->options(User::lists("username", "id"))->rule('required');
+        return $edit->view('admin.edit', compact('content'));
 	} 
  
 }
