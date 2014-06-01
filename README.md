@@ -40,21 +40,21 @@ in a view you can use
 
 ```php
 <p>
-    //order by links
-    {{ $dataset->orderbyLink('title', 'asc') }} <br />
-    {{ $dataset->orderbyLink('title', 'desc') }}
-
+    //cycle
     @foreach ($dataset->data as $item)
 
-    {{ $item->title }}<br />
-       
-          //eloquent relation
-         {{ $item->author->name }}<br />
+        //field
+        {{ $item->title }}<br />
+        //firld from relation
+        {{ $item->author->name }}<br />
 
     @endforeach
 
     //pagination links
-    {{ $dataset->links() }}    
+    {{ $dataset->links() }} <br />
+
+    //sort link
+    {{ $dataset->orderbyLink('title', 'asc') }} <br />
 </p>
 ```
 
@@ -70,7 +70,7 @@ in a controller
 
 ```php
    $grid = DataGrid::source(Article::with('author'));  //same source types of DataSet
-   $grid->add('title','Title', true); //field, label, sortable
+   $grid->add('title','Title', true); //field name, label, sortable
    $grid->add('{{ substr($body,0,20) }}...','Body'); //blade syntax
    $grid->add('{{ $row->author->name }}','Author'); //blade syntax with related field
    $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit actions
@@ -103,11 +103,11 @@ in a view you can just write
    //or starting from model (empty or loaded)
    $form = DataForm::source(Article::find(1));
    
-   $form->add('title','Title', 'text'); //name, label, type
+   $form->add('title','Title', 'text'); //field name, label, type
    $form->add('body','Body', 'textarea')->rule('required'); //validation
 
    //or you can use shorthand methods, which presents for all supported field types
-   $form->addText('title','Title'); //name, label
+   $form->addText('title','Title'); //field name, label
    $form->addText('body','Body')->rule('required');
    $form->submit('Save');
 
