@@ -97,21 +97,24 @@ in a view you can just write
  It will build a bootstrap form, on submit it  will check rules and if validation pass it'll store new entity.  
 
 ```php
-   //empty form
-   $form = DataForm::create();
+   //start with empty form to create new Article
+   $form = DataForm::source(new Article);
    
-   //or starting from model (empty or loaded)
+   //or find a record to update some value
    $form = DataForm::source(Article::find(1));
-   
+
+   //add fields to the form
    $form->add('title','Title', 'text'); //field name, label, type
    $form->add('body','Body', 'textarea')->rule('required'); //validation
 
-   //or you can use shorthand methods, which presents for all supported field types
+   //you can also use shorthand methods, add{Type}(...
    $form->addText('title','Title'); //field name, label
-   $form->addText('body','Body')->rule('required');
+   $form->addTextarea('body','Body')->rule('required');
+
+   //then a submit button
    $form->submit('Save');
 
-   //use closure to add stuffs or redirect after save
+   //at the end you can use closure to add stuffs or redirect after save
    $form->saved(function() use ($form)
    {
         $form->message("ok record saved");
@@ -125,6 +128,8 @@ in a view you can just write
    #article.blade.php
   {{ $form }}
 ```
+
+note: DataForm can also work without entity, just as Form builder, use __DataForm::create()__ instead of DataForm::source in this case
 
 ## DataEdit
   DataEdit extends DataForm, it's a full CRUD application for given Entity.  
