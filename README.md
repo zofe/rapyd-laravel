@@ -254,7 +254,7 @@ class AdminController extends BaseController {
         $content->link('/admin/articles', "Article List",  "TR");
         $content->add('title','Title', 'text')->rule('required');
         $content->add('body','Body', 'redactor');
-        $content->add('user_id','Author','select')->options(User::lists("username", "id"))->rule('required');
+        $content->add('user_id','Author','select')->options(User::lists("username", "id"));
         return $edit->view('admin.edit', compact('content'));
 	} 
  
