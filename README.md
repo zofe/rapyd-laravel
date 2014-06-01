@@ -239,7 +239,7 @@ class AdminController extends BaseController {
 	public function getArticles()
 	{
         $content = DataGrid::source( Article::with("user"));
-        $content->link('/admin/article?create=1', "New Article",  "TR");
+        $content->link('/admin/article', "New Article",  "TR");
         $content->add('title','Title', true);
         $content->add('{{ substr($body,0,20) }}...','Body');
         $content->add('{{ $row->user->email }}','author');
