@@ -69,9 +69,8 @@ It support also  blade syntax inline.
 in a controller 
 
 ```php
-   //you can use same source types of DataSet 
-   $grid = DataGrid::source(Article::with('author'));
-   $grid->add('title','Title', true); //sortable column
+   $grid = DataGrid::source(Article::with('author'));  //same source types of DataSet
+   $grid->add('title','Title', true); //field, label, sortable
    $grid->add('{{ substr($body,0,20) }}...','Body'); //blade syntax
    $grid->add('{{ $row->author->name }}','Author'); //blade syntax with related field
    $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit actions
