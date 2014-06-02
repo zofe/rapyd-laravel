@@ -189,7 +189,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 
 To `composer.json` add:  
-`"zofe/rapyd": "dev-master"` for 4.1 and latest stuffs (not stable) 
+`"zofe/rapyd": "dev-master"` for 4.1 and latest stuffs (not stable)  
 `"zofe/rapyd": "1.1.*"` for 4.1 (stable) or  
 `"zofe/rapyd": "1.2.*"` for 4.2 (may work)
 
