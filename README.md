@@ -188,13 +188,17 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 ## Install in Laravel 4.1 & 4.2
 
 
-To `composer.json` add:
-`"zofe/rapyd": "1.1.*"` for 4.1 or
-`"zofe/rapyd": "1.2.*"` for 4.2
+To `composer.json` add:  
+`"zofe/rapyd": "dev-master"` for 4.1 and latest stuffs (not stable) 
+`"zofe/rapyd": "1.1.*"` for 4.1 (stable) or  
+`"zofe/rapyd": "1.2.*"` for 4.2 (may work)
+
+
+In `app/config/app.php` add:  
+`'Zofe\Rapyd\RapydServiceProvider',`
+
 then run: `$ composer update zofe/rapyd`.
-  
-In `app/config/app.php` add the service provider:
-`'Zofe\Rapyd\RapydServiceProvider',`.
+
 
 
 ## Publish & integrate assets
