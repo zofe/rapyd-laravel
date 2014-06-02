@@ -185,13 +185,16 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    {{ $filter }}
    {{ $grid }}
 ```
-## Install 
+## Install in Laravel 4.1 & 4.2
 
 
-To `composer.json` add: `"zofe/rapyd": "1.0.*"`
-and then run: `$ composer update zofe/rapyd`.
-
-In `app/config/app.php` add this service provider: `'Zofe\Rapyd\RapydServiceProvider',`.
+To `composer.json` add:
+`"zofe/rapyd": "1.1.*"` for 4.1 or
+`"zofe/rapyd": "1.2.*"` for 4.2
+then run: `$ composer update zofe/rapyd`.
+  
+In `app/config/app.php` add the service provider:
+`'Zofe\Rapyd\RapydServiceProvider',`.
 
 
 ## Publish & integrate assets
