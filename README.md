@@ -45,7 +45,7 @@ in a view you can use
 
         //field
         {{ $item->title }}<br />
-        //firld from relation
+        //field from relation
         {{ $item->author->name }}<br />
 
     @endforeach
@@ -228,7 +228,7 @@ Rapyd use a "widget" approach to make a crud, without "generation".
 
 _You need to "show" and "edit" record from an entity?_  
 Ok so you need a DataGrid and DataEdit.
-You can build compoments where you want (even multiple widgets on same route).
+You can build widgets where you want (even multiple widgets on same route).
 An easy way to work with rapyd is:
   * make a route to a controller for each entity you need to manage
   * make the entity controller with one method for each widget (one for a datagrid and one for a dataedit)
