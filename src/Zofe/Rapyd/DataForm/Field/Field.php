@@ -199,6 +199,8 @@ abstract class Field extends Widget
 
     public function getValue()
     {
+
+        $name = $this->db_name;
         if (($this->request_refill == true) && Input::get($this->name) != null) {
            if (is_array(Input::get($this->name))) {
                 $values = array();
@@ -214,9 +216,33 @@ abstract class Field extends Widget
             $this->value = $this->update_value;
         } elseif (($this->status == "show") && ($this->show_value != null)) {
             $this->value = $this->show_value;
-        } elseif ((isset($this->model))  && (Input::get($this->name)===null) && (isset($this->db_name))) {
+        } elseif (isset($this->model)  
+                  && method_exists($this->model, $name) 
+                  && is_a($this->model->$name(),'Illuminate\Database\Eloquent\Relations\Relation') ) {
+
+
+            $methodClass =  get_class($this->model->$name());
+            switch($methodClass)
+            {
+                case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
+
+                    $relatedCollection = $this->model->$name()->get(); //Collection of attached models
+                    $relatedIds = $relatedCollection->modelKeys(); //array of attached models ids
+                    $this->value = implode($this->serialization_sep,$relatedIds);
+
+                    break;
+                case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
+                case 'Illuminate\Database\Eloquent\Relations\HasOne':
+                case 'Illuminate\Database\Eloquent\Relations\HasMany':
+
+                    $this->value = 2;
+                    break;
+            }
+        } elseif ((isset($this->model))  && (Input::get($this->name)===null) && ($this->model->offsetExists($this->db_name))) {
+
             $this->value = $this->model->getAttribute($this->db_name);
         }
+        
         $this->getMode();
     }
 
@@ -331,6 +357,11 @@ abstract class Field extends Widget
 
             if (!Schema::hasColumn($this->model->getTable(), $this->db_name))
             {
+                $this->model->saved(function () {
+                        $this->updateRelations();
+                });
+
+                 //check for relation then exit
                  return true;
             }
             
@@ -346,6 +377,38 @@ abstract class Field extends Widget
         return true;
     }
 
+
+    public function updateRelations() {
+
+        $relation = $this->db_name;
+        if (isset($this->new_value)) {
+            $data = $this->new_value;
+        } else {
+            $data = $this->value;
+        }
+        $data = explode($this->serialization_sep, $data);
+        
+        if ( method_exists($this->model, $relation) && is_a($this->model->$relation(),'Illuminate\Database\Eloquent\Relations\Relation') ) {
+            
+                $methodClass =  get_class($this->model->$relation());
+                switch($methodClass)
+                {
+                    case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
+                        $old_data =  $this->model->$relation()->get()->modelKeys(); 
+                        $this->model->$relation()->detach($old_data);
+                        $this->model->$relation()->attach($data);
+                        break;
+                    case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
+                    case 'Illuminate\Database\Eloquent\Relations\HasOne':
+                    case 'Illuminate\Database\Eloquent\Relations\HasMany':
+
+                        //should manage this or not?
+                        //if so, how?
+                        break;
+                }
+        }
+     }
+
     public function extraOutput()
     {
         return '<span class="extra">' . $this->extra_output . '</span>';
@@ -353,7 +416,6 @@ abstract class Field extends Widget
 
     public function build()
     {
-        $output = "";
         $this->getValue();
         $this->star = (!$this->status == "show" AND $this->required) ? '&nbsp;*' : '';
 
@@ -377,8 +439,5 @@ abstract class Field extends Widget
         }
     }
 
-//    public function generateFormId($id)
-//    {
-//        return preg_replace('/[^A-Za-z0-9_]*/', '',$id);
-//    }
+
 }

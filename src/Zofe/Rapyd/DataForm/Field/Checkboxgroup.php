@@ -1,119 +1,77 @@
-<?php if (!defined('RAPYD_PATH')) exit('No direct script access allowed');
+<?php  namespace Zofe\Rapyd\DataForm\Field;
 
-class checkbox_group_field extends field_field {
+use Illuminate\Support\Facades\Form;
 
-  public $type = "checks";
-  public $size = null;
-  public $description = "";
-  public $separator = "&nbsp;&nbsp;";
-  public $format = "%s";
-  public $css_class = "checkbox";
-  public $checked_value = 1;
-  public $unchecked_value = 0;
-  public $option_groups = array();
-  public $format_group = '<div class="ceckbox_group">
-                            <div class="ceckbox_group_label">%s  %s</div>
-                            <div>%s</div>
-                            <div style="clear:left"></div>
-                          </div>';
+class Checkboxgroup extends Field
+{
+    public $type = "checks";
+    public $size = null;
+    public $description = "";
+    public $separator = "&nbsp;&nbsp;";
+    public $format = "%s";
+    public $css_class = "checkbox";
+    public $checked_value = 1;
+    public $unchecked_value = 0;
 
-  function get_value()
-  {
-    parent::get_value();
-
-    /*if ($this->options_table=="")
+    public function getValue()
     {
+        parent::getValue();
 
-    }*/
-    $this->values = explode($this->serialization_sep, $this->value);
-    //var_dump($this->value);
-    $description_arr = array();
-    foreach ($this->options as $value=>$description)
-    {
-      if (in_array($value,$this->values))
-      {
-        $description_arr[] = $description;
-      }
-    }
-    $this->description = implode($this->separator, $description_arr);
-  }
+        $this->values = explode($this->serialization_sep, $this->value);
 
-  function build()
-  {
-    $output = "";
-
-    if(!isset($this->style))
-    {
-      $this->style = "margin:0 2px 0 0; vertical-align: middle";
-    }
-    unset($this->attributes['id']);
-    if (parent::build() === false) return;
-
-
-
-    switch ($this->status)
-    {
-      case "disabled":
-      case "show":
-        if (!isset($this->value))
-        {
-          $output = $this->layout['null_label'];
-        } else {
-           $output = $this->description;
+        $description_arr = array();
+        foreach ($this->options as $value => $description) {
+            if (in_array($value, $this->values)) {
+                $description_arr[] = $description;
+            }
         }
-        break;
+        $this->description = implode($this->separator, $description_arr);
+    }
 
-      case "create":
-      case "modify":
+    public function build()
+    {
+        $output = "";
 
-        $i = 1;
-        if (count($this->option_groups))
-        {
-            $output = '';
-            foreach ($this->option_groups as $group_id => $group )
-            {
-                $group_output = '';
-                foreach ($group['options'] as $val => $label )
-                {
-                  $attributes = $this->attributes;
-                  $attributes['name'] = $this->name.'[]';
-                  $attributes['id'] = $this->name.'_'.$i++;
-                  $this->checked = in_array($val,$this->values);
-                  $group_output .= sprintf($this->format, rpd_form_helper::checkbox($attributes, $val , $this->checked).$label).$this->separator;
+        if (!isset($this->style)) {
+            $this->style = "margin:0 2px 0 0; vertical-align: middle";
+        }
+        unset($this->attributes['id']);
+        if (parent::build() === false) return;
+
+
+        switch ($this->status) {
+            case "disabled":
+            case "show":
+                if (!isset($this->value)) {
+                    $output = $this->layout['null_label'];
+                } else {
+                    $output = $this->description;
                 }
+                break;
 
-                $output .= sprintf($this->format_group, $group['label'], rpd_html_helper::image('checked.png',array('class'=>'group_check')).' '.rpd_html_helper::image('unchecked.png',array('class'=>'group_uncheck')) ,$group_output). $this->extra_output();
-                $output .= rpd_html_helper::script("
-                    $('.group_check').click(function(){
-                          $(this).parent().parent().find(\"input[type='checkbox']\").attr('checked', true);
-                    });
-                    $('.group_uncheck').click(function(){
-                          $(this).parent().parent().find(\"input[type='checkbox']\").attr('checked', false);
-                    });
-                ");
-            }
-        } else {
+            case "create":
+            case "modify":
 
-            foreach ($this->options as $val => $label )
-            {
-              $attributes = $this->attributes;
-              $attributes['name'] = $this->name.'[]';
-              $attributes['id'] = $this->name.'_'.$i++;
-              $this->checked = in_array($val,$this->values);
-              $output .= sprintf($this->format, rpd_form_helper::checkbox($attributes, $val , $this->checked).$label).$this->separator;
-            }
-            $output .=  $this->extra_output();
+                //dd($this->options, $this->values);
+                foreach ($this->options as $val => $label) {
+                    
+                    $this->checked = in_array($val, $this->values);
+
+                    //echo ((int)$this->checked)."<br />";
+                    $output .= sprintf($this->format, Form::checkbox($this->name.'[]', $val, $this->checked) . $label) . $this->separator;
+                }
+                $output .= $this->extra_output;
+
+                break;
+
+            case "hidden":
+                $output = Form::hidden($this->name, $this->value);
+                break;
+
+            default:
         }
-        break;
-
-      case "hidden":
-        $output = rpd_form_helper::hidden($this->name, $this->value);
-        break;
-
-      default:
+        $this->output = $output;
     }
-    $this->output = $output;
-  }
 
 
 }
