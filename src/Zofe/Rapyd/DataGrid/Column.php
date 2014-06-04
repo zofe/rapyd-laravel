@@ -6,6 +6,7 @@ class Column
     public $link = "";
     public $label = "";
     public $orderby = null;
+    public $orderby_field = null;
     public $attributes = array();
 
     public $key = 'id';
@@ -26,7 +27,11 @@ class Column
 
     protected function orderby($orderby)
     {
-        $this->orderby = $orderby;
+        $this->orderby = (bool)$orderby;
+        if ($this->orderby)
+        {
+            $this->orderby_field = (is_string($orderby)) ? $orderby : $this->name;
+        }
         return $this;
     }
 

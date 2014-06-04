@@ -343,7 +343,14 @@ class DataForm extends Widget
     {
         if ($this->output == "")
         {
-            $this->getForm();
+            try {
+                $this->getForm();
+            }
+                //to avoid the error "toString() must not throw an exception" (PHP limitation)
+                //just return error as string
+            catch (\Exception $e) {
+                return $e->getMessage(). " Line ".$e->getLine();
+            }
         }
         return $this->output;
     }

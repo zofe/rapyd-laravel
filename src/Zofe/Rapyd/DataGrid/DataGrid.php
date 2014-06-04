@@ -48,7 +48,8 @@ class DataGrid extends DataSet
             foreach ($this->columns as $column) {
 
                  if (strpos($column->name, '{{') !== false) {
-                    
+
+
                     if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
                         $array = $tablerow->getAttributes();
                         $array['row'] = $tablerow;
@@ -101,7 +102,15 @@ class DataGrid extends DataSet
     {
         if ($this->output == "")
         {
-            $this->getGrid();
+           try {
+                $this->getGrid();
+           }
+           //to avoid the error "toString() must not throw an exception" (PHP limitation)
+           //just return error as string
+           catch (\Exception $e) {
+               return $e->getMessage(). " Line ".$e->getLine();
+           }
+
         }
         return $this->output;
     }
