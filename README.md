@@ -189,9 +189,9 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 
 To `composer.json` add:  
-`"zofe/rapyd": "dev-master"` for 4.1 and latest stuffs (not stable)  
-`"zofe/rapyd": "1.1.*"` for 4.1 (stable) or  
-`"zofe/rapyd": "1.2.*"` for 4.2 (may work)
+`"zofe/rapyd": "dev-master"` for both, with latest stuffs (suggested but may be unstable)  
+`"zofe/rapyd": "1.1.*"` for 4.1 (stable but not frequently updated) or  
+`"zofe/rapyd": "1.2.*"` for 4.2 (stable but not frequently updated)
 
 
 In `app/config/app.php` add:  
