@@ -52,7 +52,12 @@ class DataForm extends Widget
             $field_class = '\Zofe\Rapyd\DataForm\Field' . "\\" . ucfirst($type);
         }
 
-        $field_obj = new $field_class($name, $label);
+        //instancing 
+        if (isset($this->model)) {
+            $field_obj = new $field_class($name, $label, $this->model);
+        } else {
+            $field_obj = new $field_class($name, $label);
+        }
 
         if ( ! $field_obj instanceof Field) {
             throw new \InvalidArgumentException('Third argument («type») must point to class inherited Field class');
@@ -61,7 +66,7 @@ class DataForm extends Widget
         if ($field_obj->type == "file") {
             $this->multipart = true;
         }
-
+        
         //share model
         if (isset($this->model)) {
             $field_obj->model = & $this->model;

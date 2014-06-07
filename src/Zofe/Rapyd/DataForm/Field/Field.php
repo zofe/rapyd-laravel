@@ -12,6 +12,8 @@ abstract class Field extends Widget
     public $type = "field";
     public $label;
     public $name;
+    public $relation;
+    
     public $attributes = array('class' => 'form-control');
     public $output = "";
     public $visible = true;
@@ -53,15 +55,37 @@ abstract class Field extends Widget
     );
     public $star = '';
 
-    public function __construct($name, $label)
+    public function __construct($name, $label, &$model = null)
     {
         parent::__construct();
+        
+        $this->model = $model;
+        
         $this->name($name);
         $this->label = $label;
     }
 
     public function name($name)
     {
+        //detect relation.field  (only needed for hasOne)
+        if(preg_match('#^([a-z0-9_-]+)\.([a-z0-9_-]+)$#i',$name, $matches)) {
+
+            $relation = $matches[1];
+            $name = $matches[2];
+
+            
+            if (isset($this->model)
+                && method_exists($this->model, $relation)
+                && is_a($this->model->$relation(),'Illuminate\Database\Eloquent\Relations\HasOne'))
+            {
+
+                $this->relation = $relation;
+                $this->name = $relation."_".$name;
+                $this->db_name = $name;
+                return;
+            } 
+        }
+
         //replace dots with underscores so field names are html/js friendly
         $this->name = str_replace(array(".", ",", "`"), array("_", "_", "_"), $name);
 
@@ -224,18 +248,36 @@ abstract class Field extends Widget
             $methodClass =  get_class($this->model->$name());
             switch($methodClass)
             {
+                //es. "categories" per "Article"  
                 case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
-
                     $relatedCollection = $this->model->$name()->get(); //Collection of attached models
                     $relatedIds = $relatedCollection->modelKeys(); //array of attached models ids
                     $this->value = implode($this->serialization_sep,$relatedIds);
-
                     break;
-                case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
+                //es. "author" per "Article"
+                case 'Illuminate\Database\Eloquent\Relations\BelongsTo':
+                    //caricare il valore dal model, quale mostrare?  possibile accettare relazione.field
+                    //come gestirne il salvataggio ? 
+                    $this->value = $this->model->getAttribute($this->db_name);
+                    break;
+                
+                //es. "article_detail" per "article"
                 case 'Illuminate\Database\Eloquent\Relations\HasOne':
-                case 'Illuminate\Database\Eloquent\Relations\HasMany':
-
-                    $this->value = 2;
+                    //caricare il valore dal model, quale mostrare?  possibile accettare relazione.field
+                    //come gestirne il salvataggio ? 
+                    
+                    $relation = $this->relation;
+                    $this->value =  @$this->model->$relation->$name;
+                    
+                    break;
+                
+                //es. "comments" for "Article"
+                default:
+                    //'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
+                    //'Illuminate\Database\Eloquent\Relations\HasMany':
+                    //polimorphic, etc.. 
+                    throw new \InvalidArgumentException("The field {$this->db_name} is a ".$methodClass
+                                                        ." but Rapyd can handle only BelongsToMany, BelongsTo, and HasOne");
                     break;
             }
         } elseif ((isset($this->model))  && (Input::get($this->name)===null) && ($this->model->offsetExists($this->db_name))) {
@@ -398,8 +440,11 @@ abstract class Field extends Widget
                         $this->model->$relation()->detach($old_data);
                         $this->model->$relation()->attach($data);
                         break;
-                    case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
                     case 'Illuminate\Database\Eloquent\Relations\HasOne':
+
+                        break;
+                    case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
+
                     case 'Illuminate\Database\Eloquent\Relations\HasMany':
 
                         //should manage this or not?
