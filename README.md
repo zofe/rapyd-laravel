@@ -2,8 +2,8 @@ rapyd-laravel
 =============
 
 This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.  
-Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.
-Main Website: [rapyd.com](http://www.rapyd.com)
+Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.  
+Main Website: [rapyd.com](http://www.rapyd.com)  
 Demo: [rapyd.com/demo](http://www.rapyd.com/demo)
 
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
@@ -211,8 +211,9 @@ then you need to add this to your views, to let rapyd add runtime assets:
 <head>
   ...
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
    {{ Rapyd::head() }}
 </head>
 ```
@@ -235,64 +236,21 @@ An easy way to work with rapyd is:
   * make an empty view, include bootstrap and display content that rapyd will build for you
 
 
-Would you like to see a sample Backend ?  bum:
+Rapyd comes with demo (controller, models, views)  to run it just add:
+
 
 /app/routes.php
 ```php
 ...
-Route::controller('admin', 'AdminController');
+Route::controller('rapyd-demo', 'Zofe\\Rapyd\\Controllers\\DemoController');
 ```
 
-/app/controllers/AdminController.php
-```php
-class AdminController extends BaseController {
+then go to:
 
-	public function getArticles()
-	{
-        $content = DataGrid::source( Article::with("user"));
-        $content->link('/admin/article', "New Article",  "TR");
-        $content->add('title','Title', true);
-        $content->add('{{ substr($body,0,20) }}...','Body');
-        $content->add('{{ $row->user->email }}','author');
-        $content->edit('/admin/article', 'Edit','modify|delete');
-        $content->paginate(10);
-        return  View::make('admin.edit', compact('content'));
-	} 
+/rapyd-demo
 
-	public function anyArticle()
-	{
-        $content = DataEdit::source(new Article);
-        $content->link('/admin/articles', "Article List",  "TR");
-        $content->add('title','Title', 'text')->rule('required');
-        $content->add('body','Body', 'redactor');
-        $content->add('user_id','Author','select')->options(User::lists("username", "id"));
-        return $edit->view('admin.edit', compact('content'));
-	} 
- 
-}
-```
-
-/app/views/admin/edit.blade.php
-```php
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <link  href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-
-    {{ Rapyd::head() }}
-  </head>
-  <body>
-    <div id="wrap">
-      <div class="container">
-        {{ $content }}
-      </div>
-    </div>
-  </body>
-</html>
-```
+or play with the demo here:
+Demo: [http://rapyd.com/demo](http://www.rapyd.com/demo)
 
 
 
