@@ -205,7 +205,19 @@ then run: `$ composer update zofe/rapyd`.
 
 `php artisan asset:publish zofe/rapyd`
 
-then you need to add this to your views, to let rapyd add runtime assets:
+You need to publish the assets from this package.
+
+    $ php artisan asset:publish zofe/rapyd
+
+Note: The public assets can change overtime (because of upstream changes), it is recommended to re-publish them after update.  
+Alternatively you can add the publish command in composer.json.
+
+    "post-update-cmd": [
+        "php artisan asset:publish zofe/rapyd"
+    ],
+
+
+You need also to add this to your views, to let rapyd add runtime assets:
 
 ```php
 <head>

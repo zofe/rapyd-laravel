@@ -1,5 +1,6 @@
 
     <ul class="nav nav-pills">
+        <li>{{ link_to("/", "rapyd.com") }}</li>
         <li @if (Request::is('rapyd-demo')) class="active"@endif>{{ link_to("rapyd-demo", "Index") }}</li>
         <li @if (Request::is('rapyd-demo/models')) class="active"@endif>{{ link_to("rapyd-demo/models", "Models") }}</li>
         <li @if (Request::is('rapyd-demo/grid*')) class="active"@endif>{{ link_to("rapyd-demo/grid", "DataGrid") }}</li>
