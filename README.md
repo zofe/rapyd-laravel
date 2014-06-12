@@ -203,7 +203,6 @@ then run: `$ composer update zofe/rapyd`.
 
 ## Publish & integrate assets
 
-`php artisan asset:publish zofe/rapyd`
 
 You need to publish the assets from this package.
 
@@ -261,8 +260,8 @@ then go to:
 
 /rapyd-demo
 
-or play with the demo here:  
-[http://rapyd.com/demo](http://www.rapyd.com/demo)
+or use the one that is online:  
+[http://rapyd.com/rapyd-demo](http://www.rapyd.com/rapyd-demo)
 
 
 
