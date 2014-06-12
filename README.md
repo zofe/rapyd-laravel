@@ -249,8 +249,8 @@ then go to:
 
 /rapyd-demo
 
-or play with the demo here:
-Demo: [http://rapyd.com/demo](http://www.rapyd.com/demo)
+or play with the demo here:  
+[http://rapyd.com/demo](http://www.rapyd.com/demo)
 
 
 
