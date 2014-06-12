@@ -1,7 +1,5 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-?>
+//due security reason leave this commented
+//and tell user to enable it on \app\routes.php on README.md 
+//Route::controller('rapyd-demo', 'Zofe\\Rapyd\\Controllers\\DemoController');

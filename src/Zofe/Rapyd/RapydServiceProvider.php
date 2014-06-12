@@ -40,6 +40,7 @@ class RapydServiceProvider extends ServiceProvider {
 		  $loader->alias('DataForm', 'Zofe\Rapyd\Facades\DataForm');
 		  $loader->alias('DataEdit', 'Zofe\Rapyd\Facades\DataEdit');
 		  $loader->alias('DataFilter','Zofe\Rapyd\Facades\DataFilter');
+          $loader->alias('Documenter','Zofe\Rapyd\Facades\Documenter');
 		});
 	}
 
