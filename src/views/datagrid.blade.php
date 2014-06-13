@@ -7,7 +7,7 @@
     <thead>
     <tr>
      @foreach ($dg->columns as $column)
-            <th>
+            <th{{ $column->buildAttributes() }}>
             @if ($column->orderby)
                 @if ($dg->onOrderby($column->orderby_field, 'asc'))
                     <span class="glyphicon glyphicon-arrow-up"></span>

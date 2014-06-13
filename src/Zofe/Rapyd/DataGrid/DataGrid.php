@@ -58,17 +58,17 @@ class DataGrid extends DataSet
                         $array = (array)$tablerow;
                     }
 
-                    $cell= $this->parser->compileString($column->name, $array);
+                     $value = $this->parser->compileString($column->name, $array);
 
                 } elseif (is_object($tablerow)) {
 
-                    $cell = $tablerow->{$column->name};
+                     $value = $tablerow->{$column->name};
                     
                 } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
 
-                    $cell = $tablerow[$column->name];
+                     $value = $tablerow[$column->name];
                 } else {
-                    $cell = $column->name;
+                     $value = $column->name;
                 }
                 if ($column->link) {
                     if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
@@ -77,13 +77,14 @@ class DataGrid extends DataSet
                     } else {
                         $array = (array)$tablerow;
                     }
-                    $cell =  '<a href="'.$this->parser->compileString($column->link, $array).'">'.$cell.'</a>';
+                    $value =  '<a href="'.$this->parser->compileString($column->link, $array).'">'.$value.'</a>';
                 }
                 if (count($column->actions)>0) {
                     $key = ($column->key != '')?  $column->key : $this->key;
-                    $cell = \View::make('rapyd::datagrid.actions', array('uri' => $column->uri, 'id' => $tablerow->getAttribute($key), 'actions' => $column->actions));
+                    $value = \View::make('rapyd::datagrid.actions', array('uri' => $column->uri, 'id' => $tablerow->getAttribute($key), 'actions' => $column->actions));
 
                 }
+                $cell = $value;
                 $row[] = $cell;
             }
             $this->rows[] = $row;

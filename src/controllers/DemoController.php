@@ -126,7 +126,7 @@ class DemoController extends \Controller {
     public function getGrid()
     {
         $grid = DataGrid::source(Article::with('author', 'categories'));
-        $grid->add('article_id','ID', true);
+        $grid->add('article_id','ID', true)->attributes(array("style"=>"width:100px"));
         $grid->add('title','Title', true);
         $grid->add('{{ $row->author->firstname }}','Author', 'author_id');
         $grid->add('body','Body');
@@ -201,10 +201,11 @@ class DemoController extends \Controller {
         return $edit->view('rapyd::demo.edit', compact('edit'));
 
     }
+
     
     public function getAuthorlist()
     {
-        if (Input::get("id"))
+       if (Input::get("id"))
        {
             return Author::where("user_id","=", Input::get("id")."%")->first()->get();
        } else {

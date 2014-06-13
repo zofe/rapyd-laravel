@@ -12,6 +12,8 @@ class Column
     public $key = 'id';
     public $uri = null;
     public $actions = array();
+    
+    public $value = null;
 
     public function __construct($name, $label = null, $orderby = false)
     {
@@ -60,5 +62,26 @@ class Column
         return $this;
     }
 
+    public function setValue($value)
+    {
+        $this->value = $value;
+        return $this;
+    }
+    
+    public function buildAttributes()
+    {
+        if (is_string($this->attributes))
+            return $this->attributes;
+
+        if (count($this->attributes)<1)
+            return "";
+        
+        $compiled = '';
+        foreach($this->attributes as $key => $val)
+        {
+            $compiled .= ' '.$key.'="'.$val.'"';
+        }
+        return $compiled;
+    }
 
 }
