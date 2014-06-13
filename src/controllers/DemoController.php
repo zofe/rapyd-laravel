@@ -1,6 +1,7 @@
 <?php namespace Zofe\Rapyd\Controllers;
 
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,8 @@ class DemoController extends \Controller {
 
     public function getIndex()
     {
-        return  View::make('rapyd::demo.demo');
+        $is_rapyd = (Request::server('HTTP_HOST') == "www.rapyd.com") ? true : false;
+        return  View::make('rapyd::demo.demo', compact('is_rapyd'));
     }
 
     public function getModels()

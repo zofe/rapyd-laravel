@@ -13,10 +13,14 @@
 
     <p>
         Welcome to Rapyd Demo.<br />
-        first click on Populate Database button, then click on menu<br />
-        <br />
-
-        {{ link_to('rapyd-demo/schema', "Populate Database", array("class"=>"btn btn-default")) }}
+        
+        @if (isset($is_rapyd) AND $is_rapyd)
+        
+        @else
+            first click on Populate Database button, then click on menu<br />
+            <br />
+            {{ link_to('rapyd-demo/schema', "Populate Database", array("class"=>"btn btn-default")) }}
+        @endif
     </p>
 
 
