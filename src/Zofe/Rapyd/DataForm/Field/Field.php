@@ -396,17 +396,18 @@ abstract class Field extends Widget
         } else {
             $data = $this->value;
         }
-        $data = explode($this->serialization_sep, $data);
-        
-        if ( method_exists($this->model, $relation) && is_a($this->model->$relation(),'Illuminate\Database\Eloquent\Relations\Relation') ) {
+
+        if ( $this->relation != null ) {
             
-                $methodClass =  get_class($this->model->$relation());
+                $methodClass =  get_class($this->relation);
                 switch($methodClass)
                 {
                     case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
-                        $old_data =  $this->model->$relation()->get()->modelKeys(); 
-                        $this->model->$relation()->detach($old_data);
-                        $this->model->$relation()->attach($data);
+
+                        $old_data =  $this->relation->get()->modelKeys();
+                        $data = explode($this->serialization_sep, $data);
+                        $this->relation->detach($old_data);
+                        $this->relation->attach($data);
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\HasOne':
 
