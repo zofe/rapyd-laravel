@@ -35,6 +35,8 @@ class DataFilter extends DataForm
         $ins->source = $source;
         $ins->query = $source;
         $ins->cid = $ins->getIdentifier();
+        $ins->sniffStatus();
+        $ins->sniffAction();
         return $ins;
     }
 

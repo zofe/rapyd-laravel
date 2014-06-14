@@ -59,14 +59,14 @@ class DataForm extends Widget
             $field_obj = new $field_class($name, $label);
         }
 
-        if ( ! $field_obj instanceof Field) {
+        if (!$field_obj instanceof Field) {
             throw new \InvalidArgumentException('Third argument («type») must point to class inherited Field class');
         }
 
         if ($field_obj->type == "file") {
             $this->multipart = true;
         }
-        
+
         //share model
         if (isset($this->model)) {
             $field_obj->model = & $this->model;
@@ -99,9 +99,8 @@ class DataForm extends Widget
      */
     public function removeType($type)
     {
-        foreach ($this->fields as $fieldname => $field)
-        {
-            if ($field->type==$type) {
+        foreach ($this->fields as $fieldname => $field) {
+            if ($field->type == $type) {
                 unset($this->fields[$fieldname]);
             }
         }
@@ -111,7 +110,7 @@ class DataForm extends Widget
     /**
      * @param string $name
      * @param string $position
-     * @param array  $options
+     * @param array $options
      *
      * @return $this
      */
@@ -125,13 +124,13 @@ class DataForm extends Widget
     /**
      * @param string $name
      * @param string $position
-     * @param array  $options
+     * @param array $options
      *
      * @return $this
      */
     function reset($name, $position = "BL", $options = array())
     {
-        $this->link($this->url->current(true),  $name, $position);
+        $this->link($this->url->current(true), $name, $position);
         return $this;
     }
 
@@ -149,6 +148,8 @@ class DataForm extends Widget
     {
         $ins = new static;
         $ins->cid = $ins->getIdentifier();
+        $ins->sniffStatus();
+        $ins->sniffAction();
         return $ins;
     }
 
@@ -164,6 +165,8 @@ class DataForm extends Widget
             $ins->model = $source;
         }
         $ins->cid = $ins->getIdentifier();
+        $ins->sniffStatus();
+        $ins->sniffAction();
         return $ins;
     }
 
@@ -195,7 +198,7 @@ class DataForm extends Widget
     public function on($process_status = "false")
     {
         if (is_array($process_status))
-            return (bool) in_array($this->process_status, $process_status);
+            return (bool)in_array($this->process_status, $process_status);
         return ($this->process_status == $process_status);
     }
 
@@ -224,7 +227,7 @@ class DataForm extends Widget
 
     protected function sniffAction()
     {
-        if (isset($_POST) && ( $this->url->value('process'))) {
+        if (isset($_POST) && ($this->url->value('process'))) {
             $this->action = ($this->status == "modify") ? "update" : "insert";
         }
     }
@@ -284,8 +287,8 @@ class DataForm extends Widget
     {
         $data = get_object_vars($this);
         $data['buttons'] = $this->button_container;
-        
-        $form_attr = array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form", 'method'=> $this->method);
+
+        $form_attr = array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form", 'method' => $this->method);
         // See if we need a multipart form
         foreach ($this->fields as $field_obj) {
             if ($field_obj->type == 'file') {
@@ -299,11 +302,10 @@ class DataForm extends Widget
             $data['form_end'] = '</div>';
         } else {
             $data['form_begin'] = Form::open($form_attr);
-            $data['form_end'] = Form::close();
-            
-            if ($this->method =="GET")
-            {
-                $data['form_end'] = Form::hidden('search', 1). Form::close();
+            $data['form_end'] = Form::hidden('save', 1) . Form::close();
+
+            if ($this->method == "GET") {
+                $data['form_end'] = Form::hidden('search', 1) . Form::close();
             }
         }
         if (isset($this->validator)) {
@@ -322,11 +324,11 @@ class DataForm extends Widget
     public function build($view = '')
     {
         if ($this->output != '') return;
-        if ($view!='') $this->view = $view;
-        $this->sniffStatus();
-        $this->sniffAction();
+        if ($view != '') $this->view = $view;
+        //$this->sniffStatus();
+        //$this->sniffAction();
         $this->process();
-        
+
         $this->buildFields();
         $this->buildButtons();
         $this->output = $this->buildForm()->render();
@@ -346,15 +348,14 @@ class DataForm extends Widget
 
     public function __toString()
     {
-        if ($this->output == "")
-        {
+        if ($this->output == "") {
             try {
                 $this->getForm();
             }
                 //to avoid the error "toString() must not throw an exception" (PHP limitation)
                 //just return error as string
             catch (\Exception $e) {
-                return $e->getMessage(). " Line ".$e->getLine();
+                return $e->getMessage() . " Line " . $e->getLine();
             }
         }
         return $this->output;
@@ -363,14 +364,16 @@ class DataForm extends Widget
     /**
      * @return bool
      */
-    public function hasRedirect() {
+    public function hasRedirect()
+    {
         return ($this->redirect != null) ? true : false;
     }
 
     /**
      * @return string
      */
-    public function getRedirect() {
+    public function getRedirect()
+    {
         return $this->redirect;
     }
 
@@ -380,13 +383,13 @@ class DataForm extends Widget
      *
      * @return View|Redirect
      */
-    public function view($viewname, $array=array())
+    public function view($viewname, $array = array())
     {
         $form = $this->getForm();
 
         $array['form'] = $form;
         if ($this->hasRedirect()) return Redirect::to($this->getRedirect());
-        return  View::make($viewname, $array);
+        return View::make($viewname, $array);
     }
 
     /**
@@ -394,17 +397,16 @@ class DataForm extends Widget
      * @param callable $callable
      * @return callable
      */
-    function saved( \Closure $callable)
+    function saved(\Closure $callable)
     {
         $this->sniffStatus();
         $this->sniffAction();
         $this->process();
 
-        if ($this->process_status == "success")
-        {
-           $this->button_container['BL'] = array();
-           $this->removeType('submit');
-           $callable($this);
+        if ($this->process_status == "success") {
+            $this->button_container['BL'] = array();
+            $this->removeType('submit');
+            $callable($this);
         }
 
     }
@@ -422,8 +424,7 @@ class DataForm extends Widget
                 if (isset($series_of_fields[$field_ref->in][0]) && $field_ref->label != "")
                     $series_of_fields[$field_ref->in][0]->label .= '/' . $field_ref->label;
                 $series_of_fields[$field_ref->in][] = $field_ref;
-            }
-            else {
+            } else {
                 $series_of_fields[$field_name][] = $field_ref;
             }
         }
@@ -487,7 +488,7 @@ class DataForm extends Widget
      */
     public function addFile($name, $label, $validation = '')
     {
-        return $this->add($name , $label, 'file', $validation);
+        return $this->add($name, $label, 'file', $validation);
     }
 
     /**
@@ -499,7 +500,7 @@ class DataForm extends Widget
      */
     public function addRedactor($name, $label, $validation = '')
     {
-        return $this->add($name , $label, 'redactor', $validation);
+        return $this->add($name, $label, 'redactor', $validation);
     }
 
     /**
@@ -511,7 +512,7 @@ class DataForm extends Widget
      */
     public function addSelect($name, $label, $validation = '')
     {
-        return $this->add($name , $label, 'select', $validation);
+        return $this->add($name, $label, 'select', $validation);
     }
 
     /**
@@ -523,7 +524,7 @@ class DataForm extends Widget
      */
     public function addSubmit($name, $label, $validation = '')
     {
-        return $this->add($name , $label, 'submit', $validation);
+        return $this->add($name, $label, 'submit', $validation);
     }
 
     /**
@@ -535,7 +536,7 @@ class DataForm extends Widget
      */
     public function addText($name, $label, $validation = '')
     {
-        return $this->add($name , $label, 'text', $validation);
+        return $this->add($name, $label, 'text', $validation);
     }
 
     /**
@@ -547,9 +548,9 @@ class DataForm extends Widget
      */
     public function addTextarea($name, $label, $validation = '')
     {
-        return $this->add($name , $label, 'textarea', $validation);
+        return $this->add($name, $label, 'textarea', $validation);
     }
-    
+
     /**
      * @param string $name
      * @param string $label
@@ -559,9 +560,9 @@ class DataForm extends Widget
      */
     public function addCheckbox($name, $label, $validation = '')
     {
-        return $this->add($name , $label, 'checkbox', $validation);
+        return $this->add($name, $label, 'checkbox', $validation);
     }
-    
+
     /**
      * @param string $name
      * @param string $label
@@ -571,6 +572,6 @@ class DataForm extends Widget
      */
     public function addRadiogroup($name, $label, $validation = '')
     {
-        return $this->add($name , $label, 'radiogroup', $validation);
+        return $this->add($name, $label, 'radiogroup', $validation);
     }
 }

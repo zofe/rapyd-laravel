@@ -27,6 +27,7 @@ class DataEdit extends DataForm
         parent::__construct();
         $this->process_url = '';
     }
+
     protected function sniffStatus()
     {
         $this->status = "idle";
@@ -38,17 +39,17 @@ class DataEdit extends DataForm
                 $this->status = "unknow_record";
             }
             ///// modify /////
-        } elseif ($this->url->value('modify' . $this->cid )) {
+        } elseif ($this->url->value('modify' . $this->cid)) {
             $this->status = "modify";
-            
+
             $this->process_url = $this->url->replace('modify' . $this->cid, 'update' . $this->cid)->get();
             if (!$this->find($this->url->value('modify' . $this->cid))) {
                 $this->status = "unknow_record";
             }
             ///// create /////
-        } elseif ($this->url->value('show' . $this->cid ."|modify" . $this->cid ."|create" . $this->cid ."|delete" . $this->cid) === false) {
+        } elseif ($this->url->value('show' . $this->cid . "|modify" . $this->cid . "|create" . $this->cid . "|delete" . $this->cid) === false) {
             $this->status = "create";
-            $this->process_url = $this->url->append('insert'.$this->cid, 1)->get();
+            $this->process_url = $this->url->append('insert' . $this->cid, 1)->get();
         } elseif ($this->url->value('create' . $this->cid)) {
             $this->status = "create";
             $this->process_url = $this->url->replace('create' . $this->cid, 'insert' . $this->cid)->get();
@@ -65,25 +66,27 @@ class DataEdit extends DataForm
         }
     }
 
-    protected function find($id) {
+    protected function find($id)
+    {
         $model = $this->model;
         $this->model = $model::find($id);
-        return $this->model->exists; 
+        return $this->model->exists;
     }
 
     protected function sniffAction()
     {
+  
         ///// insert /////
         if ($this->url->value('insert' . $this->cid)) {
             $this->action = "insert";
-        ///// update /////
+            ///// update /////
         } elseif ($this->url->value('update' . $this->cid)) {
             $this->action = "update";
             $this->process_url = $this->url->append('update', $this->url->value('update' . $this->cid))->get();
             if (!$this->find($this->url->value('update' . $this->cid))) {
                 $this->status = "unknow_record";
             }
-        ///// delete /////
+            ///// delete /////
         } elseif ($this->url->value("do_delete" . $this->cid)) {
             $this->action = "delete";
             if (!$this->find($this->url->value("do_delete" . $this->cid))) {
@@ -91,69 +94,61 @@ class DataEdit extends DataForm
             }
         }
     }
-    
-    
-	protected function process() {
-		$result = parent::process();
-		switch ($this->action) {
-			case "update":
+
+
+    protected function process()
+    {
+        $result = parent::process();
+        switch ($this->action) {
+            case "update":
 
                 if ($this->on("error")) {
-					$this->status = "modify";
-					//$this->process_url = rpd_url_helper::get_url();
-				}
-				if ($this->on("success")) {
-                    
+                    $this->status = "modify";
+                    //$this->process_url = rpd_url_helper::get_url();
+                }
+                if ($this->on("success")) {
+
                     //settare messaggio in sessione o in variabile
                     $this->status = "modify";
-                    $this->redirect = $this->url->replace('update' . $this->cid, 'show'. $this->cid)->get();
-                   
-				}
-                
-			break;
-			case "insert":
-                
-				if ($this->on("error")) {
-					$this->status = "create";
-				}
-				if ($this->on("success")) {
+                    $this->redirect = $this->url->replace('update' . $this->cid, 'show' . $this->cid)->get();
+
+                }
+
+                break;
+            case "insert":
+
+                if ($this->on("error")) {
+                    $this->status = "create";
+                }
+                if ($this->on("success")) {
                     $this->status = "show";
-                     $this->redirect = $this->url->remove('insert' . $this->cid)->append('show'.$this->cid, $this->model->getKey())->get();
-				}
-			break;
-			case "delete":
-				if ($this->on("error")) {
-					
-                    //$this->build_buttons();
-					//return $this->build_message('!errore durante la cancellazione');
-				}
-				if ($this->on("success")) {
+                    $this->redirect = $this->url->remove('insert' . $this->cid)->append('show' . $this->cid, $this->model->getKey())->get();
+                }
+                break;
+            case "delete":
+                if ($this->on("error")) {
+
+                }
+                if ($this->on("success")) {
                     $this->message("record deleted");
-					/*$this->build_buttons();
-					if ($this->back_delete) {
-                        header("Location: ".$this->back_url);
-						die();
-					} else {
-						return $this->build_message('record cancellato');
-					}*/
-				}
-			break;
-		}
-	}
-    
+                }
+                break;
+        }
+    }
+
     protected function buildButtons()
     {
         //show
         if ($this->status == "show") {
 
-            $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), trans('rapyd::rapyd.modify'),  "TR");
+            $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), trans('rapyd::rapyd.modify'), "TR");
             //$this->link($this->url->replace('show' . $this->cid, 'delete' . $this->cid)->get(), "delete",  "TR");
         }
         //modify
         if ($this->status == "modify") {
 
             $this->link($this->url->replace('modify' . $this->cid, 'show' . $this->cid)
-                                  ->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'),  "TR");
+                ->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "TR");
             $this->submit(trans('rapyd::rapyd.save'), 'actions');
         }
         //modify
@@ -161,10 +156,10 @@ class DataEdit extends DataForm
             $this->submit(trans('rapyd::rapyd.save'), 'actions');
         }
     }
-    
+
     public function getEdit($view = '')
     {
-        
+
         return $this->getForm($view);
     }
 

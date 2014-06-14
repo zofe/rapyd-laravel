@@ -1,6 +1,7 @@
 <?php namespace Zofe\Rapyd\DataForm\Field;
 
 use Zofe\Rapyd\Widget;
+use Zofe\Rapyd\Helpers\HTML;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Input;
@@ -10,6 +11,7 @@ abstract class Field extends Widget
 
     //main properties
     public $type = "field";
+    public $multiple = false;
     public $label;
     public $name;
     public $relation;
@@ -67,26 +69,28 @@ abstract class Field extends Widget
 
     public function name($name)
     {
-        //detect relation.field  (only needed for hasOne)
+        //detect relation or relation.field
+        $relation = null;
         if(preg_match('#^([a-z0-9_-]+)\.([a-z0-9_-]+)$#i',$name, $matches)) {
-
             $relation = $matches[1];
             $name = $matches[2];
+        } elseif(preg_match('#^[a-z0-9_-]+$#i',$name))  {
+            $relation = $name;
+        } 
+         
+        if (isset($this->model) &&  
+            method_exists($this->model, $relation)  &&
+            is_a($this->model->$relation(),'Illuminate\Database\Eloquent\Relations\Relation'))
+        {
 
-            
-            if (isset($this->model)
-                && method_exists($this->model, $relation)
-                && is_a($this->model->$relation(),'Illuminate\Database\Eloquent\Relations\HasOne'))
-            {
-
-                $this->relation = $relation;
-                $this->name = $relation."_".$name;
-                $this->db_name = $name;
-                return;
-            } 
+            $this->relation = $this->model->$relation(); //va fatta dopo il find
+            $this->rel_name =  $relation;
+            $this->name = ($name != $relation) ? $relation."_".$name : $name;
+            $this->db_name = $name;
+            return;
         }
 
-        //replace dots with underscores so field names are html/js friendly
+        //otherwise replace dots with underscores so field names are html/js friendly
         $this->name = str_replace(array(".", ",", "`"), array("_", "_", "_"), $name);
 
         if (!isset($this->db_name))
@@ -181,56 +185,23 @@ abstract class Field extends Widget
         return $this;
     }
 
-    // --------------------------------------------------------------------
-    //http://svn.bitflux.ch/repos/public/popoon/trunk/classes/externalinput.php
-    function xssfilter($string)
-    {
-        if (is_array($string)) {
-            return $string;
-        }
-        if ($this->type == "html") {
-            return $string;
-        }
-        $string = str_replace(array("&amp;", "&lt;", "&gt;"), array("&amp;amp;", "&amp;lt;", "&amp;gt;",), $string);
-        // fix &entitiy\n;
-
-        $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u', "$1;", $string);
-        $string = preg_replace('#(&\#x*)([0-9A-F]+);*#iu', "$1$2;", $string);
-        $string = html_entity_decode($string, ENT_COMPAT, "UTF-8");
-
-        // remove any attribute starting with "on" or xmlns
-        $string = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iUu', "$1>", $string);
-        // remove javascript: and vbscript: protocol
-        $string = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu', '$1=$2nojavascript...', $string);
-        $string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu', '$1=$2novbscript...', $string);
-        $string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#Uu', '$1=$2nomozbinding...', $string);
-        //<span style="width: expression(alert('Ping!'));"></span>
-        // only works in ie...
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU', "$1>", $string);
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU', "$1>", $string);
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iUu', "$1>", $string);
-        //remove namespaced elements (we do not need them...)
-        $string = preg_replace('#</*\w+:\w[^>]*>#i', "", $string);
-        //remove really unwanted tags
-
-        do {
-            $oldstring = $string;
-            $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $string);
-        } while ($oldstring != $string);
-
-        return $string;
-    }
 
     public function getValue()
     {
-
         $name = $this->db_name;
-        if (($this->request_refill == true) && Input::get($this->name) != null) {
-           if (is_array(Input::get($this->name))) {
+
+        $process = (Input::get('search') || Input::get('save')) ? true : false;
+        
+        if ($this->request_refill == true && $process) {
+           if ($this->multiple) {
+                
                 $values = array();
+                if (Input::get($this->name)) {
+                    $values = Input::get($this->name);
+                }
                 $this->value = implode($this->serialization_sep, $values);
             } else {
-                $request_value = self::xssfilter(Input::get($this->name));
+                $request_value = HTML::xssfilter(Input::get($this->name));
                 $this->value = $request_value;
             }
             $this->is_refill = true;
@@ -240,34 +211,31 @@ abstract class Field extends Widget
             $this->value = $this->update_value;
         } elseif (($this->status == "show") && ($this->show_value != null)) {
             $this->value = $this->show_value;
-        } elseif (isset($this->model)  
-                  && method_exists($this->model, $name) 
-                  && is_a($this->model->$name(),'Illuminate\Database\Eloquent\Relations\Relation') ) {
+        //} elseif (isset($this->model)  
+        //          && method_exists($this->model, $name) 
+        //          && is_a($this->model->$name(),'Illuminate\Database\Eloquent\Relations\Relation') ) {
+        } elseif (isset($this->model) && $this->relation != null )  {
 
-
-            $methodClass =  get_class($this->model->$name());
+            $methodClass = get_class($this->relation);
+            
             switch($methodClass)
             {
                 //es. "categories" per "Article"  
                 case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
-                    $relatedCollection = $this->model->$name()->get(); //Collection of attached models
+                    $relatedCollection = $this->relation->get(); //Collection of attached models
                     $relatedIds = $relatedCollection->modelKeys(); //array of attached models ids
                     $this->value = implode($this->serialization_sep,$relatedIds);
                     break;
                 //es. "author" per "Article"
                 case 'Illuminate\Database\Eloquent\Relations\BelongsTo':
-                    //caricare il valore dal model, quale mostrare?  possibile accettare relazione.field
-                    //come gestirne il salvataggio ? 
-                    $this->value = $this->model->getAttribute($this->db_name);
+                    $fk = $this->relation->getForeignKey(); //value I need is the ForeingKey
+                    $this->value = $this->model->getAttribute($fk);
                     break;
                 
                 //es. "article_detail" per "article"
                 case 'Illuminate\Database\Eloquent\Relations\HasOne':
-                    //caricare il valore dal model, quale mostrare?  possibile accettare relazione.field
-                    //come gestirne il salvataggio ? 
-                    
-                    $relation = $this->relation;
-                    $this->value =  @$this->model->$relation->$name;
+                    $this->value =  $this->relation->$name; //value I need is the field value on related table
+                    // @$this->model->$relation->$name;
                     
                     break;
                 
@@ -300,11 +268,11 @@ abstract class Field extends Widget
             if (is_array(Input::get($this->name))) {
                 $values = array();
                 foreach (Input::get($this->name) as $value) {
-                    $values[] = self::xssfilter($value);
+                    $values[] = HTML::xssfilter($value);
                 }
                 $this->new_value = implode($this->serialization_sep, $values);
             } else {
-                $request_value = self::xssfilter(Input::get($this->name));
+                $request_value = HTML::xssfilter(Input::get($this->name));
                 $this->new_value = $request_value;
             }
         } elseif (($this->action == "insert") && ($this->insert_value != null)) {

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Form;
 class Checkboxgroup extends Field
 {
     public $type = "checks";
+    public $multiple = true;
     public $size = null;
     public $description = "";
     public $separator = "&nbsp;&nbsp;";

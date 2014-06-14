@@ -4,6 +4,8 @@ namespace Zofe\Rapyd\DataForm\Field;
 
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Session;
 use Zofe\Rapyd\Rapyd;
 
 class Autocomplete extends Field {
@@ -24,12 +26,33 @@ class Autocomplete extends Field {
     public $min_chars = '2';
 
 
+    
+    
+    
+
+    public function options($options, $remote = "")
+    {
+        if (is_array($options)) {
+            $this->options += $options;
+        }
+        return $this;
+    }
+
+   /* public function option($value = '', $description = '')
+    {
+        $this->options[$value] = $description;
+        return $this;
+    }*/
+    
+    
+
     function getValue()
     {
         parent::getValue();
 
+        //dd($this->value);
         
-       /* if (Input::get($this->name))
+        /*if (Input::get($this->name))
         {
             if ($this->record_label, $this->hidden_field_id))
             {
@@ -40,17 +63,26 @@ class Autocomplete extends Field {
                     $this->value = file_get_contents($this->ajax_rsource);
                 }
 
-
             }
         }*/
 
     }
 
-    public function remote($remote, $record_label=null, $record_id=null)
+    public function remote($record_label = null, $record_id = null, $remote = null)
     {
-        $this->remote = $remote;
         $this->record_label = ($record_label!="") ? $record_label : $this->db_name ;
         $this->record_id = ($record_id!="") ? $record_id : $this->db_name ;
+        if ($remote!="") {
+            $this->remote = $remote;
+        } else {
+
+            $data =  array('entity'=>'Article', 'field'=>'firstnama');
+            $hash = substr(md5(serialize($data)), 0, 12);
+            Session::put($hash, $data);
+
+            route('rapyd.remote', array('hash'=> $hash));
+        }
+        
     }
 
 
@@ -86,8 +118,7 @@ class Autocomplete extends Field {
             case "create":
             case "modify":
 
-                dd( $this->attributes);
-                $output  =  Form::text("auto_".$this->db_name, $this->value, array()$this->attributes)."\n";
+                $output  =  Form::text("auto_".$this->db_name, $this->value, $this->attributes)."\n";
                 $output .=  Form::hidden($this->db_name, $this->value);
 
                 //$mustmatch = ($this->must_match) ? 'true' : 'false';
