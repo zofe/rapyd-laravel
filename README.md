@@ -91,6 +91,26 @@ in a view you can just write
   {{ $grid }}
 ```
 
+
+styling a datagrid
+
+```php
+   $grid = DataGrid::source(Article::with('author')); 
+   $grid->add('title','Title', true)->style("width:100px"); //adding style to th
+   $grid->add('body','Body')->attributes(array("class"=>"custom_column")); //adding class to a th
+   ...
+    //row and cell manipulation via closure
+    $grid->row(function ($row) {
+       if ($row->cells[0]->value > 15) {
+           $row->cells[0]->style("font-weight:bold");
+           $row->style("color:#f00");
+       }  
+    });
+   ...
+   View::make('articles', compact('grid'))
+
+```
+
 ## DataForm
 
  DataForm is a form builder, you can add fields, rules and buttons.  

@@ -1,5 +1,6 @@
 <?php namespace Zofe\Rapyd\DataGrid;
 
+use Zofe\Rapyd\Helpers\HTML;
 
 class Column
 {
@@ -49,6 +50,12 @@ class Column
         return $this;
     }
 
+    public function style($style)
+    {
+        $this->attributes['style'] = $style;
+        return $this;
+    }
+    
     public function actions($uri, $actions)
     {
         $this->uri = $uri;
@@ -62,26 +69,9 @@ class Column
         return $this;
     }
 
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
-    }
-    
     public function buildAttributes()
     {
-        if (is_string($this->attributes))
-            return $this->attributes;
-
-        if (count($this->attributes)<1)
-            return "";
-        
-        $compiled = '';
-        foreach($this->attributes as $key => $val)
-        {
-            $compiled .= ' '.$key.'="'.$val.'"';
-        }
-        return $compiled;
+        return HTML::buildAttributes($this->attributes);
     }
 
 }

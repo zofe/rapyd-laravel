@@ -14,6 +14,9 @@ class DataGrid extends DataSet
     public $columns = array();
     public $rows = array();
     public $output = "";
+    public $attributes = array("class" => "table");
+    protected $row_callable = false;
+
 
     /**
      * @param string $name
@@ -35,19 +38,28 @@ class DataGrid extends DataSet
         ($view == '') and $view = 'rapyd::datagrid';
         parent::build();
 
+        /*$this->data->each(function($row)
+        {
+            if ($row->article_id > 15)  $row->title = "mena";
+        });*/
+        
         foreach ($this->columns as $column) {
             if (isset($column->orderby)) {
                 $column->orderby_asc_url = $this->orderbyLink($column->orderby, 'asc');
                 $column->orderby_desc_url = $this->orderbyLink($column->orderby, 'desc');
             }
         }
-
+        
         foreach ($this->data as $tablerow) {
-            $row = array();
 
+            $row = new Row();
+
+                
             foreach ($this->columns as $column) {
 
-                 if (strpos($column->name, '{{') !== false) {
+                $cell = new Cell();
+                
+                if (strpos($column->name, '{{') !== false) {
 
 
                     if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
@@ -84,12 +96,18 @@ class DataGrid extends DataSet
                     $value = \View::make('rapyd::datagrid.actions', array('uri' => $column->uri, 'id' => $tablerow->getAttribute($key), 'actions' => $column->actions));
 
                 }
-                $cell = $value;
-                $row[] = $cell;
+                $cell->value($value);
+                $row->add($cell);
             }
+
+            if ($this->row_callable) {
+                $callable = $this->row_callable;
+                $callable($row);
+            }            
             $this->rows[] = $row;
         }
-
+        
+        
         return \View::make($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label));
     }
 
@@ -132,5 +150,36 @@ class DataGrid extends DataSet
     {
 
         return $this->edit($uri, $label, $actions, $key);
+    }
+
+    
+    public function row( \Closure $callable)
+    {
+        $this->row_callable = $callable;
+        return $this;
+    }
+
+
+    public function attributes($attributes)
+    {
+        $this->attributes = $attributes;
+        return $this;
+    }
+
+
+    public function buildAttributes()
+    {
+        if (is_string($this->attributes))
+            return $this->attributes;
+
+        if (count($this->attributes)<1)
+            return "";
+
+        $compiled = '';
+        foreach($this->attributes as $key => $val)
+        {
+            $compiled .= ' '.$key.'="'.$val.'"';
+        }
+        return $compiled;
     }
 }

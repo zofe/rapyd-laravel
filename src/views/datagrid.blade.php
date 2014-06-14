@@ -3,7 +3,7 @@
 @include('rapyd::toolbar', array('label'=>$label, 'buttons_right'=>$buttons['TR']))
 
 
-<table class="table table-striped">
+<table{{ $dg->buildAttributes() }}>
     <thead>
     <tr>
      @foreach ($dg->columns as $column)
@@ -31,9 +31,9 @@
     </thead>
     <tbody>
     @foreach ($dg->rows as $row)
-        <tr>
-            @foreach ($row as $cell)
-            <td>{{ $cell }}</td>
+        <tr{{ $row->buildAttributes() }}>
+            @foreach ($row->cells as $cell)
+            <td{{ $cell->buildAttributes() }}>{{ $cell->value }}</td>
             @endforeach
         </tr>
     @endforeach

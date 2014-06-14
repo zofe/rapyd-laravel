@@ -126,14 +126,23 @@ class DemoController extends \Controller {
     public function getGrid()
     {
         $grid = DataGrid::source(Article::with('author', 'categories'));
-        $grid->add('article_id','ID', true)->attributes(array("style"=>"width:100px"));
+        
+        $grid->add('article_id','ID', true)->style("width:100px");
         $grid->add('title','Title', true);
         $grid->add('{{ $row->author->firstname }}','Author', 'author_id');
         $grid->add('body','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','show|modify');
-        $grid->paginate(10);
         $grid->orderBy('article_id','desc');
+        $grid->paginate(10);
 
+        //row and cell manipulation
+        $grid->row(function ($row) {
+           if ($row->cells[0]->value > 15) {
+               $row->cells[0]->style("font-weight:bold");
+               $row->style("color:#f00");
+           }  
+        });
+            
         return  View::make('rapyd::demo.grid', compact('grid'));
     }
 
