@@ -7,7 +7,7 @@
 
 
     <p>
-        Tthese are the entities used in this demo:
+        These are the entities used in this demo:
         <br />
 
     </p>

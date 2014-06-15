@@ -125,11 +125,13 @@ class DemoController extends \Controller {
 
     public function getGrid()
     {
+
         $grid = DataGrid::source(Article::with('author', 'categories'));
         
-        $grid->add('article_id','ID', true)->style("width:100px");
-        $grid->add('title','Title', true);
-        $grid->add('{{ $row->author->firstname }}','Author', 'author_id');
+        $grid->add('article_id','ID', true)->style("width:100px"); //sortable styled column
+        $grid->add('title','Title'); //fieldname
+        $grid->add('author.firstname','Author', 'author_id');  //relation.fieldname
+        $grid->add('{{ implode(", ", $row->categories->lists("name")) }}','Author', 'author_id');  //blade
         $grid->add('body','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','show|modify');
         $grid->orderBy('article_id','desc');
@@ -137,8 +139,10 @@ class DemoController extends \Controller {
 
         //row and cell manipulation
         $grid->row(function ($row) {
-           if ($row->cells[0]->value > 15) {
-               $row->cells[0]->style("font-weight:bold");
+           if ($row->cells[0]->value == 20) {
+               $row->style("background-color:#CCFF66"); 
+           } elseif ($row->cells[0]->value > 15) {
+               $row->cells[3]->style("font-weight:bold");
                $row->style("color:#f00");
            }  
         });
@@ -163,6 +167,7 @@ class DemoController extends \Controller {
         $grid->add('body','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify');
         $grid->paginate(10);
+        
         return  View::make('rapyd::demo.filtergrid', compact('filter', 'grid'));
     }
 
@@ -193,6 +198,33 @@ class DemoController extends \Controller {
         return View::make('rapyd::demo.form', compact('form'));
     }
 
+
+    public function anyAdvancedform()
+    {
+        $form = DataForm::source(Article::find(1));
+
+        $form->add('title','Title', 'text')->rule('required|min:5');
+
+
+        //$form->add('author.fullname','Author','autocomplete')
+         //   ->remote(array("firstname", "lastname"), "user_id");
+
+        $form->add('author_id','Author','autocomplete')
+            ->remote(array("firstname", "lastname"), "user_id", "/rapyd-demo/authorlist");
+
+        $form->submit('Save');
+
+        $form->saved(function() use ($form)
+        {
+            $form->message("ok record saved");
+            $form->link("/rapyd-demo/form","back to the form");
+        });
+        
+        return View::make('rapyd::demo.advancedform', compact('form'));
+    }
+    
+    
+    
     public function anyEdit()
     {
         if (Input::get('do_delete')==1) return  "not the first";
@@ -214,12 +246,8 @@ class DemoController extends \Controller {
     
     public function getAuthorlist()
     {
-       if (Input::get("id"))
-       {
-            return Author::where("user_id","=", Input::get("id")."%")->first()->get();
-       } else {
-            return Author::where("firstname","like", Input::get("q")."%")->take(10)->get();
-       }
+            return Author::where("firstname","like", Input::get("q")."%")
+                ->orWhere("lastname","like", Input::get("q")."%")->take(10)->get();
         
     }
 

@@ -26,47 +26,6 @@ class Autocomplete extends Field {
     public $min_chars = '2';
 
 
-    
-    
-    
-
-    public function options($options, $remote = "")
-    {
-        if (is_array($options)) {
-            $this->options += $options;
-        }
-        return $this;
-    }
-
-   /* public function option($value = '', $description = '')
-    {
-        $this->options[$value] = $description;
-        return $this;
-    }*/
-    
-    
-
-    function getValue()
-    {
-        parent::getValue();
-
-        //dd($this->value);
-        
-        /*if (Input::get($this->name))
-        {
-            if ($this->record_label, $this->hidden_field_id))
-            {
-                if (isset($this->model) AND is_object($this->model) AND $this->model->loaded)
-                {
-                    //to-do
-                    $this->ajax_rsource = parent::replace_pattern($this->ajax_rsource,$this->model->get_all());
-                    $this->value = file_get_contents($this->ajax_rsource);
-                }
-
-            }
-        }*/
-
-    }
 
     public function remote($record_label = null, $record_id = null, $remote = null)
     {
@@ -74,13 +33,22 @@ class Autocomplete extends Field {
         $this->record_id = ($record_id!="") ? $record_id : $this->db_name ;
         if ($remote!="") {
             $this->remote = $remote;
+            if (is_array($record_label))
+            {
+                $this->record_label = current($record_label);
+            }
         } else {
 
-            $data =  array('entity'=>'Article', 'field'=>'firstnama');
+            $data["entity"] = get_class($this->relation->getRelated());
+            $data["field"]  = $record_label;
+            if (is_array($record_label))
+            {
+                $this->record_label = $this->rel_field;
+            }
             $hash = substr(md5(serialize($data)), 0, 12);
             Session::put($hash, $data);
 
-            route('rapyd.remote', array('hash'=> $hash));
+            $this->remote = route('rapyd.remote', array('hash'=> $hash));
         }
         
     }
@@ -117,33 +85,46 @@ class Autocomplete extends Field {
 
             case "create":
             case "modify":
+                
+                if (Input::get("auto_".$this->db_name))
+                {
+                    $autocomplete = Input::get("auto_".$this->db_name);
+                } elseif ($this->relation != null)
+                {
+                    $name = $this->rel_field;
+                    $autocomplete = @$this->relation->get()->first()->$name;
+                } else {
+                    
+                    $autocomplete = $this->value;
+                }
 
-                $output  =  Form::text("auto_".$this->db_name, $this->value, $this->attributes)."\n";
-                $output .=  Form::hidden($this->db_name, $this->value);
+
+                $output  =  Form::text("auto_".$this->name, $autocomplete, array_merge($this->attributes, array('id'=>"auto_".$this->name)))."\n";
+                $output .=  Form::hidden($this->name, $this->value, array('id'=>$this->name));
 
                 //$mustmatch = ($this->must_match) ? 'true' : 'false';
                 //$autofill = ($this->auto_fill) ? 'true' : 'false';
 
                 $script = <<<acp
 
-                var blod_{$this->db_name} = new Bloodhound({
-                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('auto_{$this->db_name}'),
+                var blod_{$this->name} = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('auto_{$this->name}'),
                     queryTokenizer: Bloodhound.tokenizers.whitespace,
                     remote: '{$this->remote}?q=%QUERY'
                 });
-                blod_{$this->db_name}.initialize();
+                blod_{$this->name}.initialize();
             
-                $('#div_{$this->db_name} .typeahead').typeahead(null, {
-                    name: 'esami',
+                $('#div_{$this->name} .typeahead').typeahead(null, {
+                    name: '{$this->name}',
                     displayKey: '{$this->record_label}',
                     highlight: true,
                     minLength: {$this->min_chars},
-                    source: blod_{$this->db_name}.ttAdapter(),
+                    source: blod_{$this->name}.ttAdapter(),
                     templates: {
                         suggestion: Handlebars.compile('{{{$this->record_label}}}')
                     }
                 }).on("typeahead:selected typeahead:autocompleted", 
-                    function(e,data) { $('{$this->db_name}').val() = data.{$this->record_id};
+                    function(e,data) { $('#{$this->name}').val(data.{$this->record_id});
                 });
 acp;
 

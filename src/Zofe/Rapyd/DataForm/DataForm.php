@@ -355,7 +355,10 @@ class DataForm extends Widget
                 //to avoid the error "toString() must not throw an exception" (PHP limitation)
                 //just return error as string
             catch (\Exception $e) {
-                return $e->getMessage() . " Line " . $e->getLine();
+                return '<div class="alert alert-danger">'.
+                $e->getMessage() ."<br>\n".
+                "File: <small>".$e->getFile() . "</small><br>\n".
+                "Line: " . $e->getLine().'</div>';
             }
         }
         return $this->output;

@@ -38,18 +38,6 @@ class DataGrid extends DataSet
         ($view == '') and $view = 'rapyd::datagrid';
         parent::build();
 
-        /*$this->data->each(function($row)
-        {
-            if ($row->article_id > 15)  $row->title = "mena";
-        });*/
-        
-        foreach ($this->columns as $column) {
-            if (isset($column->orderby)) {
-                $column->orderby_asc_url = $this->orderbyLink($column->orderby, 'asc');
-                $column->orderby_desc_url = $this->orderbyLink($column->orderby, 'desc');
-            }
-        }
-        
         foreach ($this->data as $tablerow) {
 
             $row = new Row();
@@ -59,43 +47,8 @@ class DataGrid extends DataSet
 
                 $cell = new Cell();
                 
-                if (strpos($column->name, '{{') !== false) {
-
-
-                    if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
-                        $array = $tablerow->getAttributes();
-                        $array['row'] = $tablerow;
-
-                    } else {
-                        $array = (array)$tablerow;
-                    }
-
-                     $value = $this->parser->compileString($column->name, $array);
-
-                } elseif (is_object($tablerow)) {
-
-                     $value = $tablerow->{$column->name};
-                    
-                } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
-
-                     $value = $tablerow[$column->name];
-                } else {
-                     $value = $column->name;
-                }
-                if ($column->link) {
-                    if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
-                        $array = $tablerow->getAttributes();
-                        $array['row'] = $tablerow;
-                    } else {
-                        $array = (array)$tablerow;
-                    }
-                    $value =  '<a href="'.$this->parser->compileString($column->link, $array).'">'.$value.'</a>';
-                }
-                if (count($column->actions)>0) {
-                    $key = ($column->key != '')?  $column->key : $this->key;
-                    $value = \View::make('rapyd::datagrid.actions', array('uri' => $column->uri, 'id' => $tablerow->getAttribute($key), 'actions' => $column->actions));
-
-                }
+                $value = $this->getCellValue($column, $tablerow);
+               
                 $cell->value($value);
                 $row->add($cell);
             }
@@ -106,11 +59,79 @@ class DataGrid extends DataSet
             }            
             $this->rows[] = $row;
         }
-        
-        
+
         return \View::make($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label));
     }
 
+
+
+    protected function getCellValue($column, $tablerow)
+    {
+        //blade
+        if (strpos($column->name, '{{') !== false) 
+        {
+
+            if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
+                $array = $tablerow->getAttributes();
+                $array['row'] = $tablerow;
+
+            } else {
+                $array = (array)$tablerow;
+            }
+
+            $value = $this->parser->compileString($column->name, $array);
+
+        //eager loading smart syntax  relation.field
+        } elseif (preg_match('#^([a-z0-9_-]+)(?:\.([a-z0-9_-]+)){1,3}$#i',$column->name, $matches)
+            && is_object($tablerow) ) 
+        {
+
+            if (count($matches) > 3 )
+            {
+                dd($matches);
+                $value = @$tablerow->$matches[1]->$matches[2]->$matches[3];
+            } else {
+               
+                $value = @$tablerow->$matches[1]->$matches[2];
+            }
+            
+
+        
+        //fieldname in a collection
+        } elseif (is_object($tablerow)) {
+
+            $value = $tablerow->{$column->name};
+
+        //fieldname in an array
+        } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
+
+            $value = $tablerow[$column->name];
+        
+        //none found, cell will have the column name
+        } else {
+            $value = $column->name;
+        }
+        
+        //decorators, should be moved in another method
+        if ($column->link) {
+            if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
+                $array = $tablerow->getAttributes();
+                $array['row'] = $tablerow;
+            } else {
+                $array = (array)$tablerow;
+            }
+            $value =  '<a href="'.$this->parser->compileString($column->link, $array).'">'.$value.'</a>';
+        }
+        if (count($column->actions)>0) {
+            $key = ($column->key != '')?  $column->key : $this->key;
+            $value = \View::make('rapyd::datagrid.actions', array('uri' => $column->uri, 'id' => $tablerow->getAttribute($key), 'actions' => $column->actions));
+
+        }
+
+        return $value;
+    }
+
+    
     public function getGrid($view = '')
     {
         $this->output = $this->build($view)->render();
