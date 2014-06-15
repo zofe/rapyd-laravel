@@ -72,7 +72,10 @@ class DataGrid extends DataSet
         {
 
             if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
-                $array = $tablerow->getAttributes();
+                $fields = $tablerow->getAttributes();
+                $relations = $tablerow->getRelations();
+                $array = array_merge($fields, $relations) ;
+                
                 $array['row'] = $tablerow;
 
             } else {

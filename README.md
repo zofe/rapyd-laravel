@@ -70,11 +70,14 @@ in a controller
 
 ```php
    $grid = DataGrid::source(Article::with('author'));  //same source types of DataSet
+   
    $grid->add('title','Title', true); //field name, label, sortable
-   $grid->add('{{ substr($body,0,20) }}...','Body'); //blade syntax
-   $grid->add('{{ $row->author->name }}','Author'); //blade syntax with related field
+   $grid->add('author.firstname','Body'); //relation.fieldname 
+   $grid->add('{{ substr($body,0,20) }}...','Body'); //blade syntax with main field
+   $grid->add('{{ $author->firstname }}','Author'); //blade syntax with related field
    $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit actions
-   $grid->paginate(10);
+   $grid->orderBy('article_id','desc'); //default orderby
+   $grid->paginate(10); //pagination
 
    View::make('articles', array('grid'=>$grid->getGrid()))
 
@@ -95,7 +98,7 @@ in a view you can just write
 styling a datagrid
 
 ```php
-   $grid = DataGrid::source(Article::with('author')); 
+   ...
    $grid->add('title','Title', true)->style("width:100px"); //adding style to th
    $grid->add('body','Body')->attributes(array("class"=>"custom_column")); //adding class to a th
    ...
@@ -106,9 +109,7 @@ styling a datagrid
            $row->style("color:#f00");
        }  
     });
-   ...
-   View::make('articles', compact('grid'))
-
+    ...
 ```
 
 ## DataForm
