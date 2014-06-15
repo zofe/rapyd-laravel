@@ -129,9 +129,7 @@ class DemoController extends \Controller {
         $grid->add('article_id','ID', true)->style("width:100px"); //sortable styled column
         $grid->add('title','Title'); //simple column using fieldname
         $grid->add('{{ substr($body,0,20) }}...','Body'); //blade with main field
-        $grid->add('author.firstname','Author', 'author_id');  //relation.fieldname
-        $grid->add('{{ $author->firstname }}','Author');   //blade with related field
-        
+        $grid->add('author.firstname','Author', 'author_id');  //relation.fieldname      
         $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');  //blade with complex situation
 
         $grid->edit('/rapyd-demo/edit', 'Edit','show|modify');
