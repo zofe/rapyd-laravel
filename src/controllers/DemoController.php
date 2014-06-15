@@ -98,13 +98,11 @@ class DemoController extends \Controller {
                     'public' => true,)
             );
         }
-        $comments =  DB::table('demo_article_category');
-        $comments->insert(array(
-                'article_id' => 1,
-                'category_id' => 1)
-        );
-
-
+        $categories =  DB::table('demo_article_category');
+        $categories->insert(array('article_id' => 1,'category_id' => 1));
+        $categories->insert(array('article_id' => 20,'category_id' => 2));
+        $categories->insert(array('article_id' => 20,'category_id' => 3));
+        
         $comments =  DB::table('demo_comments');
         $comments->insert(array(
                 'user_id' => 1,
