@@ -210,9 +210,8 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 
 To `composer.json` add:  
-`"zofe/rapyd": "1.1.*"` for 4.1 or  
-`"zofe/rapyd": "1.2.*"` for 4.2 or  
-`"zofe/rapyd": "dev-master"` for 4.1, with latest stuffs (may be unstable)  
+`"zofe/rapyd": "1.3.*"` for both, not frequently updated (should be stable)  
+`"zofe/rapyd": "dev-master"` for both, with latest stuffs (may be unstable)  
 
 
 In `app/config/app.php` add:  
