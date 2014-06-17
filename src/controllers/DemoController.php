@@ -153,14 +153,13 @@ class DemoController extends \Controller {
     {
         $filter = DataFilter::source(Article::with('author'));
         $filter->add('title','Title', 'text');
-        $filter->add('author_id','Author','select')
-               ->option("","")
-               ->options(Author::lists("firstname", "user_id"));
+        $filter->add('author_id','Author','select')->option("","")->options(Author::lists("firstname", "user_id"));
         $filter->submit('search');
         $filter->reset('reset');
 
         $grid = DataGrid::source($filter);
-        $grid->add('article_id','ID', true);
+        $grid->attributes(array("class"=>"table table-striped"));
+        $grid->add('article_id','ID', true)->style("width:70px");
         $grid->add('title','Title', true);
         $grid->add('{{ $row->author->firstname }}','Author');
         $grid->add('body','Body');
@@ -204,19 +203,22 @@ class DemoController extends \Controller {
 
         $form->add('title','Title', 'text')->rule('required|min:5');
 
+        //simple autocomplete with local javascript array 
+        $form->add('author_id','Author','autocomplete')->options(Author::lists('firstname', 'user_id'));
 
-        //$form->add('author.fullname','Author','autocomplete')
-         //   ->remote(array("firstname", "lastname"), "user_id");
-
-        $form->add('author_id','Author','autocomplete')
-            ->remote(array("firstname", "lastname"), "user_id", "/rapyd-demo/authorlist");
+        //autocomplete with relation.field,  array of search fields, foreign key
+        $form->add('author.fullname','Author','autocomplete')->remote(array("firstname", "lastname"), "user_id");
+        
+        //autocomplete with relation.field,  array of search fields, foreign key, but with  custom  remote url / method
+        $form->add('author.firstname','Author','autocomplete')
+            ->remote(null, "user_id", "/rapyd-demo/authorlist");
 
         $form->submit('Save');
 
         $form->saved(function() use ($form)
         {
             $form->message("ok record saved");
-            $form->link("/rapyd-demo/form","back to the form");
+            $form->link("/rapyd-demo/advancedform","back to the form");
         });
         
         return View::make('rapyd::demo.advancedform', compact('form'));
@@ -245,6 +247,7 @@ class DemoController extends \Controller {
     
     public function getAuthorlist()
     {
+            //needed only by latest autocomplete
             return Author::where("firstname","like", Input::get("q")."%")
                 ->orWhere("lastname","like", Input::get("q")."%")->take(10)->get();
         
