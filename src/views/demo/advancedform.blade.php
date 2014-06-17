@@ -9,7 +9,7 @@
         Samples of autocomplete feature (in development).<br />
         Everyone is using <a href="http://twitter.github.io/typeahead.js/" target="_blank">twitter typehaead</a> and
         <a href="http://twitter.github.io/typeahead.js/examples/#bloodhound" target="_blank">Bloodhound (Suggestion Engine)</a>.
-        <bt />
+        <br />
         
         <ul>
          <li>The most simple is the first one, it just build a local json array using <strong>options()</strong></li>
@@ -20,8 +20,9 @@
         </li>
 
         </ul>
-    
 
+        <br />
+        options are only "Jane" and "Jhon" but it's just to test if it works.
     </p>
     <p>
 
