@@ -415,6 +415,7 @@ abstract class Field extends Widget
 
                     $old_data = $this->relation->get()->modelKeys();
                     $data = explode($this->serialization_sep, $data);
+
                     $this->relation->detach($old_data);
                     $this->relation->attach($data);
                     break;

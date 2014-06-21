@@ -8,7 +8,8 @@
     <p>
         Samples of autocomplete feature (in development).<br />
         Everyone is using <a href="http://twitter.github.io/typeahead.js/" target="_blank">twitter typehaead</a> and
-        <a href="http://twitter.github.io/typeahead.js/examples/#bloodhound" target="_blank">Bloodhound (Suggestion Engine)</a>.
+        <a href="http://twitter.github.io/typeahead.js/examples/#bloodhound" target="_blank">Bloodhound (Suggestion Engine)</a>.<br />
+        The last one is using also <a href="https://github.com/TimSchlechter/bootstrap-tagsinput" target="_blank">TagsInput</a>.
         <br />
         
         <ul>
@@ -16,13 +17,14 @@
          <li>The second one is the most smart, use relation.fieldname as fieldname and <strong>remote(search fields, foreign key)</strong><br />
              rapyd will manage an ajax request instancing related entity, searching on search fields, and storing foreign key on select
          </li>
-         <li>The last one is the most complete, it's basically like the second one but it add the ability to customize the way you need the search  
-        </li>
+         <li>The third is the most complete, it's basically like the second one but it add the ability to customize the search query </li>
+         <li>The last is a sample of "tags" field to manage a belongsToMany (it support options(), remote, and remote() with custom ajax call)</li>
 
         </ul>
 
         <br />
-        options are only "Jane" and "Jhon" but it's just to test if it works.
+        Options are only "Jane" and "Jhon" but it's just to test if it works.<br />
+        Categories are "Category 1" .. "Category 5"
     </p>
     <p>
 

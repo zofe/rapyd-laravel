@@ -213,6 +213,10 @@ class DemoController extends \Controller {
         $form->add('author.firstname','Author','autocomplete')
             ->remote(null, "user_id", "/rapyd-demo/authorlist");
 
+        //tags with relation.field to manage a belongsToMany, it support options(), and remote() as well
+        $form->add('categories.name','Categories','tags')->remote("name", "category_id");
+
+        
         $form->submit('Save');
 
         $form->saved(function() use ($form)
@@ -251,6 +255,13 @@ class DemoController extends \Controller {
             return Author::where("firstname","like", Input::get("q")."%")
                 ->orWhere("lastname","like", Input::get("q")."%")->take(10)->get();
         
+    }
+
+    public function getCategorylist()
+    {
+        //needed only by latest autocomplete
+        return Category::where("name","like", Input::get("q")."%")->take(10)->get();
+
     }
 
 }

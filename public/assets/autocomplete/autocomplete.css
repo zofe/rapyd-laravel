@@ -9,6 +9,7 @@
     padding: 3px 10px;
     line-height: 22px;
     border-top: #e5e5e5 solid 1px;
+
 }
 .tt-suggestion.tt-cursor {
     color: #fff;
@@ -20,6 +21,7 @@
 }
 .tt-suggestion p {
     margin: 0;
+    white-space: nowrap !important;
 }
 .twitter-typeahead {
     width: 75%;

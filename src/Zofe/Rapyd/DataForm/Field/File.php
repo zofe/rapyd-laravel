@@ -36,7 +36,7 @@ class File extends Field
                          return true;
                     }
 
-					$this->new_value = $filename;
+                    $this->new_value = $filename;
     
                     if (isset($this->new_value)) {
                         $this->model->setAttribute($this->db_name, $this->new_value);
