@@ -34,6 +34,9 @@ class DataFilter extends DataForm
         $ins = new static;
         $ins->source = $source;
         $ins->query = $source;
+        if (is_object($source) && is_a($source, "\Illuminate\Database\Eloquent\Builder")) {
+            $ins->model = $source->getModel();
+        }
         $ins->cid = $ins->getIdentifier();
         $ins->sniffStatus();
         $ins->sniffAction();

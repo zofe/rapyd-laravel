@@ -122,9 +122,9 @@ class Autocomplete extends Field {
             case "create":
             case "modify":
                 
-                if (Input::get("auto_".$this->db_name))
+                if (Input::get("auto_".$this->name))
                 {
-                    $autocomplete = Input::get("auto_".$this->db_name);
+                    $autocomplete = Input::get("auto_".$this->name);
                 } elseif ($this->relation != null)
                 {
                     $name = $this->rel_field;
