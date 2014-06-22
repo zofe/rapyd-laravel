@@ -55,6 +55,7 @@ class DemoController extends \Controller {
             $table->string('title', 200);
             $table->text('body');
             $table->boolean('public');
+            $table->timestamp('publication_date');
             $table->timestamps();
         });
         Schema::table("demo_comments", function ($table) {
@@ -100,6 +101,7 @@ class DemoController extends \Controller {
         }
         $categories =  DB::table('demo_article_category');
         $categories->insert(array('article_id' => 1,'category_id' => 1));
+        $categories->insert(array('article_id' => 1,'category_id' => 2));
         $categories->insert(array('article_id' => 20,'category_id' => 2));
         $categories->insert(array('article_id' => 20,'category_id' => 3));
         
@@ -177,14 +179,13 @@ class DemoController extends \Controller {
         $form->add('body','Body', 'redactor');
 
         //belongs to  
-        $form->add('author_id','Author','select')
-            ->options(Author::lists('firstname', 'user_id'));
+        $form->add('author_id','Author','select')->options(Author::lists('firstname', 'user_id'));
 
         //belongs to many (field name must be the relation name)
-        $form->add('categories','Categories','checkboxgroup')
-            ->options(Category::lists('name', 'category_id'));
+        $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'category_id'));
 
         $form->add('public','Public','checkbox');
+        $form->add('publication_date','Date','date')->format('d/m/Y');
         $form->submit('Save');
         
         $form->saved(function() use ($form)
