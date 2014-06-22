@@ -165,6 +165,7 @@ class DemoController extends \Controller {
         $grid->add('article_id','ID', true)->style("width:70px");
         $grid->add('title','Title', true);
         $grid->add('author.fullname','Author');
+        $grid->add('{{ date("d/m/Y",strtotime($publication_date)) }}','Author');
         $grid->add('body','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify');
         $grid->paginate(10);
@@ -186,7 +187,7 @@ class DemoController extends \Controller {
         $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'category_id'));
 
         $form->add('public','Public','checkbox');
-        $form->add('publication_date','Date','date')->format('d/m/Y', 'it');
+
         $form->submit('Save');
         
         $form->saved(function() use ($form)
@@ -239,11 +240,10 @@ class DemoController extends \Controller {
         $edit->link("rapyd-demo/filter","Articles", "TR");
         $edit->add('title','Title', 'text')->rule('required|min:5');
         $edit->add('body','Body', 'textarea');
-        $edit->add('author_id','Author','select')
-            ->options(Author::lists("firstname", "user_id"));
+        $edit->add('author_id','Author','select')->options(Author::lists("firstname", "user_id"));
+        $edit->add('publication_date','Date','date')->format('d/m/Y', 'it');
         $edit->add('public','Public','checkbox');
-        $edit->add('categories','Categories','checkboxgroup')
-             ->options(Category::lists("name", "category_id"));
+        $edit->add('categories','Categories','checkboxgroup')->options(Category::lists("name", "category_id"));
 
         return $edit->view('rapyd::demo.edit', compact('edit'));
 
