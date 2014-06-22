@@ -96,6 +96,7 @@ class DemoController extends \Controller {
                     'author_id' => rand(1,2),
                     'title' => 'Article '.$i,
                     'body' => 'Body of article '.$i,
+                    'publication_date' => date('Y-m-d'),
                     'public' => true,)
             );
         }
@@ -185,7 +186,7 @@ class DemoController extends \Controller {
         $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'category_id'));
 
         $form->add('public','Public','checkbox');
-        $form->add('publication_date','Date','date')->format('d/m/Y');
+        $form->add('publication_date','Date','date')->format('d/m/Y', 'it');
         $form->submit('Save');
         
         $form->saved(function() use ($form)
