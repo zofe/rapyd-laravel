@@ -583,10 +583,34 @@ class DataForm extends Widget
      * @param string $label
      * @param string $validation
      *
-     * @return Radiogroup
+     * @return Autocomplete
      */
     public function addAutocomplete($name, $label, $validation = '')
     {
         return $this->add($name, $label, 'autocomplete', $validation);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Tags
+     */
+    public function addTags($name, $label, $validation = '')
+    {
+        return $this->add($name, $label, 'tag', $validation);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Date
+     */
+    public function addDate($name, $label, $validation = '')
+    {
+        return $this->add($name, $label, 'date', $validation);
     }
 }
