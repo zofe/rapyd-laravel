@@ -165,7 +165,7 @@ class DemoController extends \Controller {
         $grid->add('article_id','ID', true)->style("width:70px");
         $grid->add('title','Title', true);
         $grid->add('author.fullname','Author');
-        $grid->add('{{ date("d/m/Y",strtotime($publication_date)) }}','Author');
+        $grid->add('{{ date("d/m/Y",strtotime($publication_date)) }}','Date', 'publication_date');
         $grid->add('body','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify');
         $grid->paginate(10);
