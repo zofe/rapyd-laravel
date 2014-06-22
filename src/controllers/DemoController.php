@@ -161,7 +161,7 @@ class DemoController extends \Controller {
         $grid->attributes(array("class"=>"table table-striped"));
         $grid->add('article_id','ID', true)->style("width:70px");
         $grid->add('title','Title', true);
-        $grid->add('{{ $row->author->firstname }}','Author');
+        $grid->add('author.fullname','Author');
         $grid->add('body','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify');
         $grid->paginate(10);
@@ -203,17 +203,16 @@ class DemoController extends \Controller {
 
         $form->add('title','Title', 'text')->rule('required|min:5');
 
-        //simple autocomplete with local javascript array 
+        //simple autocomplete on options (built as local json array)
         $form->add('author_id','Author','autocomplete')->options(Author::lists('firstname', 'user_id'));
 
-        //autocomplete with relation.field,  array of search fields, foreign key
+        //autocomplete with relation.field, remote search on array of fields, returned key to store
         $form->add('author.fullname','Author','autocomplete')->remote(array("firstname", "lastname"), "user_id");
         
-        //autocomplete with relation.field,  array of search fields, foreign key, but with  custom  remote url / method
-        $form->add('author.firstname','Author','autocomplete')
-            ->remote(null, "user_id", "/rapyd-demo/authorlist");
+        //autocomplete with relation.field,  returned key,  custom remote ajax call (see at bottom)
+        $form->add('author.firstname','Author','autocomplete')->remote(null, "user_id", "/rapyd-demo/authorlist");
 
-        //tags with relation.field to manage a belongsToMany, it support options(), and remote() as well
+        //tags with relation.field to manage a belongsToMany, it support options() and remote() as well
         $form->add('categories.name','Categories','tags')->remote("name", "category_id");
 
         
@@ -251,15 +250,15 @@ class DemoController extends \Controller {
     
     public function getAuthorlist()
     {
-            //needed only by latest autocomplete
-            return Author::where("firstname","like", Input::get("q")."%")
-                ->orWhere("lastname","like", Input::get("q")."%")->take(10)->get();
+        //needed only if you want a custom remote ajax call for a custom search 
+        return Author::where("firstname","like", Input::get("q")."%")
+            ->orWhere("lastname","like", Input::get("q")."%")->take(10)->get();
         
     }
 
     public function getCategorylist()
     {
-        //needed only by latest autocomplete
+        //needed only if you want a custom remote ajax call for a custom search 
         return Category::where("name","like", Input::get("q")."%")->take(10)->get();
 
     }
