@@ -70,15 +70,14 @@ class Date extends Field
     protected function formatToDate()
     {
         $format = $this->format;
-        $format = str_replace(
-            array('m/d/Y',      'd/m/Y',      'm.d.Y',      'd.m.Y'),
-            array('mm/dd/yyyy', 'dd/mm/yyyy', 'mm.dd.yyyy', 'dd.mm.yyyy'),
-            $format
+        $format = str_replace(array('d',  'm',  'Y'),
+                              array('dd', 'mm', 'yyyy'),
+                             $format
         );
         
         return $format;
         
-        /*
+        /* todo (non zero-filled, and names for days and months)
         d, dd: Numeric date, no leading zero and leading zero, respectively. Eg, 5, 05.
         D, DD: Abbreviated and full weekday names, respectively. Eg, Mon, Monday.
         m, mm: Numeric month, no leading zero and leading zero, respectively. Eg, 7, 07.
@@ -129,7 +128,8 @@ class Date extends Field
                         $('#".$this->name."').datepicker({
                             format: '{$this->formatToDate()}',
                             language: '{$this->language}',
-                            todayBtn: 'linked'
+                            todayBtn: 'linked',
+                            autoclose: true
                         });
                     });");
 
