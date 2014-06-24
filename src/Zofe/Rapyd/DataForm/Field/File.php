@@ -13,6 +13,8 @@ class File extends Field
     protected $file = null;
     protected $path = 'uploads/';
     protected $filename = '';
+    protected $saved = '';
+    
     public function autoUpdate($save = false)
     {
         $this->getValue();
@@ -27,8 +29,8 @@ class File extends Field
                 $filename = ($this->filename!='') ?  $this->filename : $this->file->getClientOriginalName();
  
                 $uploaded = $this->file->move($this->path, $filename);
+                $this->saved = $this->path. $filename;
                 
-   
                 if ($uploaded && is_object($this->model) && isset($this->db_name)) {
 
                     if (!Schema::hasColumn($this->model->getTable(), $this->db_name))
