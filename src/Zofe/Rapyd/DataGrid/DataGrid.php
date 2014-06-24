@@ -45,7 +45,7 @@ class DataGrid extends DataSet
                 
             foreach ($this->columns as $column) {
 
-                $cell = new Cell();
+                $cell = new Cell($column->name);
                 
                 $value = $this->getCellValue($column, $tablerow);
                

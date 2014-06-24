@@ -4,9 +4,14 @@ use Zofe\Rapyd\Helpers\HTML;
 
 class Cell
 {
+    public $name = null;
     public $attributes = array();
     public $value = null;
 
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
     public function value($value)
     {
         $this->value = $value;
