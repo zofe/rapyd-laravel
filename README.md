@@ -171,7 +171,8 @@ note: DataForm can also work without entity, just as Form builder, use __DataFor
    $edit = DataEdit::source(new Article);
    $edit->add('title','Title', 'text')->rule('required');
    $edit->add('body','Body','textarea')->rule('required');
-   $edit->add('photo','Photo', 'file')->rule('image')->move('uploads/');
+   $edit->add('download','Attachment', 'file')->rule('mime:pdf')->move('uploads/pdf/');
+   $edit->add('photo','Photo', 'image')->rule('mime:jpeg')->move('uploads/images/')->fit(320,240);
    $edit->add('author.fullname','Author','autocomplete')->remote(array("firstname"), "user_id");
    
    return $edit->view('crud', compact('edit'));
