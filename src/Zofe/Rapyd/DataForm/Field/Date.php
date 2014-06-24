@@ -32,6 +32,7 @@ class Date extends Field
     {
         $isodate = str_replace(" 00:00:00", "", $isodate);
         $datetime = \DateTime::createFromFormat( 'Y-m-d', $isodate);
+        if (!$datetime) return '';
         $timestamp = $datetime->getTimestamp();
         if ($timestamp < 1) {
             $timestamp = 0;
