@@ -104,9 +104,9 @@ styling a datagrid
    ...
     //row and cell manipulation via closure
     $grid->row(function ($row) {
-       if ($row->cell('title')->value > 15) {
-           $row->cell('title')->style("font-weight:bold");
-           $row->style("color:#f00");
+       if ($row->cell('public')->value < 1) {
+           $row->cell('title')->style("color:Gray");
+           $row->style("color:#FFF0F5");
        }  
     });
     ...
