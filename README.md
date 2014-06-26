@@ -127,7 +127,13 @@ styling a datagrid
    //add fields to the form
    $form->add('title','Title', 'text'); //field name, label, type
    $form->add('body','Body', 'textarea')->rule('required'); //validation
-
+   
+   //some enhanced field (images, wysiwyg, autocomplete, etc..):
+   $form->add('photo','Photo', 'image')->move('uploads/images/')->preview(80,80);
+   $form->add('body','Body', 'redactor'); //wysiwyg editor
+   $edit->add('author.fullname','Author','autocomplete')->remote("firstname", "user_id");
+   $form->add('categories.name','Categories','tags')->remote("name", "category_id");
+   
    //you can also use shorthand methods, add{Type}(...
    $form->addText('title','Title'); //field name, label
    $form->addTextarea('body','Body')->rule('required');
