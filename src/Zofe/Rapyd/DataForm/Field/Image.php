@@ -9,11 +9,13 @@ use Intervention\Image\ImageManagerStatic as ImageManager;
 class Image extends File
 {
     public $type = "image";
+    public $rule = "mimes:jpeg,png";
+    
     protected $image;
-
     protected $image_callable;
     protected $resize = array();
     protected $fit = array();
+    protected $preview = array(120, 80);
 
     /**
      * store a closure to make something with ImageManager post process
@@ -49,6 +51,18 @@ class Image extends File
     public function fit($width, $height, $filename = null)
     {
         $this->fit[] = array('width'=>$width, 'height'=>$height,  'filename'=>$filename);
+        return $this;
+    }
+
+    /**
+     * change the preview thumb size
+     * @param $width
+     * @param $height
+     * @return $this
+     */
+    public function preview($width, $height)
+    {
+        $this->preview = array($width, $height);
         return $this;
     }
     
@@ -89,6 +103,10 @@ class Image extends File
         
     }
     
+    public function thumb()
+    {
+        return '<img src="'.ImageManager::make($this->path.$this->value)->fit($this->preview[0], $this->preview[1])->encode('data-url').'">';
+    }
 
     public function build()
     {
@@ -106,16 +124,17 @@ class Image extends File
                 } elseif ((!isset($this->value))) {
                     $output = $this->layout['null_label'];
                 } else {
-                    
-                    $output =  '<img src="'.ImageManager::make($this->path.$this->value)->fit(50, 50)->encode('data-url').'">';
-                    //$output = '<img src="'.route('rapyd.image.fit', array(50,50,$this->path.$this->value)).'" />';
+                    $output =  $this->thumb();
                 }
                 $output = "<div class='help-block'>" . $output . "</div>";
                 break;
 
             case "create":
             case "modify":
-                $output = Form::file($this->db_name, $this->attributes);
+                if ($this->value != "") {
+                    $output =  $this->thumb();
+                }
+                $output .= Form::file($this->db_name, $this->attributes);
                 break;
 
             case "hidden":

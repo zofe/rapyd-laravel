@@ -17,6 +17,7 @@ class File extends Field
     
     public function autoUpdate($save = false)
     {
+
         $this->getValue();
 
         if ((($this->action == "update") || ($this->action == "insert"))) {
@@ -27,12 +28,16 @@ class File extends Field
                 $this->file = Input::file($this->name);
                 
                 $filename = ($this->filename!='') ?  $this->filename : $this->file->getClientOriginalName();
- 
+
+                //se il nuovo file è diverso,  dovrei cancellare il vecchio
+                
+                
                 $uploaded = $this->file->move($this->path, $filename);
                 $this->saved = $this->path. $filename;
                 
                 if ($uploaded && is_object($this->model) && isset($this->db_name)) {
 
+                    
                     if (!Schema::hasColumn($this->model->getTable(), $this->db_name))
                     {
                          return true;
@@ -55,11 +60,18 @@ class File extends Field
         }
         return true;
     }
-    
+
+    /**
+     * move uploaded file to the destination path, optionally raname it
+     * name can be passed also as blade syntax 
+     * @param $path
+     * @param string $name
+     * @return $this
+     */
     public function move($path, $name='')
-    {   
-        $this->path = $path;
-        $this->filename = $name;
+    {
+        $this->path = rtrim($path,"/")."/";
+        $this->filename = $this->parseString($name);
         return $this;
     }
 

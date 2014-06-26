@@ -57,6 +57,10 @@ abstract class Field extends Widget
         'option_separator' => '',
         'null_label' => '[null]',
     );
+
+    public $rule = '';
+    
+    
     public $star = '';
 
     public function __construct($name, $label, &$model = null)
@@ -119,12 +123,14 @@ abstract class Field extends Widget
         return $this;
     }
 
+    /**
+     * add rules for field es.:  required|min:5 ...
+     * @param $rule
+     * @return $this
+     */
     public function rule($rule)
     {
-        //keep CI/kohana serialization
-        if (is_array($rule))
-            $rule = join('|', $rule);
-        $this->rule = $rule;
+        $this->rule = trim($this->rule."|".$rule, "|");
         if ((strpos($this->rule, "required") !== false) AND !isset($this->no_star)) {
             $this->required = true;
         }
@@ -259,8 +265,8 @@ abstract class Field extends Widget
         } elseif ((isset($this->model)) && (Input::get($this->name) === null) && ($this->model->offsetExists($this->db_name))) {
 
             $this->value = $this->model->getAttribute($this->db_name);
-        }
 
+        }
         $this->getMode();
     }
 
@@ -437,6 +443,25 @@ abstract class Field extends Widget
     {
         return '<span class="extra">' . $this->extra_output . '</span>';
     }
+
+    /**
+     * parse blade syntax string using current model
+     * @param $string
+     * @return string
+     */
+    protected function parseString($string)
+    {
+        if (is_object($this->model) && strpos($string, '{{') !== false)
+        {
+            $fields = $this->model->getAttributes();
+            $relations = $this->model->getRelations();
+            $array = array_merge($fields, $relations) ;
+            $string = $this->parser->compileString($string, $array);
+        }
+        return $string;
+    }
+
+    
 
     public function build()
     {
