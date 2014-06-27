@@ -70,7 +70,7 @@ class Tags extends Field {
             $related = $this->relation->get();
             $name = $this->rel_field;
             $key = $this->record_id;
-            
+            $this->fill_tags = "";
             if (count($related)){
                 foreach($related as $item) {
                     $row = new \stdClass();
