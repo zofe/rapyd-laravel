@@ -212,14 +212,14 @@ class DemoController extends \Controller {
         //simple autocomplete on options (built as local json array)
         $form->add('author_id','Author','autocomplete')->options(Author::lists('firstname', 'user_id'));
 
-        //autocomplete with relation.field, remote search on array of fields, returned key to store
-        $form->add('author.fullname','Author','autocomplete')->remote(array("firstname", "lastname"), "user_id");
+        //autocomplete with relation.field to manage a belongsToMany
+        $form->add('author.fullname','Author','autocomplete')->search(array("firstname", "lastname"));
         
         //autocomplete with relation.field,  returned key,  custom remote ajax call (see at bottom)
         $form->add('author.firstname','Author','autocomplete')->remote(null, "user_id", "/rapyd-demo/authorlist");
 
-        //tags with relation.field to manage a belongsToMany, it support options() and remote() as well
-        $form->add('categories.name','Categories','tags')->remote("name", "category_id");
+        //tags with relation.field to manage a belongsToMany, it support also remote()
+        $form->add('categories.name','Categories','tags');
 
         
         $form->submit('Save');
