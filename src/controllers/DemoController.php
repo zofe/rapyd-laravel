@@ -157,8 +157,8 @@ class DemoController extends \Controller {
     {
         $filter = DataFilter::source(Article::with('author','categories'));
         $filter->add('title','Title', 'text');
-        $filter->add('author.fullname','Author','autocomplete')->remote(array("firstname", "lastname"), "user_id");
-        $filter->add('categories.name','Categories','tags')->remote("name", "category_id");
+        $filter->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
+        $filter->add('categories.name','Categories','tags');
         $filter->submit('search');
         $filter->reset('reset');
 
