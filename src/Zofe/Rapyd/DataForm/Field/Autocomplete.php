@@ -27,7 +27,7 @@ class Autocomplete extends Field {
     
     public $min_chars = '2';
     public $clause = "where";
-
+    public $is_local;
 
 
     //getvalue quando è local
@@ -49,6 +49,11 @@ class Autocomplete extends Field {
 
     function getValue()
     {
+        if (!$this->is_local && !$this->record_label && $this->rel_field != "")
+        {
+            $this->remote($this->rel_field, trim(strstr($this->rel_key,'.'),'.'));
+        }
+        
         parent::getValue();
         if (count($this->local_options)) {
             foreach ($this->options as $value => $description) {
@@ -87,9 +92,18 @@ class Autocomplete extends Field {
 
             $this->remote = route('rapyd.remote', array('hash'=> $hash));
         }
-        
+        return $this;
     }
 
+
+    public function search($record_label, $record_id = null)
+    {
+        $record_id = ($record_id!="") ? $record_id : trim(strstr($this->rel_key,'.'),'.');
+        $this->remote($record_label, $record_id);
+        return $this;
+    }
+    
+    
 
     public function build()
     {
