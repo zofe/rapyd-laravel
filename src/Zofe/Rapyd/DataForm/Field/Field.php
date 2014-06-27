@@ -220,7 +220,7 @@ abstract class Field extends Widget
         if ($this->request_refill == true && $process) {
             if ($this->multiple) {
 
-                $this->value = array();
+                $this->value = "";
                 if (Input::get($this->name)) {
                     $values = Input::get($this->name);
                     if (!is_array($values))
@@ -305,7 +305,7 @@ abstract class Field extends Widget
             }
 
             if ($this->multiple) {
-                $this->value = array();
+                $this->value = "";
                 if (Input::get($this->name)) {
                     $values = Input::get($this->name);
                     if (!is_array($values))

@@ -48,7 +48,6 @@ class Tags extends Field {
     public function getValue()
     {
         parent::getValue();
-        $this->values = explode($this->serialization_sep, $this->value);
         
         if (count($this->local_options)) {
             $description_arr = array();
