@@ -30,11 +30,12 @@ class DataFilter extends DataForm
      * @return static
      */
     public static function source($source = null)
-    {
+    {        
         $ins = new static;
         $ins->source = $source;
         $ins->query = $source;
-        if (is_object($source) && is_a($source, "\Illuminate\Database\Eloquent\Builder")) {
+        if (is_object($source) && (is_a($source, "\Illuminate\Database\Eloquent\Builder") || 
+                                  is_a($source, "\Illuminate\Database\Eloquent\Model"))) {
             $ins->model = $source->getModel();
         }
         $ins->cid = $ins->getIdentifier();
@@ -88,10 +89,26 @@ class DataFilter extends DataForm
 
                 // prepare the WHERE clause
                 foreach ($this->fields as $field) {
+                    
+                    
                     $field->getValue();
-                    //$field->getNewValue();
+                    
+                    //detect if where should be deep (on relation)
+                    $deep_where = false;
+                    
+                    if (isset($this->model) && $field->relation != null) 
+                    {
+                        $methodClass = get_class($field->relation);
+                        if (in_array($methodClass, 
+                            array('Illuminate\Database\Eloquent\Relations\HasOne', 
+                                  'Illuminate\Database\Eloquent\Relations\HasMany',
+                                  'Illuminate\Database\Eloquent\Relations\BelongsToMany' )))
+                        {
+                            $deep_where = true;
+                        }
+                    }
 
-                     //die( '..'.$field->value);
+    
                     if ($field->value != "") {
                         if (strpos($field->name, "_copy") > 0) {
                             $name = substr($field->db_name, 0, strpos($field->db_name, "_copy"));
@@ -101,22 +118,54 @@ class DataFilter extends DataForm
 
                         $value = $field->value;
 
-                        switch ($field->clause) {
-                            case "like":
-                                $this->query = $this->query->where($name, 'LIKE', '%' . $value . '%');
-                                break;
-                            case "orlike":
-                                $this->query = $this->query->orWhere($name, 'LIKE', '%' . $value . '%');
-                                break;
-                            case "where":
-                                $this->query = $this->query->where($name, $field->operator, $value);
-                                break;
-                            case "orwhere":
-                                $this->query = $this->query->orWhere($name, $field->operator, $value);
-                                break;
+                        if ($deep_where)
+                        {   
+                            
+                                switch ($field->clause) {
+                                    case "like":
+                                        $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $value) {
+                                            $q->where($field->rel_field, 'LIKE', '%' . $value . '%');
+                                        });
+                                        break;
+                                    case "orlike":
+                                        $this->query = $this->query->orWhereHas($field->rel_name, function($q) use($field, $value) {
+                                            $q->where($field->rel_field, 'LIKE', '%' . $value . '%');
+                                        });
+                                        break;
+                                    case "where":
+                                        $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $value) {
+                                            $q->where($field->rel_field, $field->operator, $value);
+                                        });
+                                        break;
+                                    case "orwhere":
+                                        $this->query = $this->query->orWhereHas($field->rel_name, function($q) use($field, $value) {
+                                            $q->where($field->rel_field, $field->operator, $value);
+                                        });
+                                        break;
+                                }
+                            
+                        //not deep, where is on main entity
+                        } else {
+                            switch ($field->clause) {
+                                case "like":
+                                    $this->query = $this->query->where($name, 'LIKE', '%' . $value . '%');
+                                    break;
+                                case "orlike":
+                                    $this->query = $this->query->orWhere($name, 'LIKE', '%' . $value . '%');
+                                    break;
+                                case "where":
+                                    $this->query = $this->query->where($name, $field->operator, $value);
+                                    break;
+                                case "orwhere":
+                                    $this->query = $this->query->orWhere($name, $field->operator, $value);
+                                    break;
+                            }
                         }
+                        
                     }
                 }
+               // dd($this->query->toSql());
+                break;
             case "reset":
                 $this->process_status = "show";
                 return true;
