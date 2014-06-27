@@ -4,7 +4,7 @@
 
 @section('body')
 
-    <h1>Advanced DataForm</h1>
+    <h1>DataForm (advanced stuffs)</h1>
     <p>
         Samples of autocomplete feature (in development).<br />
         Everyone is using <a href="http://twitter.github.io/typeahead.js/" target="_blank">twitter typehaead</a> and
@@ -14,11 +14,11 @@
         
         <ul>
          <li>The most simple is the first one, it just build a local json array using <strong>options()</strong></li>
-         <li>The second one is the most smart, use relation.fieldname as fieldname and <strong>remote(search fields, foreign key)</strong><br />
+         <li>The second one is the most smart, use relation.fieldname as fieldname and <strong>search(array of search fields)</strong><br />
              rapyd will manage an ajax request instancing related entity, searching on search fields, and storing foreign key on select
          </li>
          <li>The third is the most complete, it's basically like the second one but it add the ability to customize the search query </li>
-         <li>The last is a sample of "tags" field to manage a belongsToMany (it support options(), remote, and remote() with custom ajax call)</li>
+         <li>The last is a sample of "tags" field to manage a belongsToMany, it support also search() remote()</li>
 
         </ul>
 
