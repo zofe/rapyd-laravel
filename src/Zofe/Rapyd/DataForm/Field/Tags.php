@@ -13,9 +13,10 @@ class Tags extends Field {
 
     public $type = "tags";
     public $css_class = "autocompleter";
-
+    public $multiple = true;
     public $remote;
     public $separator = "&nbsp;";
+    public $serialization_sep = ","; 
     public $local_options;
     
     public $record_id;
@@ -26,7 +27,7 @@ class Tags extends Field {
     public $parent_id = '';
     
     public $min_chars = '2';
-
+    public $clause = "where";
 
     
     public function options($options)
@@ -44,7 +45,7 @@ class Tags extends Field {
         
     }
 
-    function getValue()
+    public function getValue()
     {
         parent::getValue();
         $this->values = explode($this->serialization_sep, $this->value);
@@ -67,7 +68,13 @@ class Tags extends Field {
             $this->description = implode($this->separator, $description_arr);
         }  elseif ($this->relation != null) {
 
-            $related = $this->relation->get();
+            if ($this->is_refill) {
+                $values = explode($this->serialization_sep, $this->value);
+                $entity = get_class($this->relation->getRelated());
+                $related = $entity::whereIn($this->record_id, $values)->get();
+            } else {
+                $related = $this->relation->get(); 
+            }
             $name = $this->rel_field;
             $key = $this->record_id;
             $this->fill_tags = "";
@@ -84,11 +91,6 @@ class Tags extends Field {
 
     }
 
-    function getNewValue()
-    {
-        parent::getNewValue();
-       $this->new_value = str_replace(",",$this->serialization_sep, $this->new_value);
-    }
     
 
     public function remote($record_label = null, $record_id = null, $remote = null)

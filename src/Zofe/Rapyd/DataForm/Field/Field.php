@@ -210,13 +210,17 @@ abstract class Field extends Widget
         if ($this->request_refill == true && $process) {
             if ($this->multiple) {
 
-                $values = array();
+                $this->value = array();
                 if (Input::get($this->name)) {
                     $values = Input::get($this->name);
+                    if (!is_array($values))
+                    {
+                        $this->value = $values;
+                    } else {
+                        $this->value = implode($this->serialization_sep, $values);
+                    }
                 }
-                $this->value = implode($this->serialization_sep, $values);
-
-
+                
             } else {
                 $this->value = HTML::xssfilter(Input::get($this->name));
             }
@@ -291,11 +295,17 @@ abstract class Field extends Widget
             }
 
             if ($this->multiple) {
-                $values = array();
+                $this->value = array();
                 if (Input::get($this->name)) {
                     $values = Input::get($this->name);
+                    if (!is_array($values))
+                    {
+                        $this->new_value = $values;
+                    } else {
+                        $this->new_value = implode($this->serialization_sep, $values);
+                    }
                 }
-                $this->new_value = implode($this->serialization_sep, $values);
+
             } else {
 
                 $this->new_value = HTML::xssfilter(Input::get($this->name));
