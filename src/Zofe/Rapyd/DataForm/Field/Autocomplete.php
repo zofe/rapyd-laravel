@@ -51,7 +51,7 @@ class Autocomplete extends Field {
     {
         if (!$this->is_local && !$this->record_label && $this->rel_field != "")
         {
-            $this->remote($this->rel_field, trim(strstr($this->rel_key,'.'),'.'));
+            $this->remote($this->rel_field, preg_replace('#([a-z0-9_-]+\.)?(.*)#i','$2',$this->rel_key));
         }
         
         parent::getValue();
@@ -98,7 +98,7 @@ class Autocomplete extends Field {
 
     public function search($record_label, $record_id = null)
     {
-        $record_id = ($record_id!="") ? $record_id : trim(strstr($this->rel_key,'.'),'.');
+        $record_id = ($record_id!="") ? $record_id :  preg_replace('#([a-z0-9_-]+\.)?(.*)#i','$2',$this->rel_key);
         $this->remote($record_label, $record_id);
         return $this;
     }
