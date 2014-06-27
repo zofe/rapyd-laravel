@@ -128,7 +128,14 @@ class Tags extends Field {
         return $this;
     }
 
-
+    public function search($record_label, $record_id = null)
+    {
+        $record_id = ($record_id!="") ? $record_id :  preg_replace('#([a-z0-9_-]+\.)?(.*)#i','$2',$this->rel_other_key);
+        $this->remote($record_label, $record_id);
+        return $this;
+    }
+    
+    
     public function build()
     {
         $output = "";
