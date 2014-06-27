@@ -91,6 +91,7 @@ class DataGrid extends DataSet
 
             if (count($matches) > 3 )
             {
+                //todo (if possible) handle third level relations  
                 dd($matches);
                 $value = @$tablerow->$matches[1]->$matches[2]->$matches[3];
             } else {
