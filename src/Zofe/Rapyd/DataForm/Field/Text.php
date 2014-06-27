@@ -30,11 +30,11 @@ class Text extends Field {
 
       case "create":
       case "modify":
-        $output = Form::text($this->db_name, $this->value, $this->attributes);
+        $output = Form::text($this->name, $this->value, $this->attributes);
         break;
 
       case "hidden":
-        $output = Form::hidden($this->db_name, $this->value);
+        $output = Form::hidden($this->name, $this->value);
         break;
 
       default:;
