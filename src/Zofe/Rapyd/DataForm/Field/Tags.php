@@ -28,6 +28,7 @@ class Tags extends Field {
     
     public $min_chars = '2';
     public $clause = "where";
+    public $is_local;
 
     
     public function options($options)
@@ -47,6 +48,11 @@ class Tags extends Field {
 
     public function getValue()
     {
+        
+        if (!$this->is_local && !$this->record_label && $this->rel_field != "")
+        {
+             $this->remote($this->rel_field, trim(strstr($this->rel_other_key,'.'),'.'));
+        }
         parent::getValue();
         
         if (count($this->local_options)) {
@@ -119,7 +125,7 @@ class Tags extends Field {
 
             $this->remote = route('rapyd.remote', array('hash'=> $hash));
         }
-        
+        return $this;
     }
 
 
