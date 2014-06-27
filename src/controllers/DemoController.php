@@ -54,6 +54,7 @@ class DemoController extends \Controller {
             $table->integer('author_id')->unsigned();
             $table->string('title', 200);
             $table->text('body');
+            $table->string('photo', 200);
             $table->boolean('public');
             $table->timestamp('publication_date');
             $table->timestamps();
@@ -141,10 +142,10 @@ class DemoController extends \Controller {
 
         //row and cell manipulation
         $grid->row(function ($row) {
-           if ($row->cells[0]->value == 20) {
+           if ($row->cell('article_id')->value == 20) {
                $row->style("background-color:#CCFF66"); 
-           } elseif ($row->cells[0]->value > 15) {
-               $row->cells[3]->style("font-weight:bold");
+           } elseif ($row->cell('article_id')->value > 15) {
+               $row->cell('title')->style("font-weight:bold");
                $row->style("color:#f00");
            }  
         });
@@ -154,9 +155,10 @@ class DemoController extends \Controller {
 
     public function getFilter()
     {
-        $filter = DataFilter::source(Article::with('author'));
+        $filter = DataFilter::source(Article::with('author','categories'));
         $filter->add('title','Title', 'text');
         $filter->add('author.fullname','Author','autocomplete')->remote(array("firstname", "lastname"), "user_id");
+        $filter->add('categories.name','Category','text');
         $filter->submit('search');
         $filter->reset('reset');
 
@@ -165,6 +167,7 @@ class DemoController extends \Controller {
         $grid->add('article_id','ID', true)->style("width:70px");
         $grid->add('title','Title', true);
         $grid->add('author.fullname','Author');
+        $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');
         $grid->add('{{ date("d/m/Y",strtotime($publication_date)) }}','Date', 'publication_date');
         $grid->add('body','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify');
@@ -242,6 +245,7 @@ class DemoController extends \Controller {
         $edit->add('body','Body', 'textarea');
         $edit->add('author_id','Author','select')->options(Author::lists("firstname", "user_id"));
         $edit->add('publication_date','Date','date')->format('d/m/Y', 'it');
+        //$edit->add('photo','Photo', 'image')->move('uploads/')->fit(240, 160)->preview(120,80);
         $edit->add('public','Public','checkbox');
         $edit->add('categories','Categories','checkboxgroup')->options(Category::lists("name", "category_id"));
 
