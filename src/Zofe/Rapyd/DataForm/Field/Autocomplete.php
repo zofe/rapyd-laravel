@@ -26,6 +26,7 @@ class Autocomplete extends Field {
     public $parent_id = '';
     
     public $min_chars = '2';
+    public $clause = "where";
 
 
 
