@@ -121,6 +121,18 @@ class DataFilter extends DataForm
                         if ($deep_where)
                         {
 
+                            //exception for multiple value fields on BelongsToMany
+                            if ($methodClass == 'Illuminate\Database\Eloquent\Relations\BelongsToMany' and
+                                in_array($field->type, array('tags','checks'))  )
+                            {
+                                  $values = explode($field->serialization_sep, $value);
+                                  $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $values) {
+                                      
+                                      $q->whereIn($field->rel_other_key, $values);
+                                  });
+                                continue;
+                            } 
+
                             switch ($field->clause) {
                                 case "like":
                                     $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $value) {
