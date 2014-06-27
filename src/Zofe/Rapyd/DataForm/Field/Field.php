@@ -89,7 +89,7 @@ abstract class Field extends Widget
             is_a($this->model->$relation(), 'Illuminate\Database\Eloquent\Relations\Relation')
         ) {
 
-            $this->relation = $this->model->$relation();
+            $this->relation = $this->model->$relation($relation);
             $this->rel_name = $relation;
             $this->rel_field = $name;
             $this->name = ($name != $relation) ? $relation . "_" . $name : $name;
@@ -207,7 +207,6 @@ abstract class Field extends Widget
 
         $process = (Input::get('search') || Input::get('save')) ? true : false;
 
-
         if ($this->request_refill == true && $process) {
             if ($this->multiple) {
 
@@ -232,13 +231,23 @@ abstract class Field extends Widget
         } elseif (isset($this->model) && $this->relation != null) {
 
             $methodClass = get_class($this->relation);
-
+ 
             switch ($methodClass) {
                 //es. "categories" per "Article"  
                 case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
-                    $relatedCollection = $this->relation->get(); //Collection of attached models
-                    $relatedIds = $relatedCollection->modelKeys(); //array of attached models ids
-                    $this->value = implode($this->serialization_sep, $relatedIds);
+     
+                    // some kind of field on belongsToMany works with multiple values, most of time in serialized way
+                    //in this case I need to fill value using a serialized array of related collection
+                    if (in_array($this->type, array('tags','checks')))
+                    {
+                        $relatedCollection = $this->relation->get(); //Collection of attached models
+                        $relatedIds = $relatedCollection->modelKeys(); //array of attached models ids
+                        $this->value = implode($this->serialization_sep, $relatedIds);
+                    } else {
+                        $this->value = "";
+                    }
+
+
                     break;
                 //es. "author" per "Article"
                 case 'Illuminate\Database\Eloquent\Relations\BelongsTo':
