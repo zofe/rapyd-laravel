@@ -17,6 +17,8 @@ abstract class Field extends Widget
     public $relation;
     public $rel_name;
     public $rel_field;
+    public $rel_fq_other_key;
+    public $rel_other_key;
 
     public $attributes = array('class' => 'form-control');
     public $output = "";
@@ -94,10 +96,18 @@ abstract class Field extends Widget
             $this->rel_field = $name;
             $this->name = ($name != $relation) ? $relation . "_" . $name : $name;
 
-            if (get_class($this->relation) == 'Illuminate\Database\Eloquent\Relations\BelongsTo') {
+            $relclass = get_class($this->relation);
+            
+            if ($relclass == 'Illuminate\Database\Eloquent\Relations\BelongsTo') {
                 $this->db_name = $this->relation->getForeignKey();
             } else {
                 $this->db_name = $name;
+            }
+
+            if (in_array($relclass, array('Illuminate\Database\Eloquent\Relations\BelongsToMany'))) {
+                
+                $this->rel_other_key = $this->relation->getOtherKey();
+ 
             }
 
             return;
