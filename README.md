@@ -106,7 +106,7 @@ styling a datagrid
     $grid->row(function ($row) {
        if ($row->cell('public')->value < 1) {
            $row->cell('title')->style("color:Gray");
-           $row->style("color:#FFF0F5");
+           $row->style("background-color:#CCFF66");
        }  
     });
     ...
@@ -179,7 +179,7 @@ note: DataForm can also work without entity, just as Form builder, use __DataFor
    $edit->add('body','Body','textarea')->rule('required');
    $edit->add('download','Attachment', 'file')->rule('mime:pdf')->move('uploads/pdf/');
    $edit->add('photo','Photo', 'image')->rule('mime:jpeg')->move('uploads/images/')->fit(320,240);
-   $edit->add('author.fullname','Author','autocomplete')->sarch(array('firstname','lastname'));
+   $edit->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
    
    return $edit->view('crud', compact('edit'));
 
