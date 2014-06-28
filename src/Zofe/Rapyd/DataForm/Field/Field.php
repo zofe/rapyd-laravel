@@ -127,12 +127,6 @@ abstract class Field extends Widget
             $this->db_name = $name;
     }
 
-    public function group($group)
-    {
-        $this->group = $group;
-        return $this;
-    }
-
     public function onchange($onchange)
     {
 
@@ -165,12 +159,6 @@ abstract class Field extends Widget
     {
 
         $this->mask = $mask;
-        return $this;
-    }
-
-    public function in($in)
-    {
-        $this->in = $in;
         return $this;
     }
 
@@ -216,7 +204,6 @@ abstract class Field extends Widget
         $this->extra_output = $extra;
         return $this;
     }
-
 
     public function getValue()
     {
@@ -336,7 +323,6 @@ abstract class Field extends Widget
         }
     }
 
-    // --------------------------------------------------------------------
 
     public function getMode()
     {
@@ -526,5 +512,11 @@ abstract class Field extends Widget
         }
     }
 
+    public function getField()
+    {
+        $field = $this;
+        return  \View::make('rapyd::dataform.field', array('field'=>$this))->render();
+    }
 
+    
 }

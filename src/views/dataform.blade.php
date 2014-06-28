@@ -15,9 +15,9 @@
 @section('df.fields')
     
     @if ($df->message == '')
-        @foreach ($df->fields as $fieldname => $field)
+        @foreach ($df->fields as  $field)
 
-            @include('rapyd::dataform.field')
+            {{ $field->getField() }}
     
         @endforeach
     @endif
@@ -39,6 +39,8 @@
 @show
 
 @section('df.footer')
+
     @include('rapyd::toolbar', array('buttons_left'=>$df->buttons['BL'], 'buttons_right'=>$df->buttons['BR'] ))
+
     {{ $df->form_end }}
 @show
