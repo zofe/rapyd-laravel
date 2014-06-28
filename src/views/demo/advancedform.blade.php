@@ -4,6 +4,8 @@
 
 @section('body')
 
+    @include('rapyd::demo.menu_form')
+
     <h1>DataForm (advanced stuffs)</h1>
     <p>
         Samples of autocomplete feature (in development).<br />
@@ -30,6 +32,5 @@
 
         {{ $form }}
         {{ Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", array("anyAdvancedform", "getAuthorlist")) }}
-        {{ Documenter::showCode("zofe/rapyd/src/views/demo/form.blade.php") }}
     </p>
 @stop
