@@ -184,6 +184,7 @@ class DataForm extends Widget
         if (isset($rules)) {
 
             $this->validator = Validator::make(Input::all(), $rules);
+            
             return !$this->validator->fails();
         } else {
             return true;
@@ -211,11 +212,21 @@ class DataForm extends Widget
         }
     }
 
+    /**
+     * build each field and share some data from dataform to field (form status, validation errors) 
+     */
     protected function buildFields()
     {
-        foreach ($this->fields as $field) {
-            //share status
+        $messages = (isset($this->validator)) ? $this->validator->messages() : false;
+        
+        foreach ($this->fields as $field) 
+        {
             $field->status = $this->status;
+            if($messages and $messages->has($field->name)) 
+            {
+                $field->messages = $messages->get($field->name);
+                $field->has_error = " has-error";
+            }
             $field->build();
         }
     }
@@ -285,9 +296,10 @@ class DataForm extends Widget
 
     protected function buildForm()
     {
-        $data = get_object_vars($this);
-        $data['buttons'] = $this->button_container;
-
+        $df = new \stdClass(); 
+        $df->buttons = $this->button_container;
+        $df->label = $this->label;
+        $df->message = $this->message;
         $form_attr = array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form", 'method' => $this->method);
         // See if we need a multipart form
         foreach ($this->fields as $field_obj) {
@@ -298,23 +310,23 @@ class DataForm extends Widget
         }
         // Set the form open and close
         if ($this->status == 'show') {
-            $data['form_begin'] = '<div class="form">';
-            $data['form_end'] = '</div>';
+            $df->form_begin = '<div class="form">';
+            $df->form_end = '</div>';
         } else {
-            $data['form_begin'] = Form::open($form_attr);
-            $data['form_end'] = Form::hidden('save', 1) . Form::close();
+            $df->form_begin = Form::open($form_attr);
+            $df->form_end = Form::hidden('save', 1) . Form::close();
 
             if ($this->method == "GET") {
-                $data['form_end'] = Form::hidden('search', 1) . Form::close();
+                $df->form_end = Form::hidden('search', 1) . Form::close();
             }
         }
         if (isset($this->validator)) {
-            $data['errors'] = $this->validator->messages();
+            $df->errors = $this->validator->messages();
         }
 
-        $data['message'] = ($this->process_status == "success") ? $this->message : '';
-        $data['groups'] = $this->regroupFields($this->orderFields($this->fields));
-        return View::make($this->view, $data);
+        $df->message = ($this->process_status == "success") ? $this->message : '';
+        $df->fields = $this->fields;
+        return View::make($this->view, compact('df'));
     }
 
 
@@ -413,74 +425,6 @@ class DataForm extends Widget
         }
 
     }
-
-    /**
-     * @param $fields
-     *
-     * @return array
-     */
-    protected function orderFields($fields)
-    {
-        //prepare nested fields
-        foreach ($fields as $field_name => $field_ref) {
-            if (isset($field_ref->in)) {
-                if (isset($series_of_fields[$field_ref->in][0]) && $field_ref->label != "")
-                    $series_of_fields[$field_ref->in][0]->label .= '/' . $field_ref->label;
-                $series_of_fields[$field_ref->in][] = $field_ref;
-            } else {
-                $series_of_fields[$field_name][] = $field_ref;
-            }
-        }
-
-        //prepare grouped fields
-        $ordered_fields = array();
-        foreach ($fields as $field_name => $field_ref) {
-            if (!isset($field_ref->in)) {
-                if (isset($field_ref->group)) {
-                    $ordered_fields[$field_ref->group][$field_name] = $series_of_fields[$field_name];
-                } else {
-                    $ordered_fields["ungrouped"][$field_name] = $series_of_fields[$field_name];
-                }
-            }
-        }
-        return $ordered_fields;
-    }
-
-    protected function regroupFields($ordered_fields)
-    {
-        //build main array
-        $groups = array();
-        foreach ($ordered_fields as $group => $series_of_fields) {
-            unset($gr);
-
-            $gr["group_name"] = $group;
-
-            foreach ($series_of_fields as $series_name => $serie_fields) {
-                unset($sr);
-                $sr["is_hidden"] = false;
-                $sr["series_name"] = $series_name;
-
-                foreach ($serie_fields as $field_ref) {
-                    unset($fld);
-                    if (($field_ref->status == "hidden" || $field_ref->visible === false || in_array($field_ref->type, array("hidden", "auto")))) {
-                        $sr["is_hidden"] = true;
-                    }
-
-                    $fld["label"] = $field_ref->label;
-                    $fld["id"] = $field_ref->name;
-                    $fld["field"] = $field_ref->output;
-                    $fld["type"] = $field_ref->type;
-                    $fld["star"] = $field_ref->star;
-                    $sr["fields"][] = $fld;
-                }
-                $gr["series"][] = $sr;
-            }
-            $groups[] = $gr;
-        }
-
-        return $groups;
-    }
-
 
     /**
      * @param string $name

@@ -40,11 +40,11 @@ abstract class Field extends Widget
     public $apply_rules = true;
     public $required = false;
     //data settings
-    public $model; //dataobject model
-    public $insert_value = null; //default value for insert
-    public $update_value = null; //default value for update
+    public $model; 
+    public $insert_value = null; 
+    public $update_value = null; 
     public $show_value = null; //default value in visualization
-    public $options = array(); //associative&multidim. array ($value => $description)
+    public $options = array();
     public $mask = null;
     public $group;
     public $value = null;
@@ -52,8 +52,13 @@ abstract class Field extends Widget
     public $new_value;
     public $request_refill = true;
     public $is_refill = false;
+    public $is_hidden = false;
     public $options_table = '';
     public $options_key = null;
+    public $has_error = '';
+    public $messages = array();
+
+    
     // layout
     public $layout = array(
         'field_separator' => '<br />',
@@ -498,7 +503,9 @@ abstract class Field extends Widget
     {
         $this->getValue();
         $this->star = (!$this->status == "show" AND $this->required) ? '&nbsp;*' : '';
-
+        if (($this->status == "hidden" || $this->visible === false || in_array($this->type, array("hidden", "auto")))) {
+            $this->is_hidden = true;
+        }
         $attributes = array('onchange', 'type', 'size', 'style', 'class', 'rows', 'cols');
 
         foreach ($attributes as $attribute) {
