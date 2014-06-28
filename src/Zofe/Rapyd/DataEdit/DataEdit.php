@@ -142,18 +142,18 @@ class DataEdit extends DataForm
         if ($this->status == "show") {
 
             $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), trans('rapyd::rapyd.modify'), "TR");
-            //$this->link($this->url->replace('show' . $this->cid, 'delete' . $this->cid)->get(), "delete",  "TR");
+
         }
         //modify
         if ($this->status == "modify") {
 
             $this->link($this->url->replace('modify' . $this->cid, 'show' . $this->cid)
                 ->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "TR");
-            $this->submit(trans('rapyd::rapyd.save'), 'actions');
+            $this->submit(trans('rapyd::rapyd.save'), 'BL');
         }
         //modify
         if ($this->status == "create") {
-            $this->submit(trans('rapyd::rapyd.save'), 'actions');
+            $this->submit(trans('rapyd::rapyd.save'), 'BL');
         }
     }
 
