@@ -24,11 +24,11 @@
     white-space: nowrap !important;
 }
 .twitter-typeahead {
-    width: 75%;
+    width: 100%;
 }
 .tt-dropdown-menu {
 
-    width: 125%;
+    width: 80%;
 }
 .tt-hint {
     width: 100%;
