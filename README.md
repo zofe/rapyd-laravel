@@ -189,6 +189,19 @@ styling a datagrid
     {{ $form->footer }}
 ```
 
+| Attribute or method            | Output or content                                           |
+| ---------------------------    | ----------------------------------------------------------- |
+| $form->header                  | form open and header buttons                                |
+| $form->footer                  | footer buttons and form close                               |
+| $form->message                 | show if present a succes/confirmation message               |
+| $form->fields                  | array of fields  (to do a @foreach)                         |
+| $form->field('fieldname')      | field instance, used without property it show field output  |
+| ..field('fieldname')->messages | array of error messages for current field                   |
+|                                |                                                             |
+| $fotm->open                    |  form open (it's contained in "header")                     |
+| $fotm->close                   |  form close (it's contained in "footer")                    |
+| $fotm->button_container        |  array of buttons (it's contained in both header & footer)  |
+
 
 ## DataEdit
   DataEdit extends DataForm, it's a full CRUD application for given Entity.  
