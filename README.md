@@ -198,9 +198,9 @@ styling a datagrid
 | $form->field('fieldname')      | field instance, used without property it show field output  |
 | ..field('fieldname')->messages | array of error messages for current field                   |
 |                                |                                                             |
-| $fotm->open                    |  form open (it's contained in "header")                     |
-| $fotm->close                   |  form close (it's contained in "footer")                    |
-| $fotm->button_container        |  array of buttons (it's contained in both header & footer)  |
+| $form->open                    |  form open (it's contained in "header")                     |
+| $form->close                   |  form close (it's contained in "footer")                    |
+| $form->button_container        |  array of buttons (it's contained in both header & footer)  |
 
 
 ## DataEdit
