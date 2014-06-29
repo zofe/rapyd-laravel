@@ -98,13 +98,22 @@ class DataFilter extends DataForm
                     
                     if (isset($this->model) && $field->relation != null) 
                     {
-                        $methodClass = get_class($field->relation);
-                        if (in_array($methodClass, 
+                        $rel_type = get_class($field->relation);
+                        if (in_array($rel_type, 
                             array('Illuminate\Database\Eloquent\Relations\HasOne', 
                                   'Illuminate\Database\Eloquent\Relations\HasMany',
-                                  'Illuminate\Database\Eloquent\Relations\BelongsToMany' )))
+                                  'Illuminate\Database\Eloquent\Relations\BelongsTo',
+                                  'Illuminate\Database\Eloquent\Relations\BelongsToMany'
+
+                            )))
                         {
-                            $deep_where = true;
+                            if ($rel_type == 'Illuminate\Database\Eloquent\Relations\BelongsTo' and
+                                in_array($field->type, array('select', 'radiogroup', 'autocomplete'))){
+                                    $deep_where = false;             
+                            } else {
+                                $deep_where = true;
+                            }
+
                         }
                     }
 
@@ -122,7 +131,7 @@ class DataFilter extends DataForm
                         {
 
                             //exception for multiple value fields on BelongsToMany
-                            if ($methodClass == 'Illuminate\Database\Eloquent\Relations\BelongsToMany' and
+                            if ($rel_type == 'Illuminate\Database\Eloquent\Relations\BelongsToMany' and
                                 in_array($field->type, array('tags','checks'))  )
                             {
                                   $values = explode($field->serialization_sep, $value);
@@ -131,7 +140,7 @@ class DataFilter extends DataForm
                                       $q->whereIn($field->rel_other_key, $values);
                                   });
                                 continue;
-                            } 
+                            }
 
                             switch ($field->clause) {
                                 case "like":
