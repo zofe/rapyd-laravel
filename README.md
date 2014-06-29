@@ -158,9 +158,9 @@ styling a datagrid
 
  note: DataForm can also work without entity, just as Form builder, use __DataForm::create()__ instead of DataForm::source in this case..
  
-### custom output.
+### customize form in view
 
- There is not only {{ $form }}, if you need to customize something: wrap fields, grouping elements etc..
+ There is not only {{ $form }} to show a form, if you need to customize something: wrap fields, grouping elements etc..
  Simply call build method:
  ```php
      ...
@@ -171,27 +171,22 @@ styling a datagrid
  
 ```php
    #article.blade.php
-   
-        {{ $form->header }}
+    {{ $form->header }}
 
-            {{ $form->message }}
-    
-            <br />
-    
-            @if(!$form->message)
-            
-                {{ $form->field('title')->label }} 
-                {{ $form->field('title')->output }} 
-                <br /> 
-                {{ $form->field('body')->output }}
-                ...
-                
-            @endif
-            <br />
+        {{ $form->message }} <br />
+
+        @if(!$form->message)
         
-        {{ $form->footer }}
-```
+            {{ $form->field('title')->label }} 
+            {{ $form->field('title')->output }}<br /> 
 
+            {{ $form->field('body')->output }}
+            ...
+            
+        @endif
+
+    {{ $form->footer }}
+```
 
 
 ## DataEdit
