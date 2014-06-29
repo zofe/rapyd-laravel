@@ -244,6 +244,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 ```php
    $filter = DataFilter::source(new Article);
+   $filter->attributes(array('class'=>'form-inline'));
    $filter->add('title','Title', 'text');
    $filter->submit('search');
    $filter->reset('reset');
