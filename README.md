@@ -303,7 +303,7 @@ Ok so you need a DataGrid and DataEdit.
 You can build widgets where you want (even multiple widgets on same route).
 An easy way to work with rapyd is:
   * make a route to a controller for each entity you need to manage
-  * make the entity controller with one method for each widget (one for a datagrid and one for a dataedit)
+  * make the controller with one method for each widget (i.e.: one for a datagrid and one for a dataedit)
   * make an empty view, include bootstrap and display content that rapyd will build for you
 
 
