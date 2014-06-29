@@ -185,26 +185,4 @@ class DataGrid extends DataSet
     }
 
 
-    public function attributes($attributes)
-    {
-        $this->attributes = $attributes;
-        return $this;
-    }
-
-
-    public function buildAttributes()
-    {
-        if (is_string($this->attributes))
-            return $this->attributes;
-
-        if (count($this->attributes)<1)
-            return "";
-
-        $compiled = '';
-        foreach($this->attributes as $key => $val)
-        {
-            $compiled .= ' '.$key.'="'.$val.'"';
-        }
-        return $compiled;
-    }
 }

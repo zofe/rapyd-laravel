@@ -34,6 +34,7 @@ class DataForm extends Widget
     protected $source;
     protected $process_url = '';
     protected $view = 'rapyd::dataform';
+    protected $orientation = 'horizontal';
 
     public function __construct()
     {
@@ -227,6 +228,7 @@ class DataForm extends Widget
         foreach ($this->fields as $field) 
         {
             $field->status = $this->status;
+            $field->orientation = $this->orientation;
             if($messages and $messages->has($field->name)) 
             {
                 $field->messages = $messages->get($field->name);
@@ -309,6 +311,8 @@ class DataForm extends Widget
     public function prepareForm()
     {
         $form_attr = array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form", 'method' => $this->method);
+        $form_attr = array_merge($form_attr, $this->attributes);
+
         // See if we need a multipart form
         foreach ($this->fields as $field_obj) {
             if (in_array($field_obj->type, array('file','image'))) {
@@ -321,6 +325,7 @@ class DataForm extends Widget
             $this->open = '<div class="form">';
             $this->close = '</div>';
         } else {
+
             $this->open = Form::open($form_attr);
             $this->close = Form::hidden('save', 1) . Form::close();
 
@@ -334,12 +339,18 @@ class DataForm extends Widget
     }
 
     /**
+     * build form output and prepare form partials (header / footer / ..)
      * @param string $view
      */
     public function build($view = '')
     {
+        if (isset($this->attributes['class']) and strpos($this->attributes['class'], 'form-inline') !== false) {
+            $this->view = 'rapyd::dataform_inline';
+            $this->orientation = 'inline';
+        }
         if ($this->output != '') return;
         if ($view != '') $this->view = $view;
+        
         //$this->sniffStatus();
         //$this->sniffAction();
         $this->process();

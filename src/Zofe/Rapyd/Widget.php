@@ -11,6 +11,7 @@ class Widget
     public $output = "";
     public $built = FALSE;
     public $url;
+    public $attributes = array();
 
     public $process_status = "idle";
     public $status = "idle";
@@ -114,6 +115,37 @@ class Widget
             $this->build();
         }
         return $this->output;
+    }
+
+    /**
+     * set attributes for widget
+     * @param $attributes
+     * @return $this
+     */
+    public function attributes($attributes)
+    {
+        $this->attributes = $attributes;
+        return $this;
+    }
+
+    /**
+     * return a attributes in string format
+     * @return string
+     */
+    public function buildAttributes()
+    {
+        if (is_string($this->attributes))
+            return $this->attributes;
+
+        if (count($this->attributes)<1)
+            return "";
+
+        $compiled = '';
+        foreach($this->attributes as $key => $val)
+        {
+            $compiled .= ' '.$key.'="'.$val.'"';
+        }
+        return $compiled;
     }
 
 }

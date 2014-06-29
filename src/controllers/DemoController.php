@@ -156,9 +156,11 @@ class DemoController extends \Controller {
     public function getFilter()
     {
         $filter = DataFilter::source(Article::with('author','categories'));
+        $filter->attributes(array('class'=>'form-inline'));
         $filter->add('title','Title', 'text');
-        $filter->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
         $filter->add('categories.name','Categories','tags');
+        $filter->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
+
         $filter->submit('search');
         $filter->reset('reset');
         //$filter->build();

@@ -500,6 +500,11 @@ abstract class Field extends Widget
             if ($attribute == 'type') {
                 $this->attributes['type'] = ($this->$attribute == 'input') ? 'text' : $this->$attribute;
             }
+            
+            if ($this->orientation == 'inline') {
+                $this->attributes["placeholder"] = $this->label;
+            } 
+            
         }
         if (!isset($this->attributes['id']))
             $this->attributes['id'] = $this->name;
