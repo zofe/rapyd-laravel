@@ -156,7 +156,43 @@ styling a datagrid
   {{ $form }}
 ```
 
-note: DataForm can also work without entity, just as Form builder, use __DataForm::create()__ instead of DataForm::source in this case
+ note: DataForm can also work without entity, just as Form builder, use __DataForm::create()__ instead of DataForm::source in this case..
+ 
+### custom output.
+
+ There is not only {{ $form }}, if you need to customize something: wrap fields, grouping elements etc..
+ Simply call build method:
+ ```php
+     ...
+     $form->build();
+     View::make('article', compact('form'))
+ ```
+ then in the view you can use something like this:
+ 
+```php
+   #article.blade.php
+   
+        {{ $form->header }}
+
+            {{ $form->message }}
+    
+            <br />
+    
+            @if(!$form->message)
+            
+                {{ $form->field('title')->label }} 
+                {{ $form->field('title')->output }} 
+                <br /> 
+                {{ $form->field('body')->output }}
+                ...
+                
+            @endif
+            <br />
+        
+        {{ $form->footer }}
+```
+
+
 
 ## DataEdit
   DataEdit extends DataForm, it's a full CRUD application for given Entity.  
