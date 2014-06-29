@@ -21,19 +21,16 @@
         {{ $form->header }}
 
             {{ $form->message }}
-    
-            <br />
-    
+
             @if(!$form->message)
             
-                {{ $form->field('title')->label }}
-                {{ $form->field('title')->output }}
-                {{ implode(', ', $form->field('title')->messages) }}
-                <br /> 
-                {{ $form->field('body')->output }}
-                <br />
-                {{ $form->field('categories.name')->label }}
-                {{ $form->field('categories.name')->output }}
+                Title: {{ $form->field('title')->output }}
+                <p class="bg-danger">{{ implode(', ', $form->field('title')->messages) }}</p>
+
+                Body: {{ $form->field('body')->output }}<br />
+
+                Categories: {{ $form->field('categories.name')->output }}
+
             @endif
             <br />
         
