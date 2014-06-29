@@ -24,12 +24,12 @@
 
             @if(!$form->message)
             
-                Title: {{ $form->field('title')->output }}
+                Title: {{ $form->field('title') }}
                 <p class="bg-danger">{{ implode(', ', $form->field('title')->messages) }}</p>
 
-                Body: {{ $form->field('body')->output }}<br />
+                Body: {{ $form->field('body') }}<br />
 
-                Categories: {{ $form->field('categories.name')->output }}
+                Categories: {{ $form->field('categories.name') }}
 
             @endif
             <br />

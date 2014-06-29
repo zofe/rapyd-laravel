@@ -177,10 +177,11 @@ styling a datagrid
 
         @if(!$form->message)
         
-            {{ $form->field('title')->label }} 
-            {{ $form->field('title')->output }}<br /> 
+            Title: 
+            {{ $form->field('title') }}<br /> 
 
-            {{ $form->field('body')->output }}
+            Body: 
+            {{ $form->field('body') }}
             ...
             
         @endif
@@ -281,9 +282,9 @@ You need also to add this to your views, to let rapyd add runtime assets:
 ```php
 <head>
   ...
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
    {{ Rapyd::head() }}
 </head>
