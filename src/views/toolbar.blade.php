@@ -8,7 +8,7 @@
     </div>
     @endif
     @if (isset($buttons_left) && count($buttons_left))
-    <div class="pull-left col-sm-offset-2">
+    <div class="pull-left">
         @foreach ($buttons_left as $button)
         {{ $button }}
         @endforeach

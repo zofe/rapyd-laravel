@@ -57,7 +57,6 @@ abstract class Field extends Widget
     public $options_key = null;
     public $has_error = '';
     public $messages = array();
-
     
     // layout
     public $layout = array(
@@ -512,11 +511,5 @@ abstract class Field extends Widget
         }
     }
 
-    public function getField()
-    {
-        $field = $this;
-        return  \View::make('rapyd::dataform.field', array('field'=>$this))->render();
-    }
 
-    
 }

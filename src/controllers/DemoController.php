@@ -161,7 +161,8 @@ class DemoController extends \Controller {
         $filter->add('categories.name','Categories','tags');
         $filter->submit('search');
         $filter->reset('reset');
-
+        //$filter->build();
+        
         $grid = DataGrid::source($filter);
         $grid->attributes(array("class"=>"table table-striped"));
         $grid->add('article_id','ID', true)->style("width:70px");
@@ -172,7 +173,7 @@ class DemoController extends \Controller {
         $grid->add('body','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify');
         $grid->paginate(10);
-        
+
         return  View::make('rapyd::demo.filtergrid', compact('filter', 'grid'));
     }
 
@@ -232,7 +233,25 @@ class DemoController extends \Controller {
         
         return View::make('rapyd::demo.advancedform', compact('form'));
     }
-    
+
+    public function anyStyledform()
+    {
+        $form = DataForm::source(Article::find(1));
+
+        $form->add('title','Title', 'text')->rule('required|min:5');
+        $form->add('body','Body', 'redactor');
+        $form->add('categories.name','Categories','tags');
+        $form->submit('Save');
+
+        $form->saved(function() use ($form)
+        {
+            $form->message("ok record saved");
+            $form->link("/rapyd-demo/styledform","back to the form");
+        });
+        $form->build();
+        
+        return View::make('rapyd::demo.styledform', compact('form'));
+    }
     
     
     public function anyEdit()

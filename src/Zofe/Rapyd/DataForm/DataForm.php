@@ -24,6 +24,11 @@ class DataForm extends Widget
     public $output = "";
     public $fields = array();
     public $hash = "";
+    
+    public $open;
+    public $close;    
+    
+    
     protected $method = 'POST';
     protected $redirect = null;
     protected $source;
@@ -134,7 +139,7 @@ class DataForm extends Widget
         return $this;
     }
 
-    public function &field($field_name)
+    public function field($field_name)
     {
         if (isset($this->fields[$field_name])) {
             return $this->fields[$field_name];
@@ -296,10 +301,13 @@ class DataForm extends Widget
 
     protected function buildForm()
     {
-        $df = new \stdClass(); 
-        $df->buttons = $this->button_container;
-        $df->label = $this->label;
-        $df->message = $this->message;
+        $this->prepareForm();
+        $df = $this;
+        return View::make($this->view, compact('df'));
+    }
+
+    public function prepareForm()
+    {
         $form_attr = array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form", 'method' => $this->method);
         // See if we need a multipart form
         foreach ($this->fields as $field_obj) {
@@ -310,25 +318,20 @@ class DataForm extends Widget
         }
         // Set the form open and close
         if ($this->status == 'show') {
-            $df->form_begin = '<div class="form">';
-            $df->form_end = '</div>';
+            $this->open = '<div class="form">';
+            $this->close = '</div>';
         } else {
-            $df->form_begin = Form::open($form_attr);
-            $df->form_end = Form::hidden('save', 1) . Form::close();
+            $this->open = Form::open($form_attr);
+            $this->close = Form::hidden('save', 1) . Form::close();
 
             if ($this->method == "GET") {
-                $df->form_end = Form::hidden('search', 1) . Form::close();
+                $this->close = Form::hidden('search', 1) . Form::close();
             }
         }
         if (isset($this->validator)) {
-            $df->errors = $this->validator->messages();
+            $this->errors = $this->validator->messages();
         }
-
-        $df->message = ($this->process_status == "success") ? $this->message : '';
-        $df->fields = $this->fields;
-        return View::make($this->view, compact('df'));
     }
-
 
     /**
      * @param string $view
@@ -343,7 +346,15 @@ class DataForm extends Widget
 
         $this->buildFields();
         $this->buildButtons();
-        $this->output = $this->buildForm()->render();
+        $dataform = $this->buildForm();
+        
+        $this->output = $dataform->render();
+
+        $sections = $dataform->renderSections();
+        $this->header = $sections['df.header'];
+        $this->footer = $sections['df.footer'];
+        $this->body = @$sections['df.fields'];
+        
     }
 
     /**
