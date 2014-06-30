@@ -173,7 +173,7 @@ class DemoController extends \Controller {
         $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');
         $grid->add('{{ date("d/m/Y",strtotime($publication_date)) }}','Date', 'publication_date');
         $grid->add('body','Body');
-        $grid->edit('/rapyd-demo/edit', 'Edit','modify');
+        $grid->edit('/rapyd-demo/edit', 'Edit','modify|delete');
         $grid->paginate(10);
 
         return  View::make('rapyd::demo.filtergrid', compact('filter', 'grid'));
