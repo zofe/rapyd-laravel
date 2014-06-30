@@ -67,6 +67,9 @@ class DataFilter extends DataForm
             $this->action = "reset";
 
             Persistence::clear();
+        } else {
+            
+            Persistence::clear();
         }
     }
 
