@@ -68,10 +68,10 @@ class Widget
      */
     function link($url, $name, $position="BL", $attributes=array())
     {
-        $url = trim(parse_url($url, PHP_URL_PATH),'/');
+        $match_url = trim(parse_url($url, PHP_URL_PATH),'/');
 
-        if (Request::path()!= $url){
-            $url = Persistence::get($url); 
+        if (Request::path()!= $match_url){
+            $url = Persistence::get($match_url); 
         } 
        
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
