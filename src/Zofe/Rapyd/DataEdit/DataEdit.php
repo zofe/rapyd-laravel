@@ -104,14 +104,10 @@ class DataEdit extends DataForm
 
                 if ($this->on("error")) {
                     $this->status = "modify";
-                    //$this->process_url = rpd_url_helper::get_url();
                 }
                 if ($this->on("success")) {
-
-                    //settare messaggio in sessione o in variabile
                     $this->status = "modify";
                     $this->redirect = $this->url->replace('update' . $this->cid, 'show' . $this->cid)->get();
-
                 }
 
                 break;
@@ -127,11 +123,20 @@ class DataEdit extends DataForm
                 break;
             case "delete":
                 if ($this->on("error")) {
-
+                    $this->message(trans('rapyd::rapyd.err'));
                 }
                 if ($this->on("success")) {
-                    $this->message("record deleted");
+                    $this->message(trans('rapyd::rapyd.deleted'));
                 }
+                break;
+        }
+
+        switch ($this->status) {
+            case "delete":
+                $this->message(trans('rapyd::rapyd.conf_delete'));
+                break;
+            case "unknow_record":
+                $this->message(trans('rapyd::rapyd.err_unknown'));
                 break;
         }
     }
@@ -151,9 +156,15 @@ class DataEdit extends DataForm
                 ->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "TR");
             $this->submit(trans('rapyd::rapyd.save'), 'BL');
         }
-        //modify
-        if ($this->status == "create") {
+        //crete
+        if ($this->status == "create" && $this->action!= 'delete') {
             $this->submit(trans('rapyd::rapyd.save'), 'BL');
+        }
+        //delete
+        if ($this->status == "delete") {
+            $this->link($this->url->replace('delete' . $this->cid, 'show' . $this->cid)
+                ->replace('do_delete' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "BL");
+            $this->link($this->url->replace('delete' . $this->cid, 'do_delete' . $this->cid)->get(), trans('rapyd::rapyd.delete'), "BL");
         }
     }
 

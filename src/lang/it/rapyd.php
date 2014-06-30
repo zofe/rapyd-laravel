@@ -12,12 +12,12 @@ return array(
     'back'    => 'Indietro',
     
     //dataedit
-    'de.inserted'   => 'Il record è stato inserito correttamente.',
-    'de.updated'    => 'Il record è stato modificato correttamente.',
-    'de.deleted'    => 'Il record è stato eliminato correttamente.',
-    'de.err'        => 'Si è verificato un errore',
-    'de.err_unknown'=> 'Si è verificato un errore, nessun record su cui operare.',
-    'de.err_dup_pk' => 'Si è verificato un errore, chiave primaria non univoca.',
-    'de.conf_delete'=> 'Vuoi davvero eliminare il record corrente?',
+    'inserted'   => 'Il record è stato inserito correttamente.',
+    'updated'    => 'Il record è stato modificato correttamente.',
+    'deleted'    => 'Il record è stato eliminato correttamente.',
+    'err'        => 'Si è verificato un errore',
+    'err_unknown'=> 'Si è verificato un errore, nessun record su cui operare.',
+    'err_dup_pk' => 'Si è verificato un errore, chiave primaria non univoca.',
+    'conf_delete'=> 'Vuoi davvero eliminare il record corrente?',
 
 );
