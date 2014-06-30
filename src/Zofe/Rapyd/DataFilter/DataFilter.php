@@ -88,6 +88,23 @@ class DataFilter extends DataForm
                     
                     $field->getValue();
                     
+                    //query scope 
+                    $query_scope = $field->query_scope;
+                    if ($query_scope) {
+
+                        if (is_a($query_scope, '\Closure'))
+                        {
+                            $this->query = $query_scope($this->query, $field->value);
+                            
+                        } elseif (isset($this->model) && method_exists($this->model, $query_scope))
+                        {
+                            $this->query = $this->model->$query_scope($this->query, $field->value);
+                            
+                        }
+                        continue;
+                    }
+                    
+                    
                     //detect if where should be deep (on relation)
                     $deep_where = false;
                     

@@ -57,6 +57,7 @@ abstract class Field extends Widget
     public $options_key = null;
     public $has_error = '';
     public $messages = array();
+    public $query_scope;
     
     // layout
     public $layout = array(
@@ -170,6 +171,12 @@ abstract class Field extends Widget
     public function operator($operator)
     {
         $this->operator = $operator;
+        return $this;
+    }
+
+    public function scope($scope)
+    {
+        $this->query_scope = $scope;
         return $this;
     }
 
