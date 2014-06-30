@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Zofe\Rapyd\DataSet as DataSet;
 use Zofe\Rapyd\Exceptions\DataGridException;
+use Zofe\Rapyd\Persistence;
 
 class DataGrid extends DataSet
 {
@@ -38,6 +39,8 @@ class DataGrid extends DataSet
         ($view == '') and $view = 'rapyd::datagrid';
         parent::build();
 
+        Persistence::save();
+        
         foreach ($this->data as $tablerow) {
 
             $row = new Row();
