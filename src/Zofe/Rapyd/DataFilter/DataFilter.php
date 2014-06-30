@@ -60,21 +60,13 @@ class DataFilter extends DataForm
         if ($this->url->value('search')) {
             $this->action = "search";
 
-            //Persistence::save();
+            Persistence::save();
         }
         ///// reset /////
         elseif ($this->url->value("reset")) {
             $this->action = "reset";
 
-            //Persistence::clear();
-        }
-        ///// show /////
-        else {
-            $page = Persistence::all();
-            if (count($page)) {
-                $this->action = "search";
-            }
-            //Persistence::save();
+            Persistence::clear();
         }
     }
 

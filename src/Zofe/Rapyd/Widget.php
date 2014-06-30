@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
+
 class Widget
 {
 
@@ -66,6 +68,12 @@ class Widget
      */
     function link($url, $name, $position="BL", $attributes=array())
     {
+        $url = trim(parse_url($url, PHP_URL_PATH),'/');
+
+        if (Request::path()!= $url){
+            $url = Persistence::get($url); 
+        } 
+       
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
         $this->button_container[$position][] =  Html::link($url, $name, $attributes);
 
