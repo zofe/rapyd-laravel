@@ -177,11 +177,8 @@ styling a datagrid
 
         @if(!$form->message)
         
-            Title: 
-            {{ $form->field('title') }}<br /> 
-
-            Body: 
-            {{ $form->field('body') }}
+            Title:  {{ $form->field('title') }}<br /> 
+            Body:  {{ $form->field('body') }}
             ...
             
         @endif
