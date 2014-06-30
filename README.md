@@ -43,14 +43,11 @@ in a view you can use
     //cycle
     @foreach ($dataset->data as $item)
 
-        //field
         {{ $item->title }}<br />
-        //field from relation
         {{ $item->author->name }}<br />
 
     @endforeach
 
-    //pagination links
     {{ $dataset->links() }} <br />
 
     //sort link
