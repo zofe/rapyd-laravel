@@ -42,7 +42,16 @@
                 @endforeach
                     
                 </div>
-                {{ $set->links() }} <br />
+                
+                <div>
+                    {{ $set->links() }}
+                    <div class="pull-right">
+                        <a href="/rapyd-demo/customfilter">all atricles</a> |
+                        <a href="/rapyd-demo/customfilter?src=jhon doe&search=1">jhon doe articles</a> |
+                        <a href="/rapyd-demo/customfilter?src=jane doe&search=1">jane doe articles</a>
+                    </div>                    
+                </div>
+
     
             </div>
 
