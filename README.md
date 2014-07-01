@@ -263,6 +263,23 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    {{ $filter }}
    {{ $grid }}
 ```
+
+Since DataFilter use GET method, it's trivial to make filter-links:
+```
+/datafilter/uri?title=Article+10&search=1     search for "Article 10" in title
+/datafilter/uri?category_id=1&search=1       search for articles related to "Category 1" ..
+```
+
+DataFilter can work with multiple fields  or, if you prefer,  you can add a generic single field to do a free search.
+This is how to: http://www.rapyd.com/rapyd-demo/customfilter  
+
+Note that, parameter's name is generally related to "datafilter fields" and not directly to the Entity.  
+DataFilter works making only "where", "whereHas" and using  **PDO parameter binding**  (so It's safe from SQL injection), 
+however you must pay attention if you customize queries using _scopes_ (you should use _parameter binding_ too).
+ 
+
+
+
 ## Install in Laravel 4.1 & 4.2
 
 
