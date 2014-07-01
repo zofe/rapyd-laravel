@@ -134,17 +134,28 @@ class DataForm extends Widget
      *
      * @return $this
      */
-    function reset($name = "", $position = "BL", $options = array())
+    function reset($name = "", $position = "BL")
     {
         if ($name == "") $name = trans('rapyd::reset');
         $this->link($this->url->current(true), $name, $position);
         return $this;
     }
 
-    public function field($field_name)
+    /**
+     * get field instance from fields array
+     * @param $field_name
+     * @param array $ttributes
+     * @return \Zofe\Rapyd\DataForm\Field $field
+     */
+    public function field($field_name, array $attributes = array())
     {
         if (isset($this->fields[$field_name])) {
-            return $this->fields[$field_name];
+            $field = $this->fields[$field_name];
+            if (count($attributes)) {
+                $field->attributes($attributes);
+                $field->build();
+            }
+            return $field;
         }
     }
 

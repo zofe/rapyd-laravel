@@ -111,7 +111,6 @@ class Image extends File
     public function build()
     {
         $output = "";
-        $this->attributes["class"] = "form-control";
         if (parent::build() === false)
             return;
 

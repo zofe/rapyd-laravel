@@ -22,9 +22,7 @@ class Select extends Field
     function build()
     {
         $output = "";
-        if (!isset($this->style) AND !isset($this->attributes['style'])) {
-            $this->style = "width:290px;";
-        }
+
         unset($this->attributes['type'], $this->attributes['size']);
         if (parent::build() === false)
             return;
