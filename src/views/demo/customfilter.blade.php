@@ -32,13 +32,15 @@
             
                 <br />
                 <div class="row">
+                    
                 @foreach ($set->data as $item)
                     <div class="col-sm-4">
-                    <strong>{{ $item->title }}</strong><br />
-                    <em>{{ $item->author->firstname }} {{ $item->author->lastname }}</em><br />
-                    {{ implode(", ", $item->categories->lists("name"))  }}<br />
+                        <strong>{{ $item->title }}</strong><br />
+                        <em>{{ $item->author->firstname }} {{ $item->author->lastname }}</em><br />
+                        {{ implode(", ", $item->categories->lists("name"))  }}<br />
                     </div>
                 @endforeach
+                    
                 </div>
                 {{ $set->links() }} <br />
     
