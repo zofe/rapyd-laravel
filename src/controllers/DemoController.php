@@ -179,6 +179,30 @@ class DemoController extends \Controller {
         return  View::make('rapyd::demo.filtergrid', compact('filter', 'grid'));
     }
 
+    public function getCustomfilter()
+    {
+        $filter = DataFilter::source(Article::with('author','categories'));
+        $filter->add('src','Search', 'text')->scope( 
+        function ($query, $value) {
+            return $query->where('title','like','%'.$value.'%')
+                        ->orWhere('body','like','%'.$value.'%')
+                        ->orWhereHas('author', function($q) use($value) {
+                                            $q->where('firstname','like','%'.$value.'%')
+                                              ->orWhere('lastname','like','%'.$value.'%');
+                        })->orWhereHas('categories', function($q) use($value) {
+                                            $q->where('name','like','%'.$value.'%');
+                        });
+        });
+        $filter->submit('search');
+        $filter->reset('reset');
+        $filter->build();
+        
+        $set = DataSet::source($filter);
+        $set->paginate(9);
+        $set = $set->getSet();
+        return  View::make('rapyd::demo.customfilter', compact('filter', 'set'));
+    }
+    
     public function anyForm()
     {
         $form = DataForm::source(Article::find(1));
