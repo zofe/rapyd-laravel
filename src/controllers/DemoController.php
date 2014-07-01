@@ -121,9 +121,11 @@ class DemoController extends \Controller {
 
     public function getSet()
     {
-        $set = DataSet::source(DB::table('demo_articles')->select('title'))->orderBy('title','DESC')->paginate(10)->getSet();
+        $set = DataSet::source(Article::with('author', 'categories'));
+        $set->paginate(9);
+        $set->build();
         return  View::make('rapyd::demo.set', compact('set'));
-    }
+    }   
 
     public function getGrid()
     {
