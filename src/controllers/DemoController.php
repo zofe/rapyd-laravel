@@ -199,7 +199,7 @@ class DemoController extends \Controller {
         
         $set = DataSet::source($filter);
         $set->paginate(9);
-        $set = $set->getSet();
+        $set->build();
         return  View::make('rapyd::demo.customfilter', compact('filter', 'set'));
     }
     

@@ -55,7 +55,19 @@ in a view you can use
 </p>
 ```
 
+As you see you can build a dataset  using "one row of code" (using method chaining),
+however I suggest you this alternative syntax
+to be more in "standard"  with other widgets:
 
+```php
+   $set = DataSet::source(Article::with('author'));
+   $set->paginate(10);
+   $set->build();
+   
+   View::make('articles', compact('set'))
+```
+ 
+   
 
 ## DataGrid
 
