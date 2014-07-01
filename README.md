@@ -88,10 +88,6 @@ in a controller
    $grid->orderBy('article_id','desc'); //default orderby
    $grid->paginate(10); //pagination
 
-   View::make('articles', array('grid'=>$grid->getGrid()))
-
-   //since we use also __toString() you can do..
-   ...
    View::make('articles', compact('grid'))
 
 ```
