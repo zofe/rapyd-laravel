@@ -1,6 +1,6 @@
 @extends('rapyd::demo.demo')
 
-@section('title','DataFilter')
+@section('title','DataSet')
 
 @section('body')
 
