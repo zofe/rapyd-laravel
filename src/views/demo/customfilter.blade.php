@@ -34,8 +34,8 @@
                 <div class="row">
                 @foreach ($set->data as $item)
                     <div class="col-sm-4">
-                    {{ $item->title }}<br />
-                    {{ $item->author->name }} {{ $item->author->lastname }}<br />
+                    <strong>{{ $item->title }}</strong><br />
+                    <em>{{ $item->author->firstname }} {{ $item->author->lastname }}</em><br />
                     {{ implode(", ", $item->categories->lists("name"))  }}<br />
                     </div>
                 @endforeach
@@ -52,7 +52,8 @@
                 <br />
                 On the layout-side,  we customize filter output by using partial render 
                 (form open, form close and src field)<br />
-                then we do a simple foreach on dataset->data   to display resultset.
+                then we do a simple foreach on dataset "data" to display resultset.<br />
+                <br />
             </div>
         </div>
     </div>
