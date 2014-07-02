@@ -57,9 +57,8 @@
 
             <div class="col-sm-4">
                 This is a sample of datafilter + dataset.<br />
-                The filter is using a custom <strong>query scope</strong> (note it can be moved on your "Article"
-                entity to be more clean in your controller).<br />
-                The filter is passet to a DataSet (to paginate results and enable order by features)<br />
+                The filter is using a custom <strong>query scope</strong>.<br />
+                The filter is passed to a DataSet (to paginate results and enable order by features)<br />
                 <br />
                 On the layout-side,  we customize filter output by using partial render 
                 (form open, form close and src field)<br />
@@ -70,6 +69,7 @@
     </div>
 
     {{ Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", "getCustomfilter") }}
+    {{ Documenter::showMethod("Zofe\\Rapyd\\Models\\Article", "scopeFreesearch") }}
     {{ Documenter::showCode("zofe/rapyd/src/views/demo/customfilter.blade.php") }}
 
 @stop

@@ -184,16 +184,7 @@ class DemoController extends \Controller {
     public function getCustomfilter()
     {
         $filter = DataFilter::source(Article::with('author','categories'));
-        $filter->add('src','Search', 'text')->scope( 
-        function ($query, $value) {
-            return $query->where('title','like','%'.$value.'%')
-                        ->orWhere('body','like','%'.$value.'%')
-                        ->orWhereHas('author', function($q) use($value) {
-                                       $q->whereRaw(" CONCAT(firstname, ' ', lastname) like ?", array("%".$value."%"));
-                        })->orWhereHas('categories', function($q) use($value) {
-                                       $q->where('name','like','%'.$value.'%');
-                        });
-        });
+        $filter->add('src','Search', 'text')->scope('freesearch'); 
         $filter->submit('search');
         $filter->reset('reset');
         $filter->build();
