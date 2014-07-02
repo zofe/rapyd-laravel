@@ -96,8 +96,9 @@ class DataFilter extends DataForm
                         {
                             $this->query = $query_scope($this->query, $field->value);
                             
-                        } elseif (isset($this->model) && method_exists($this->model, $query_scope))
+                        } elseif (isset($this->model) && method_exists($this->model, "scope".$query_scope))
                         {
+                            $query_scope = "scope".$query_scope;
                             $this->query = $this->model->$query_scope($this->query, $field->value);
                             
                         }
