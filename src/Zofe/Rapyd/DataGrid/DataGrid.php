@@ -43,7 +43,7 @@ class DataGrid extends DataSet
         
         foreach ($this->data as $tablerow) {
 
-            $row = new Row();
+            $row = new Row($tablerow);
 
                 
             foreach ($this->columns as $column) {

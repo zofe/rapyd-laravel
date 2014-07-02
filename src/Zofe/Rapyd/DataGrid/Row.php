@@ -7,8 +7,14 @@ class Row
     public $attributes = array();
     public $cells = array();
     public $cell_names = array();
- 
-        
+    public $data;
+
+    public function __construct($tablerow)
+    {
+        $this->data = $tablerow;
+
+    }
+    
     public function add(Cell $cell)
     {
         if (!in_array($cell->name,$this->cell_names)) array_push($this->cell_names,$cell->name);
