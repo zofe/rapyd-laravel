@@ -15,28 +15,37 @@
         
         
         
-    </p>  
+    </p>
 
-        
+        <div class="container">
+            
         {{ $form->header }}
 
             {{ $form->message }}
 
             @if(!$form->message)
-            
-                Title: {{ $form->field('title') }}
-                <p class="bg-danger">{{ implode(', ', $form->field('title')->messages) }}</p>
+
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        Title: {{ $form->field('title') }}
+                        <p class="bg-danger">{{ implode(', ', $form->field('title')->messages) }}</p>
+                        
+                        Categories: {{ $form->field('categories.name') }} 
+                     </div>
+                    <div class="col-sm-8">
+                
 
                 Body: {{ $form->field('body') }}<br />
+                    </div>
 
-                Categories: {{ $form->field('categories.name') }}
 
             @endif
             <br />
         
         {{ $form->footer }}
 
-        <br />
+       </div>
         
         {{ Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", array("anyStyledform")) }}
         {{ Documenter::showCode("zofe/rapyd/src/views/demo/styledform.blade.php") }}
