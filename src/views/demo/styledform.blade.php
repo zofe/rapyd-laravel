@@ -27,21 +27,22 @@
 
 
                 <div class="row">
+                    
                     <div class="col-sm-4">
                         Title: {{ $form->field('title') }}
                         <p class="bg-danger">{{ implode(', ', $form->field('title')->messages) }}</p>
                         
                         Categories: {{ $form->field('categories.name') }} 
                      </div>
+                    
                     <div class="col-sm-8">
                 
-
-                Body: {{ $form->field('body') }}<br />
+                         Body: {{ $form->field('body') }}<br />
                     </div>
 
-
+                </div>
             @endif
-            <br />
+
         
         {{ $form->footer }}
 
