@@ -185,8 +185,6 @@ class DemoController extends \Controller {
     {
         $filter = DataFilter::source(Article::with('author','categories'));
         $filter->add('src','Search', 'text')->scope('freesearch'); 
-        $filter->submit('search');
-        $filter->reset('reset');
         $filter->build();
         
         $set = DataSet::source($filter);
