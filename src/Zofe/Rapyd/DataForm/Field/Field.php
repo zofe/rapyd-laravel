@@ -498,6 +498,8 @@ abstract class Field extends Widget
         if (($this->status == "hidden" || $this->visible === false || in_array($this->type, array("hidden", "auto")))) {
             $this->is_hidden = true;
         }
+        $this->message = implode("<br />\n", $this->messages);
+        
         $attributes = array('onchange', 'type', 'size', 'style', 'class', 'rows', 'cols');
 
         foreach ($attributes as $attribute) {

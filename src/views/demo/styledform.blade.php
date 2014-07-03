@@ -30,7 +30,7 @@
                     
                     <div class="col-sm-4">
                         Title: {{ $form->field('title') }}
-                        <p class="bg-danger">{{ implode(', ', $form->field('title')->messages) }}</p>
+                        <p class="bg-danger">{{ $form->field('title')->message }}</p>
                         
                         Categories: {{ $form->field('categories.name') }} 
                      </div>

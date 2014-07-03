@@ -199,6 +199,7 @@ styling a datagrid
 | $form->fields                  | array of fields  (to do a @foreach)                         |
 | $form->field('fieldname')      | field instance, used without property it show field output  |
 | ..field('fieldname')->messages | array of error messages for current field                   |
+| ..field('fieldname')->message  | string with all error messages for current field            |
 |                                |                                                             |
 | $form->open                    |  form open (it's contained in "header")                     |
 | $form->close                   |  form close (it's contained in "footer")                    |
