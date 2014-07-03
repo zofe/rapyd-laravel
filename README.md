@@ -225,7 +225,7 @@ styling a datagrid
    $edit->add('title','Title', 'text')->rule('required');
    $edit->add('body','Body','textarea')->rule('required');
    $edit->add('download','Attachment', 'file')->rule('mime:pdf')->move('uploads/pdf/');
-   $edit->add('photo','Photo', 'image')->rule('mime:jpeg')->move('uploads/images/')->fit(320,240);
+   $edit->add('photo','Photo', 'image')->rule('mimes:jpeg')->move('uploads/images/')->fit(320,240);
    $edit->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
    
    return $edit->view('crud', compact('edit'));
