@@ -113,7 +113,13 @@ class DemoController extends \Controller {
                 'article_id' => 2,
                 'comment' => 'Comment for Article 2')
         );
-        
+
+        $files = glob(public_path().'uploads/demo/*'); 
+        foreach($files as $file){ 
+            if(is_file($file))
+                unlink($file); 
+        }
+
         return \Redirect::to("rapyd-demo")->with("message", "Database filled");
     }
 
@@ -205,7 +211,7 @@ class DemoController extends \Controller {
 
         //belongs to many (field name must be the relation name)
         $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'category_id'));
-
+        $form->add('photo','Photo', 'image')->move('uploads/')->fit(240, 160)->preview(120,80);
         $form->add('public','Public','checkbox');
 
         $form->submit('Save');
@@ -257,6 +263,7 @@ class DemoController extends \Controller {
         $form->add('title','Title', 'text')->rule('required|min:5');
         $form->add('body','Body', 'redactor');
         $form->add('categories.name','Categories','tags');
+        $form->add('photo','Photo', 'image')->move('uploads/')->fit(240, 160)->preview(120,80);
         $form->submit('Save');
 
         $form->saved(function() use ($form)
@@ -280,7 +287,7 @@ class DemoController extends \Controller {
         $edit->add('body','Body', 'textarea');
         $edit->add('author_id','Author','select')->options(Author::lists("firstname", "user_id"));
         $edit->add('publication_date','Date','date')->format('d/m/Y', 'it');
-        //$edit->add('photo','Photo', 'image')->move('uploads/')->fit(240, 160)->preview(120,80);
+        $edit->add('photo','Photo', 'image')->move('uploads/')->fit(240, 160)->preview(120,80);
         $edit->add('public','Public','checkbox');
         $edit->add('categories','Categories','checkboxgroup')->options(Category::lists("name", "category_id"));
 
