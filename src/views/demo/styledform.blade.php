@@ -33,12 +33,10 @@
                         <p class="bg-danger">{{ $form->field('title')->message }}</p>
                         
                         Categories: {{ $form->field('categories.name') }}
-
-                        <div>
-                            <br />
-                            Photo: {{ $form->field('photo') }}
-                            <p class="bg-danger">{{ $form->field('photo')->message }}</p>
-                        </div>
+                        <p class="bg-danger">{{ $form->field('title')->message }}</p>
+       
+                        Photo: <br />{{ $form->field('photo') }}
+                        <p class="bg-danger">{{ $form->field('photo')->message }}</p>
                         
                     </div>
                     
