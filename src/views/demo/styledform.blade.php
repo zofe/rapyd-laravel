@@ -32,8 +32,15 @@
                         Title: {{ $form->field('title') }}
                         <p class="bg-danger">{{ $form->field('title')->message }}</p>
                         
-                        Categories: {{ $form->field('categories.name') }} 
-                     </div>
+                        Categories: {{ $form->field('categories.name') }}
+
+                        <div>
+                            <br />
+                            Photo: {{ $form->field('photo') }}
+                            <p class="bg-danger">{{ $form->field('photo')->message }}</p>
+                        </div>
+                        
+                    </div>
                     
                     <div class="col-sm-8">
                 
