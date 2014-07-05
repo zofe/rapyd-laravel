@@ -48,7 +48,7 @@ class Checkboxgroup extends Field
                 } else {
                     $output = $this->description;
                 }
-                $output = "<div class='help-block'>".$output."</div>";
+                $output = "<div class='help-block'>".$output."&nbsp;</div>";
                 break;
 
             case "create":

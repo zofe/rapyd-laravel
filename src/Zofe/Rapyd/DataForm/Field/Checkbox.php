@@ -46,7 +46,7 @@ class Checkbox extends Field
                 } else {
                     $output = ($this->checked) ? $this->checked_output : $this->unchecked_output;
                 }
-                $output = "<div class='help-block'>".$output."</div>";
+                $output = "<div class='help-block'>".$output."&nbsp;</div>";
                 break;
 
             case "create":

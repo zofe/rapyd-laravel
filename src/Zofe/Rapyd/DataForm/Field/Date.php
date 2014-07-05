@@ -110,7 +110,7 @@ class Date extends Field
                     $value = $this->isoDateToHuman($this->value);
                 }
                 $output = $value;
-                $output = "<div class='help-block'>".$output."</div>";
+                $output = "<div class='help-block'>".$output."&nbsp;</div>";
                 break;
 
             case "create":

@@ -125,7 +125,7 @@ class Image extends File
                 } else {
                     $output =  $this->thumb();
                 }
-                $output = "<div class='help-block'>" . $output . "</div>";
+                $output = "<div class='help-block'>" . $output . "&nbsp;</div>";
                 break;
 
             case "create":
