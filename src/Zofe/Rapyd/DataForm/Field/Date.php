@@ -35,7 +35,7 @@ class Date extends Field
         if (!$datetime) return '';
         $timestamp = $datetime->getTimestamp();
         if ($timestamp < 1) {
-            $timestamp = 0;
+            return "";
         }
         $isodate = date($this->format, $timestamp);
         return $isodate;
@@ -47,7 +47,11 @@ class Date extends Field
     protected function humanDateToIso($humandate)
     {
         $datetime = \DateTime::createFromFormat( $this->format, $humandate);
+        if (!$datetime) return '';
         $timestamp = $datetime->getTimestamp();
+        if ($timestamp < 1) {
+            return "";
+        }
         $humandate = date('Y-m-d', $timestamp);
         return $humandate;
     }
@@ -117,11 +121,11 @@ class Date extends Field
                     }
                 }
 
-                Rapyd::css('packages/zofe/rapyd/assets/datepicker/datepicker3.css');
-                Rapyd::js('packages/zofe/rapyd/assets/datepicker/bootstrap-datepicker.js');
+                Rapyd::css('datepicker/datepicker3.css');
+                Rapyd::js('datepicker/bootstrap-datepicker.js');
                 if ($this->language != "en")
                 {
-                    Rapyd::js('packages/zofe/rapyd/assets/datepicker/locales/bootstrap-datepicker.'.$this->language.'.js');                    
+                    Rapyd::js('datepicker/locales/bootstrap-datepicker.'.$this->language.'.js');                    
                 }
 
                 $output  = Form::text($this->name, $this->value,  $this->attributes);

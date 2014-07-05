@@ -31,9 +31,9 @@ class Redactor extends Field {
       case "modify":
 
 
-        Rapyd::js('packages/zofe/rapyd/assets/redactor/jquery.browser.min.js');
-        Rapyd::js('packages/zofe/rapyd/assets/redactor/redactor.min.js');
-        Rapyd::css('packages/zofe/rapyd/assets/redactor/css/redactor.css');
+        Rapyd::js('redactor/jquery.browser.min.js');
+        Rapyd::js('redactor/redactor.min.js');
+        Rapyd::css('redactor/css/redactor.css');
         $output  = Form::textarea($this->db_name, $this->value, $this->attributes);
         Rapyd::script("$('#".$this->name."').redactor();");
 

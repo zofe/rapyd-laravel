@@ -140,12 +140,12 @@ class Tags extends Field {
     {
         $output = "";
         //typeahead
-        Rapyd::css('packages/zofe/rapyd/assets/autocomplete/autocomplete.css');
-        Rapyd::js('packages/zofe/rapyd/assets/autocomplete/typeahead.bundle.min.js');
-        Rapyd::js('packages/zofe/rapyd/assets/template/handlebars.js');
+        Rapyd::css('autocomplete/autocomplete.css');
+        Rapyd::js('autocomplete/typeahead.bundle.min.js');
+        Rapyd::js('template/handlebars.js');
         //tagsinput
-        Rapyd::css('packages/zofe/rapyd/assets/autocomplete/bootstrap-tagsinput.css');
-        Rapyd::js('packages/zofe/rapyd/assets/autocomplete/bootstrap-tagsinput.min.js');
+        Rapyd::css('autocomplete/bootstrap-tagsinput.css');
+        Rapyd::js('autocomplete/bootstrap-tagsinput.min.js');
 
         unset($this->attributes['type']);
 

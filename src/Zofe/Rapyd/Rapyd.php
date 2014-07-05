@@ -94,14 +94,14 @@ class Rapyd
     
     public static function js($js)
     {
-        if (!in_array($js, self::$js))
-            self::$js[] = $js;
+        if (!in_array('packages/zofe/rapyd/assets/'.$js, self::$js))
+            self::$js[] = 'packages/zofe/rapyd/assets/'.$js;
     }
 
     public static function css($css)
     {
-        if (!in_array($css, self::$css))
-            self::$css[] = $css;
+        if (!in_array('packages/zofe/rapyd/assets/'.$css, self::$css))
+            self::$css[] = 'packages/zofe/rapyd/assets/'.$css;
     }
 
     public static function script($script)

@@ -108,9 +108,9 @@ class Autocomplete extends Field {
     public function build()
     {
         $output = "";
-        Rapyd::css('packages/zofe/rapyd/assets/autocomplete/autocomplete.css');
-        Rapyd::js('packages/zofe/rapyd/assets/autocomplete/typeahead.bundle.min.js');
-        Rapyd::js('packages/zofe/rapyd/assets/template/handlebars.js');
+        Rapyd::css('autocomplete/autocomplete.css');
+        Rapyd::js('autocomplete/typeahead.bundle.min.js');
+        Rapyd::js('template/handlebars.js');
 
         unset($this->attributes['type']);
 
