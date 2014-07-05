@@ -35,8 +35,7 @@
                         Categories: {{ $form->field('categories.name') }}
                         <p class="bg-danger">{{ $form->field('title')->message }}</p>
        
-                        Photo: <br />{{ $form->field('photo') }}
-                        <p class="bg-danger">{{ $form->field('photo')->message }}</p>
+
                         
                     </div>
                     
