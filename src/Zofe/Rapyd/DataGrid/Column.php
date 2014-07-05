@@ -1,6 +1,6 @@
 <?php namespace Zofe\Rapyd\DataGrid;
 
-use Zofe\Rapyd\Helpers\HTML;
+use Zofe\Rapyd\Helpers\Html;
 
 class Column
 {
@@ -71,7 +71,7 @@ class Column
 
     public function buildAttributes()
     {
-        return HTML::buildAttributes($this->attributes);
+        return Html::buildAttributes($this->attributes);
     }
 
 }
