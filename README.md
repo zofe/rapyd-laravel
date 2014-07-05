@@ -313,7 +313,7 @@ Alternatively you can add the publish command in composer.json.
 
 You need also to add this to your views, to let rapyd add runtime assets:
 
-```php
+```html
 <head>
   ...
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -325,6 +325,23 @@ You need also to add this to your views, to let rapyd add runtime assets:
 ```
 note: widget output is in standard with __Boostrap 3+__, and some widget need support of __JQuery 1.9+__
 so be sure to include dependencies as above
+
+A better choice is to split css and javascipts and move javascript at bottom, just before body to speedup the page,
+you can do this with:
+
+```html
+<head>
+  ...
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+   {{ Rapyd::styles() }}
+</head>
+....
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+   {{ Rapyd::scripts() }}
+</body>
+```
 
 
 
