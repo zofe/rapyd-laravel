@@ -211,7 +211,7 @@ class DemoController extends \Controller {
 
         //belongs to many (field name must be the relation name)
         $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'category_id'));
-        $form->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
+        //$form->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
         $form->add('public','Public','checkbox');
 
         $form->submit('Save');
