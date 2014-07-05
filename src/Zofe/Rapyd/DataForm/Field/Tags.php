@@ -201,7 +201,7 @@ class Tags extends Field {
 
 acp;
     
-                    $output .= Rapyd::script($script);
+                    Rapyd::script($script);
 
                     
                 } elseif (count($this->options)) {
@@ -246,7 +246,7 @@ acp;
 
 acp;
 
-                    $output .= Rapyd::script($script);
+                    Rapyd::script($script);
                 }
 
                 break;

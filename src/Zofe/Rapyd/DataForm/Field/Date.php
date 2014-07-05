@@ -125,15 +125,13 @@ class Date extends Field
                 }
 
                 $output  = Form::text($this->name, $this->value,  $this->attributes);
-                $output .= Rapyd::script("
-                    $(document).ready(function() {
+                Rapyd::script("
                         $('#".$this->name."').datepicker({
                             format: '{$this->formatToDate()}',
                             language: '{$this->language}',
                             todayBtn: 'linked',
                             autoclose: true
-                        });
-                    });");
+                        });");
 
                 break;
             case "hidden":

@@ -6,14 +6,12 @@ use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Input;
 
-class File extends Field
+class Map extends Field
 {
 
-    public $type = "file";
-    protected $file = null;
-    protected $path = 'uploads/';
-    protected $filename = '';
-    protected $saved = '';
+    public $type = "map";
+
+    
     
     public function autoUpdate($save = false)
     {
@@ -61,19 +59,6 @@ class File extends Field
         return true;
     }
 
-    /**
-     * move uploaded file to the destination path, optionally raname it
-     * name can be passed also as blade syntax 
-     * @param $path
-     * @param string $name
-     * @return $this
-     */
-    public function move($path, $name='')
-    {
-        $this->path = rtrim($path,"/")."/";
-        $this->filename = $this->parseString($name);
-        return $this;
-    }
 
     public function build()
     {
@@ -91,6 +76,7 @@ class File extends Field
                 } elseif ((!isset($this->value))) {
                     $output = $this->layout['null_label'];
                 } else {
+                    //immagine statica della mappa su lat e lon  su api google
                     $output = nl2br(htmlspecialchars($this->value));
                 }
                 $output = "<div class='help-block'>" . $output . "</div>";
@@ -98,7 +84,57 @@ class File extends Field
 
             case "create":
             case "modify":
-                $output = Form::file($this->db_name, $this->attributes);
+                $output  = Form::text($this->lat, $this->attributes);
+                $output .= Form::text($this->lon, $this->attributes);
+
+
+
+//            <input type="text" id="latitude" placeholder="latitude">
+//  <input type="text" id="longitude" placeholder="longitude">
+//  <div id="map" style="width:500px; height:500px"></div>
+  
+//  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+  <script>
+	function initialize() {
+        var $latitude = document.getElementById('latitude');
+        var $longitude = document.getElementById('longitude');
+        var latitude = 50.715591133433854
+		var longitude = -3.53485107421875;
+		var zoom = 7;
+		
+		var LatLng = new google.maps.LatLng(latitude, longitude);
+		
+		var mapOptions = {
+            zoom: zoom,
+			center: LatLng,
+			panControl: false,
+			zoomControl: false,
+			scaleControl: true,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		}	
+		
+		var map = new google.maps.Map(document.getElementById('map'),mapOptions);
+      
+		
+		var marker = new google.maps.Marker({
+			position: LatLng,
+			map: map,
+			title: 'Drag Me!',
+			draggable: true
+		});
+		
+		google.maps.event.addListener(marker, 'dragend', function(marker){
+            var latLng = marker.latLng;
+            $latitude.value = latLng.lat();
+            $longitude.value = latLng.lng();
+        });
+		
+		
+	}
+	initialize();
+	</script>
+                
+                
                 break;
 
             case "hidden":

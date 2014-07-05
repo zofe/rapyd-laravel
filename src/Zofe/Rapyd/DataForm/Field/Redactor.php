@@ -35,10 +35,7 @@ class Redactor extends Field {
         Rapyd::js('packages/zofe/rapyd/assets/redactor/redactor.min.js');
         Rapyd::css('packages/zofe/rapyd/assets/redactor/css/redactor.css');
         $output  = Form::textarea($this->db_name, $this->value, $this->attributes);
-        $output .= Rapyd::script("
-        $(document).ready(function() {
-                 $('#".$this->name."').redactor();
-        });");
+        Rapyd::script("$('#".$this->name."').redactor();");
 
         break;
 
