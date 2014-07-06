@@ -98,14 +98,15 @@ class Image extends File
                     $this->image->save($fit["filename"]);
                 }
             }
-            return true;
+
         }
-        
+        return true;
     }
     
     public function thumb()
     {
-        return '<img src="'.ImageManager::make($this->path.$this->value)->fit($this->preview[0], $this->preview[1])->encode('data-url').'">';
+        if (!\File::exists($this->path.$this->value)) return '';
+        return '<img src="'.ImageManager::make($this->path.$this->value)->fit($this->preview[0], $this->preview[1])->encode('data-url').'" class="pull-left" style="margin:0 10px 10px 0">';
     }
 
     public function build()
@@ -131,7 +132,10 @@ class Image extends File
             case "create":
             case "modify":
                 if ($this->value != "") {
-                    $output =  $this->thumb();
+                    $output .= '<div class="clearfix">';
+                    $output .= $this->thumb()." &nbsp;".link_to($this->path.$this->value, $this->value, array('target'=>'_blank'))."<br />\n";
+                    $output .= Form::checkbox($this->name.'_remove', 1, (bool)Input::get($this->name.'_remove'))." ".trans('rapyd::rapyd.delete')." <br/>\n";
+                    $output .= '</div>';
                 }
                 $output .= Form::file($this->db_name, $this->attributes);
                 break;

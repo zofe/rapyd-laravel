@@ -14,6 +14,7 @@ class File extends Field
     protected $path = 'uploads/';
     protected $filename = '';
     protected $saved = '';
+    protected $unlink_file = true;
     
     public function autoUpdate($save = false)
     {
@@ -29,8 +30,9 @@ class File extends Field
                 
                 $filename = ($this->filename!='') ?  $this->filename : $this->file->getClientOriginalName();
 
-                //se il nuovo file è diverso,  dovrei cancellare il vecchio
-                
+                if ($this->unlink_file) {
+                    @unlink(public_path().'/'.$this->path.$this->old_value);
+                }
                 
                 $uploaded = $this->file->move($this->path, $filename);
                 $this->saved = $this->path. $filename;
@@ -56,22 +58,41 @@ class File extends Field
                 }
                 
                 
+            } else {
+
+
+                if (Input::get($this->name . "_remove")) 
+                {
+                    if ($this->unlink_file) {
+                        @unlink(public_path().'/'.$this->path.$this->old_value);
+                    }
+                    if (is_object($this->model) && isset($this->db_name)) {
+                        $this->model->setAttribute($this->db_name, null);
+                    }
+                    if ($save) {
+                        return $this->model->save();
+                    }
+                }
+                
             }
         }
         return true;
     }
-
+    
     /**
      * move uploaded file to the destination path, optionally raname it
-     * name can be passed also as blade syntax 
+     * name param can be passed also as blade syntax
+     * unlinkable  is a bool, tell to the field to unlink or not if "remove" is checked
      * @param $path
      * @param string $name
+     * @param bool $unlinkable
      * @return $this
      */
-    public function move($path, $name='')
+    public function move($path, $name = '', $unlinkable = true)
     {
         $this->path = rtrim($path,"/")."/";
         $this->filename = $this->parseString($name);
+        $this->unlink_file = $unlinkable;
         return $this;
     }
 
@@ -97,7 +118,12 @@ class File extends Field
 
             case "create":
             case "modify":
-                $output = Form::file($this->db_name, $this->attributes);
+
+                if ($this->value){
+                    $output .= link_to($this->path.$this->value, $this->value). "&nbsp;";
+                    $output .= Form::checkbox($this->name.'_remove', 1, (bool)Input::get($this->name.'_remove'))."<br/>\n";
+                }
+                $output .= Form::file($this->db_name, $this->attributes);                    
                 break;
 
             case "hidden":
