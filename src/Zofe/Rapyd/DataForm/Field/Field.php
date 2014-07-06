@@ -50,6 +50,7 @@ abstract class Field extends Widget
     public $value = null;
     public $values = array();
     public $new_value;
+    public $old_value = null;
     public $request_refill = true;
     public $is_refill = false;
     public $is_hidden = false;
@@ -289,6 +290,12 @@ abstract class Field extends Widget
 
             $this->value = $this->model->getAttribute($this->db_name);
 
+        }
+        
+        //storing old model value in a propery
+        if(isset($this->model) && ($this->model->offsetExists($this->db_name))) 
+        {
+            $this->old_value = $this->model->getAttribute($this->db_name);
         }
         $this->getMode();
     }
