@@ -142,7 +142,7 @@ class DemoController extends \Controller {
         $grid->add('id','ID', true)->style("width:100px"); //sortable styled column
         $grid->add('title','Title'); //simple column using fieldname
         $grid->add('{{ substr($body,0,20) }}...','Body'); //blade with main field
-        $grid->add('author.fullname','Author', 'author_id');  //relation.fieldname      
+        $grid->add('{{ $author->fullname }}','Author', 'author_id');  //relation.fieldname      
         $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');  //blade with complex situation
 
         $grid->edit('/rapyd-demo/edit', 'Edit','show|modify');
@@ -213,7 +213,7 @@ class DemoController extends \Controller {
         //belongs to many (field name must be the relation name)
         $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'id'));
         $form->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
-
+        $form->add('color','Color','colorpicker');
         $form->add('public','Public','checkbox');
 
         $form->submit('Save');
