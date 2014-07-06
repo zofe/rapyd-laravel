@@ -43,14 +43,14 @@ class DemoController extends \Controller {
         //create all tables
         Schema::table("demo_users", function ($table) {
             $table->create();
-            $table->increments('user_id');
+            $table->increments('id');
             $table->string('firstname', 100);
             $table->string('lastname', 100);
             $table->timestamps();
         });
         Schema::table("demo_articles", function ($table) {
             $table->create();
-            $table->increments('article_id');
+            $table->increments('id');
             $table->integer('author_id')->unsigned();
             $table->string('title', 200);
             $table->text('body');
@@ -61,7 +61,7 @@ class DemoController extends \Controller {
         });
         Schema::table("demo_comments", function ($table) {
             $table->create();
-            $table->increments('comment_id');
+            $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('article_id')->unsigned();
             $table->text('comment');
@@ -69,7 +69,7 @@ class DemoController extends \Controller {
         });
         Schema::table("demo_categories", function ($table) {
             $table->create();
-            $table->increments('category_id');
+            $table->increments('id');
             $table->integer('parent_id')->unsigned();
             $table->string('name', 100);
             $table->timestamps();
@@ -139,21 +139,21 @@ class DemoController extends \Controller {
 
         $grid = DataGrid::source(Article::with('author', 'categories'));
         
-        $grid->add('article_id','ID', true)->style("width:100px"); //sortable styled column
+        $grid->add('id','ID', true)->style("width:100px"); //sortable styled column
         $grid->add('title','Title'); //simple column using fieldname
         $grid->add('{{ substr($body,0,20) }}...','Body'); //blade with main field
-        $grid->add('author.firstname','Author', 'author_id');  //relation.fieldname      
+        $grid->add('author.fullname','Author', 'author_id');  //relation.fieldname      
         $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');  //blade with complex situation
 
         $grid->edit('/rapyd-demo/edit', 'Edit','show|modify');
-        $grid->orderBy('article_id','desc');
+        $grid->orderBy('id','desc');
         $grid->paginate(10);
 
         //row and cell manipulation
         $grid->row(function ($row) {
-           if ($row->cell('article_id')->value == 20) {
+           if ($row->cell('id')->value == 20) {
                $row->style("background-color:#CCFF66"); 
-           } elseif ($row->cell('article_id')->value > 15) {
+           } elseif ($row->cell('id')->value > 15) {
                $row->cell('title')->style("font-weight:bold");
                $row->style("color:#f00");
            }  
@@ -176,7 +176,7 @@ class DemoController extends \Controller {
         
         $grid = DataGrid::source($filter);
         $grid->attributes(array("class"=>"table table-striped"));
-        $grid->add('article_id','ID', true)->style("width:70px");
+        $grid->add('id','ID', true)->style("width:70px");
         $grid->add('title','Title', true);
         $grid->add('author.fullname','Author');
         $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');
@@ -208,10 +208,10 @@ class DemoController extends \Controller {
         $form->add('body','Body', 'redactor');
 
         //belongs to  
-        $form->add('author_id','Author','select')->options(Author::lists('firstname', 'user_id'));
+        $form->add('author_id','Author','select')->options(Author::lists('firstname', 'id'));
 
         //belongs to many (field name must be the relation name)
-        $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'category_id'));
+        $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'id'));
         $form->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
 
         $form->add('public','Public','checkbox');
@@ -235,13 +235,13 @@ class DemoController extends \Controller {
         $form->add('title','Title', 'text')->rule('required|min:5');
 
         //simple autocomplete on options (built as local json array)
-        $form->add('author_id','Author','autocomplete')->options(Author::lists('firstname', 'user_id'));
+        $form->add('author_id','Author','autocomplete')->options(Author::lists('firstname', 'id'));
 
         //autocomplete with relation.field to manage a belongsToMany
         $form->add('author.fullname','Author','autocomplete')->search(array("firstname", "lastname"));
         
         //autocomplete with relation.field,  returned key,  custom remote ajax call (see at bottom)
-        $form->add('author.firstname','Author','autocomplete')->remote(null, "user_id", "/rapyd-demo/authorlist");
+        $form->add('author.firstname','Author','autocomplete')->remote(null, "id", "/rapyd-demo/authorlist");
 
         //tags with relation.field to manage a belongsToMany, it support also remote()
         $form->add('categories.name','Categories','tags');
@@ -287,11 +287,11 @@ class DemoController extends \Controller {
         $edit->link("rapyd-demo/filter","Articles", "TR");
         $edit->add('title','Title', 'text')->rule('required|min:5');
         $edit->add('body','Body', 'textarea');
-        $edit->add('author_id','Author','select')->options(Author::lists("firstname", "user_id"));
+        $edit->add('author_id','Author','select')->options(Author::lists("firstname", "id"));
         $edit->add('publication_date','Date','date')->format('d/m/Y', 'it');
         $edit->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
         $edit->add('public','Public','checkbox');
-        $edit->add('categories','Categories','checkboxgroup')->options(Category::lists("name", "category_id"));
+        $edit->add('categories','Categories','checkboxgroup')->options(Category::lists("name", "id"));
 
         return $edit->view('rapyd::demo.edit', compact('edit'));
 

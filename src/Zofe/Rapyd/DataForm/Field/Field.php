@@ -18,6 +18,7 @@ abstract class Field extends Widget
     public $rel_name;
     public $rel_field;
     public $rel_key;
+    public $rel_fq_key;
     public $rel_fq_other_key;
     public $rel_other_key;
 
@@ -100,6 +101,7 @@ abstract class Field extends Widget
 
             $this->relation = $this->model->$relation($relation);
             $this->rel_key = $this->relation->getModel()->getKeyName();
+            $this->rel_fq_key = $this->relation->getModel()->getQualifiedKeyName();
             $this->rel_name = $relation;
             $this->rel_field = $name;
             $this->name = ($name != $relation) ? $relation . "_" . $name : $name;

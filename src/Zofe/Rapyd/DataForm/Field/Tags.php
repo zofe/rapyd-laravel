@@ -51,7 +51,7 @@ class Tags extends Field {
         
         if (!$this->is_local && !$this->record_label && $this->rel_field != "")
         {
-             $this->remote($this->rel_field, trim(strstr($this->rel_other_key,'.'),'.'));
+             $this->remote($this->rel_field, trim(strstr($this->rel_key,'.'),'.'));
         }
         parent::getValue();
         
@@ -101,7 +101,7 @@ class Tags extends Field {
     public function remote($record_label = null, $record_id = null, $remote = null)
     {
         $this->record_label = ($record_label!="") ? $record_label : $this->db_name ;
-        $this->record_id = ($record_id!="") ? $record_id : $this->db_name ;
+        $this->record_id =  ($record_id!="") ? $record_id :  preg_replace('#([a-z0-9_-]+\.)?(.*)#i','$2',$this->rel_key);
         if ($remote!="") {
             $this->remote = $remote;
             if (is_array($record_label))
@@ -130,7 +130,7 @@ class Tags extends Field {
 
     public function search($record_label, $record_id = null)
     {
-        $record_id = ($record_id!="") ? $record_id :  preg_replace('#([a-z0-9_-]+\.)?(.*)#i','$2',$this->rel_other_key);
+        $record_id = ($record_id!="") ? $record_id :  preg_replace('#([a-z0-9_-]+\.)?(.*)#i','$2',$this->rel_key);
         $this->remote($record_label, $record_id);
         return $this;
     }

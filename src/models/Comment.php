@@ -7,7 +7,6 @@ class Comment extends \Eloquent
 {
 
 	protected $table = 'demo_comments';
-    protected $primaryKey = 'comment_id';
 
     public function article(){
         return $this->belongsTo('Zofe\Rapyd\Models\Article');
