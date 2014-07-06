@@ -585,6 +585,18 @@ class DataForm extends Widget
      * @param string $label
      * @param string $validation
      *
+     * @return Colorpicker
+     */
+    public function addColorpicker($name, $label, $validation = '')
+    {
+        return $this->add($name, $label, 'colorpicker', $validation);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
      * @return Date
      */
     public function addDate($name, $label, $validation = '')
