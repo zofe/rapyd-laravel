@@ -7,7 +7,6 @@
 class Article extends \Eloquent {
 
     protected $table = 'demo_articles';
-    //protected $primaryKey = 'article_id';
 
     public function author(){
         return $this->belongsTo('Zofe\Rapyd\Models\Author', 'author_id');

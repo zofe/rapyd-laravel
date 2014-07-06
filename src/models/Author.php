@@ -8,7 +8,6 @@ class Author extends \Eloquent
 {
 
 	protected $table = 'demo_users';
-    //protected $primaryKey = 'user_id';
 
     protected $appends = array('fullname');
     
