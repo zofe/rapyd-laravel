@@ -149,8 +149,7 @@ class DataFilter extends DataForm
                             {
                                   $values = explode($field->serialization_sep, $value);
                                   $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $values) {
-                                      
-                                      $q->whereIn($field->rel_other_key, $values);
+                                      $q->whereIn($field->rel_fq_key, $values);
                                   });
                                 continue;
                             }
@@ -200,7 +199,7 @@ class DataFilter extends DataForm
                         
                     }
                 }
-               // dd($this->query->toSql());
+                // dd($this->query->toSql());
                 break;
             case "reset":
                 $this->process_status = "show";
