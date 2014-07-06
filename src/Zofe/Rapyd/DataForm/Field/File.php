@@ -119,7 +119,7 @@ class File extends Field
             case "create":
             case "modify":
 
-                if ($this->value){
+                if ($this->old_value){
                     $output .= link_to($this->path.$this->value, $this->value). "&nbsp;";
                     $output .= Form::checkbox($this->name.'_remove', 1, (bool)Input::get($this->name.'_remove'))."<br/>\n";
                 }
