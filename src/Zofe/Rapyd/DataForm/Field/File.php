@@ -29,7 +29,8 @@ class File extends Field
                 $this->file = Input::file($this->name);
                 
                 $filename = ($this->filename!='') ?  $this->filename : $this->file->getClientOriginalName();
-
+                $filename = $this->sanitize_filename($filename);
+                
                 if ($this->unlink_file) {
                     @unlink(public_path().'/'.$this->path.$this->old_value);
                 }
@@ -78,6 +79,23 @@ class File extends Field
         }
         return true;
     }
+    
+    protected function sanitize_filename($filename)
+    {
+        $filename = preg_replace('/\s+/', '_', $filename);
+        $filename = preg_replace('/[^a-zA-Z0-9\._-]/', '', $filename);
+        $ext = strtolower(substr(strrchr($filename, '.'), 1));
+        $name = rtrim($filename, strrchr($filename, '.'));
+        $i = 0;
+        $finalname = $name;
+        while (file_exists(public_path().'/'.$this->path . $finalname. '.'.$ext))
+        {
+            $i++;
+            $finalname = $name . (string)$i;
+        }
+        return $finalname. '.'.$ext;
+    }
+    
     
     /**
      * move uploaded file to the destination path, optionally raname it
