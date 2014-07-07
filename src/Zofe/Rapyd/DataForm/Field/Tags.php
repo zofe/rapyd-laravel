@@ -29,7 +29,7 @@ class Tags extends Field {
     public $min_chars = '2';
     public $clause = "where";
     public $is_local;
-
+    public $description = '';
     
     public function options($options)
     {
