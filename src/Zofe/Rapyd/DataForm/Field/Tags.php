@@ -90,7 +90,9 @@ class Tags extends Field {
                     $row->$name = $item->$name;
                     $this->fill_tags .= "
                       $('#{$this->name}').tagsinput('add', ".json_encode($row).");";
+                    $description_arr[] = $item->$name;
                 }
+                $this->description = implode($this->separator, $description_arr);
             }
         }
 
