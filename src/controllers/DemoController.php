@@ -139,17 +139,16 @@ class DemoController extends \Controller {
 
         $grid = DataGrid::source(Article::with('author', 'categories'));
         
-        $grid->add('id','ID', true)->style("width:100px"); //sortable styled column
-        $grid->add('title','Title'); //simple column using fieldname
-        $grid->add('{{ substr($body,0,20) }}...','Body'); //blade with main field
-        $grid->add('{{ $author->fullname }}','Author', 'author_id');  //relation.fieldname      
-        $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');  //blade with complex situation
+        $grid->add('id','ID', true)->style("width:100px"); 
+        $grid->add('title','Title');
+        $grid->add('{{ Str::words($body,4) }}','Body'); 
+        $grid->add('{{ $author->fullname }}','Author', 'author_id');       
+        $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories'); 
 
         $grid->edit('/rapyd-demo/edit', 'Edit','show|modify');
         $grid->orderBy('id','desc');
         $grid->paginate(10);
 
-        //row and cell manipulation
         $grid->row(function ($row) {
            if ($row->cell('id')->value == 20) {
                $row->style("background-color:#CCFF66"); 
@@ -286,13 +285,12 @@ class DemoController extends \Controller {
         $edit = DataEdit::source(new Article);
         $edit->link("rapyd-demo/filter","Articles", "TR");
         $edit->add('title','Title', 'text')->rule('required|min:5');
-        $edit->add('body','Body', 'textarea');
+        $edit->add('body','Body', 'redactor');
         $edit->add('author_id','Author','select')->options(Author::lists("firstname", "id"));
         $edit->add('publication_date','Date','date')->format('d/m/Y', 'it');
         $edit->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
         $edit->add('public','Public','checkbox');
-        $edit->add('categories','Categories','checkboxgroup')->options(Category::lists("name", "id"));
-
+        $edit->add('categories.name','Categories','tags');
         return $edit->view('rapyd::demo.edit', compact('edit'));
 
     }
