@@ -115,10 +115,10 @@ class DemoController extends \Controller {
                 'comment' => 'Comment for Article 2')
         );
 
-        $files = glob(public_path().'uploads/demo/*'); 
+        $files = glob(public_path().'/uploads/demo/*'); 
         foreach($files as $file){ 
             if(is_file($file))
-                unlink($file); 
+                @unlink($file); 
         }
 
         return \Redirect::to("rapyd-demo")->with("message", "Database filled");
