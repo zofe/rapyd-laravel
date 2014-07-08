@@ -100,7 +100,7 @@ class DataGrid extends DataSet
             } else {
                
                 $value = @$tablerow->$matches[1]->$matches[2];
-                $value = nl2br(htmlspecialchars($value));
+                $value = $this->sanitize($value);
             }
             
 
@@ -108,7 +108,7 @@ class DataGrid extends DataSet
         //fieldname in a collection
         } elseif (is_object($tablerow)) {
 
-            $value = nl2br(htmlspecialchars($tablerow->{$column->name}));
+            $value = $this->sanitize($tablerow->{$column->name});
 
         //fieldname in an array
         } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
@@ -188,5 +188,9 @@ class DataGrid extends DataSet
         return $this;
     }
 
+    protected function sanitize($string)
+    {
+        return \Str::words(nl2br(htmlspecialchars($string)), 30);
+    }
 
 }
