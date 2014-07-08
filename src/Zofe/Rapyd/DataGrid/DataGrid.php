@@ -100,6 +100,7 @@ class DataGrid extends DataSet
             } else {
                
                 $value = @$tablerow->$matches[1]->$matches[2];
+                $value = nl2br(htmlspecialchars($value));
             }
             
 
@@ -107,7 +108,7 @@ class DataGrid extends DataSet
         //fieldname in a collection
         } elseif (is_object($tablerow)) {
 
-            $value = $tablerow->{$column->name};
+            $value = nl2br(htmlspecialchars($tablerow->{$column->name}));
 
         //fieldname in an array
         } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
