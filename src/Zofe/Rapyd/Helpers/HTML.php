@@ -51,7 +51,7 @@ class HTML
 
         do {
             $oldstring = $string;
-            $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $string);
+            $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|frame|form|input|select|button|textarea|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $string);
         } while ($oldstring != $string);
 
         return $string;
