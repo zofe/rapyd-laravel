@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 
 class DataEdit extends DataForm
 {
@@ -41,7 +42,7 @@ class DataEdit extends DataForm
             ///// modify /////
         } elseif ($this->url->value('modify' . $this->cid)) {
             $this->status = "modify";
-
+            $this->method = "patch";
             $this->process_url = $this->url->replace('modify' . $this->cid, 'update' . $this->cid)->get();
             if (!$this->find($this->url->value('modify' . $this->cid))) {
                 $this->status = "unknow_record";
@@ -49,13 +50,16 @@ class DataEdit extends DataForm
             ///// create /////
         } elseif ($this->url->value('show' . $this->cid . "|modify" . $this->cid . "|create" . $this->cid . "|delete" . $this->cid) === false) {
             $this->status = "create";
+            $this->method = "post";
             $this->process_url = $this->url->append('insert' . $this->cid, 1)->get();
         } elseif ($this->url->value('create' . $this->cid)) {
             $this->status = "create";
+            $this->method = "post";
             $this->process_url = $this->url->replace('create' . $this->cid, 'insert' . $this->cid)->get();
             ///// delete /////
         } elseif ($this->url->value('delete' . $this->cid)) {
             $this->status = "delete";
+            $this->method = "delete";
             $this->process_url = $this->url->replace('delete' . $this->cid, 'do_delete' . $this->cid)->get();
             $this->undo_url = $this->url->replace('delete' . $this->cid, 'show' . $this->cid);
             if (!$this->find($this->url->value('delete' . $this->cid))) {
@@ -77,17 +81,17 @@ class DataEdit extends DataForm
     {
   
         ///// insert /////
-        if ($this->url->value('insert' . $this->cid)) {
+        if (Request::isMethod('post') && $this->url->value('insert' . $this->cid)) {
             $this->action = "insert";
             ///// update /////
-        } elseif ($this->url->value('update' . $this->cid)) {
+        } elseif (Request::isMethod('patch') && $this->url->value('update' . $this->cid)) {
             $this->action = "update";
             $this->process_url = $this->url->append('update', $this->url->value('update' . $this->cid))->get();
             if (!$this->find($this->url->value('update' . $this->cid))) {
                 $this->status = "unknow_record";
             }
             ///// delete /////
-        } elseif ($this->url->value("do_delete" . $this->cid)) {
+        } elseif (Request::isMethod('delete') && $this->url->value("do_delete" . $this->cid)) {
             $this->action = "delete";
             if (!$this->find($this->url->value("do_delete" . $this->cid))) {
                 $this->status = "unknow_record";
@@ -162,9 +166,10 @@ class DataEdit extends DataForm
         }
         //delete
         if ($this->status == "delete") {
-            $this->link($this->url->replace('delete' . $this->cid, 'show' . $this->cid)
-                ->replace('do_delete' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "BL");
-            $this->link($this->url->replace('delete' . $this->cid, 'do_delete' . $this->cid)->get(), trans('rapyd::rapyd.delete'), "BL");
+
+            $do_delete_url = $this->url->replace('delete' . $this->cid, 'do_delete' . $this->cid)->get();
+            $this->link($this->url->replace('delete' . $this->cid, 'show' . $this->cid)->replace('do_delete' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "BL");
+            $this->formButton($do_delete_url, 'delete', trans('rapyd::rapyd.delete'), "BL");
         }
     }
 

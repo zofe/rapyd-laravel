@@ -156,4 +156,20 @@ class Widget
         return $compiled;
     }
 
+    /**
+     * return a form with a nested action button
+     * @param $url
+     * @param $method
+     * @param $name
+     * @param string $position
+     * @param array $attributes
+     * @return $this
+     */
+    public function formButton($url, $method, $name, $position="BL", $attributes=array())
+    {
+        $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
+        $this->button_container[$position][] = Form::open(array('url' => $url, 'method' => $method)).Form::submit($name, $attributes).Form::close(); 
+        return $this;
+    }
+
 }

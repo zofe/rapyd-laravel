@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
 
 class DataForm extends Widget
 {
@@ -257,7 +258,8 @@ class DataForm extends Widget
 
     protected function sniffAction()
     {
-        if (isset($_POST) && ($this->url->value('process'))) {
+        
+        if (Request::isMethod('post') && ($this->url->value('process'))) {
             $this->action = ($this->status == "modify") ? "update" : "insert";
         }
     }
