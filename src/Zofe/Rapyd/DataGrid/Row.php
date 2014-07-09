@@ -47,10 +47,10 @@ class Row
         return HTML::buildAttributes($this->attributes);
     }
     
-    public function values()
+    public function toArray()
     {
         $values = array();
-        foreach ($this->cells as $cell)
+        foreach ($this->cells as  $cell)
         {
             $values[] = $cell->value;
         }

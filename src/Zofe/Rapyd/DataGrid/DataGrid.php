@@ -13,6 +13,7 @@ class DataGrid extends DataSet
     protected $fields = array();
     /** @var Column[]  */
     public $columns = array();
+    public $headers = array();
     public $rows = array();
     public $output = "";
     public $attributes = array("class" => "table");
@@ -30,6 +31,7 @@ class DataGrid extends DataSet
     {
         $column = new Column($name, $label, $orderby);
         $this->columns[$name] = $column;
+        $this->headers[] = $label;
         return $column;
     }
 
@@ -84,16 +86,19 @@ class DataGrid extends DataSet
             
         } else {
 
+            
             $headers  = array(
-                'Pragma'=>'private',
                 'Content-Type' => 'text/csv',
+                'Pragma'=>'no-cache',
+                '"Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
                 'Content-Disposition' => 'attachment; filename="' . $filename.'"');
 
             $handle = fopen('php://output', 'w');
             ob_start();
         }
 
-        fputcsv($handle, array_keys($this->columns), ';');
+
+        fputs($handle, '"'.implode('";"', $this->headers) .'"'."\n");
         
         foreach ($this->data as $tablerow) 
         {
@@ -102,7 +107,7 @@ class DataGrid extends DataSet
             foreach ($this->columns as $column) {
 
                 $cell = new Cell($column->name);
-                $value =  strip_tags($this->getCellValue($column, $tablerow));
+                $value =  str_replace('"', '""',str_replace(PHP_EOL, '', strip_tags($this->getCellValue($column, $tablerow))));
                 $cell->value($value);
                 $row->add($cell);
             }
@@ -112,7 +117,7 @@ class DataGrid extends DataSet
                 $callable($row);
             }
 
-            fputcsv($handle, array_values($row->cells), ';');
+            fputs($handle, '"' . implode('";"', $row->toArray()) . '"'."\n");
         }
        
         fclose($handle);
