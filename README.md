@@ -223,6 +223,7 @@ styling a datagrid
 ```php
    //simple crud for Article entity
    $edit = DataEdit::source(new Article);
+   $edit->link("article/list","Articles", "TR")->back('update|do_delete');
    $edit->add('title','Title', 'text')->rule('required');
    $edit->add('body','Body','textarea')->rule('required');
    $edit->add('download','Attachment', 'file')->rule('mime:pdf')->move('uploads/pdf/');
@@ -237,6 +238,7 @@ styling a datagrid
    #crud.blade.php
   {{ $edit }}
 ```
+As you see you can append fields and links, while the "buttons" (save, undo, delete, etc..) are fully managed by dataedit
 
 note: we use _$edit->view_  method  instead _View::make_ for a reason: DataEdit must manage  redirects. With other widgets you should use View facade as default.    
 
