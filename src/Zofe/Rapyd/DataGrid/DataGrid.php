@@ -72,7 +72,7 @@ class DataGrid extends DataSet
     }
 
 
-    public function buildCSV($file = '', $timestamp = '') 
+    public function buildCSV($file = '', $timestamp = '', $sanitize = true) 
     {
         parent::build();
         $segments = \Request::segments();
@@ -113,7 +113,7 @@ class DataGrid extends DataSet
                     continue;
 
                 $cell = new Cell($column->name);
-                $value =  str_replace('"', '""',str_replace(PHP_EOL, '', strip_tags($this->getCellValue($column, $tablerow))));
+                $value =  str_replace('"', '""',str_replace(PHP_EOL, '', strip_tags($this->getCellValue($column, $tablerow, $sanitize))));
                 $cell->value($value);
                 $row->add($cell);
             }
@@ -137,7 +137,7 @@ class DataGrid extends DataSet
     }
 
 
-    protected function getCellValue($column, $tablerow)
+    protected function getCellValue($column, $tablerow, $sanitize = true)
     {
         //blade
         if (strpos($column->name, '{{') !== false) 
@@ -169,7 +169,10 @@ class DataGrid extends DataSet
             } else {
                
                 $value = @$tablerow->$matches[1]->$matches[2];
-                $value = $this->sanitize($value);
+                if ($sanitize) {
+                    $value = $this->sanitize($value);
+                }
+                
             }
             
 
@@ -177,8 +180,10 @@ class DataGrid extends DataSet
         //fieldname in a collection
         } elseif (is_object($tablerow)) {
 
-            $value = $this->sanitize($tablerow->{$column->name});
-
+            $value = $tablerow->{$column->name};
+            if ($sanitize) {
+                $value = $this->sanitize($value);
+            }
         //fieldname in an array
         } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
 
