@@ -283,7 +283,7 @@ class DemoController extends \Controller {
         if (Input::get('do_delete')==1) return  "not the first";
 
         $edit = DataEdit::source(new Article);
-        $edit->link("rapyd-demo/filter","Articles", "TR");
+        $edit->link("rapyd-demo/filter","Articles", "TR")->back('update|do_delete');
         $edit->add('title','Title', 'text')->rule('required|min:5');
         $edit->add('body','Body', 'redactor');
         $edit->add('author_id','Author','select')->options(Author::lists("firstname", "id"));

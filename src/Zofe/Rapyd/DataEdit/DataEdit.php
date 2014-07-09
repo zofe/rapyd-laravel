@@ -125,7 +125,7 @@ class DataEdit extends DataForm
                 }
                 if ($this->on("success")) {
                     $this->status = "modify";
-                    if (isset($this->back_on['update']))
+                    if (in_array('update',$this->back_on))
                     {
                         $this->redirect = $this->back_url;
                     } else {
@@ -142,7 +142,7 @@ class DataEdit extends DataForm
                 }
                 if ($this->on("success")) {
                     $this->status = "show";
-                    if (isset($this->back_on['insert']))
+                    if (in_array('insert',$this->back_on))
                     {
                         $this->redirect = $this->back_url;
                     } else {
@@ -156,7 +156,7 @@ class DataEdit extends DataForm
                     $this->message(trans('rapyd::rapyd.err'));
                 }
                 if ($this->on("success")) {
-                    if (isset($this->back_on['do_delete']))
+                    if (in_array('do_delete',$this->back_on))
                     {
                         $this->redirect = $this->back_url;
                     } else {
