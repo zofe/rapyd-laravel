@@ -16,12 +16,8 @@ class DataEdit extends DataForm
     protected $postprocess_url = "";
     protected $undo_url = "";
     public $back_url = "";
-    public $back_save = false;
-    public $back_delete = true;
-    public $back_cancel = false;
+    public $back_on = array();
     public $buttons = array();
-    public $back_cancel_save = false;
-    public $back_cancel_delete = false;
 
     public function __construct()
     {
@@ -29,6 +25,10 @@ class DataEdit extends DataForm
         $this->process_url = '';
     }
 
+    /**
+     * detect dataedit status by qs, 
+     * if needed it find the record for show/modify/delete "status"
+     */
     protected function sniffStatus()
     {
         $this->status = "idle";
@@ -70,6 +70,11 @@ class DataEdit extends DataForm
         }
     }
 
+    /**
+     * find a record on current model, and return bool 
+     * @param $id
+     * @return bool
+     */
     protected function find($id)
     {
         $model = $this->model;
@@ -77,6 +82,10 @@ class DataEdit extends DataForm
         return $this->model->exists;
     }
 
+    /**
+     * detect current action to execute by request method and qs
+     * if needed it find the record for update/do_delete "action"
+     */
     protected function sniffAction()
     {
   
@@ -99,7 +108,12 @@ class DataEdit extends DataForm
         }
     }
 
-
+    /**
+     * process works with current action/status, appended fields and model 
+     * it do field validation, field auto-update, then model operations 
+     * in can change current status and setup an output message
+     * @return bool|void
+     */
     protected function process()
     {
         $result = parent::process();
@@ -111,7 +125,13 @@ class DataEdit extends DataForm
                 }
                 if ($this->on("success")) {
                     $this->status = "modify";
-                    $this->redirect = $this->url->replace('update' . $this->cid, 'show' . $this->cid)->get();
+                    if (isset($this->back_on['update']))
+                    {
+                        $this->redirect = $this->back_url;
+                    } else {
+                        $this->redirect = $this->url->replace('update' . $this->cid, 'show' . $this->cid)->get();    
+                    }
+                    
                 }
 
                 break;
@@ -122,7 +142,13 @@ class DataEdit extends DataForm
                 }
                 if ($this->on("success")) {
                     $this->status = "show";
-                    $this->redirect = $this->url->remove('insert' . $this->cid)->append('show' . $this->cid, $this->model->getKey())->get();
+                    if (isset($this->back_on['insert']))
+                    {
+                        $this->redirect = $this->back_url;
+                    } else {
+                        $this->redirect = $this->url->remove('insert' . $this->cid)->append('show' . $this->cid, $this->model->getKey())->get();
+                    }
+                    
                 }
                 break;
             case "delete":
@@ -130,7 +156,13 @@ class DataEdit extends DataForm
                     $this->message(trans('rapyd::rapyd.err'));
                 }
                 if ($this->on("success")) {
-                    $this->message(trans('rapyd::rapyd.deleted'));
+                    if (isset($this->back_on['do_delete']))
+                    {
+                        $this->redirect = $this->back_url;
+                    } else {
+                        $this->message(trans('rapyd::rapyd.deleted'));
+                    }
+                    
                 }
                 break;
         }
@@ -145,6 +177,31 @@ class DataEdit extends DataForm
         }
     }
 
+
+    /**
+     * enable auto-back feature on given actions
+     * @param string $actions
+     * @param string $uri
+     * @return $this
+     */
+    public function back($actions='insert|update|do_delete', $uri="")
+    {
+        if  ($uri == "") {
+            if (count($this->links)) {
+                $uri = array_pop($this->links);
+            } else {
+                return $this;
+            }
+        }
+
+        $this->back_on = explode("|", $actions);
+        $this->back_url = $uri;
+        return $this;
+    }
+
+    /**
+     * it build standard buttons depending on current status
+     */
     protected function buildButtons()
     {
         //show
