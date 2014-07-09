@@ -67,6 +67,64 @@ class DataGrid extends DataSet
     }
 
 
+    public function buildCSV($file = '', $timestamp = '') 
+    {
+        parent::build();
+        $segments = \Request::segments();
+
+        $filename = ($file != '') ? basename($file, '.csv') : end($segments);
+        $filename = preg_replace('/[^0-9a-z\._-]/i', '',$filename);
+        $filename .= ($timestamp != "") ? date($timestamp).".csv" : ".csv";
+        
+        $save = (bool)strpos($file,"/");
+
+        if ($save)
+        {
+            $handle = fopen(dirname($file)."/".$filename, 'w');
+            
+        } else {
+
+            $headers  = array(
+                'Pragma'=>'private',
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="' . $filename.'"');
+
+            $handle = fopen('php://output', 'w');
+            ob_start();
+        }
+
+        fputcsv($handle, array_keys($this->columns), ';');
+        
+        foreach ($this->data as $tablerow) 
+        {
+            $row = new Row($tablerow);
+
+            foreach ($this->columns as $column) {
+
+                $cell = new Cell($column->name);
+                $value =  strip_tags($this->getCellValue($column, $tablerow));
+                $cell->value($value);
+                $row->add($cell);
+            }
+
+            if ($this->row_callable) {
+                $callable = $this->row_callable;
+                $callable($row);
+            }
+
+            fputcsv($handle, array_values($row->cells), ';');
+        }
+       
+        fclose($handle);
+        if ($save)
+        {
+            //redirect, boolean or filename?
+        } else {
+            $output = ob_get_clean();
+            return \Response::make(rtrim($output, "\n"), 200, $headers);
+        }
+    }
+
 
     protected function getCellValue($column, $tablerow)
     {

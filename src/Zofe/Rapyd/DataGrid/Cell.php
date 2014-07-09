@@ -35,4 +35,9 @@ class Cell
         return HTML::buildAttributes($this->attributes);
     }
 
+    public function __toString()
+    {
+        return $this->value;
+    }
+
 }

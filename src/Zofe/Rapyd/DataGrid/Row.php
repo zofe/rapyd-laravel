@@ -46,5 +46,15 @@ class Row
     {
         return HTML::buildAttributes($this->attributes);
     }
+    
+    public function values()
+    {
+        $values = array();
+        foreach ($this->cells as $cell)
+        {
+            $values[] = $cell->value;
+        }
+        return $values;
+    }
 
 }
