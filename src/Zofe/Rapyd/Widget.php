@@ -21,6 +21,7 @@ class Widget
     
     public $button_container = array( "TR"=>array(), "BL"=>array(), "BR"=>array() );
     public $message = "";
+    public $links = array();
 
     public function __construct()
     {
@@ -49,7 +50,7 @@ class Widget
      *
      * @return $this
      */
-    function button($name, $position="BL", $attributes=array())
+    public function button($name, $position="BL", $attributes=array())
     {
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
         
@@ -66,7 +67,7 @@ class Widget
      *
      * @return $this
      */
-    function link($url, $name, $position="BL", $attributes=array())
+    public function link($url, $name, $position="BL", $attributes=array())
     {
         $match_url = trim(parse_url($url, PHP_URL_PATH),'/');
 
@@ -76,10 +77,10 @@ class Widget
        
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
         $this->button_container[$position][] =  Html::link($url, $name, $attributes);
-
+        $this->links[] = $url;
         return $this;
     }
-
+    
     /**
      * @param string $route
      * @param string $name
@@ -89,7 +90,7 @@ class Widget
      *
      * @return $this
      */
-    function linkRoute($route, $name, $parameters=array(), $position="BL", $attributes=array())
+    public function linkRoute($route, $name, $parameters=array(), $position="BL", $attributes=array())
     {
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
         $this->button_container[$position][] = Html::linkRoute($route, $name, $parameters, $attributes);
@@ -104,7 +105,7 @@ class Widget
      *
      * @return $this
      */
-    function message($message)
+    public function message($message)
     {
         $this->message =  $message;
         return $this;
