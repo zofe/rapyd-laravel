@@ -31,7 +31,10 @@ class DataGrid extends DataSet
     {
         $column = new Column($name, $label, $orderby);
         $this->columns[$name] = $column;
-        $this->headers[] = $label;
+        if (!in_array($name,array("_edit")))
+        {
+            $this->headers[] = $label;
+        }
         return $column;
     }
 
@@ -105,6 +108,9 @@ class DataGrid extends DataSet
             $row = new Row($tablerow);
 
             foreach ($this->columns as $column) {
+
+                if (in_array($column->name,array("_edit")))
+                    continue;
 
                 $cell = new Cell($column->name);
                 $value =  str_replace('"', '""',str_replace(PHP_EOL, '', strip_tags($this->getCellValue($column, $tablerow))));
@@ -228,7 +234,7 @@ class DataGrid extends DataSet
 
     public function edit($uri, $label='Edit', $actions='show|modify|delete', $key = '')
     {
-        return $this->add('mena', $label)->actions($uri, explode('|', $actions))->key($key);
+        return $this->add('_edit', $label)->actions($uri, explode('|', $actions))->key($key);
     }
 
     public function getColumn($column_name)
