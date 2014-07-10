@@ -210,11 +210,17 @@ class DataEdit extends DataForm
             $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), trans('rapyd::rapyd.modify'), "TR");
 
         }
-        //modify
-        if ($this->status == "modify") {
 
-            $this->link($this->url->replace('modify' . $this->cid, 'show' . $this->cid)
-                ->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "TR");
+        //modify
+        if ($this->status == "modify") 
+        {
+            if (in_array('update',$this->back_on))
+            {
+                $this->link($this->back_url, trans('rapyd::rapyd.undo'), "TR");
+            } else {
+                $this->link($this->url->replace('modify' . $this->cid, 'show' . $this->cid)->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "TR");                
+            }
+
             $this->submit(trans('rapyd::rapyd.save'), 'BL');
         }
         //crete
@@ -222,10 +228,16 @@ class DataEdit extends DataForm
             $this->submit(trans('rapyd::rapyd.save'), 'BL');
         }
         //delete
-        if ($this->status == "delete") {
-
+        if ($this->status == "delete") 
+        {
+            if (in_array('do_delete',$this->back_on))
+            {
+                $this->link($this->back_url, trans('rapyd::rapyd.undo'), "BL");
+            } else {
+                $this->link($this->url->replace('delete' . $this->cid, 'show' . $this->cid)->replace('do_delete' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "BL");
+            }
+            
             $do_delete_url = $this->url->replace('delete' . $this->cid, 'do_delete' . $this->cid)->get();
-            $this->link($this->url->replace('delete' . $this->cid, 'show' . $this->cid)->replace('do_delete' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "BL");
             $this->formButton($do_delete_url, 'delete', trans('rapyd::rapyd.delete'), "BL");
         }
     }
