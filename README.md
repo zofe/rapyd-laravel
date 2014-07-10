@@ -117,6 +117,21 @@ styling a datagrid
     ...
 ```
 
+datagrid supports also csv output, so it can be used as "report" tool.
+
+```php
+   ...
+   $grid->add('title','Title');
+   $grid->add('body','Body')
+   ...
+   $grid->buildCSV();  //  force download 
+   $grid->buildCSV('export_articles', 'Y-m-d.His');  //  force download with custom name and stamp
+   $grid->buildCSV('uploads/filename', 'Y-m-d');  // write on file 
+    ...
+```
+
+
+
 ## DataForm
 
  DataForm is a form builder, you can add fields, rules and buttons.  

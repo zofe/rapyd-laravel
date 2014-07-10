@@ -87,7 +87,7 @@ class DataGrid extends DataSet
 
         if ($save)
         {
-            $handle = fopen(dirname($file)."/".$filename, 'w');
+            $handle = fopen(public_path().'/'.dirname($file)."/".$filename, 'w');
             
         } else {
 
