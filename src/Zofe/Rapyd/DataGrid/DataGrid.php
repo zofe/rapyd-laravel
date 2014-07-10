@@ -74,7 +74,9 @@ class DataGrid extends DataSet
 
     public function buildCSV($file = '', $timestamp = '', $sanitize = true) 
     {
+        $this->limit = null;
         parent::build();
+
         $segments = \Request::segments();
 
         $filename = ($file != '') ? basename($file, '.csv') : end($segments);
