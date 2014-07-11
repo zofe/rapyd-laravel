@@ -605,4 +605,16 @@ class DataForm extends Widget
     {
         return $this->add($name, $label, 'date', $validation);
     }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Hidden
+     */
+    public function addHidden($name, $label, $validation = '')
+    {
+        return $this->add($name, $label, 'hidden', $validation);
+    }
 }
