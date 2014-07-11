@@ -274,8 +274,8 @@ abstract class Field extends Widget
 
                 //es. "article_detail" per "article"
                 case 'Illuminate\Database\Eloquent\Relations\HasOne':
-                    $this->value = $this->relation->$name; //value I need is the field value on related table
-                    // @$this->model->$relation->$name;
+                    $this->value = @$this->relation->get()->first()->$name; //value I need is the field value on related table
+//                     @$this->model->$relation->$name;
 
                     break;
 
@@ -419,7 +419,10 @@ abstract class Field extends Widget
 
         if (is_object($this->model) && isset($this->db_name)) {
 
-            if (!Schema::hasColumn($this->model->getTable(), $this->db_name)) {
+            if (
+                !Schema::hasColumn($this->model->getTable(), $this->db_name)
+                || is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\HasOne') 
+                ) {
                 $this->model->saved(function () {
                     $this->updateRelations();
                 });
@@ -449,9 +452,8 @@ abstract class Field extends Widget
         } else {
             $data = $this->value;
         }
-
         if ($this->relation != null) {
-
+            
             $methodClass = get_class($this->relation);
             switch ($methodClass) {
                 case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
@@ -463,7 +465,10 @@ abstract class Field extends Widget
                     $this->relation->attach($data);
                     break;
                 case 'Illuminate\Database\Eloquent\Relations\HasOne':
-
+                    $relation = $this->relation->get()->first();
+                    if (!$relation) $relation = $this->relation->getRelated();
+                    $relation->{$this->rel_field} = $data;
+                    $this->relation->save( $relation );
                     break;
                 case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
 
