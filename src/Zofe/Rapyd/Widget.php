@@ -142,6 +142,16 @@ class Widget
     }
 
     /**
+     * shortcut for attributes()
+     * @param $attributes
+     * @return $this
+     */
+    public function attr($attributes)
+    {
+        return $this->attributes($attributes);
+    }
+
+    /**
      * return a attributes in string format
      * @return string
      */
