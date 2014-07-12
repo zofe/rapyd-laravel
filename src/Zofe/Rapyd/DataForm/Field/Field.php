@@ -61,6 +61,12 @@ abstract class Field extends Widget
     public $messages = array();
     public $query_scope;
     
+    /**
+     * @var \Zofe\Rapyd\DataForm\DataForm
+     */
+    public $widget;
+
+    
     // layout
     public $layout = array(
         'field_separator' => '<br />',
@@ -458,8 +464,13 @@ abstract class Field extends Widget
                     $this->relation->attach($data);
                     break;
                 case 'Illuminate\Database\Eloquent\Relations\HasOne':
-                    $relation = $this->relation->get()->first();
-                    if (!$relation) $relation = $this->relation->getRelated();
+                    if (isset($this->widget->related_models[$this->rel_name])) {
+                        $relation = $this->widget->related_models[$this->rel_name];
+                    } else {
+                        $relation = $this->relation->get()->first();
+                        if (!$relation) $relation = $this->relation->getRelated();
+                        $this->widget->related_models[$this->rel_name] = $relation;
+                    }
                     $relation->{$this->rel_field} = $data;
                     $this->relation->save( $relation );
                     break;
