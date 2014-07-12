@@ -35,4 +35,13 @@ class Article extends \Eloquent {
             });
         
     }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function($article) {
+            $article->detail()->delete();
+            if ($article->photo)  @unlink(public_path().'/uploads/demo/'.$article->photo);
+        });
+    }
 }
