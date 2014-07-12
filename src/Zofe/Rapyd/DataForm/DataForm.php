@@ -36,6 +36,8 @@ class DataForm extends Widget
     protected $process_url = '';
     protected $view = 'rapyd::dataform';
     protected $orientation = 'horizontal';
+    
+    public $related_models = array();
 
     public function __construct()
     {
@@ -84,6 +86,9 @@ class DataForm extends Widget
             $field_obj->group = $this->default_group;
         }
         $this->fields[$name] = $field_obj;
+        
+        $field_obj->widget = $this;
+        
         return $field_obj;
     }
 
