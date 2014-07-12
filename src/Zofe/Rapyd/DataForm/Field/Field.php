@@ -183,13 +183,6 @@ abstract class Field extends Widget
         return $this;
     }
 
-    public function attributes($attributes)
-    {
-
-        $this->attributes = $attributes;
-        return $this;
-    }
-
     public function insertValue($insert_value)
     {
         $this->insert_value = $insert_value;
