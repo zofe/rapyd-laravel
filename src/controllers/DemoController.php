@@ -36,6 +36,7 @@ class DemoController extends \Controller {
     {
         Schema::dropIfExists("demo_users");
         Schema::dropIfExists("demo_articles");
+        Schema::dropIfExists("demo_article_detail");
         Schema::dropIfExists("demo_comments");
         Schema::dropIfExists("demo_categories");
         Schema::dropIfExists("demo_article_category");
@@ -58,6 +59,12 @@ class DemoController extends \Controller {
             $table->boolean('public');
             $table->timestamp('publication_date');
             $table->timestamps();
+        });
+        Schema::table("demo_article_detail", function ($table) {
+            $table->create();
+            $table->increments('id');
+            $table->integer('article_id')->unsigned();
+            $table->text('note');
         });
         Schema::table("demo_comments", function ($table) {
             $table->create();
@@ -286,6 +293,7 @@ class DemoController extends \Controller {
         $edit->link("rapyd-demo/filter","Articles", "TR")->back();
         $edit->add('title','Title', 'text')->rule('required|min:5');
         $edit->add('body','Body', 'redactor');
+        $edit->add('detail.note','Note', 'textarea')->attributes(array('rows'=>2));
         $edit->add('author_id','Author','select')->options(Author::lists("firstname", "id"));
         $edit->add('publication_date','Date','date')->format('d/m/Y', 'it');
         $edit->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
