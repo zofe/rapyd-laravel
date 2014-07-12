@@ -22,7 +22,7 @@ class DataForm extends Widget
 {
 
     public $model;
-    public $model_relations = array();
+    public $model_relations;
     
     public $output = "";
     public $fields = array();
@@ -43,6 +43,7 @@ class DataForm extends Widget
     {
         parent::__construct();
         $this->process_url = $this->url->append('process', 1)->get();
+        $this->model_relations = new \ArrayObject();
     }
 
     /**

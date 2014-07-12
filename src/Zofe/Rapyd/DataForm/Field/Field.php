@@ -78,8 +78,8 @@ abstract class Field extends Widget
     {
         parent::__construct();
 
-        $this->model =& $model;
-        $this->model_relations =& $model_relations;
+        $this->model = $model;
+        $this->model_relations = $model_relations;
 
         $this->setName($name);
         $this->label = $label;
@@ -468,7 +468,6 @@ abstract class Field extends Widget
 
                     if (isset($this->model_relations[$this->rel_name])) {
                         $relation = $this->model_relations[$this->rel_name];
-                        //dd('qui');
                     } else {
                         $relation = $this->relation->get()->first();
                         if (!$relation) $relation = $this->relation->getRelated();
