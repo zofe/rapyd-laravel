@@ -65,6 +65,7 @@ class DemoController extends \Controller {
             $table->increments('id');
             $table->integer('article_id')->unsigned();
             $table->text('note');
+            $table->string('note_tags', 200);
         });
         Schema::table("demo_comments", function ($table) {
             $table->create();
@@ -292,8 +293,10 @@ class DemoController extends \Controller {
         $edit = DataEdit::source(new Article);
         $edit->link("rapyd-demo/filter","Articles", "TR")->back();
         $edit->add('title','Title', 'text')->rule('required|min:5');
+        
         $edit->add('body','Body', 'redactor');
         $edit->add('detail.note','Note', 'textarea')->attributes(array('rows'=>2));
+        $edit->add('detail.note_tags','Note tags', 'text');
         $edit->add('author_id','Author','select')->options(Author::lists("firstname", "id"));
         $edit->add('publication_date','Date','date')->format('d/m/Y', 'it');
         $edit->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);

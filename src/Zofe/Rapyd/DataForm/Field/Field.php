@@ -41,7 +41,8 @@ abstract class Field extends Widget
     public $apply_rules = true;
     public $required = false;
     //data settings
-    public $model; 
+    public $model;
+    public $model_relations;
     public $insert_value = null; 
     public $update_value = null; 
     public $show_value = null; //default value in visualization
@@ -73,17 +74,23 @@ abstract class Field extends Widget
     
     public $star = '';
 
-    public function __construct($name, $label, &$model = null)
+    public function __construct($name, $label, &$model = null, &$model_relations = null)
     {
         parent::__construct();
 
-        $this->model = $model;
+        $this->model =& $model;
+        $this->model_relations =& $model_relations;
 
-        $this->name($name);
+        $this->setName($name);
         $this->label = $label;
     }
 
-    public function name($name)
+
+    /**
+     * check for relation notation and split relation-name and fiel-dname
+     * @param $name
+     */
+    protected function setName($name)
     {
         //detect relation or relation.field
         $relation = null;
@@ -458,8 +465,15 @@ abstract class Field extends Widget
                     $this->relation->attach($data);
                     break;
                 case 'Illuminate\Database\Eloquent\Relations\HasOne':
-                    $relation = $this->relation->get()->first();
-                    if (!$relation) $relation = $this->relation->getRelated();
+
+                    if (isset($this->model_relations[$this->rel_name])) {
+                        $relation = $this->model_relations[$this->rel_name];
+                        //dd('qui');
+                    } else {
+                        $relation = $this->relation->get()->first();
+                        if (!$relation) $relation = $this->relation->getRelated();
+                        $this->model_relations[$this->rel_name] = $relation;
+                    }
                     $relation->{$this->rel_field} = $data;
                     $this->relation->save( $relation );
                     break;

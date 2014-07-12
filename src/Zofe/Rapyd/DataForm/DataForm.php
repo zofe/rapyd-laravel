@@ -22,6 +22,8 @@ class DataForm extends Widget
 {
 
     public $model;
+    public $model_relations = array();
+    
     public $output = "";
     public $fields = array();
     public $hash = "";
@@ -61,7 +63,7 @@ class DataForm extends Widget
 
         //instancing 
         if (isset($this->model)) {
-            $field_obj = new $field_class($name, $label, $this->model);
+            $field_obj = new $field_class($name, $label, $this->model, $this->model_relations);
         } else {
             $field_obj = new $field_class($name, $label);
         }
@@ -72,11 +74,6 @@ class DataForm extends Widget
 
         if ($field_obj->type == "file") {
             $this->multipart = true;
-        }
-
-        //share model
-        if (isset($this->model)) {
-            $field_obj->model = & $this->model;
         }
 
         //default group
