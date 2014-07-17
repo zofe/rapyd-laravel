@@ -458,12 +458,15 @@ class DataForm extends Widget
         $this->process();
 
         if ($this->process_status == "success") {
-            $this->button_container['BL'] = array();
-            $this->removeType('submit');
+           
             $result = $callable($this);
             if ($result && is_a($result, 'Illuminate\Http\RedirectResponse'))
             {
                 $this->redirect = $result;
+            }
+            if ($this->error == '') {
+                $this->button_container['BL'] = array();
+                $this->removeType('submit');
             }
             return $result;
         }
