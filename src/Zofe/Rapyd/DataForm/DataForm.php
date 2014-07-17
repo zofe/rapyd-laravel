@@ -436,10 +436,14 @@ class DataForm extends Widget
      */
     public function view($viewname, $array = array())
     {
-        $form = $this->getForm();
-
-        $array['form'] = $form;
-        if ($this->hasRedirect()) return Redirect::to($this->getRedirect());
+        if (!isset($array['form']))
+        {
+            $form = $this->getForm();
+            $array['form'] = $form;
+        }
+        if ($this->hasRedirect()) {
+            return (is_a($this->redirect, 'Illuminate\Http\RedirectResponse')) ? $this->redirect : Redirect::to($this->redirect);
+        } 
         return View::make($viewname, $array);
     }
 
@@ -456,7 +460,12 @@ class DataForm extends Widget
         if ($this->process_status == "success") {
             $this->button_container['BL'] = array();
             $this->removeType('submit');
-            $callable($this);
+            $result = $callable($this);
+            if ($result && is_a($result, 'Illuminate\Http\RedirectResponse'))
+            {
+                $this->redirect = $result;
+            }
+            return $result;
         }
 
     }
@@ -467,7 +476,7 @@ class DataForm extends Widget
      */
     function passed(\Closure $callable)
     {
-        $this->saved($callable);
+        return $this->saved($callable);
     }
 
     /**
