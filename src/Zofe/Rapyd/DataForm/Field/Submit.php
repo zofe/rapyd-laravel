@@ -15,18 +15,9 @@ class Submit extends Field {
     switch ($this->status)
     {
       case "disabled":
-      case "show":
-		  
-		if ($this->type =='hidden' || $this->value == "") {
-          $output = "";
-		} elseif ( (!isset($this->value)) )
-        {
-          $output = $this->layout['null_label'];
-        } else {
-          $output = nl2br(htmlspecialchars($this->value));
-        }
+          $output = '';
         break;
-
+      case "show":
       case "create":
       case "modify":
         $output = Form::submit($this->label, $this->attributes);
