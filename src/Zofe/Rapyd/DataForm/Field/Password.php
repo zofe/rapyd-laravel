@@ -30,7 +30,7 @@ class Password extends Field {
 
       case "create":
       case "modify":
-        $output = Form::password($this->name, $this->value, $this->attributes);
+        $output = Form::password($this->name, $this->attributes);
         break;
 
       case "hidden":
