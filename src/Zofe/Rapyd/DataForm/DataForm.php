@@ -444,7 +444,6 @@ class DataForm extends Widget
     /**
      * build form and check if process status is "success" then execute a callable
      * @param callable $callable
-     * @return callable
      */
     function saved(\Closure $callable)
     {
@@ -458,6 +457,15 @@ class DataForm extends Widget
             $callable($this);
         }
 
+    }
+
+    /**
+     * alias for saved
+     * @param callable $callable
+     */
+    function passed(\Closure $callable)
+    {
+        $this->saved($callable);
     }
 
     /**
