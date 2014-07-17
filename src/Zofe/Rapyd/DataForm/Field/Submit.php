@@ -5,11 +5,11 @@ use Illuminate\Support\Facades\Form;
 class Submit extends Field {
 
   public $type = "submit";
-  
+  public $attributes = array('class' => 'btn btn-default');
+    
   public function build()
   {
     $output = "";
-    $this->attributes["class"] = "btn btn-default";
     if (parent::build() === false) return;
 
     switch ($this->status)
