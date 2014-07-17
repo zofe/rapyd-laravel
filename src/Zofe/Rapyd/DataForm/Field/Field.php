@@ -214,6 +214,12 @@ abstract class Field extends Widget
         return $this;
     }
 
+    public function placeholder($placeholder)
+    {
+        $this->attributes['placeholder'] = $placeholder;
+        return $this;
+    }
+    
     public function getValue()
     {
         $name = $this->db_name;
@@ -520,7 +526,7 @@ abstract class Field extends Widget
         }
         $this->message = implode("<br />\n", $this->messages);
         
-        $attributes = array('onchange', 'type', 'size', 'style', 'class', 'rows', 'cols');
+        $attributes = array('onchange', 'type', 'size', 'style', 'class', 'rows', 'cols', 'placeholder');
 
         foreach ($attributes as $attribute) {
             if (isset($this->$attribute))
