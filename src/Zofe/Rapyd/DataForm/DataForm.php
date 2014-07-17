@@ -615,4 +615,16 @@ class DataForm extends Widget
     {
         return $this->add($name, $label, 'hidden', $validation);
     }
+    
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $validation
+     *
+     * @return Hidden
+     */
+    public function addPassword($name, $label, $validation = '')
+    {
+        return $this->add($name, $label, 'password', $validation);
+    }
 }
