@@ -27,6 +27,7 @@ class DataForm extends Widget
     public $output = "";
     public $fields = array();
     public $hash = "";
+    public $error = "";
     
     public $open;
     public $close;    
@@ -347,6 +348,7 @@ class DataForm extends Widget
         }
         if (isset($this->validator)) {
             $this->errors = $this->validator->messages();
+            $this->error =  implode('<br />',$this->validator->messages()->all());
         }
     }
 
