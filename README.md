@@ -213,6 +213,7 @@ datagrid supports also csv output, so it can be used as "report" tool.
 | $form->message                 | show if present a succes/confirmation message               |
 | $form->fields                  | array of fields  (to do a @foreach)                         |
 | $form->field('fieldname')      | field instance, used without property it show field output  |
+| $form->error                   | error string containing all errors                          |
 | ..field('fieldname')->messages | array of error messages for current field                   |
 | ..field('fieldname')->message  | string with all error messages for current field            |
 |                                |                                                             |
