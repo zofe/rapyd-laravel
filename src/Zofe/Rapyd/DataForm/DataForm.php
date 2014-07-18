@@ -39,6 +39,7 @@ class DataForm extends Widget
     protected $process_url = '';
     protected $view = 'rapyd::dataform';
     protected $orientation = 'horizontal';
+    protected $form_callable = false;
 
     public function __construct()
     {
@@ -99,7 +100,7 @@ class DataForm extends Widget
     }
 
     /**
-     * remove field where type==$type from list
+     * remove field where type==$type from field list and button container
      * @param $type
      * @return $this
      */
@@ -108,6 +109,16 @@ class DataForm extends Widget
         foreach ($this->fields as $fieldname => $field) {
             if ($field->type == $type) {
                 unset($this->fields[$fieldname]);
+            }
+        }
+        foreach ($this->button_container as $container => $buttons)
+        {
+            foreach ($buttons as $key=>$button)
+            {
+                if (strpos($button, 'type="'.$type.'"')!==false)
+                {
+                    $this->button_container[$container][$key] = "";
+                }
             }
         }
         return $this;
@@ -193,6 +204,10 @@ class DataForm extends Widget
      */
     protected function isValid()
     {
+        if ($this->error != "")
+        {
+            return false;
+        }
         foreach ($this->fields as $field) {
             $field->action = $this->action;
             if (isset($field->rule)) {
@@ -209,6 +224,23 @@ class DataForm extends Widget
         }
     }
 
+    /**
+     * append error (to be used in passed/saved closure)
+     * @param string $url
+     * @param string $name
+     * @param string $position
+     * @param array  $attributes
+     *
+     * @return $this
+     */
+    public function error($error)
+    {
+        $this->process_status = 'error';
+        $this->message = '';
+        $this->error .= $error;
+        return $this;
+    }
+    
     /**
      * @param string $process_status
      *
@@ -231,6 +263,14 @@ class DataForm extends Widget
     }
 
     /**
+     * needed by DataEdit, to build standard action buttons
+     */
+    protected function buildButtons()
+    {
+
+    }
+    
+    /**
      * build each field and share some data from dataform to field (form status, validation errors) 
      */
     protected function buildFields()
@@ -248,11 +288,6 @@ class DataForm extends Widget
             }
             $field->build();
         }
-    }
-
-    protected function buildButtons()
-    {
-
     }
 
     protected function sniffAction()
@@ -348,7 +383,7 @@ class DataForm extends Widget
         }
         if (isset($this->validator)) {
             $this->errors = $this->validator->messages();
-            $this->error =  implode('<br />',$this->validator->messages()->all());
+            $this->error .=  implode('<br />',$this->errors->all());
         }
     }
 
@@ -365,14 +400,29 @@ class DataForm extends Widget
         if ($this->output != '') return;
         if ($view != '') $this->view = $view;
         
-        //$this->sniffStatus();
-        //$this->sniffAction();
         $this->process();
 
-        $this->buildFields();
+        //callable
+        if ($this->form_callable && $this->process_status == "success") 
+        {
+            $callable = $this->form_callable;
+            $result = $callable($this);
+            if ($result && is_a($result, 'Illuminate\Http\RedirectResponse'))
+            {
+                $this->redirect = $result;
+            }
+            //reprocess if an error is added in closure
+            if ($this->process_status == 'error') {
+                $this->process();
+            }
+        }
+        //cleanup submits if success
+        if ($this->process_status == 'success') {
+            $this->removeType('submit');   
+        }
         $this->buildButtons();
+        $this->buildFields();
         $dataform = $this->buildForm();
-        
         $this->output = $dataform->render();
 
         $sections = $dataform->renderSections();
@@ -384,7 +434,6 @@ class DataForm extends Widget
 
     /**
      * @param string $view
-     *
      * @return string
      */
     public function getForm($view = '')
@@ -429,8 +478,8 @@ class DataForm extends Widget
     }
 
     /**
-     * @param       $viewname
-     * @param array $array
+     * @param string $viewname
+     * @param array $array of values for view
      *
      * @return View|Redirect
      */
@@ -453,24 +502,7 @@ class DataForm extends Widget
      */
     function saved(\Closure $callable)
     {
-        $this->sniffStatus();
-        $this->sniffAction();
-        $this->process();
-
-        if ($this->process_status == "success") {
-           
-            $result = $callable($this);
-            if ($result && is_a($result, 'Illuminate\Http\RedirectResponse'))
-            {
-                $this->redirect = $result;
-            }
-            if ($this->error == '') {
-                $this->button_container['BL'] = array();
-                $this->removeType('submit');
-            }
-            return $result;
-        }
-
+         $this->form_callable = $callable;
     }
 
     /**
@@ -479,7 +511,7 @@ class DataForm extends Widget
      */
     function passed(\Closure $callable)
     {
-        return $this->saved($callable);
+        $this->saved($callable);
     }
 
     /**
