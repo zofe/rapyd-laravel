@@ -28,6 +28,7 @@ class Autocomplete extends Field {
     public $min_chars = '2';
     public $clause = "where";
     public $is_local;
+    public $description;
 
 
     //getvalue quando è local
@@ -178,6 +179,13 @@ class Autocomplete extends Field {
                         }
                     }).on("typeahead:selected typeahead:autocompleted", 
                         function(e,data) { $('#{$this->name}').val(data.{$this->record_id});
+                        
+                    }).on("typeahead:closed", 
+                        function(e,data) { 
+                            if ($(this).val() == '')
+                            {
+                                $('#{$this->name}').val('');
+                            }     
                     });
 acp;
     
@@ -213,6 +221,12 @@ acp;
                     }).on("typeahead:selected typeahead:autocompleted", 
                         function(e,data) { 
                             $('#{$this->name}').val(data.key);
+                    }).on("typeahead:closed", 
+                        function(e,data) { 
+                            if ($(this).val() == '')
+                            {
+                                $('#{$this->name}').val('');
+                            }     
                     });
 acp;
 
