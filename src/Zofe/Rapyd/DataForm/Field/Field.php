@@ -226,7 +226,7 @@ abstract class Field extends Widget
 
         $process = (Input::get('search') || Input::get('save')) ? true : false;
 
-        if ($this->request_refill == true && $process) {
+        if ($this->request_refill == true && $process && Input::exists($this->name) ) {
             if ($this->multiple) {
 
                 $this->value = "";
@@ -311,8 +311,8 @@ abstract class Field extends Widget
     public function getNewValue()
     {
         $process = (Input::get('search') || Input::get('save')) ? true : false;
-        //if (Input::get($this->name)) {
-        if ($process) {
+
+        if ($process && Input::exists($this->name)) {
             if ($this->status == "create") {
                 $this->action = "insert";
             } elseif ($this->status == "modify") {
