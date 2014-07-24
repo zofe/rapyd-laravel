@@ -212,11 +212,12 @@ class DataForm extends Widget
             $field->action = $this->action;
             if (isset($field->rule)) {
                 $rules[$field->name] = $field->rule;
+                $attributes[$field->name] = $field->label;
             }
         }
         if (isset($rules)) {
 
-            $this->validator = Validator::make(Input::all(), $rules);
+            $this->validator = Validator::make(Input::all(), $rules, array(), $attributes);
             
             return !$this->validator->fails();
         } else {
