@@ -21,6 +21,7 @@ class Date extends Field
     {
         $this->format = $format;
         $this->language = $language;
+        return $this;
     }
 
 
