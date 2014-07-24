@@ -87,7 +87,7 @@ class DataGrid extends DataSet
 
         //Delimiter
         $delimiter = array();
-        $delimiter['delimiter'] = isset($del['delimiter']) ? $del['delimiter']:':';
+        $delimiter['delimiter'] = isset($del['delimiter']) ? $del['delimiter']:';';
         $delimiter['enclosure'] = isset($del['enclosure']) ? $del['enclosure']:'"';
         $delimiter['line_ending'] = isset($del['line_ending']) ? $del['line_ending']:"\n";
 
@@ -109,7 +109,7 @@ class DataGrid extends DataSet
         }
 
 
-        fputs($handle, $delimiter['enclosure'].implode($delimiter['delimiter'], $this->headers) .$delimiter['enclosure'].$delimiter['line_ending']);
+        fputs($handle, $delimiter['enclosure'].implode($delimiter['enclosure'].$delimiter['delimiter'].$delimiter['enclosure'], $this->headers) .$delimiter['enclosure'].$delimiter['line_ending']);
 
         
         foreach ($this->data as $tablerow) 
@@ -132,7 +132,7 @@ class DataGrid extends DataSet
                 $callable($row);
             }
 
-            fputs($handle, $delimiter['enclosure'] . implode($delimiter['delimiter'], $row->toArray()) . $delimiter['enclosure'].$delimiter['line_ending']);
+            fputs($handle, $delimiter['enclosure'] . implode($delimiter['enclosure'].$delimiter['delimiter'].$delimiter['enclosure'], $row->toArray()) . $delimiter['enclosure'].$delimiter['line_ending']);
         }
        
         fclose($handle);
