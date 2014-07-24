@@ -158,6 +158,9 @@ datagrid supports also csv output, so it can be used as "report" tool.
    $form->addText('title','Title'); //field name, label
    $form->addTextarea('body','Body')->rule('required');
 
+    //can also support readonly 
+   $form->addText('nickname','Nickname')->mode('readonly');
+
    //then a submit button
    $form->submit('Save');
 
