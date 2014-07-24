@@ -72,7 +72,7 @@ class DataGrid extends DataSet
     }
 
 
-    public function buildCSV($file = '', $timestamp = '', $sanitize = true) 
+    public function buildCSV($file = '', $timestamp = '', $sanitize = true,$del = array()) 
     {
         $this->limit = null;
         parent::build();
@@ -84,6 +84,12 @@ class DataGrid extends DataSet
         $filename .= ($timestamp != "") ? date($timestamp).".csv" : ".csv";
         
         $save = (bool)strpos($file,"/");
+
+        //Delimiter
+        $delimiter = array();
+        $delimiter['delimiter'] = isset($del['delimiter']) ? $del['delimiter']:':';
+        $delimiter['enclosure'] = isset($del['enclosure']) ? $del['enclosure']:'"';
+        $delimiter['line_ending'] = isset($del['line_ending']) ? $del['line_ending']:"\n";
 
         if ($save)
         {
@@ -103,7 +109,8 @@ class DataGrid extends DataSet
         }
 
 
-        fputs($handle, '"'.implode('";"', $this->headers) .'"'."\n");
+        fputs($handle, $delimiter['enclosure'].implode($delimiter['delimiter'], $this->headers) .$delimiter['enclosure'].$delimiter['line_ending']);
+
         
         foreach ($this->data as $tablerow) 
         {
@@ -125,7 +132,7 @@ class DataGrid extends DataSet
                 $callable($row);
             }
 
-            fputs($handle, '"' . implode('";"', $row->toArray()) . '"'."\n");
+            fputs($handle, $delimiter['enclosure'] . implode($delimiter['delimiter'], $row->toArray()) . $delimiter['enclosure'].$delimiter['line_ending']);
         }
        
         fclose($handle);
@@ -137,7 +144,6 @@ class DataGrid extends DataSet
             return \Response::make(rtrim($output, "\n"), 200, $headers);
         }
     }
-
 
     protected function getCellValue($column, $tablerow, $sanitize = true)
     {
