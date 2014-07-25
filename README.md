@@ -317,8 +317,14 @@ In `app/config/app.php` add:
 then run: `$ composer update zofe/rapyd`.
 
 
+## Publish & override configuration (optional)
 
-## Publish & integrate assets
+You can quickly publish the configuration file (to override something) 
+by running the following Artisan command.  
+
+    $ php artisan config:publish zofe/rapyd
+
+## Publish & integrate assets (needed)
 
 
 You need to publish the assets from this package.
