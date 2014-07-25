@@ -34,13 +34,13 @@ class Redactor extends Field {
         Rapyd::js('redactor/jquery.browser.min.js');
         Rapyd::js('redactor/redactor.min.js');
         Rapyd::css('redactor/css/redactor.css');
-        $output  = Form::textarea($this->db_name, $this->value, $this->attributes);
+        $output  = Form::textarea($this->name, $this->value, $this->attributes);
         Rapyd::script("$('#".$this->name."').redactor();");
 
         break;
 
       case "hidden":
-        $output = Form::hidden($this->db_name, $this->value);
+        $output = Form::hidden($this->name, $this->value);
         break;
 
       default:;
