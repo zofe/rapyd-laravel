@@ -114,4 +114,19 @@ class Rapyd
         self::$styles[] = $style;
     }
 
+    public static function qs($value, $default = FALSE)
+    {
+        $url = new Url();
+        return $url->value($value, $default);
+    }
+    
+    public static function url($set = '')
+    {
+        $url = new Url();
+        if ($set != '') {
+            $url->set($set);
+        }
+        return $url;
+    }
+
 }
