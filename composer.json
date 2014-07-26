@@ -1,8 +1,8 @@
 {
     "name": "zofe/rapyd",
-    "description": "crud widgets for laravel 4, port of rapyd",
+    "description": "crud widgets for laravel 4, to make an admin in few lines of code",
     "homepage": "https://github.com/zofe/rapyd-laravel",
-    "keywords": ["laravel","crud", "rapyd"],
+    "keywords": ["laravel", "crud", "rapyd", "administrator", "admin", "backend", "datatable", "form"],
     "authors": [
         {
             "name": "zofe",
