@@ -1,6 +1,13 @@
 rapyd-laravel
 =============
 
+<a href="https://packagist.org/packages/zofe/rapyd">
+    <img src="http://img.shields.io/packagist/v/zofe/rapyd.svg?style=flat" style="vertical-align: text-top">
+</a>
+<a href="https://packagist.org/packages/zofe/rapyd">
+    <img src="http://img.shields.io/packagist/dt/zofe/rapyd.svg?style=flat" style="vertical-align: text-top">
+</a>
+
 This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.  
 Main Website: [rapyd.com](http://www.rapyd.com)  
