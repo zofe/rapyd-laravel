@@ -1,4 +1,4 @@
-@if ($field->type == 'hidden')
+@if (in_array($field->type, array('hidden','auto')))
 
     {{ $field->output }}
 
