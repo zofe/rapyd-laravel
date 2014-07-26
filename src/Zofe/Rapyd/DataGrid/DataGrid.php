@@ -188,7 +188,7 @@ class DataGrid extends DataSet
         //fieldname in a collection
         } elseif (is_object($tablerow)) {
 
-            $value = $tablerow->{$column->name};
+            $value = @$tablerow->{$column->name};
             if ($sanitize) {
                 $value = $this->sanitize($value);
             }
@@ -214,7 +214,9 @@ class DataGrid extends DataSet
         }
         if (count($column->actions)>0) {
             $key = ($column->key != '')?  $column->key : $this->key;
-            $value = \View::make('rapyd::datagrid.actions', array('uri' => $column->uri, 'id' => $tablerow->getAttribute($key), 'actions' => $column->actions));
+            $keyvalue = @$tablerow->{$key};
+
+            $value = \View::make('rapyd::datagrid.actions', array('uri' => $column->uri, 'id' => $keyvalue, 'actions' => $column->actions));
 
         }
 
