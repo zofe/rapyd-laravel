@@ -2,6 +2,7 @@
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\HTML;
+use Illuminate\Support\Facades\Input;
 
 class Rapyd
 {
@@ -116,6 +117,10 @@ class Rapyd
 
     public static function qs($value, $default = FALSE)
     {
+        if ($value == 'id' && !Input::has('id'))
+        {
+            $value = 'show|modify|delete|do_delete|update'; 
+        }
         $url = new Url();
         return $url->value($value, $default);
     }
