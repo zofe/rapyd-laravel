@@ -546,7 +546,12 @@ abstract class Field extends Widget
         if (!isset($this->attributes['id']))
             $this->attributes['id'] = $this->name;
         if (isset($this->css_class))
-            $this->attributes['class'] = $this->css_class;
+        {
+            if (!isset($this->attributes['class']))
+                $this->attributes['class'] = '';
+            $this->attributes['class'] .= " ".$this->css_class;
+        }
+
 
         if ($this->visible === false) {
             return false;
