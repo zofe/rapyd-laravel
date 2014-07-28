@@ -105,7 +105,7 @@ abstract class Field extends Widget
 
         if (isset($this->model) &&
             method_exists($this->model, $relation) &&
-            is_a($this->model->$relation(), 'Illuminate\Database\Eloquent\Relations\Relation')
+            is_a(@$this->model->$relation(), 'Illuminate\Database\Eloquent\Relations\Relation')
         ) {
 
             $this->relation = $this->model->$relation($relation);
