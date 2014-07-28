@@ -17,7 +17,7 @@ class DataGrid extends DataSet
     public $rows = array();
     public $output = "";
     public $attributes = array("class" => "table");
-    protected $row_callable = false;
+    protected $row_callable = array();
 
 
     /**
@@ -61,10 +61,13 @@ class DataGrid extends DataSet
                 $row->add($cell);
             }
 
-            if ($this->row_callable) {
-                $callable = $this->row_callable;
-                $callable($row);
-            }            
+            if (count($this->row_callable)) 
+            {
+                foreach ($this->row_callable as $callable)
+                {
+                    $callable($row);
+                }
+            }
             $this->rows[] = $row;
         }
 
@@ -127,9 +130,12 @@ class DataGrid extends DataSet
                 $row->add($cell);
             }
 
-            if ($this->row_callable) {
-                $callable = $this->row_callable;
-                $callable($row);
+            if (count($this->row_callable))
+            {
+                foreach ($this->row_callable as $callable)
+                {
+                    $callable($row);
+                }
             }
 
             fputs($handle, $delimiter['enclosure'] . implode($delimiter['enclosure'].$delimiter['delimiter'].$delimiter['enclosure'], $row->toArray()) . $delimiter['enclosure'].$delimiter['line_ending']);
@@ -268,7 +274,7 @@ class DataGrid extends DataSet
     
     public function row( \Closure $callable)
     {
-        $this->row_callable = $callable;
+        $this->row_callable[] = $callable;
         return $this;
     }
 
