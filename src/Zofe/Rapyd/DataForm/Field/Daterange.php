@@ -88,7 +88,9 @@ class Daterange extends Date
                 Rapyd::script("
                         $('#range_{$this->name}_container .input-daterange').datepicker({
                             format: '{$this->formatToDate()}',
-                            language: '{$this->language}'
+                            language: '{$this->language}',
+                            todayBtn: 'linked',
+                            autoclose: true
                         });");
 
                 break;
