@@ -16,7 +16,7 @@ class DataFilter extends DataForm
     public $source;
     protected $process_url = '';
     protected $reset_url = '';
-
+    public $attributes = array('class'=>'form-inline');
     /**
      *
      * @var \Illuminate\Database\Query\Builder
