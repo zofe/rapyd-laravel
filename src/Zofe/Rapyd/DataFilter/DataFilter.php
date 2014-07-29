@@ -177,14 +177,47 @@ class DataFilter extends DataForm
                                     break;
                                 case "wherebetween":
                                     $values = explode($field->serialization_sep, $value);
-                                    $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $value) {
-                                        $q->whereBetween($field->rel_field, array($values));
+                                    $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $values) {
+
+                                        if ($values[0] != '' and $values[1] == '')
+                                        {
+                                            $q->where($field->rel_field, ">=", $values[0]);
+                                        } elseif ($values[0] == '' and $values[1] != '') {
+                                            $q->where($field->rel_field, "<=", $values[1]);
+                                        } elseif($values[0] != '' and $values[1] != '') {
+
+                                            //we avoid "whereBetween" because a bug in laravel 4.1
+                                            $q->where(
+                                                function ($query) use ($field, $values) {
+                                                    return $query->where($field->rel_field, ">=", $values[0])
+                                                                 ->where($field->rel_field, "<=", $values[1]);
+                                                }
+                                            );
+                                        }
+                                        
                                     });
                                     break;
                                 case "orwherebetween":
                                     $values = explode($field->serialization_sep, $value);
-                                    $this->query = $this->query->orWhereHas($field->rel_name, function($q) use($field, $value) {
-                                        $q->whereBetween($field->rel_field, array($values));
+                                    $this->query = $this->query->orWhereHas($field->rel_name, function($q) use($field, $values) {
+
+                                        if ($values[0] != '' and $values[1] == '')
+                                        {
+                                            $q->orWhere($field->rel_field, ">=", $values[0]);
+                                        } elseif ($values[0] == '' and $values[1] != '') {
+                                            $q->orWhere($field->rel_field, "<=", $values[1]);
+                                        } elseif($values[0] != '' and $values[1] != '') {
+
+                                            //we avoid "whereBetween" because a bug in laravel 4.1
+                                            $q->orWhere(
+                                                function ($query) use ($field, $values) {
+                                                    return $query->where($field->rel_field, ">=", $values[0])
+                                                                 ->where($field->rel_field, "<=", $values[1]);
+                                                }
+                                            );
+                                        }
+
+                                        
                                     });
                                     break;
                             }
@@ -208,12 +241,51 @@ class DataFilter extends DataForm
                                     break;
                                 case "wherebetween":
                                     $values = explode($field->serialization_sep, $value);
-                                    $this->query = $this->query->whereBetween($name, array($values));
+                                    if (count($values)==2)
+                                    {
+                                        
+                                        if ($values[0] != '' and $values[1] == '')
+                                        {
+                                            $this->query = $this->query->where($name, ">=", $values[0]);
+                                        } elseif ($values[0] == '' and $values[1] != '') {
+                                            $this->query = $this->query->where($name, "<=", $values[1]);
+                                        } elseif($values[0] != '' and $values[1] != '') {
+
+                                            //we avoid "whereBetween" because a bug in laravel 4.1
+                                            $this->query =  $this->query->where(
+                                                function ($query) use ($name, $values) {
+                                                     return $query->where($name, ">=", $values[0])
+                                                                  ->where($name, "<=", $values[1]);
+                                                }
+                                            );
+                                           
+                                        }
+                                                
+                                    }
+                                    
 
                                     break;
                                 case "orwherebetween":
                                     $values = explode($field->serialization_sep, $value);
-                                    $this->query = $this->query->orWhereBetween($name, array($values));
+                                    if (count($values)==2)
+                                    {
+                                        if ($values[0] != '' and $values[1] == '')
+                                        {
+                                            $this->query = $this->query->orWhere($name, ">=", $values[0]);
+                                        } elseif ($values[0] == '' and $values[1] != '') {
+                                            $this->query = $this->query->orWhere($name, "<=", $values[1]);
+                                        } elseif($values[0] != '' and $values[1] != '') {
+                                            //we avoid "whereBetween" because a bug in laravel 4.1
+                                            $this->query =  $this->query->orWhere(
+                                                function ($query) use ($name, $values) {
+                                                    return $query->where($name, ">=", $values[0])
+                                                                 ->where($name, "<=", $values[1]);
+                                                }
+                                            );
+                                        }
+                                        
+                                    }
+                                    
                                     break;
                             }
                         }
