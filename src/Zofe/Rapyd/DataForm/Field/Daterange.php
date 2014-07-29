@@ -63,18 +63,26 @@ class Daterange extends Date
                     Rapyd::js('datepicker/locales/bootstrap-datepicker.'.$this->language.'.js');
                 }
 
-                unset($this->attributes['placeholder'], $this->attributes['id']);
-                $this->attributes['class'] = "input-sm form-control";
+                unset($this->attributes['id']);
+                //$this->attributes['class'] = "form-control";
 
 
-                $output  = '<div id="range_'.$this->name.'_container">'.
-                             '<div class="input-daterange input-group" >'.
-                               '<span class="input-group-addon"> from </span>'.
-                                Form::text($this->name.'[]', @$this->values[0],  $this->attributes).
-                               '<span class="input-group-addon"> to </span>'.
-                                Form::text($this->name.'[]', @$this->values[1],  $this->attributes).
-                            '</div>'.
-                            '</div>';
+                $from = Form::text($this->name.'[]', @$this->values[0],  $this->attributes);
+                $to = Form::text($this->name.'[]', @$this->values[1],  $this->attributes);
+                
+                $output  = '
+                            <div id="range_'.$this->name.'_container">
+                                <div class="input-daterange">
+                                   <div class="input-group">
+                                       <div class="input-group-addon">&ge;</div>
+                                       '.$from.'
+                                   </div>
+                                   <div class="input-group">
+                                        <div class="input-group-addon">&le;</div>
+                                        '.$to.'
+                                   </div>     
+                                </div>
+                            </div>';
 
                 Rapyd::pop_script();
                 Rapyd::script("
