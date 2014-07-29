@@ -98,6 +98,16 @@ class Widget
     }
 
     /**
+     * @param $label
+     * @return $this
+     */
+    public function label($label)
+    {
+        $this->label = $label;
+        return $this;
+    }
+    
+    /**
      * @param string $url
      * @param string $name
      * @param string $position
