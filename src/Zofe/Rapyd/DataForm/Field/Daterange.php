@@ -11,22 +11,21 @@ class Daterange extends Date
     public $type = "daterange";
     public $multiple = true;
     public $clause = "wherebetween";
-    
+
     public function getValue()
     {
         parent::getValue();
         $this->values = explode($this->serialization_sep, $this->value);
-        foreach($this->values as $value)
-        {
-            $values[] =  $this->humanDateToIso($value);
+        foreach ($this->values as $value) {
+            $values[] = $this->humanDateToIso($value);
         }
 
         if (isset($values)) {
             $this->value = implode($this->serialization_sep, $values);
         }
-        
+
     }
- 
+
     public function build()
     {
         $output = "";
@@ -34,52 +33,49 @@ class Daterange extends Date
         unset($this->attributes['type']);
         if (parent::build() === false) return;
 
-        switch ($this->status)
-        {
+        switch ($this->status) {
 
             case "show":
-                if (!isset($this->value))
-                {
+                if (!isset($this->value)) {
                     $value = $this->layout['null_label'];
                 } else {
                     $value = $this->isoDateToHuman($this->value);
                 }
                 $output = $value;
-                $output = "<div class='help-block'>".$output."&nbsp;</div>";
+                $output = "<div class='help-block'>" . $output . "&nbsp;</div>";
                 break;
 
             case "create":
             case "modify":
-                if ($this->value != ""){
-                    if (!$this->is_refill){
+                if ($this->value != "") {
+                    if (!$this->is_refill) {
                         $this->value = $this->isoDateToHuman($this->value);
                     }
                 }
 
                 Rapyd::css('datepicker/datepicker3.css');
                 Rapyd::js('datepicker/bootstrap-datepicker.js');
-                if ($this->language != "en")
-                {
-                    Rapyd::js('datepicker/locales/bootstrap-datepicker.'.$this->language.'.js');
+                if ($this->language != "en") {
+                    Rapyd::js('datepicker/locales/bootstrap-datepicker.' . $this->language . '.js');
                 }
 
                 unset($this->attributes['id']);
                 //$this->attributes['class'] = "form-control";
 
 
-                $from = Form::text($this->name.'[]', @$this->values[0],  $this->attributes);
-                $to = Form::text($this->name.'[]', @$this->values[1],  $this->attributes);
-                
-                $output  = '
-                            <div id="range_'.$this->name.'_container">
+                $from = Form::text($this->name . '[]', @$this->values[0], $this->attributes);
+                $to = Form::text($this->name . '[]', @$this->values[1], $this->attributes);
+
+                $output = '
+                            <div id="range_' . $this->name . '_container">
                                 <div class="input-daterange">
                                    <div class="input-group">
                                        <div class="input-group-addon">&ge;</div>
-                                       '.$from.'
+                                       ' . $from . '
                                    </div>
                                    <div class="input-group">
                                         <div class="input-group-addon">&le;</div>
-                                        '.$to.'
+                                        ' . $to . '
                                    </div>     
                                 </div>
                             </div>';
@@ -97,7 +93,8 @@ class Daterange extends Date
             case "hidden":
                 $output = Form::hidden($this->name, $this->value);
                 break;
-            default:;
+            default:
+                ;
         }
         $this->output = $output;
     }
