@@ -1,5 +1,6 @@
 <?php namespace Zofe\Rapyd\Controllers;
 
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
@@ -175,8 +176,8 @@ class DemoController extends \Controller {
         $filter->attributes(array('class'=>'form-inline'));
         $filter->add('title','Title', 'text');
         $filter->add('categories.name','Categories','tags');
-        $filter->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
-
+        //$filter->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
+        $filter->add('publication_date','data pubblicazione','daterange');
         $filter->submit('search');
         $filter->reset('reset');
         //$filter->build();
