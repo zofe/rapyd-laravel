@@ -4,7 +4,7 @@
 
     @if (isset($label))
     <div class="pull-left">
-        {{ $label }}
+        <h2>{{ $label }}</h2>
     </div>
     @endif
     @if (isset($buttons_left) && count($buttons_left))

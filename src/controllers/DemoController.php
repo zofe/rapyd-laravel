@@ -290,6 +290,7 @@ class DemoController extends \Controller {
         if (Input::get('do_delete')==1) return  "not the first";
 
         $edit = DataEdit::source(new Article);
+        $edit->label('Edit Article');
         $edit->link("rapyd-demo/filter","Articles", "TR")->back();
         $edit->add('title','Title', 'text')->rule('required|min:5');
         
