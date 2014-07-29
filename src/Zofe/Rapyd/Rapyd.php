@@ -115,6 +115,16 @@ class Rapyd
         self::$styles[] = $style;
     }
 
+    public static function pop_script()
+    {
+        return array_pop(self::$scripts);
+    }
+
+    public static function pop_style()
+    {
+        return array_pop(self::$styles);
+    }
+    
     public static function qs($value, $default = FALSE)
     {
         if ($value == 'id' && !Input::has('id'))

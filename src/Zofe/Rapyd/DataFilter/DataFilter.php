@@ -175,6 +175,18 @@ class DataFilter extends DataForm
                                         $q->where($field->rel_field, $field->operator, $value);
                                     });
                                     break;
+                                case "wherebetween":
+                                    $values = explode($field->serialization_sep, $value);
+                                    $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $value) {
+                                        $q->whereBetween($field->rel_field, array($values));
+                                    });
+                                    break;
+                                case "orwherebetween":
+                                    $values = explode($field->serialization_sep, $value);
+                                    $this->query = $this->query->orWhereHas($field->rel_name, function($q) use($field, $value) {
+                                        $q->whereBetween($field->rel_field, array($values));
+                                    });
+                                    break;
                             }
 
                             
@@ -193,6 +205,15 @@ class DataFilter extends DataForm
                                     break;
                                 case "orwhere":
                                     $this->query = $this->query->orWhere($name, $field->operator, $value);
+                                    break;
+                                case "wherebetween":
+                                    $values = explode($field->serialization_sep, $value);
+                                    $this->query = $this->query->whereBetween($name, array($values));
+
+                                    break;
+                                case "orwherebetween":
+                                    $values = explode($field->serialization_sep, $value);
+                                    $this->query = $this->query->orWhereBetween($name, array($values));
                                     break;
                             }
                         }
