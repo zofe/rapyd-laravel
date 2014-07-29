@@ -177,10 +177,10 @@ class DemoController extends \Controller {
         $filter->add('title','Title', 'text');
         $filter->add('categories.name','Categories','tags');
         //$filter->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
-        $filter->add('publication_date','data pubblicazione','daterange');
+        $filter->add('publication_date','publication date','daterange')->format('m/d/Y', 'en');
         $filter->submit('search');
         $filter->reset('reset');
-        //$filter->build();
+        $filter->build();
         
         $grid = DataGrid::source($filter);
         $grid->attributes(array("class"=>"table table-striped"));
@@ -188,7 +188,7 @@ class DemoController extends \Controller {
         $grid->add('title','Title', true);
         $grid->add('author.fullname','Author');
         $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');
-        $grid->add('{{ date("d/m/Y",strtotime($publication_date)) }}','Date', 'publication_date');
+        $grid->add('{{ date("m/d/Y",strtotime($publication_date)) }}','Date', 'publication_date');
         $grid->add('body','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify|delete');
         $grid->paginate(10);
