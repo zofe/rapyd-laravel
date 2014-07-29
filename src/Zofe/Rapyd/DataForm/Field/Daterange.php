@@ -69,6 +69,7 @@ class Daterange extends Date
 
                 $output  = '<div id="range_'.$this->name.'_container">'.
                              '<div class="input-daterange input-group" >'.
+                               '<span class="input-group-addon"> from </span>'.
                                 Form::text($this->name.'[]', @$this->values[0],  $this->attributes).
                                '<span class="input-group-addon"> to </span>'.
                                 Form::text($this->name.'[]', @$this->values[1],  $this->attributes).
