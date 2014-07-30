@@ -33,5 +33,7 @@
 
     @yield('body')
 
+    @include('rapyd::demo.disqus')
+
 @stop
 

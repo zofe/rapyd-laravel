@@ -21,9 +21,16 @@ use Zofe\Rapyd\Models\Category;
 
 class DemoController extends \Controller {
 
-    public function getIndex()
+    protected function setupLayout()
     {
         $is_rapyd = (Request::server('HTTP_HOST') == "www.rapyd.com") ? true : false;
+        View::composer('rapyd::demo.*', function ($view) use ($is_rapyd) {
+            $view->with('is_rapyd', $is_rapyd);
+        });
+    }
+    
+    public function getIndex()
+    {
         return  View::make('rapyd::demo.demo', compact('is_rapyd'));
     }
 
