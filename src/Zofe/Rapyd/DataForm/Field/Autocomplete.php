@@ -130,8 +130,6 @@ class Autocomplete extends Field {
                     $output = "";
                 } else {
                     $output = nl2br(htmlspecialchars($this->value));
-                    if ($this->is_multiple)
-                        $output = '<div class="textarea_disabled">'.$output.'</div>';
                 }
                 $output = "<div class='help-block'>".$output."&nbsp;</div>";
                 break;
