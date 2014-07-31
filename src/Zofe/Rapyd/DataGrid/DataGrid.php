@@ -54,10 +54,11 @@ class DataGrid extends DataSet
             foreach ($this->columns as $column) {
 
                 $cell = new Cell($column->name);
-                
                 $value = $this->getCellValue($column, $tablerow);
                
                 $cell->value($value);
+                $cell->parseFilters($column->filters);
+                
                 $row->add($cell);
             }
 

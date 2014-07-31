@@ -9,6 +9,7 @@ class Column
     public $orderby = null;
     public $orderby_field = null;
     public $attributes = array();
+    public $filters = array();
 
     public $key = 'id';
     public $uri = null;
@@ -69,6 +70,17 @@ class Column
         return $this;
     }
 
+    public function filter($filters)
+    {
+        if (is_string($filters)) {
+            $filters = explode('|', trim($filters));
+        }
+        if (is_array($filters)) {
+            $this->filters = $filters;
+        }
+        return $this;
+    }
+    
     public function buildAttributes()
     {
         return HTML::buildAttributes($this->attributes);
