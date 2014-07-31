@@ -173,24 +173,14 @@ class DataGrid extends DataSet
             $value = $this->parser->compileString($column->name, $array);
 
         //eager loading smart syntax  relation.field
-        } elseif (preg_match('#^([a-z0-9_-]+)(?:\.([a-z0-9_-]+)){1,3}$#i',$column->name, $matches)
-            && is_object($tablerow) ) 
+        } elseif (preg_match('#^[a-z0-9_-]+(?:\.[a-z0-9_-]+)+$#i',$column->name, $matches) && is_object($tablerow) ) 
         {
-
-            if (count($matches) > 3 )
-            {
-                //todo (if possible) handle third level relations  
-                dd($matches);
-                $value = @$tablerow->$matches[1]->$matches[2]->$matches[3];
-            } else {
-               
-                $value = @$tablerow->$matches[1]->$matches[2];
-                if ($sanitize) {
-                    $value = $this->sanitize($value);
-                }
-                
-            }
-            
+            //switch to blade and god bless eloquent
+            $expression = '{{$'.trim(str_replace('.','->', $column->name)).'}}';
+            $fields = $tablerow->getAttributes();
+            $relations = $tablerow->getRelations();
+            $array = array_merge($fields, $relations) ;
+            $value = @$this->parser->compileString($expression, $array);
 
         
         //fieldname in a collection
