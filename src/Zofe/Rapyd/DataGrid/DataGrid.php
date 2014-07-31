@@ -30,7 +30,7 @@ class DataGrid extends DataSet
     public function add($name, $label = null, $orderby = false)
     {
         $column = new Column($name, $label, $orderby);
-        $this->columns[$name] = $column;
+        $this->columns[$column->name] = $column;
         if (!in_array($name,array("_edit")))
         {
             $this->headers[] = $label;

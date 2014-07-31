@@ -4,6 +4,7 @@ use Zofe\Rapyd\Helpers\HTML;
 
 class Column
 {
+    public $name;
     public $link = "";
     public $label = "";
     public $orderby = null;
