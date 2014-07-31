@@ -82,7 +82,9 @@ to be more in "standard"  with other widgets:
 
 DataGrid extend DataSet to make data-grid output with few lines of fluent code.  
 It build a bootstrap striped table, with pagination at bottom and order-by links on table header.
-It support also  blade syntax inline. 
+It support also blade syntax inline.  
+It support also some filter (native php functions) like substr, strip_tags, date.. etc.
+
 
 in a controller 
 
@@ -93,6 +95,8 @@ in a controller
    $grid->add('author.firstname','Body'); //relation.fieldname 
    $grid->add('{{ substr($body,0,20) }}...','Body'); //blade syntax with main field
    $grid->add('{{ $author->firstname }}','Author'); //blade syntax with related field
+   $grid->add('body|strip_tags|substr[0,20]','Body'); //filter (similar to twig syntax)
+   $grid->add('body,'Body')->filter('strip_tags|substr[0,20]'); //another way to filter
    $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit actions
    $grid->orderBy('article_id','desc'); //default orderby
    $grid->paginate(10); //pagination
