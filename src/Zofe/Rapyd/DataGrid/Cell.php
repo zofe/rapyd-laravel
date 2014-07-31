@@ -51,7 +51,13 @@ class Cell
 
             if (function_exists($filter))
             {
-                array_unshift($params, $this->value);
+                if ($filter == "date")
+                {
+                    array_push($params, $this->value);
+                } else {
+                    array_unshift($params, $this->value);
+                }
+
                 try {
                     $this->value = call_user_func_array($filter, $params);
                 } catch (\Exception $e) {

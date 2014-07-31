@@ -193,8 +193,8 @@ class DemoController extends \Controller {
         $grid->add('title','Title', true);
         $grid->add('author.fullname','Author');
         $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');
-        $grid->add('{{ date("m/d/Y",strtotime($publication_date)) }}','Date', 'publication_date');
-        $grid->add('body','Body');
+        $grid->add('publication_date','Date', 'publication_date')->filter('strtotime|date[m/d/Y]');
+        $grid->add('body','Body')->filter('strip_tags|substr[0,5]');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify|delete');
         $grid->paginate(10);
 
