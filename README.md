@@ -96,7 +96,7 @@ in a controller
    $grid->add('{{ substr($body,0,20) }}...','Body'); //blade syntax with main field
    $grid->add('{{ $author->firstname }}','Author'); //blade syntax with related field
    $grid->add('body|strip_tags|substr[0,20]','Body'); //filter (similar to twig syntax)
-   $grid->add('body,'Body')->filter('strip_tags|substr[0,20]'); //another way to filter
+   $grid->add('body','Body')->filter('strip_tags|substr[0,20]'); //another way to filter
    $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit actions
    $grid->orderBy('article_id','desc'); //default orderby
    $grid->paginate(10); //pagination
