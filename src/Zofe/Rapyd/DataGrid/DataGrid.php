@@ -180,7 +180,7 @@ class DataGrid extends DataSet
             $fields = $tablerow->getAttributes();
             $relations = $tablerow->getRelations();
             $array = array_merge($fields, $relations) ;
-            $value = @$this->parser->compileString($expression, $array);
+            $value = $this->parser->compileString($expression, $array);
 
         
         //fieldname in a collection
