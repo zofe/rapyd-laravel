@@ -17,70 +17,10 @@ Documentation: [Wiki](https://github.com/zofe/rapyd-laravel/wiki)
 
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
 
-## DataSet
-
-DataSet can paginate results starting from query, eloquent collection or multidimensional array.  
-It add the ability to order result and keep persistence of all params in query string.
-
-i.e.:
-```
-/dataset/uri?page=2&ord=-name   will get page 2 order by "name" descending
-/dataset/uri?page=3&ord=name&other=xx  will get page 3 order by "name" and keeping "other=xx"
-```
-
-in a controller 
-
-```php
-   //using table name
-   $dataset = DataSet::source("tablename")->paginate(10)->getSet();
-
-   //or using query
-   $dataset = DataSet::source(DB::table('users')->select('name', 'email'))->paginate(10)->getSet();
-
-   //or using eloquent model or eloquent builder 
-   $dataset = DataSet::source(new Article)->paginate(10)->getSet();
-   $dataset = DataSet::source(Article::with('author'))->paginate(10)->getSet();
-
-   //or using array
-   $dataset = DataSet::source($multidimensional_array)->paginate(10)->getSet();
-```
-
-in a view you can use
-
-```php
-<p>
-    //cycle
-    @foreach ($dataset->data as $item)
-
-        {{ $item->title }}<br />
-        {{ $item->author->name }}<br />
-
-    @endforeach
-
-    {{ $dataset->links() }} <br />
-
-    //sort link
-    {{ $dataset->orderbyLink('title', 'asc') }} <br />
-</p>
-```
-
-As you see you can build a dataset  using "one row of code" (using method chaining),
-however I suggest you this alternative syntax
-to be more in "standard"  with other widgets:
-
-```php
-   $set = DataSet::source(Article::with('author'));
-   $set->paginate(10);
-   $set->build();
-   
-   View::make('articles', compact('set'))
-```
- 
-   
 
 ## DataGrid
 
-DataGrid extend DataSet to make data-grid output with few lines of fluent code.  
+DataGrid extend [DataSet](https://github.com/zofe/rapyd-laravel/wiki/DataSet) to make data-grid output with few lines of fluent code.  
 It build a bootstrap striped table, with pagination at bottom and order-by links on table header.
 It support also blade syntax inline.  
 It support also some filter (native php functions) like substr, strip_tags, date.. etc.
