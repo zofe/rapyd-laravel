@@ -136,8 +136,8 @@ datagrid supports also csv output, so it can be used as "report" tool.
  
 ### customize form in view
 
- There is not only {{ $form }} to show a form, if you need to customize something: wrap fields, grouping elements etc..
- Simply call build method:
+You can directly customize form  using build() in your controller
+
  ```php
      ...
      $form->build();
@@ -161,21 +161,8 @@ datagrid supports also csv output, so it can be used as "report" tool.
 
     {{ $form->footer }}
 ```
-
-| Attribute or method            | Output or content                                           |
-| ---------------------------    | ----------------------------------------------------------- |
-| $form->header                  | form open and header buttons                                |
-| $form->footer                  | footer buttons and form close                               |
-| $form->message                 | show if present a succes/confirmation message               |
-| $form->fields                  | array of fields  (to do a @foreach)                         |
-| $form->field('fieldname')      | field instance, used without property it show field output  |
-| $form->error                   | error string containing all errors                          |
-| ..field('fieldname')->messages | array of error messages for current field                   |
-| ..field('fieldname')->message  | string with all error messages for current field            |
-|                                |                                                             |
-| $form->open                    |  form open (it's contained in "header")                     |
-| $form->close                   |  form close (it's contained in "footer")                    |
-| $form->button_container        |  array of buttons (it's contained in both header & footer)  |
+[custom form layout explained](https://github.com/zofe/rapyd-laravel/wiki/Custom-Form-Layout)  
+[custom form layout demo](http://www.rapyd.com/rapyd-demo/styledform)  
 
 
 ## DataEdit
