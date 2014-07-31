@@ -54,12 +54,15 @@ class DataGrid extends DataSet
             foreach ($this->columns as $column) {
 
                 $cell = new Cell($column->name);
-                $sanitize = (count($column->filters)) ? false : true;
+                $sanitize = (count($column->filters) || $column->cell_callable) ? false : true;
                 $value = $this->getCellValue($column, $tablerow, $sanitize);
-               
                 $cell->value($value);
                 $cell->parseFilters($column->filters);
-                
+                if ($column->cell_callable)
+                {
+                    $callable = $column->cell_callable;
+                    $cell->value($callable($cell->value));
+                }             
                 $row->add($cell);
             }
 

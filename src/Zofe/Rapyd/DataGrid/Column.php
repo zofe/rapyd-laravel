@@ -17,6 +17,7 @@ class Column
     public $actions = array();
     
     public $value = null;
+    public $cell_callable;
 
     public function __construct($name, $label = null, $orderby = false)
     {
@@ -87,6 +88,12 @@ class Column
         if (is_array($filters)) {
             $this->filters = $filters;
         }
+        return $this;
+    }
+
+    public function cell( \Closure $callable)
+    {
+        $this->cell_callable = $callable;
         return $this;
     }
     
