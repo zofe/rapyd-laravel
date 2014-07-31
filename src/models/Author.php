@@ -19,8 +19,8 @@ class Author extends \Eloquent
         return $this->hasMany('Zofe\Rapyd\Models\Comment');
     }
 
-    public function getFullnameAttribute() {
-        return $this->attributes['fullname'] = $this->firstname ." ". $this->lastname;
+    public function getFullnameAttribute($value) {
+        return $this->firstname ." ". $this->lastname;
     }
     
 }
