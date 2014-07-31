@@ -21,15 +21,16 @@ class Column
     public function __construct($name, $label = null, $orderby = false)
     {
         $this->name = $name; 
-        $this->label($label);
-        $this->orderby($orderby);
-        
+
         //check for filters
         $filter = strstr($name, '|');
         if ($filter) {
             $this->name = strstr($name, '|', true);
             $this->filter(trim($filter,'|'));
         }
+        
+        $this->label($label);
+        $this->orderby($orderby);
     }
 
     protected function label($label)
