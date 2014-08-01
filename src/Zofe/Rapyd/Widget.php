@@ -92,9 +92,7 @@ class Widget
      */
     public function linkRoute($route, $name, $parameters=array(), $position="BL", $attributes=array())
     {
-        $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
-        $this->button_container[$position][] = Html::linkRoute($route, $name, $parameters, $attributes);
-        return $this;
+        return $this->link(route($route, $parameters), $name, $position, $attributes);
     }
 
     /**
