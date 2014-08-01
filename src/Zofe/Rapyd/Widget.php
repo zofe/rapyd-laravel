@@ -152,13 +152,14 @@ class Widget
     }
 
     /**
-     * shortcut for attributes()
+     * add an attribute, or shortcut for attributes()
      * @param $attributes
      * @return $this
      */
-    public function attr($attributes)
+    public function attr($attribute, $value = null)
     {
-        return $this->attributes($attributes);
+        if (is_array($attribute)) return $this->attributes($attribute);
+        if ($value) return $this->attributes(array($attribute => $value));
     }
 
     /**
