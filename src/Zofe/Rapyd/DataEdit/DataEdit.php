@@ -184,18 +184,24 @@ class DataEdit extends DataForm
      * @param string $uri
      * @return $this
      */
-    public function back($actions='insert|update|do_delete', $uri="")
+    public function back($actions='insert|update|do_delete', $url="")
     {
-        if  ($uri == "") {
+
+        if  ($url == "") {
             if (count($this->links)) {
-                $uri = array_pop($this->links);
+                $url = array_pop($this->links);
             } else {
                 return $this;
+            }
+        } else {
+            $match_url = trim(parse_url($url, PHP_URL_PATH),'/');
+            if (Request::path()!= $match_url){
+                $url = Persistence::get($match_url);
             }
         }
 
         $this->back_on = explode("|", $actions);
-        $this->back_url = $uri;
+        $this->back_url = $url;
         return $this;
     }
 
