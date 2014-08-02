@@ -98,24 +98,14 @@ datagrid supports also csv output, so it can be used as "report" tool.
    //add fields to the form
    $form->add('title','Title', 'text'); //field name, label, type
    $form->add('body','Body', 'textarea')->rule('required'); //validation
-   
+
    //some enhanced field (images, wysiwyg, autocomplete, etc..):
    $form->add('photo','Photo', 'image')->move('uploads/images/')->preview(80,80);
    $form->add('body','Body', 'redactor'); //wysiwyg editor
    $form->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
    $form->add('categories.name','Categories','tags'); //tags field
-   
-   //you can also use shorthand methods, add{Type}(...
-   $form->addText('title','Title'); //field name, label
-   $form->addTextarea('body','Body')->rule('required');
-
-    //can also support readonly 
-   $form->addText('nickname','Nickname')->mode('readonly');
-
-   //then a submit button
+ 
    $form->submit('Save');
-
-   //at the end you can use closure to add stuffs or redirect after save
    $form->saved(function() use ($form)
    {
         $form->message("ok record saved");
@@ -130,7 +120,8 @@ datagrid supports also csv output, so it can be used as "report" tool.
   {{ $form }}
 ```
 
- note: DataForm can also work without entity, just as Form builder, use __DataForm::create()__ instead of DataForm::source in this case..
+[DataForm explained](https://github.com/zofe/rapyd-laravel/wiki/DataForm)  
+
  
 ### customize form in view
 
