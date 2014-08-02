@@ -137,11 +137,11 @@ class Image extends File
                     $output .= Form::checkbox($this->name.'_remove', 1, (bool)Input::get($this->name.'_remove'))." ".trans('rapyd::rapyd.delete')." <br/>\n";
                     $output .= '</div>';
                 }
-                $output .= Form::file($this->db_name, $this->attributes);
+                $output .= Form::file($this->name, $this->attributes);
                 break;
 
             case "hidden":
-                $output = Form::hidden($this->db_name, $this->value);
+                $output = Form::hidden($this->name, $this->value);
                 break;
 
             default:;
