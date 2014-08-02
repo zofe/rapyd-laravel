@@ -183,10 +183,7 @@ You can directly customize form  using build() in your controller
    $edit->link("article/list","Articles", "TR")->back();
    $edit->add('title','Title', 'text')->rule('required');
    $edit->add('body','Body','textarea')->rule('required');
-   $edit->add('download','Attachment', 'file')->rule('mime:pdf')->move('uploads/pdf/');
-   $edit->add('photo','Photo', 'image')->rule('mimes:jpeg')->move('uploads/images/')->fit(320,240);
    $edit->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
-   
    return $edit->view('crud', compact('edit'));
 
 ```
@@ -195,10 +192,8 @@ You can directly customize form  using build() in your controller
    #crud.blade.php
   {{ $edit }}
 ```
-As you see you can append fields and links, while the "buttons" (save, undo, delete, etc..) and messages (like delete confirmation) are fully managed by dataedit.  
-You can add a ```->back()``` or more specific ```->back('do_delete|update')``` to a link if you want to auto-pull back  after all actions (or after some of these).
+[DataEdit explained](https://github.com/zofe/rapyd-laravel/wiki/DataEdit)  
 
-note: we use _$edit->view_  method  instead _View::make_ for a reason: DataEdit must manage  redirects. With other widgets you should use View facade as default.    
 
 ## DataFilter
 DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by default using 'like' operator).   
