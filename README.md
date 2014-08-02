@@ -225,7 +225,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    {{ $grid }}
 ```
 
-[DataFilter explained](https://github.com/zofe/rapyd-laravel/wiki/DataFilter)
+[DataFilter explained](https://github.com/zofe/rapyd-laravel/wiki/DataFilter)  
 [Custom layout and custom query scope](http://www.rapyd.com/rapyd-demo/customfilter) 
 
 
