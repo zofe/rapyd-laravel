@@ -22,9 +22,7 @@ Documentation: [Wiki](https://github.com/zofe/rapyd-laravel/wiki)
 
 DataGrid extend [DataSet](https://github.com/zofe/rapyd-laravel/wiki/DataSet) to make data-grid output with few lines of fluent code.  
 It build a bootstrap striped table, with pagination at bottom and order-by links on table header.
-It support also blade syntax inline.  
-It support also some filter (native php functions) like substr, strip_tags, date.. etc.
-
+It support also blade syntax, filters, closures etc..
 
 in a controller 
 
@@ -32,7 +30,7 @@ in a controller
    $grid = DataGrid::source(Article::with('author'));  //same source types of DataSet
    
    $grid->add('title','Title', true); //field name, label, sortable
-   $grid->add('author.firstname','Body'); //relation.fieldname 
+   $grid->add('author.fullname','author'); //relation.fieldname 
    $grid->add('{{ substr($body,0,20) }}...','Body'); //blade syntax with main field
    $grid->add('{{ $author->firstname }}','Author'); //blade syntax with related field
    $grid->add('body|strip_tags|substr[0,20]','Body'); //filter (similar to twig syntax)
@@ -58,7 +56,7 @@ styling a datagrid
 ```php
    ...
    $grid->add('title','Title', true)->style("width:100px"); //adding style to th
-   $grid->add('body','Body')->attributes(array("class"=>"custom_column")); //adding class to a th
+   $grid->add('body','Body')->attr("class","custom_column"); //adding class to a th
    ...
     //row and cell manipulation via closure
     $grid->row(function ($row) {
@@ -227,20 +225,8 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    {{ $grid }}
 ```
 
-Since DataFilter use GET method, it's trivial to make filter-links:
-```
-/datafilter/uri?title=Article+10&search=1     search for "Article 10" in title
-/datafilter/uri?category_id=1&search=1       search for articles related to "Category 1" ..
-```
-
-DataFilter can work with multiple fields  or, if you prefer,  you can add a generic single field to do a free search.
-This is how to: http://www.rapyd.com/rapyd-demo/customfilter  
-
-Note that, parameter's name is generally related to "datafilter fields" and not directly to the Entity.  
-DataFilter works making only "where", "whereHas" and using  **PDO parameter binding**  (so It's safe from SQL injection), 
-however you must pay attention if you customize queries using _scopes_ (you should use _parameter binding_ too).
- 
-
+[DataFilter explained](https://github.com/zofe/rapyd-laravel/wiki/DataFilter)
+[Custom layout and custom query scope](http://www.rapyd.com/rapyd-demo/customfilter) 
 
 
 ## Install in Laravel 4.1 & 4.2
