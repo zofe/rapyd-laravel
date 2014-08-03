@@ -71,11 +71,18 @@ class File extends Field
 
                 if (Input::get($this->name . "_remove")) 
                 {
+
                     if ($this->unlink_file) {
                         @unlink(public_path().'/'.$this->path.$this->old_value);
                     }
-                    if (is_object($this->model) && isset($this->db_name)) {
+                    if (isset($this->model) && $this->model->offsetExists($this->db_name)) {
                         $this->model->setAttribute($this->db_name, null);
+                    }
+                    if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\HasOne')) {
+
+                        $this->new_value = null;
+                        $this->updateRelations();
+                        
                     }
                     if ($save) {
                         return $this->model->save();
