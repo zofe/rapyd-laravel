@@ -302,11 +302,7 @@ abstract class Field extends Widget
 
         }
         
-        //storing old model value in a propery
-        if(isset($this->model) && ($this->model->offsetExists($this->db_name))) 
-        {
-            $this->old_value = $this->model->getAttribute($this->db_name);
-        }
+        $this->old_value = $this->value; 
         $this->getMode();
     }
 

@@ -40,13 +40,20 @@ class File extends Field
                 
                 if ($uploaded && is_object($this->model) && isset($this->db_name)) {
 
+                    $this->new_value = $filename;
                     
-                    if (!Schema::hasColumn($this->model->getTable(), $this->db_name))
-                    {
-                         return true;
+                    if (
+                        !Schema::hasColumn($this->model->getTable(), $this->db_name)
+                        || is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\HasOne')
+                    ) {
+                        $this->model->saved(function () {
+
+                            $this->updateRelations();
+                        });
+                        //check for relation then exit
+                        return true;
                     }
 
-                    $this->new_value = $filename;
     
                     if (isset($this->new_value)) {
                         $this->model->setAttribute($this->db_name, $this->new_value);
