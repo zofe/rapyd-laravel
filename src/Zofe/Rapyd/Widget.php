@@ -96,6 +96,20 @@ class Widget
     }
 
     /**
+     * @param string $action
+     * @param string $name
+     * @param array  $parameters
+     * @param string $position
+     * @param array  $attributes
+     *
+     * @return $this
+     */
+    public function linkAction($action, $name, $parameters=array(), $position="BL", $attributes=array())
+    {
+        return $this->link(action($action, $parameters), $name, $position, $attributes);
+    }
+
+    /**
      * @param $label
      * @return $this
      */
