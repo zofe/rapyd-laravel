@@ -28,6 +28,8 @@ abstract class Field extends Widget
     public $visible = true;
     public $extra_output = "";
     public $extra_attributes = array();
+    public $callable;
+    
     public $serialization_sep = '|';
     //atributes
     public $maxlength;
@@ -470,11 +472,26 @@ abstract class Field extends Widget
                 case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
 
                     $old_data = $this->relation->get()->modelKeys();
-                    $data = explode($this->serialization_sep, $data);
+                    $new_data = explode($this->serialization_sep, $data);
 
                     $this->relation->detach($old_data);
+
+                    if ($data=='') 
+                    {
+                        continue;
+                    }
+    
+                    if(is_callable($this->extra_attributes)) {
+                        $callable = $this->extra_attributes;
+                        foreach($new_data as $d) 
+                        {
+                            $this->relation->attach($d, $callable($d));
+                        }
+                    } elseif (is_array($this->extra_attributes))
+                    {
+                        $this->relation->attach($new_data, $this->extra_attributes);
+                    }
                     
-                    $this->relation->attach($data, $this->extra_attributes);
                     break;
                 case 'Illuminate\Database\Eloquent\Relations\HasOne':
 
