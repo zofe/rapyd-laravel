@@ -27,6 +27,7 @@ abstract class Field extends Widget
     public $output = "";
     public $visible = true;
     public $extra_output = "";
+    public $extra_attributes = array();
     public $serialization_sep = '|';
     //atributes
     public $maxlength;
@@ -216,6 +217,12 @@ abstract class Field extends Widget
         return $this;
     }
 
+    public function extraAttributes($extra)
+    {
+        $this->extra_attributes = $extra;
+        return $this;
+    }
+    
     public function placeholder($placeholder)
     {
         $this->attributes['placeholder'] = $placeholder;
@@ -466,7 +473,8 @@ abstract class Field extends Widget
                     $data = explode($this->serialization_sep, $data);
 
                     $this->relation->detach($old_data);
-                    $this->relation->attach($data);
+                    
+                    $this->relation->attach($data, $this->extra_attributes);
                     break;
                 case 'Illuminate\Database\Eloquent\Relations\HasOne':
 
