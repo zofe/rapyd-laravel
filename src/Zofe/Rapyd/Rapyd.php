@@ -150,7 +150,7 @@ class Rapyd
         static::$form = $form;
     }
 
-    public static function getForm($make = null)
+    public static function getForm()
     {
         return static::$form;
     }
