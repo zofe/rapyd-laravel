@@ -430,7 +430,7 @@ class DataForm extends Widget
         $this->header = $sections['df.header'];
         $this->footer = $sections['df.footer'];
         $this->body = @$sections['df.fields'];
-        
+        Rapyd::setForm($this);
     }
 
     /**

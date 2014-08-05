@@ -12,7 +12,8 @@ class Rapyd
     protected static $css = array();
     protected static $scripts = array();
     protected static $styles = array();
-    
+    protected static $form;
+
     /**
      * Bind a Container to Rapyd
      *
@@ -144,4 +145,13 @@ class Rapyd
         return $url;
     }
 
+    public static function setForm($form)
+    {
+        static::$form = $form;
+    }
+
+    public static function getForm($make = null)
+    {
+        return static::$form;
+    }
 }
