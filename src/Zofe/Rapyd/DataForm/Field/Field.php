@@ -580,4 +580,13 @@ abstract class Field extends Widget
     }
 
 
+    public function all()
+    {
+        $output  = "<label for=\"{$this->name}\">{$this->label}</label>";
+        $output .= $this->output;
+        if ($this->has_error) {
+            $output = "<span class=\"has-error\">{$output}<span class=\"help-block\"><span class=\"glyphicon glyphicon-warning-sign\"></span> {$this->message}</span></span>";
+        } 
+        return $output;
+    }
 }
