@@ -27,7 +27,7 @@ class Tags extends Field {
     public $parent_id = '';
     
     public $min_chars = '2';
-    public $clause = "where";
+    public $clause = "wherein";
     public $is_local;
     public $description = '';
     

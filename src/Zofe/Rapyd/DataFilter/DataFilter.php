@@ -148,9 +148,25 @@ class DataFilter extends DataForm
                                 in_array($field->type, array('tags','checks'))  )
                             {
                                   $values = explode($field->serialization_sep, $value);
-                                  $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $values) {
-                                      $q->whereIn($field->rel_fq_key, $values);
-                                  });
+
+                                  if ($field->clause == 'wherein') 
+                                  {
+                                      $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $values) 
+                                      {
+                                          $q->whereIn($field->rel_fq_key, $values);
+                                      });
+                                  }
+                                  
+                                  if($field->clause == 'where') 
+                                  {
+                                      foreach($values as $value) 
+                                      {
+                                          $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $value)
+                                          {
+                                              $q->where($field->rel_fq_key,'=', $value);
+                                          });
+                                      }
+                                  }
                                 continue;
                             }
 

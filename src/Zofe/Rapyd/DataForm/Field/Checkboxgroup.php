@@ -13,7 +13,8 @@ class Checkboxgroup extends Field
     public $css_class = "checkbox";
     public $checked_value = 1;
     public $unchecked_value = 0;
-
+    public $clause = "wherein";
+    
     public function getValue()
     {
         parent::getValue();
