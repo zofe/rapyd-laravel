@@ -15,6 +15,16 @@ class File extends Field
     protected $filename = '';
     protected $saved = '';
     protected $unlink_file = true;
+
+    public function rule($rule)
+    {
+        //we should consider rules only on upload
+        if (Input::hasFile($this->name)) 
+        {
+            parent::rule($rule);
+        }
+        return $this;
+    }
     
     public function autoUpdate($save = false)
     {

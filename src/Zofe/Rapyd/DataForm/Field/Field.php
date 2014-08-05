@@ -237,6 +237,12 @@ abstract class Field extends Widget
 
         $process = (Input::get('search') || Input::get('save')) ? true : false;
 
+        //fix, don't refill on file fields
+        if(in_array($this->type, array('file','image')))
+        {
+            $this->request_refill = false;
+        }
+        
         if ($this->request_refill == true && $process && Input::exists($this->name) ) {
             if ($this->multiple) {
 
