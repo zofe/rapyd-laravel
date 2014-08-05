@@ -172,6 +172,18 @@ class DataForm extends Widget
     }
 
     /**
+     * get entire field output (label, output, and messages)
+     * @param $field_name
+     * @param array $ttributes
+     * @return string
+     */
+    public function render($field_name, array $attributes = array())
+    {
+        $field = $this->field($field_name, $attributes);
+        return $field->all();
+    }
+    
+    /**
      * @return static
      */
     public static function create()
