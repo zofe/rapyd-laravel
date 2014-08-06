@@ -12,7 +12,7 @@
 @else
     <div class="form-group{{$field->has_error}}">
     
-        <label for="{{ $field->name }}" class="col-sm-2 control-label">{{ $field->label.$field->star }}</label>
+        <label for="{{ $field->name }}" class="col-sm-2 control-label{{ $field->req }}">{{ $field->label }}</label>
         <div class="col-sm-10" id="div_{{ $field->name }}">
     
             {{ $field->output }}
