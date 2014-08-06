@@ -77,6 +77,7 @@ abstract class Field extends Widget
     
     
     public $star = '';
+    public $req = '';
 
     public function __construct($name, $label, &$model = null, &$model_relations = null)
     {
@@ -549,7 +550,8 @@ abstract class Field extends Widget
     public function build()
     {
         $this->getValue();
-        $this->star = (!$this->status == "show" AND $this->required) ? '&nbsp;*' : '';
+        $this->star = (!($this->status == "show") AND $this->required) ? '&nbsp;*' : '';
+        $this->req = (!($this->status == "show") AND $this->required) ? ' required' : '';
         if (($this->status == "hidden" || $this->visible === false || in_array($this->type, array("hidden", "auto")))) {
             $this->is_hidden = true;
         }
@@ -588,7 +590,7 @@ abstract class Field extends Widget
 
     public function all()
     {
-        $output  = "<label for=\"{$this->name}\">{$this->label}</label>";
+        $output  = "<label for=\"{$this->name}{$this->req}\">{$this->label}</label>";
         $output .= $this->output;
         if ($this->has_error) {
             $output = "<span class=\"has-error\">{$output}<span class=\"help-block\"><span class=\"glyphicon glyphicon-warning-sign\"></span> {$this->message}</span></span>";
