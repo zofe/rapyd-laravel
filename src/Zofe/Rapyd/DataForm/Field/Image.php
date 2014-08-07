@@ -17,6 +17,15 @@ class Image extends File
     protected $fit = array();
     protected $preview = array(120, 80);
 
+    public function __construct($name, $label, &$model = null, &$model_relations = null)
+    {
+        parent::__construct($name, $label, $model, $model_relations);
+
+        \Event::listen('rapyd.uploaded.'.$this->name, function() {
+            $this->imageProcess();
+        });
+    }
+    
     /**
      * store a closure to make something with ImageManager post process
      * @param callable $callable
@@ -65,19 +74,16 @@ class Image extends File
         $this->preview = array($width, $height);
         return $this;
     }
-    
+
     /**
-     * after upload we can work with ImageManager to so some post process
-     * @param bool $save
-     * @return bool
+     * postprocess image if needed
      */
-    public function autoUpdate($save = false)
+    protected function imageProcess()
     {
-        parent::autoUpdate($save);
         if ($this->saved)
         {
             if (!$this->image)  $this->image = ImageManager::make($this->saved);
-            
+
             if ($this->image_callable) {
                 $callable = $this->image_callable;
                 $callable($this->image);
@@ -90,7 +96,7 @@ class Image extends File
                     $this->image->save($resize["filename"]);
                 }
             }
-            
+
             if(count($this->fit)) {
                 foreach($this->fit as $fit)
                 {
@@ -100,8 +106,8 @@ class Image extends File
             }
 
         }
-        return true;
     }
+   
     
     public function thumb()
     {
