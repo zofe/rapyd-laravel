@@ -12,6 +12,7 @@ class File extends Field
     public $type = "file";
     protected $file = null;
     protected $path = 'uploads/';
+    protected $web_path = '';
     protected $filename = '';
     protected $saved = '';
     protected $unlink_file = true;
@@ -146,6 +147,7 @@ class File extends Field
         $this->filename = $name; 
         $this->unlink_file = $unlinkable;
         $this->upload_deferred = $deferred;
+        if (!$this->web_path) $this->web_path = $this->path;
         return $this;
     }
 
@@ -163,6 +165,12 @@ class File extends Field
         return $this->move($path, $name, $unlinkable, true);
     }
 
+    public function webPath($path)
+    {
+        $this->web_path = rtrim($path,"/")."/";
+        return $this;
+    }
+    
     /**
      * @return update field name
      */
@@ -203,6 +211,7 @@ class File extends Field
     public function build()
     {
         $this->path =  $this->parseString($this->path);
+        $this->web_path = $this->parseString($this->web_path);
         $output = "";
         if (parent::build() === false)
             return;
@@ -225,7 +234,7 @@ class File extends Field
             case "modify":
 
                 if ($this->old_value){
-                    $output .= link_to($this->path.$this->value, $this->value). "&nbsp;";
+                    $output .= link_to($this->web_path.$this->value, $this->value). "&nbsp;";
                     $output .= Form::checkbox($this->name.'_remove', 1, (bool)Input::get($this->name.'_remove'))."<br/>\n";
                 }
                 $output .= Form::file($this->name, $this->attributes);                    
