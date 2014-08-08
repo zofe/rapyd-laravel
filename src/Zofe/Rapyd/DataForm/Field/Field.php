@@ -592,6 +592,7 @@ abstract class Field extends Widget
     {
         $output  = "<label for=\"{$this->name}\" class=\"{$this->req}\">{$this->label}</label>";
         $output .= $this->output;
+        $output  = '<span id="div_{{ $this->name }}">'.$output.'</span>';
         if ($this->has_error) {
             $output = "<span class=\"has-error\">{$output}<span class=\"help-block\"><span class=\"glyphicon glyphicon-warning-sign\"></span> {$this->message}</span></span>";
         } 
