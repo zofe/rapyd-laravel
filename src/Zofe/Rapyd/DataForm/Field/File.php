@@ -51,34 +51,46 @@ class File extends Field
                 //deferred upload
                 if ($this->upload_deferred)
                 {
-                    $this->model->saved(function () use ($filename)
+                    if (isset($this->model) and isset($this->db_name))
                     {
-                        if ($this->recursion) return;
-                        $this->recursion = true;
-                        
-                        $this->path =  $this->parseString($this->path);
-                        $filename = $this->parseString($filename);
-                        $filename = $this->sanitizeFilename($filename);
-                        $this->new_value = $filename;
-                        if ($this->uploadFile($filename) and is_object($this->model) and isset($this->db_name))
+                        $this->model->saved(function () use ($filename)
                         {
-                            $this->updateRelations();
-                            $this->updateName(true);
-                        }
+                            if ($this->recursion) return;
+                            $this->recursion = true;
 
-                    });
-                    $this->model->save();
+                            $this->path =  $this->parseString($this->path);
+                            $filename = $this->parseString($filename);
+                            $filename = $this->sanitizeFilename($filename);
+                            $this->new_value = $filename;
+                            if ($this->uploadFile($filename))
+                            {
+                                if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\Relation'))
+                                    $this->updateRelations();
+                                else
+                                    $this->updateName(true);
+                            }
+
+                        });
+                        $this->model->save();
+                    }
+
                 
                 //direct upload
                 } else {
                     
-                    if ($this->uploadFile($filename) and is_object($this->model) and isset($this->db_name))
+                    if ($this->uploadFile($filename))
                     {
-                        $this->model->saved(function () {
-                            $this->updateRelations();
-
-                        });
-                        $this->updateName($save);
+                        if(is_object($this->model) and isset($this->db_name))
+                        {
+                            if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\Relation'))
+                            {
+                                $this->model->saved(function () {
+                                        $this->updateRelations();
+                                });
+                            } else {
+                                $this->updateName($save);
+                            }
+                        }
                     }
                 }
 
@@ -91,15 +103,16 @@ class File extends Field
                     if ($this->unlink_file) {
                         @unlink(public_path().'/'.$this->path.$this->old_value);
                     }
-                    if (isset($this->model) && $this->model->offsetExists($this->db_name)) {
-                        $this->model->setAttribute($this->db_name, null);
-                    }
-                    if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\HasOne')) {
-
+                    if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\Relation')) {
                         $this->new_value = null;
+                        $this->value = null;
                         $this->updateRelations();
                         
                     }
+                    if (isset($this->model) && $this->model->offsetExists($this->db_name)) {
+                        $this->model->setAttribute($this->db_name, null);
+                    }
+                    
                     if ($save) {
                         return $this->model->save();
                     }
