@@ -1,15 +1,15 @@
 <?php namespace Zofe\Rapyd\Models;
 
-
 /**
  * Category
  */
 class Category extends \Eloquent
 {
 
-	protected $table = 'demo_categories';
+    protected $table = 'demo_categories';
 
-    public function articles() {
+    public function articles()
+    {
         return $this->belongsToMany('Zofe\Rapyd\Models\Article', 'demo_article_category', 'category_id','article_id');
     }
 

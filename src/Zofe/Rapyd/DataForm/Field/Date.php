@@ -3,7 +3,6 @@
 namespace Zofe\Rapyd\DataForm\Field;
 
 use Illuminate\Support\Facades\Form;
-use Illuminate\Support\Facades\Input;
 use Zofe\Rapyd\Rapyd;
 
 class Date extends Field
@@ -12,19 +11,18 @@ class Date extends Field
     public $format = 'm/d/Y';
     public $language = 'en';
 
-    
     /**
      * set instarnal preview date format
      * @param $format valid php date format
-     * @param string $language valid DatePicker language string http://bootstrap-datepicker.readthedocs.org/en/release/options.html#language 
+     * @param string $language valid DatePicker language string http://bootstrap-datepicker.readthedocs.org/en/release/options.html#language
      */
     public function format($format, $language = 'en')
     {
         $this->format = $format;
         $this->language = $language;
+
         return $this;
     }
-
 
     /**
      * convert from iso date to user format
@@ -40,6 +38,7 @@ class Date extends Field
             return "";
         }
         $isodate = date($this->format, $timestamp);
+
         return $isodate;
     }
 
@@ -55,6 +54,7 @@ class Date extends Field
             return "";
         }
         $humandate = date('Y-m-d', $timestamp);
+
         return $humandate;
     }
 
@@ -67,10 +67,9 @@ class Date extends Field
         $this->new_value = $this->humanDateToIso($this->new_value);
     }
 
-
     /**
      * simple translation from php date format to DatePicker format
-     * only basic translation of numeric timestamps m/d/Y, d/m/Y, ... 
+     * only basic translation of numeric timestamps m/d/Y, d/m/Y, ...
      * @param $format valid php date format http://www.php.net/manual/it/function.date.php
      * @return string valid datepicker format http://bootstrap-datepicker.readthedocs.org/en/release/options.html#format
      */
@@ -81,9 +80,9 @@ class Date extends Field
                               array('dd', 'mm', 'yyyy'),
                              $format
         );
-        
+
         return $format;
-        
+
         /* todo (non zero-filled, and names for days and months)
         d, dd: Numeric date, no leading zero and leading zero, respectively. Eg, 5, 05.
         D, DD: Abbreviated and full weekday names, respectively. Eg, Mon, Monday.
@@ -92,8 +91,7 @@ class Date extends Field
         yy, yyyy: 2- and 4-digit years, respectively. Eg, 12, 2012.
         */
     }
-    
-    
+
     public function build()
     {
         $output = "";
@@ -101,12 +99,10 @@ class Date extends Field
         unset($this->attributes['type']);
         if (parent::build() === false) return;
 
-        switch ($this->status)
-        {
+        switch ($this->status) {
 
             case "show":
-                if (!isset($this->value))
-                {
+                if (!isset($this->value)) {
                     $value = $this->layout['null_label'];
                 } else {
                     $value = $this->isoDateToHuman($this->value);
@@ -117,17 +113,16 @@ class Date extends Field
 
             case "create":
             case "modify":
-                if ($this->value != ""){
-                    if (!$this->is_refill){
+                if ($this->value != "") {
+                    if (!$this->is_refill) {
                         $this->value = $this->isoDateToHuman($this->value);
                     }
                 }
 
                 Rapyd::css('datepicker/datepicker3.css');
                 Rapyd::js('datepicker/bootstrap-datepicker.js');
-                if ($this->language != "en")
-                {
-                    Rapyd::js('datepicker/locales/bootstrap-datepicker.'.$this->language.'.js');                    
+                if ($this->language != "en") {
+                    Rapyd::js('datepicker/locales/bootstrap-datepicker.'.$this->language.'.js');
                 }
 
                 $output  = Form::text($this->name, $this->value,  $this->attributes);

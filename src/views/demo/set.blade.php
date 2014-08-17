@@ -23,7 +23,7 @@
                         <small>{{ implode(", ", $item->categories->lists("name"))  }}</small><br />
                     </div>
                 @endforeach
-                
+
                </div>
                {{ $set->links() }}
            </div>
@@ -33,8 +33,8 @@
                 order by <strong>title <a href="{{ $set->orderbyLink('title', 'desc') }}">desc</a></strong><br />
 
             </div>
-            
-            
+
+
         </div>
     </div>
 

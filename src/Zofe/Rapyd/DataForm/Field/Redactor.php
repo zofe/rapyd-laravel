@@ -2,24 +2,22 @@
 
 use Illuminate\Support\Facades\Form;
 use Zofe\Rapyd\Rapyd;
-class Redactor extends Field {
-
+class Redactor extends Field
+{
   public $type = "text";
-  
+
   public function build()
   {
     $output = "";
     if (parent::build() === false) return;
 
-    switch ($this->status)
-    {
+    switch ($this->status) {
       case "disabled":
       case "show":
-		  
+
 		if ($this->type =='hidden' || $this->value == "") {
           $output = "";
-		} elseif ( (!isset($this->value)) )
-        {
+		} elseif ( (!isset($this->value)) ) {
           $output = $this->layout['null_label'];
         } else {
           $output = nl2br(htmlspecialchars($this->value));
@@ -29,7 +27,6 @@ class Redactor extends Field {
 
       case "create":
       case "modify":
-
 
         Rapyd::js('redactor/jquery.browser.min.js');
         Rapyd::js('redactor/redactor.min.js');

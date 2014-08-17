@@ -13,7 +13,7 @@
         <a href="http://twitter.github.io/typeahead.js/examples/#bloodhound" target="_blank">Bloodhound (Suggestion Engine)</a>.<br />
         The last one also uses <a href="https://github.com/TimSchlechter/bootstrap-tagsinput" target="_blank">TagsInput</a>.
         <br />
-        
+
         <ul>
          <li>The most simple is the first one, it simply builds a local json array using <strong>options()</strong></li>
          <li>The second one is the smarter, using relation.fieldname as fieldname and <strong>search(array of search fields)</strong><br />

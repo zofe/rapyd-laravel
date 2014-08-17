@@ -27,7 +27,7 @@ class Rapyd
     /**
      * Get the Container from Rapyd
      *
-     * @param string $make A dependency to make on the fly
+     * @param  string    $make A dependency to make on the fly
      * @return Container
      */
     public static function getContainer($make = null)
@@ -51,21 +51,22 @@ class Rapyd
         foreach (self::$js as $item) {
             $buffer .= HTML::script($item);
         }
-        
+
         //inline styles & scripts
         if (count(self::$styles)) {
             $buffer .= sprintf("<style type=\"text/css\">\n%s\n</style>", implode("\n", self::$styles));
         }
         if (count(self::$scripts)) {
-            $buffer .= sprintf("\n<script language=\"javascript\" type=\"text/javascript\">\n\$(document).ready(function() {\n\n %s \n\n});\n</script>\n", implode("\n", self::$scripts));
+            $buffer .= sprintf("\n<script language=\"javascript\" type=\"text/javascript\">\n\$(document).ready(function () {\n\n %s \n\n});\n</script>\n", implode("\n", self::$scripts));
         }
+
         return $buffer;
     }
 
     public static function scripts()
     {
         $buffer = "\n";
-        
+
         //js links
         foreach (self::$js as $item) {
             $buffer .= HTML::script($item);
@@ -73,8 +74,9 @@ class Rapyd
 
         //inline scripts
         if (count(self::$scripts)) {
-            $buffer .= sprintf("\n<script language=\"javascript\" type=\"text/javascript\">\n\$(document).ready(function() {\n\n %s \n\n});\n\n</script>\n", implode("\n", self::$scripts));
+            $buffer .= sprintf("\n<script language=\"javascript\" type=\"text/javascript\">\n\$(document).ready(function () {\n\n %s \n\n});\n\n</script>\n", implode("\n", self::$scripts));
         }
+
         return $buffer;
     }
 
@@ -91,9 +93,10 @@ class Rapyd
         if (count(self::$styles)) {
             $buffer .= sprintf("<style type=\"text/css\">\n%s\n</style>", implode("\n", self::$styles));
         }
+
         return $buffer;
     }
-    
+
     public static function js($js)
     {
         if (!in_array('packages/zofe/rapyd/assets/'.$js, self::$js))
@@ -125,23 +128,24 @@ class Rapyd
     {
         return array_pop(self::$styles);
     }
-    
-    public static function qs($value, $default = FALSE)
+
+    public static function qs($value, $default = false)
     {
-        if ($value == 'id' && !Input::has('id'))
-        {
-            $value = 'show|modify|delete|do_delete|update'; 
+        if ($value == 'id' && !Input::has('id')) {
+            $value = 'show|modify|delete|do_delete|update';
         }
         $url = new Url();
+
         return $url->value($value, $default);
     }
-    
+
     public static function url($set = '')
     {
         $url = new Url();
         if ($set != '') {
             $url->set($set);
         }
+
         return $url;
     }
 

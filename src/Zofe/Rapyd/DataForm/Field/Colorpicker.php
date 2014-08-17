@@ -5,20 +5,18 @@ namespace Zofe\Rapyd\DataForm\Field;
 use Illuminate\Support\Facades\Form;
 use Zofe\Rapyd\Rapyd;
 
-
 class Colorpicker extends Field
 {
     public $type = "colorpicker";
     public $rule = 'regex:/^#[A-Fa-f0-9]{6}$/';
-    
+
     public function build()
     {
         $output = "";
 
         if (parent::build() === false) return;
 
-        switch ($this->status)
-        {
+        switch ($this->status) {
 
             case "show":
                 $output = $this->value;

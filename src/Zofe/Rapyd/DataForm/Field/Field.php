@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Config;
 use Zofe\Rapyd\Widget;
 use Zofe\Rapyd\Helpers\HTML;
-use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Input;
 
@@ -29,7 +28,7 @@ abstract class Field extends Widget
     public $extra_output = "";
     public $extra_attributes = array();
     public $callable;
-    
+
     public $serialization_sep = '|';
     //atributes
     public $maxlength;
@@ -47,8 +46,8 @@ abstract class Field extends Widget
     //data settings
     public $model;
     public $model_relations;
-    public $insert_value = null; 
-    public $update_value = null; 
+    public $insert_value = null;
+    public $update_value = null;
     public $show_value = null; //default value in visualization
     public $options = array();
     public $mask = null;
@@ -65,7 +64,7 @@ abstract class Field extends Widget
     public $has_error = '';
     public $messages = array();
     public $query_scope;
-    
+
     // layout
     public $layout = array(
         'field_separator' => '<br />',
@@ -74,8 +73,7 @@ abstract class Field extends Widget
     );
 
     public $rule = '';
-    
-    
+
     public $star = '';
     public $req = '';
 
@@ -90,7 +88,6 @@ abstract class Field extends Widget
         $this->setName($name);
         $this->label = $label;
     }
-
 
     /**
      * check for relation notation and split relation-name and fiel-dname
@@ -120,7 +117,7 @@ abstract class Field extends Widget
             $this->name = ($name != $relation) ? $relation . "_" . $name : $name;
 
             $relclass = get_class($this->relation);
-            
+
             if ($relclass == 'Illuminate\Database\Eloquent\Relations\BelongsTo') {
                 $this->db_name = $this->relation->getForeignKey();
             } else {
@@ -128,9 +125,9 @@ abstract class Field extends Widget
             }
 
             if (in_array($relclass, array('Illuminate\Database\Eloquent\Relations\BelongsToMany'))) {
-                
+
                 $this->rel_other_key = $this->relation->getOtherKey();
- 
+
             }
 
             return;
@@ -147,6 +144,7 @@ abstract class Field extends Widget
     {
 
         $this->onchange = $onchange;
+
         return $this;
     }
 
@@ -158,9 +156,10 @@ abstract class Field extends Widget
     public function rule($rule)
     {
         $this->rule = trim($this->rule."|".$rule, "|");
-        if ((strpos($this->rule, "required") !== false) AND !isset($this->no_star)) {
+        if ((strpos($this->rule, "required") !== false) and !isset($this->no_star)) {
             $this->required = true;
         }
+
         return $this;
     }
 
@@ -168,6 +167,7 @@ abstract class Field extends Widget
     {
 
         $this->mode = $mode;
+
         return $this;
     }
 
@@ -175,63 +175,73 @@ abstract class Field extends Widget
     {
 
         $this->mask = $mask;
+
         return $this;
     }
 
     public function clause($clause)
     {
         $this->clause = $clause;
+
         return $this;
     }
 
     public function operator($operator)
     {
         $this->operator = $operator;
+
         return $this;
     }
 
     public function scope($scope)
     {
         $this->query_scope = $scope;
+
         return $this;
     }
 
     public function insertValue($insert_value)
     {
         $this->insert_value = $insert_value;
+
         return $this;
     }
 
     public function showValue($show_value)
     {
         $this->show_value = $show_value;
+
         return $this;
     }
 
     public function updateValue($update_value)
     {
         $this->update_value = $update_value;
+
         return $this;
     }
 
     public function extra($extra)
     {
         $this->extra_output = $extra;
+
         return $this;
     }
 
     public function extraAttributes($extra)
     {
         $this->extra_attributes = $extra;
+
         return $this;
     }
-    
+
     public function placeholder($placeholder)
     {
         $this->attributes['placeholder'] = $placeholder;
+
         return $this;
     }
-    
+
     public function getValue()
     {
         $name = $this->db_name;
@@ -239,25 +249,23 @@ abstract class Field extends Widget
         $process = (Input::get('search') || Input::get('save')) ? true : false;
 
         //fix, don't refill on file fields
-        if(in_array($this->type, array('file','image')))
-        {
+        if (in_array($this->type, array('file','image'))) {
             $this->request_refill = false;
         }
-        
+
         if ($this->request_refill == true && $process && Input::exists($this->name) ) {
             if ($this->multiple) {
 
                 $this->value = "";
                 if (Input::get($this->name)) {
                     $values = Input::get($this->name);
-                    if (!is_array($values))
-                    {
+                    if (!is_array($values)) {
                         $this->value = $values;
                     } else {
                         $this->value = implode($this->serialization_sep, $values);
                     }
                 }
-                
+
             } else {
                 $this->value = HTML::xssfilter(Input::get($this->name));
             }
@@ -272,22 +280,20 @@ abstract class Field extends Widget
         } elseif (isset($this->model) && $this->relation != null) {
 
             $methodClass = get_class($this->relation);
- 
+
             switch ($methodClass) {
-                //es. "categories" per "Article"  
+                //es. "categories" per "Article"
                 case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
-     
+
                     // some kind of field on belongsToMany works with multiple values, most of time in serialized way
                     //in this case I need to fill value using a serialized array of related collection
-                    if (in_array($this->type, array('tags','checks')))
-                    {
+                    if (in_array($this->type, array('tags','checks'))) {
                         $relatedCollection = $this->relation->get(); //Collection of attached models
                         $relatedIds = $relatedCollection->modelKeys(); //array of attached models ids
                         $this->value = implode($this->serialization_sep, $relatedIds);
                     } else {
                         $this->value = "";
                     }
-
 
                     break;
                 //es. "author" per "Article"
@@ -307,7 +313,7 @@ abstract class Field extends Widget
                 default:
                     //'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
                     //'Illuminate\Database\Eloquent\Relations\HasMany':
-                    //polimorphic, etc.. 
+                    //polimorphic, etc..
                     throw new \InvalidArgumentException("The field {$this->db_name} is a " . $methodClass
                         . " but Rapyd can handle only BelongsToMany, BelongsTo, and HasOne");
                     break;
@@ -317,8 +323,8 @@ abstract class Field extends Widget
             $this->value = $this->model->getAttribute($this->db_name);
 
         }
-        
-        $this->old_value = $this->value; 
+
+        $this->old_value = $this->value;
         $this->getMode();
     }
 
@@ -337,8 +343,7 @@ abstract class Field extends Widget
                 $this->value = "";
                 if (Input::get($this->name)) {
                     $values = Input::get($this->name);
-                    if (!is_array($values))
-                    {
+                    if (!is_array($values)) {
                         $this->new_value = $values;
                     } else {
                         $this->new_value = implode($this->serialization_sep, $values);
@@ -357,7 +362,6 @@ abstract class Field extends Widget
             $this->action = "idle";
         }
     }
-
 
     public function getMode()
     {
@@ -397,11 +401,11 @@ abstract class Field extends Widget
         }
 
         if (isset($this->when)) {
-            if (is_string($this->when) AND strpos($this->when, '|')) {
+            if (is_string($this->when) and strpos($this->when, '|')) {
                 $this->when = explode('|', $this->when);
             }
-            $this->when = (array)$this->when;
-            if (!in_array($this->status, $this->when) AND !in_array($this->action, $this->when)) {
+            $this->when = (array) $this->when;
+            if (!in_array($this->status, $this->when) and !in_array($this->action, $this->when)) {
                 $this->visible = false;
                 $this->apply_rules = false;
             } else {
@@ -416,12 +420,14 @@ abstract class Field extends Widget
         if (is_array($options)) {
             $this->options += $options;
         }
+
         return $this;
     }
 
     public function option($value = '', $description = '')
     {
         $this->options[$value] = $description;
+
         return $this;
     }
 
@@ -429,6 +435,7 @@ abstract class Field extends Widget
     {
         $this->option_groups[$group_id]['label'] = $group_label;
         $this->option_groups[$group_id]['options'][$value] = $description;
+
         return $this;
     }
 
@@ -441,7 +448,7 @@ abstract class Field extends Widget
 
             if (
                 !Schema::hasColumn($this->model->getTable(), $this->db_name)
-                || is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\HasOne') 
+                || is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\HasOne')
                 ) {
                 $this->model->saved(function () {
                     $this->updateRelations();
@@ -460,9 +467,9 @@ abstract class Field extends Widget
                 return $this->model->save();
             }
         }
+
         return true;
     }
-
 
     public function updateRelations()
     {
@@ -473,7 +480,7 @@ abstract class Field extends Widget
             $data = $this->value;
         }
         if ($this->relation != null) {
-            
+
             $methodClass = get_class($this->relation);
             switch ($methodClass) {
                 case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
@@ -483,22 +490,19 @@ abstract class Field extends Widget
 
                     $this->relation->detach($old_data);
 
-                    if ($data=='') 
-                    {
+                    if ($data=='') {
                         continue;
                     }
-    
-                    if(is_callable($this->extra_attributes)) {
+
+                    if (is_callable($this->extra_attributes)) {
                         $callable = $this->extra_attributes;
-                        foreach($new_data as $d) 
-                        {
+                        foreach ($new_data as $d) {
                             $this->relation->attach($d, $callable($d));
                         }
-                    } elseif (is_array($this->extra_attributes))
-                    {
+                    } elseif (is_array($this->extra_attributes)) {
                         $this->relation->attach($new_data, $this->extra_attributes);
                     }
-                    
+
                     break;
                 case 'Illuminate\Database\Eloquent\Relations\HasOne':
 
@@ -535,28 +539,26 @@ abstract class Field extends Widget
      */
     protected function parseString($string)
     {
-        if (is_object($this->model) && strpos($string, '{{') !== false)
-        {
+        if (is_object($this->model) && strpos($string, '{{') !== false) {
             $fields = $this->model->getAttributes();
             $relations = $this->model->getRelations();
             $array = array_merge($fields, $relations) ;
             $string = $this->parser->compileString($string, $array);
         }
+
         return $string;
     }
-
-    
 
     public function build()
     {
         $this->getValue();
-        $this->star = (!($this->status == "show") AND $this->required) ? '&nbsp;*' : '';
-        $this->req = (!($this->status == "show") AND $this->required) ? ' required' : '';
+        $this->star = (!($this->status == "show") and $this->required) ? '&nbsp;*' : '';
+        $this->req = (!($this->status == "show") and $this->required) ? ' required' : '';
         if (($this->status == "hidden" || $this->visible === false || in_array($this->type, array("hidden", "auto")))) {
             $this->is_hidden = true;
         }
         $this->message = implode("<br />\n", $this->messages);
-        
+
         $attributes = array('onchange', 'type', 'size', 'style', 'class', 'rows', 'cols', 'placeholder');
 
         foreach ($attributes as $attribute) {
@@ -566,27 +568,24 @@ abstract class Field extends Widget
             if ($attribute == 'type') {
                 $this->attributes['type'] = ($this->$attribute == 'input') ? 'text' : $this->$attribute;
             }
-            
+
             if ($this->orientation == 'inline') {
                 $this->attributes["placeholder"] = $this->label;
-            } 
-            
+            }
+
         }
         if (!isset($this->attributes['id']))
             $this->attributes['id'] = $this->name;
-        if (isset($this->css_class))
-        {
+        if (isset($this->css_class)) {
             if (!isset($this->attributes['class']))
                 $this->attributes['class'] = '';
             $this->attributes['class'] .= " ".$this->css_class;
         }
 
-
         if ($this->visible === false) {
             return false;
         }
     }
-
 
     public function all()
     {
@@ -595,7 +594,8 @@ abstract class Field extends Widget
         $output  = '<span id="div_'.$this->name.'">'.$output.'</span>';
         if ($this->has_error) {
             $output = "<span class=\"has-error\">{$output}<span class=\"help-block\"><span class=\"glyphicon glyphicon-warning-sign\"></span> {$this->message}</span></span>";
-        } 
+        }
+
         return $output;
     }
 }

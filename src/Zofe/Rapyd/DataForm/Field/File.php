@@ -3,7 +3,6 @@
 namespace Zofe\Rapyd\DataForm\Field;
 
 use Illuminate\Support\Facades\Form;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Input;
 
 class File extends Field
@@ -18,43 +17,38 @@ class File extends Field
     protected $unlink_file = true;
     protected $upload_deferred = false;
     protected $recursion = false;
-    
+
     public function rule($rule)
     {
         //we should consider rules only on upload
-        if (Input::hasFile($this->name)) 
-        {
+        if (Input::hasFile($this->name)) {
             parent::rule($rule);
         }
+
         return $this;
     }
-    
+
     public function autoUpdate($save = false)
     {
 
         $this->getValue();
 
         if ((($this->action == "update") || ($this->action == "insert"))) {
-            
-            
-            if (Input::hasFile($this->name))
-            {
+
+            if (Input::hasFile($this->name)) {
                 $this->file = Input::file($this->name);
-                
+
                 $filename = ($this->filename!='') ?  $this->filename : $this->file->getClientOriginalName();
 
                 $this->path =  $this->parseString($this->path);
                 $filename = $this->parseString($filename);
                 $filename = $this->sanitizeFilename($filename);
                 $this->new_value = $filename;
-                
+
                 //deferred upload
-                if ($this->upload_deferred)
-                {
-                    if (isset($this->model) and isset($this->db_name))
-                    {
-                        $this->model->saved(function () use ($filename)
-                        {
+                if ($this->upload_deferred) {
+                    if (isset($this->model) and isset($this->db_name)) {
+                        $this->model->saved(function () use ($filename) {
                             if ($this->recursion) return;
                             $this->recursion = true;
 
@@ -62,8 +56,7 @@ class File extends Field
                             $filename = $this->parseString($filename);
                             $filename = $this->sanitizeFilename($filename);
                             $this->new_value = $filename;
-                            if ($this->uploadFile($filename))
-                            {
+                            if ($this->uploadFile($filename)) {
                                 if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\Relation'))
                                     $this->updateRelations();
                                 else
@@ -74,16 +67,12 @@ class File extends Field
                         $this->model->save();
                     }
 
-                
                 //direct upload
                 } else {
-                    
-                    if ($this->uploadFile($filename))
-                    {
-                        if(is_object($this->model) and isset($this->db_name))
-                        {
-                            if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\Relation'))
-                            {
+
+                    if ($this->uploadFile($filename)) {
+                        if (is_object($this->model) and isset($this->db_name)) {
+                            if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\Relation')) {
                                 $this->model->saved(function () {
                                         $this->updateRelations();
                                 });
@@ -97,8 +86,7 @@ class File extends Field
             } else {
 
                 //unlink
-                if (Input::get($this->name . "_remove")) 
-                {
+                if (Input::get($this->name . "_remove")) {
                     $this->path =  $this->parseString($this->path);
                     if ($this->unlink_file) {
                         @unlink(public_path().'/'.$this->path.$this->old_value);
@@ -107,57 +95,59 @@ class File extends Field
                         $this->new_value = null;
                         $this->value = null;
                         $this->updateRelations();
-                        
+
                     }
                     if (isset($this->model) && $this->model->offsetExists($this->db_name)) {
                         $this->model->setAttribute($this->db_name, null);
                     }
-                    
+
                     if ($save) {
                         return $this->model->save();
                     }
                 }
-                
+
             }
         }
+
         return true;
     }
-    
+
     protected function sanitizeFilename($filename)
     {
         $filename = preg_replace('/\s+/', '_', $filename);
         $filename = preg_replace('/[^a-zA-Z0-9\._-]/', '', $filename);
         $filename = $this->preventOverwrite($filename);
+
         return $filename;
     }
-    
+
     protected function preventOverwrite($filename)
     {
         $ext = strtolower(substr(strrchr($filename, '.'), 1));
         $name = rtrim($filename, strrchr($filename, '.'));
         $i = 0;
         $finalname = $name;
-        while (file_exists(public_path().'/'.$this->path . $finalname. '.'.$ext))
-        {
+        while (file_exists(public_path().'/'.$this->path . $finalname. '.'.$ext)) {
             $i++;
-            $finalname = $name . (string)$i;
+            $finalname = $name . (string) $i;
         }
+
         return $finalname. '.'.$ext;
     }
-    
+
     /**
      * move uploaded file to the destination path, optionally raname it
      * name param can be passed also as blade syntax
      * unlinkable  is a bool, tell to the field to unlink or not if "remove" is checked
      * @param $path
-     * @param string $name
-     * @param bool $unlinkable
+     * @param  string $name
+     * @param  bool   $unlinkable
      * @return $this
      */
     public function move($path, $name = '', $unlinkable = true, $deferred = false)
     {
         $this->path = rtrim($path,"/")."/";
-        $this->filename = $name; 
+        $this->filename = $name;
         $this->unlink_file = $unlinkable;
         $this->upload_deferred = $deferred;
         if (!$this->web_path) $this->web_path = $this->path;
@@ -165,12 +155,12 @@ class File extends Field
     }
 
     /**
-     * as move but deferred after model->save() 
+     * as move but deferred after model->save()
      * this way you can use ->move('upload/folder/{{ $id }}/'); using blade and pk reference
-     * 
+     *
      * @param $path
-     * @param string $name
-     * @param bool $unlinkable
+     * @param  string $name
+     * @param  bool   $unlinkable
      * @return $this
      */
     public function moveDeferred($path, $name = '', $unlinkable = true)
@@ -181,33 +171,34 @@ class File extends Field
     public function webPath($path)
     {
         $this->web_path = rtrim($path,"/")."/";
+
         return $this;
     }
-    
+
     /**
      * @return update field name
      */
     protected function uploadFile($filename, $safe = false)
     {
-        if ($safe)
-        {
+        if ($safe) {
             try {
                 $this->file->move($this->path, $filename);
                 $this->saved = $this->path. $filename;
-            } catch(Exception $e) {
+            } catch (Exception $e) {
             }
-        }  else {
+        } else {
             $this->file->move($this->path, $filename);
             $this->saved = $this->path. $filename;
         }
         \Event::fire('rapyd.uploaded.'.$this->name);
+
         return true;
     }
-    
+
     /**
      * @return update field name
      */
-    protected function updateName($save) 
+    protected function updateName($save)
     {
         if (isset($this->new_value)) {
             $this->model->setAttribute($this->db_name, $this->new_value);
@@ -220,7 +211,6 @@ class File extends Field
         }
     }
 
-    
     public function build()
     {
         $this->path =  $this->parseString($this->path);
@@ -246,11 +236,11 @@ class File extends Field
             case "create":
             case "modify":
 
-                if ($this->old_value){
+                if ($this->old_value) {
                     $output .= link_to($this->web_path.$this->value, $this->value). "&nbsp;";
-                    $output .= Form::checkbox($this->name.'_remove', 1, (bool)Input::get($this->name.'_remove'))."<br/>\n";
+                    $output .= Form::checkbox($this->name.'_remove', 1, (bool) Input::get($this->name.'_remove'))."<br/>\n";
                 }
-                $output .= Form::file($this->name, $this->attributes);                    
+                $output .= Form::file($this->name, $this->attributes);
                 break;
 
             case "hidden":

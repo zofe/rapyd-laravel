@@ -2,18 +2,17 @@
 
 use Illuminate\Support\Facades\Form;
 
-class Hidden extends Field {
-
+class Hidden extends Field
+{
   public $type = "hidden";
-  
+
   public function build()
   {
     $output = "";
 
     if (parent::build() === false) return;
 
-    switch ($this->status)
-    {
+    switch ($this->status) {
       case "disabled":
       case "show":
         break;

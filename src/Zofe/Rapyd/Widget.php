@@ -11,14 +11,14 @@ class Widget
     public static $identifier = 0;
     public $label = "";
     public $output = "";
-    public $built = FALSE;
+    public $built = false;
     public $url;
     public $attributes = array();
 
     public $process_status = "idle";
     public $status = "idle";
     public $action = "idle";
-    
+
     public $button_container = array( "TR"=>array(), "BL"=>array(), "BR"=>array() );
     public $message = "";
     public $links = array();
@@ -31,15 +31,17 @@ class Widget
 
     /**
      * identifier is empty or a numeric value, it "identify" a single object instance.
-     * 
-     * @return string identifier 
+     *
+     * @return string identifier
      */
     protected function getIdentifier()
     {
         if (static::$identifier < 1) {
             static::$identifier++;
+
             return "";
         }
+
         return (string) static::$identifier++;
     }
 
@@ -53,7 +55,7 @@ class Widget
     public function button($name, $position="BL", $attributes=array())
     {
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
-        
+
         $this->button_container[$position][] = Form::button($name, $attributes);
 
         return $this;
@@ -71,16 +73,17 @@ class Widget
     {
         $match_url = trim(parse_url($url, PHP_URL_PATH),'/');
 
-        if (Request::path()!= $match_url){
-            $url = Persistence::get($match_url); 
-        } 
-       
+        if (Request::path()!= $match_url) {
+            $url = Persistence::get($match_url);
+        }
+
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
         $this->button_container[$position][] =  Html::link($url, $name, $attributes);
         $this->links[] = $url;
+
         return $this;
     }
-    
+
     /**
      * @param string $route
      * @param string $name
@@ -116,9 +119,10 @@ class Widget
     public function label($label)
     {
         $this->label = $label;
+
         return $this;
     }
-    
+
     /**
      * @param string $url
      * @param string $name
@@ -130,21 +134,22 @@ class Widget
     public function message($message)
     {
         $this->message =  $message;
+
         return $this;
     }
 
     /**
      * "echo $widget" automatically call build() it and display $widget->output
      * however explicit build is preferred for a clean code
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function __toString()
     {
-        if ($this->output == "")
-        {    
+        if ($this->output == "") {
             $this->build();
         }
+
         return $this->output;
     }
 
@@ -155,11 +160,11 @@ class Widget
      */
     public function attributes($attributes)
     {
-        if (is_array($this->attributes) and is_array($attributes))
-        {
+        if (is_array($this->attributes) and is_array($attributes)) {
             $attributes = array_merge($this->attributes, $attributes);
         }
         $this->attributes = $attributes;
+
         return $this;
     }
 
@@ -187,10 +192,10 @@ class Widget
             return "";
 
         $compiled = '';
-        foreach($this->attributes as $key => $val)
-        {
+        foreach ($this->attributes as $key => $val) {
             $compiled .= ' '.$key.'="'.$val.'"';
         }
+
         return $compiled;
     }
 
@@ -199,14 +204,15 @@ class Widget
      * @param $url
      * @param $method
      * @param $name
-     * @param string $position
-     * @param array $attributes
+     * @param  string $position
+     * @param  array  $attributes
      * @return $this
      */
     public function formButton($url, $method, $name, $position="BL", $attributes=array())
     {
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
-        $this->button_container[$position][] = Form::open(array('url' => $url, 'method' => $method)).Form::submit($name, $attributes).Form::close(); 
+        $this->button_container[$position][] = Form::open(array('url' => $url, 'method' => $method)).Form::submit($name, $attributes).Form::close();
+
         return $this;
     }
 

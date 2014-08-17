@@ -6,7 +6,7 @@
     <title>@yield('title', 'Rapyd crud widgets for laravel 4')</title>
     <meta name="description" content="@yield('description', 'crud widgets for laravel 4. datatable, grids, forms, in a simple package')" />
     @section('meta', '')
-    
+
     <link href="http://fonts.googleapis.com/css?family=Bitter" rel="stylesheet" type="text/css" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
             <div class="col-sm-12">
                 @yield('content')
             </div>
-    
+
 
         </div>
 
@@ -47,5 +47,3 @@
 {{ Rapyd::scripts() }}
 </body>
 </html>
-
-

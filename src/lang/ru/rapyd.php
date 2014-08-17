@@ -10,7 +10,7 @@ return array(
     'reset'   => 'сброс',
     'search'  => 'поиск',
     'back'    => 'назад',
-    
+
     //dataedit
     'inserted'   => 'Новый рекорд создан.',
     'updated'    => 'Запись была обновлена.​​',

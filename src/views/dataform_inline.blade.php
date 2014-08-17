@@ -19,13 +19,12 @@
 @endif
 
 @section('df.footer')
-   
+
     @if (isset($df->button_container['BL']) && count($df->button_container['BL']))
-    
-        @foreach ($df->button_container['BL'] as $button)
-        {{ $button }}
+
+        @foreach ($df->button_container['BL'] as $button) {{ $button }}
         @endforeach
-    
+
     @endif
 
     {{ $df->close }}

@@ -10,7 +10,7 @@ return array(
     'reset'   => 'Resetta',
     'search'  => 'Cerca',
     'back'    => 'Indietro',
-    
+
     //dataedit
     'inserted'   => 'Il record è stato inserito correttamente.',
     'updated'    => 'Il record è stato modificato correttamente.',

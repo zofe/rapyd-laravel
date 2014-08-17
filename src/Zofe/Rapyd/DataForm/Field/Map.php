@@ -11,38 +11,32 @@ class Map extends Field
 
     public $type = "map";
 
-    
-    
     public function autoUpdate($save = false)
     {
 
         $this->getValue();
 
         if ((($this->action == "update") || ($this->action == "insert"))) {
-            
-            
-            if (Input::hasFile($this->name))
-            {
+
+            if (Input::hasFile($this->name)) {
                 $this->file = Input::file($this->name);
-                
+
                 $filename = ($this->filename!='') ?  $this->filename : $this->file->getClientOriginalName();
 
                 //se il nuovo file è diverso,  dovrei cancellare il vecchio
-                
-                
+
+
                 $uploaded = $this->file->move($this->path, $filename);
                 $this->saved = $this->path. $filename;
-                
+
                 if ($uploaded && is_object($this->model) && isset($this->db_name)) {
 
-                    
-                    if (!Schema::hasColumn($this->model->getTable(), $this->db_name))
-                    {
+                    if (!Schema::hasColumn($this->model->getTable(), $this->db_name)) {
                          return true;
                     }
 
                     $this->new_value = $filename;
-    
+
                     if (isset($this->new_value)) {
                         $this->model->setAttribute($this->db_name, $this->new_value);
                     } else {
@@ -52,13 +46,12 @@ class Map extends Field
                         return $this->model->save();
                     }
                 }
-                
-                
+
             }
         }
+
         return true;
     }
-
 
     public function build()
     {
@@ -87,23 +80,22 @@ class Map extends Field
                 $output  = Form::text($this->lat, $this->attributes);
                 $output .= Form::text($this->lon, $this->attributes);
 
-
-
 //            <input type="text" id="latitude" placeholder="latitude">
 //  <input type="text" id="longitude" placeholder="longitude">
 //  <div id="map" style="width:500px; height:500px"></div>
-  
+
 //  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
   <script>
-	function initialize() {
+	function initialize()
+	{
         var $latitude = document.getElementById('latitude');
         var $longitude = document.getElementById('longitude');
         var latitude = 50.715591133433854
 		var longitude = -3.53485107421875;
 		var zoom = 7;
-		
+
 		var LatLng = new google.maps.LatLng(latitude, longitude);
-		
+
 		var mapOptions = {
             zoom: zoom,
 			center: LatLng,
@@ -111,30 +103,28 @@ class Map extends Field
 			zoomControl: false,
 			scaleControl: true,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
-		}	
-		
+		}
+
 		var map = new google.maps.Map(document.getElementById('map'),mapOptions);
-      
-		
+
 		var marker = new google.maps.Marker({
 			position: LatLng,
 			map: map,
 			title: 'Drag Me!',
 			draggable: true
 		});
-		
-		google.maps.event.addListener(marker, 'dragend', function(marker){
+
+		google.maps.event.addListener(marker, 'dragend', function (marker) {
             var latLng = marker.latLng;
             $latitude.value = latLng.lat();
             $longitude.value = latLng.lng();
         });
-		
-		
+
 	}
 	initialize();
 	</script>
-                
-                
+
+
                 break;
 
             case "hidden":

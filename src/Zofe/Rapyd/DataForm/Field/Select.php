@@ -9,7 +9,7 @@ class Select extends Field
     public $description = "";
     public $clause = "where";
 
-    function getValue()
+    public function getValue()
     {
         parent::getValue();
         foreach ($this->options as $value => $description) {
@@ -19,7 +19,7 @@ class Select extends Field
         }
     }
 
-    function build()
+    public function build()
     {
         $output = "";
 

@@ -76,7 +76,7 @@ class Daterange extends Date
                                    <div class="input-group">
                                         <div class="input-group-addon">&le;</div>
                                         ' . $to . '
-                                   </div>     
+                                   </div>
                                 </div>
                             </div>';
 

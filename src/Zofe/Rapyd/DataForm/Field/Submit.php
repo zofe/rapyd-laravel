@@ -2,18 +2,17 @@
 
 use Illuminate\Support\Facades\Form;
 
-class Submit extends Field {
-
+class Submit extends Field
+{
   public $type = "submit";
   public $attributes = array('class' => 'btn btn-default');
-    
+
   public function build()
   {
     $output = "";
     if (parent::build() === false) return;
 
-    switch ($this->status)
-    {
+    switch ($this->status) {
       case "disabled":
           $output = '';
         break;

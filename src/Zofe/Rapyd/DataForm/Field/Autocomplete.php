@@ -4,57 +4,54 @@ namespace Zofe\Rapyd\DataForm\Field;
 
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Session;
 use MyProject\Proxies\__CG__\stdClass;
 use Zofe\Rapyd\Rapyd;
 
-class Autocomplete extends Field {
-
+class Autocomplete extends Field
+{
     public $type = "autocomplete";
     public $css_class = "autocompleter typeahead";
 
     public $remote;
-    
+
     public $local_options;
-    
+
     public $record_id;
     public $record_label;
 
     public $must_match = false;
     public $auto_fill = false;
     public $parent_id = '';
-    
+
     public $min_chars = '2';
     public $clause = "where";
     public $is_local;
     public $description;
 
-
     //getvalue quando è local
-    
+
     public function options($options)
     {
         $this->is_local = true;
         parent::options($options);
-        foreach ($options as $key=>$value)
-        {
+        foreach ($options as $key=>$value) {
             $row = new \stdClass();
             $row->key = $key;
             $row->value = $value;
             $this->local_options[] =$row;
         }
+
         return $this;
-        
+
     }
 
-    function getValue()
+    public function getValue()
     {
-        if (!$this->is_local && !$this->record_label && $this->rel_field != "")
-        {
+        if (!$this->is_local && !$this->record_label && $this->rel_field != "") {
             $this->remote($this->rel_field, preg_replace('#([a-z0-9_-]+\.)?(.*)#i','$2',$this->rel_key));
         }
-        
+
         parent::getValue();
         if (count($this->local_options)) {
             foreach ($this->options as $value => $description) {
@@ -64,7 +61,6 @@ class Autocomplete extends Field {
             }
         }
     }
-    
 
     public function remote($record_label = null, $record_id = null, $remote = null)
     {
@@ -72,20 +68,17 @@ class Autocomplete extends Field {
         $this->record_id = ($record_id!="") ? $record_id : $this->db_name ;
         if ($remote!="") {
             $this->remote = $remote;
-            if (is_array($record_label))
-            {
+            if (is_array($record_label)) {
                 $this->record_label = current($record_label);
             }
-            if ($this->rel_field!= "")
-            {
+            if ($this->rel_field!= "") {
                 $this->record_label = $this->rel_field;
             }
         } else {
 
             $data["entity"] = get_class($this->relation->getRelated());
             $data["field"]  = $record_label;
-            if (is_array($record_label))
-            {
+            if (is_array($record_label)) {
                 $this->record_label = $this->rel_field;
             }
             $hash = substr(md5(serialize($data)), 0, 12);
@@ -93,18 +86,17 @@ class Autocomplete extends Field {
 
             $this->remote = route('rapyd.remote', array('hash'=> $hash));
         }
+
         return $this;
     }
-
 
     public function search($record_label, $record_id = null)
     {
         $record_id = ($record_id!="") ? $record_id :  preg_replace('#([a-z0-9_-]+\.)?(.*)#i','$2',$this->rel_key);
         $this->remote($record_label, $record_id);
+
         return $this;
     }
-    
-    
 
     public function build()
     {
@@ -115,18 +107,14 @@ class Autocomplete extends Field {
 
         unset($this->attributes['type']);
 
-        
         if (parent::build() === false) return;
 
-
-        switch ($this->status)
-        {
+        switch ($this->status) {
             case "disabled":
             case "show":
-                if ( (!isset($this->value)) )
-                {
+                if ( (!isset($this->value)) ) {
                     $output = $this->layout['null_label'];
-                } elseif ($this->value == ""){
+                } elseif ($this->value == "") {
                     $output = "";
                 } else {
                     $output = nl2br(htmlspecialchars($this->value));
@@ -136,16 +124,14 @@ class Autocomplete extends Field {
 
             case "create":
             case "modify":
-                
-                if (Input::get("auto_".$this->name))
-                {
+
+                if (Input::get("auto_".$this->name)) {
                     $autocomplete = Input::get("auto_".$this->name);
-                } elseif ($this->relation != null)
-                {
+                } elseif ($this->relation != null) {
                     $name = $this->rel_field;
                     $autocomplete = @$this->relation->get()->first()->$name;
                 } elseif (count($this->local_options)) {
-                    
+
                     $autocomplete = $this->description;
                 } else {
                     $autocomplete = $this->value;
@@ -154,18 +140,16 @@ class Autocomplete extends Field {
                 $output  =  Form::text("auto_".$this->name, $autocomplete, array_merge($this->attributes, array('id'=>"auto_".$this->name)))."\n";
                 $output .=  Form::hidden($this->name, $this->value, array('id'=>$this->name));
 
-
-                if ($this->remote) 
-                {
+                if ($this->remote) {
                     $script = <<<acp
-    
+
                     var blod_{$this->name} = new Bloodhound({
                         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('auto_{$this->name}'),
                         queryTokenizer: Bloodhound.tokenizers.whitespace,
                         remote: '{$this->remote}?q=%QUERY'
                     });
                     blod_{$this->name}.initialize();
-                
+
                     $('#div_{$this->name} .typeahead').typeahead(null, {
                         name: '{$this->name}',
                         displayKey: '{$this->record_label}',
@@ -175,25 +159,23 @@ class Autocomplete extends Field {
                         templates: {
                             suggestion: Handlebars.compile('{{{$this->record_label}}}')
                         }
-                    }).on("typeahead:selected typeahead:autocompleted", 
-                        function(e,data) { $('#{$this->name}').val(data.{$this->record_id});
-                        
-                    }).on("typeahead:closed", 
-                        function(e,data) { 
-                            if ($(this).val() == '')
-                            {
+                    }).on("typeahead:selected typeahead:autocompleted",
+                        function (e,data) { $('#{$this->name}').val(data.{$this->record_id});
+
+                    }).on("typeahead:closed",
+                        function (e,data) {
+                            if ($(this).val() == '') {
                                 $('#{$this->name}').val('');
-                            }     
+                            }
                     });
 acp;
-    
+
                     Rapyd::script($script);
 
-                    
                 } elseif (count($this->options)) {
-                    
+
                     $options = json_encode($this->local_options);
-                    
+
                     //options
                     $script = <<<acp
 
@@ -206,7 +188,7 @@ acp;
 
 
                     blod_{$this->name}.initialize();
-                    
+
                     $('#div_{$this->name} .typeahead').typeahead({
                          hint: true,
                          highlight: true,
@@ -216,15 +198,14 @@ acp;
                         name: '{$this->name}',
                         displayKey: 'value',
                         source: blod_{$this->name}.ttAdapter()
-                    }).on("typeahead:selected typeahead:autocompleted", 
-                        function(e,data) { 
+                    }).on("typeahead:selected typeahead:autocompleted",
+                        function (e,data) {
                             $('#{$this->name}').val(data.key);
-                    }).on("typeahead:closed", 
-                        function(e,data) { 
-                            if ($(this).val() == '')
-                            {
+                    }).on("typeahead:closed",
+                        function (e,data) {
+                            if ($(this).val() == '') {
                                 $('#{$this->name}').val('');
-                            }     
+                            }
                     });
 acp;
 

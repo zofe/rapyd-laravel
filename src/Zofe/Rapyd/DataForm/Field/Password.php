@@ -2,25 +2,23 @@
 
 use Illuminate\Support\Facades\Form;
 
-class Password extends Field {
-
+class Password extends Field
+{
   public $type = "password";
-  
+
   public function build()
   {
     $output = "";
 
     if (parent::build() === false) return;
 
-    switch ($this->status)
-    {
+    switch ($this->status) {
       case "disabled":
       case "show":
-		  
+
 		if ($this->type =='hidden' || $this->value == "") {
           $output = "";
-		} elseif ( (!isset($this->value)) )
-        {
+		} elseif ( (!isset($this->value)) ) {
           $output = $this->layout['null_label'];
         } else {
           $output = "********";

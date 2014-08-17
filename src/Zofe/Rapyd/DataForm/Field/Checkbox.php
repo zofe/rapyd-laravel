@@ -14,17 +14,17 @@ class Checkbox extends Field
     public $checked_output = 'yes';
     public $unchecked_output = 'no';
 
-    function getValue()
+    public function getValue()
     {
         parent::getValue();
 
         $this->checked = (bool) ($this->value == $this->checked_value);
     }
 
-    function getNewValue()
+    public function getNewValue()
     {
         parent::getNewValue();
-        
+
         if (is_null($this->new_value)) {
             $this->new_value = $this->unchecked_value;
 
@@ -32,7 +32,7 @@ class Checkbox extends Field
         $this->checked = (bool) ($this->value == $this->checked_value);
     }
 
-    function build()
+    public function build()
     {
         $output = "";
         if (parent::build() === false)

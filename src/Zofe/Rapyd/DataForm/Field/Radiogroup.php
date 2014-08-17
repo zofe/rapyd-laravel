@@ -11,7 +11,7 @@ class Radiogroup extends Field
     public $separator = "&nbsp;&nbsp;";
     public $clause = "where";
 
-    function getValue()
+    public function getValue()
     {
         parent::getValue();
         foreach ($this->options as $value => $description) {
@@ -21,7 +21,7 @@ class Radiogroup extends Field
         }
     }
 
-    function build()
+    public function build()
     {
         $output = "";
         if (parent::build() === false)
@@ -42,7 +42,7 @@ class Radiogroup extends Field
             case "modify":
 
                 foreach ($this->options as $val => $label) {
-                    $this->checked = (!is_null($this->value) AND ($this->value == $val));
+                    $this->checked = (!is_null($this->value) and ($this->value == $val));
                     $output .= Form::radio($this->name, $val, $this->checked).' '. $label. $this->separator;
                 }
                 $output .= $this->extra_output;

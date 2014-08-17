@@ -5,8 +5,6 @@ namespace Zofe\Rapyd\DataFilter;
 use Zofe\Rapyd\DataForm\DataForm;
 use Zofe\Rapyd\Persistence;
 use Illuminate\Support\Facades\Form;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 
 class DataFilter extends DataForm
@@ -23,30 +21,31 @@ class DataFilter extends DataForm
      */
     public $query;
 
- 
     /**
      * @param $source
      *
      * @return static
      */
     public static function source($source = null)
-    {        
-        $ins = new static;
+    {
+        $ins = new static();
         $ins->source = $source;
         $ins->query = $source;
-        if (is_object($source) && (is_a($source, "\Illuminate\Database\Eloquent\Builder") || 
+        if (is_object($source) && (is_a($source, "\Illuminate\Database\Eloquent\Builder") ||
                                   is_a($source, "\Illuminate\Database\Eloquent\Model"))) {
             $ins->model = $source->getModel();
         }
         $ins->cid = $ins->getIdentifier();
         $ins->sniffStatus();
         $ins->sniffAction();
+
         return $ins;
     }
 
     protected function table($table)
     {
         $this->query = DB::table($table);
+
         return $this->query;
     }
 
@@ -68,7 +67,7 @@ class DataFilter extends DataForm
 
             Persistence::clear();
         } else {
-            
+
             Persistence::clear();
         }
     }
@@ -81,39 +80,33 @@ class DataFilter extends DataForm
         switch ($this->action) {
             case "search":
 
-
                 // prepare the WHERE clause
                 foreach ($this->fields as $field) {
-                    
-                    
+
                     $field->getValue();
-                    
-                    //query scope 
+
+                    //query scope
                     $query_scope = $field->query_scope;
                     if ($query_scope) {
 
-                        if (is_a($query_scope, '\Closure'))
-                        {
+                        if (is_a($query_scope, '\Closure')) {
                             $this->query = $query_scope($this->query, $field->value);
-                            
-                        } elseif (isset($this->model) && method_exists($this->model, "scope".$query_scope))
-                        {
+
+                        } elseif (isset($this->model) && method_exists($this->model, "scope".$query_scope)) {
                             $query_scope = "scope".$query_scope;
                             $this->query = $this->model->$query_scope($this->query, $field->value);
-                            
+
                         }
                         continue;
                     }
-                    
-                    
+
                     //detect if where should be deep (on relation)
                     $deep_where = false;
-                    
-                    if (isset($this->model) && $field->relation != null) 
-                    {
+
+                    if (isset($this->model) && $field->relation != null) {
                         $rel_type = get_class($field->relation);
-                        if (in_array($rel_type, 
-                            array('Illuminate\Database\Eloquent\Relations\HasOne', 
+                        if (in_array($rel_type,
+                            array('Illuminate\Database\Eloquent\Relations\HasOne',
                                   'Illuminate\Database\Eloquent\Relations\HasMany',
                                   'Illuminate\Database\Eloquent\Relations\BelongsTo',
                                   'Illuminate\Database\Eloquent\Relations\BelongsToMany'
@@ -122,7 +115,7 @@ class DataFilter extends DataForm
                         {
                             if ($rel_type == 'Illuminate\Database\Eloquent\Relations\BelongsTo' and
                                 in_array($field->type, array('select', 'radiogroup', 'autocomplete'))){
-                                    $deep_where = false;             
+                                    $deep_where = false;
                             } else {
                                 $deep_where = true;
                             }
@@ -130,7 +123,6 @@ class DataFilter extends DataForm
                         }
                     }
 
-    
                     if ($field->value != "") {
                         if (strpos($field->name, "_copy") > 0) {
                             $name = substr($field->db_name, 0, strpos($field->db_name, "_copy"));
@@ -140,8 +132,7 @@ class DataFilter extends DataForm
 
                         $value = $field->value;
 
-                        if ($deep_where)
-                        {
+                        if ($deep_where) {
 
                             //exception for multiple value fields on BelongsToMany
                             if ($rel_type == 'Illuminate\Database\Eloquent\Relations\BelongsToMany' and
@@ -149,20 +140,15 @@ class DataFilter extends DataForm
                             {
                                   $values = explode($field->serialization_sep, $value);
 
-                                  if ($field->clause == 'wherein') 
-                                  {
-                                      $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $values) 
-                                      {
+                                  if ($field->clause == 'wherein') {
+                                      $this->query = $this->query->whereHas($field->rel_name, function ($q) use ($field, $values) {
                                           $q->whereIn($field->rel_fq_key, $values);
                                       });
                                   }
-                                  
-                                  if($field->clause == 'where') 
-                                  {
-                                      foreach($values as $value) 
-                                      {
-                                          $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $value)
-                                          {
+
+                                  if ($field->clause == 'where') {
+                                      foreach ($values as $value) {
+                                          $this->query = $this->query->whereHas($field->rel_name, function ($q) use ($field, $value) {
                                               $q->where($field->rel_fq_key,'=', $value);
                                           });
                                       }
@@ -172,35 +158,34 @@ class DataFilter extends DataForm
 
                             switch ($field->clause) {
                                 case "like":
-                                    $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $value) {
+                                    $this->query = $this->query->whereHas($field->rel_name, function ($q) use ($field, $value) {
                                         $q->where($field->rel_field, 'LIKE', '%' . $value . '%');
                                     });
                                     break;
                                 case "orlike":
-                                    $this->query = $this->query->orWhereHas($field->rel_name, function($q) use($field, $value) {
+                                    $this->query = $this->query->orWhereHas($field->rel_name, function ($q) use ($field, $value) {
                                         $q->where($field->rel_field, 'LIKE', '%' . $value . '%');
                                     });
                                     break;
                                 case "where":
-                                    $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $value) {
+                                    $this->query = $this->query->whereHas($field->rel_name, function ($q) use ($field, $value) {
                                         $q->where($field->rel_field, $field->operator, $value);
                                     });
                                     break;
                                 case "orwhere":
-                                    $this->query = $this->query->orWhereHas($field->rel_name, function($q) use($field, $value) {
+                                    $this->query = $this->query->orWhereHas($field->rel_name, function ($q) use ($field, $value) {
                                         $q->where($field->rel_field, $field->operator, $value);
                                     });
                                     break;
                                 case "wherebetween":
                                     $values = explode($field->serialization_sep, $value);
-                                    $this->query = $this->query->whereHas($field->rel_name, function($q) use($field, $values) {
+                                    $this->query = $this->query->whereHas($field->rel_name, function ($q) use ($field, $values) {
 
-                                        if ($values[0] != '' and $values[1] == '')
-                                        {
+                                        if ($values[0] != '' and $values[1] == '') {
                                             $q->where($field->rel_field, ">=", $values[0]);
                                         } elseif ($values[0] == '' and $values[1] != '') {
                                             $q->where($field->rel_field, "<=", $values[1]);
-                                        } elseif($values[0] != '' and $values[1] != '') {
+                                        } elseif ($values[0] != '' and $values[1] != '') {
 
                                             //we avoid "whereBetween" because a bug in laravel 4.1
                                             $q->where(
@@ -210,19 +195,18 @@ class DataFilter extends DataForm
                                                 }
                                             );
                                         }
-                                        
+
                                     });
                                     break;
                                 case "orwherebetween":
                                     $values = explode($field->serialization_sep, $value);
-                                    $this->query = $this->query->orWhereHas($field->rel_name, function($q) use($field, $values) {
+                                    $this->query = $this->query->orWhereHas($field->rel_name, function ($q) use ($field, $values) {
 
-                                        if ($values[0] != '' and $values[1] == '')
-                                        {
+                                        if ($values[0] != '' and $values[1] == '') {
                                             $q->orWhere($field->rel_field, ">=", $values[0]);
                                         } elseif ($values[0] == '' and $values[1] != '') {
                                             $q->orWhere($field->rel_field, "<=", $values[1]);
-                                        } elseif($values[0] != '' and $values[1] != '') {
+                                        } elseif ($values[0] != '' and $values[1] != '') {
 
                                             //we avoid "whereBetween" because a bug in laravel 4.1
                                             $q->orWhere(
@@ -233,15 +217,13 @@ class DataFilter extends DataForm
                                             );
                                         }
 
-                                        
                                     });
                                     break;
                             }
 
-                            
                         //not deep, where is on main entity
                         } else {
-                            
+
                             switch ($field->clause) {
                                 case "like":
                                     $this->query = $this->query->where($name, 'LIKE', '%' . $value . '%');
@@ -257,15 +239,13 @@ class DataFilter extends DataForm
                                     break;
                                 case "wherebetween":
                                     $values = explode($field->serialization_sep, $value);
-                                    if (count($values)==2)
-                                    {
-                                        
-                                        if ($values[0] != '' and $values[1] == '')
-                                        {
+                                    if (count($values)==2) {
+
+                                        if ($values[0] != '' and $values[1] == '') {
                                             $this->query = $this->query->where($name, ">=", $values[0]);
                                         } elseif ($values[0] == '' and $values[1] != '') {
                                             $this->query = $this->query->where($name, "<=", $values[1]);
-                                        } elseif($values[0] != '' and $values[1] != '') {
+                                        } elseif ($values[0] != '' and $values[1] != '') {
 
                                             //we avoid "whereBetween" because a bug in laravel 4.1
                                             $this->query =  $this->query->where(
@@ -274,23 +254,20 @@ class DataFilter extends DataForm
                                                                   ->where($name, "<=", $values[1]);
                                                 }
                                             );
-                                           
+
                                         }
-                                                
+
                                     }
-                                    
 
                                     break;
                                 case "orwherebetween":
                                     $values = explode($field->serialization_sep, $value);
-                                    if (count($values)==2)
-                                    {
-                                        if ($values[0] != '' and $values[1] == '')
-                                        {
+                                    if (count($values)==2) {
+                                        if ($values[0] != '' and $values[1] == '') {
                                             $this->query = $this->query->orWhere($name, ">=", $values[0]);
                                         } elseif ($values[0] == '' and $values[1] != '') {
                                             $this->query = $this->query->orWhere($name, "<=", $values[1]);
-                                        } elseif($values[0] != '' and $values[1] != '') {
+                                        } elseif ($values[0] != '' and $values[1] != '') {
                                             //we avoid "whereBetween" because a bug in laravel 4.1
                                             $this->query =  $this->query->orWhere(
                                                 function ($query) use ($name, $values) {
@@ -299,19 +276,20 @@ class DataFilter extends DataForm
                                                 }
                                             );
                                         }
-                                        
+
                                     }
-                                    
+
                                     break;
                             }
                         }
-                        
+
                     }
                 }
                 // dd($this->query->toSql());
                 break;
             case "reset":
                 $this->process_status = "show";
+
                 return true;
                 break;
             default:

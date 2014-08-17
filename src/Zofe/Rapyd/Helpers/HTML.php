@@ -1,6 +1,5 @@
 <?php namespace Zofe\Rapyd\Helpers;
 
-
 class HTML
 {
 
@@ -13,14 +12,14 @@ class HTML
         foreach ($attributes as $key => $val) {
             $compiled .= ' ' . $key . '="' . HTML::chars($val) . '"';
         }
+
         return $compiled;
     }
 
-    public static function chars($value, $double_encode = TRUE)
+    public static function chars($value, $double_encode = true)
     {
-        return htmlspecialchars((string)$value, ENT_QUOTES, "UTF-8", $double_encode);
+        return htmlspecialchars((string) $value, ENT_QUOTES, "UTF-8", $double_encode);
     }
-
 
     public static function xssfilter($string)
     {
@@ -57,4 +56,4 @@ class HTML
         return $string;
     }
 
-} 
+}

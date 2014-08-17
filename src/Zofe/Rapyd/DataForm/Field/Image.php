@@ -10,7 +10,7 @@ class Image extends File
 {
     public $type = "image";
     public $rule = "mimes:jpeg,png";
-    
+
     protected $image;
     protected $image_callable;
     protected $resize = array();
@@ -21,19 +21,20 @@ class Image extends File
     {
         parent::__construct($name, $label, $model, $model_relations);
 
-        \Event::listen('rapyd.uploaded.'.$this->name, function() {
+        \Event::listen('rapyd.uploaded.'.$this->name, function () {
             $this->imageProcess();
         });
     }
-    
+
     /**
      * store a closure to make something with ImageManager post process
-     * @param callable $callable
+     * @param  callable $callable
      * @return $this
      */
     public function image(\Closure $callable)
     {
         $this->image_callable = $callable;
+
         return $this;
     }
 
@@ -47,6 +48,7 @@ class Image extends File
     public function resize($width, $height, $filename = null)
     {
         $this->resize[] = array('width'=>$width, 'height'=>$height,  'filename'=>$filename);
+
         return $this;
     }
 
@@ -60,6 +62,7 @@ class Image extends File
     public function fit($width, $height, $filename = null)
     {
         $this->fit[] = array('width'=>$width, 'height'=>$height,  'filename'=>$filename);
+
         return $this;
     }
 
@@ -72,6 +75,7 @@ class Image extends File
     public function preview($width, $height)
     {
         $this->preview = array($width, $height);
+
         return $this;
     }
 
@@ -80,8 +84,7 @@ class Image extends File
      */
     protected function imageProcess()
     {
-        if ($this->saved)
-        {
+        if ($this->saved) {
             if (!$this->image)  $this->image = ImageManager::make($this->saved);
 
             if ($this->image_callable) {
@@ -89,17 +92,15 @@ class Image extends File
                 $callable($this->image);
             }
 
-            if(count($this->resize)) {
-                foreach($this->resize as $resize)
-                {
+            if (count($this->resize)) {
+                foreach ($this->resize as $resize) {
                     $this->image->resize($resize["width"], $resize["height"]);
                     $this->image->save($resize["filename"]);
                 }
             }
 
-            if(count($this->fit)) {
-                foreach($this->fit as $fit)
-                {
+            if (count($this->fit)) {
+                foreach ($this->fit as $fit) {
                     $this->image->fit($fit["width"], $fit["height"]);
                     $this->image->save($fit["filename"]);
                 }
@@ -107,8 +108,7 @@ class Image extends File
 
         }
     }
-   
-    
+
     public function thumb()
     {
         if (!\File::exists($this->path.$this->old_value)) return '';
@@ -140,7 +140,7 @@ class Image extends File
                 if ($this->old_value != "") {
                     $output .= '<div class="clearfix">';
                     $output .= $this->thumb()." &nbsp;".link_to($this->web_path.$this->value, $this->value, array('target'=>'_blank'))."<br />\n";
-                    $output .= Form::checkbox($this->name.'_remove', 1, (bool)Input::get($this->name.'_remove'))." ".trans('rapyd::rapyd.delete')." <br/>\n";
+                    $output .= Form::checkbox($this->name.'_remove', 1, (bool) Input::get($this->name.'_remove'))." ".trans('rapyd::rapyd.delete')." <br/>\n";
                     $output .= '</div>';
                 }
                 $output .= Form::file($this->name, $this->attributes);
