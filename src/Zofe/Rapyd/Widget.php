@@ -78,7 +78,7 @@ class Widget
         }
 
         $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
-        $this->button_container[$position][] =  Html::link($url, $name, $attributes);
+        $this->button_container[$position][] =  HTML::link($url, $name, $attributes);
         $this->links[] = $url;
 
         return $this;
