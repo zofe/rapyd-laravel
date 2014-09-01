@@ -58,10 +58,10 @@ class DataForm extends Widget
      */
     public function add($name, $label, $type, $validation = '')
     {
-        if (strpos($type, "\\")) {
+        if (strpos($type, "\\") !== false) {
             $field_class = $type;
         } else {
-            $field_class = '\Zofe\Rapyd\DataForm\Field' . "\\" . ucfirst($type);
+            $field_class = '\Zofe\Rapyd\DataForm\Field\\' .  ucfirst($type);
         }
 
         //instancing
