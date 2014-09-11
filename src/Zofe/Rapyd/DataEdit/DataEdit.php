@@ -38,11 +38,11 @@ class DataEdit extends DataForm
                 $this->status = "unknow_record";
             }
             ///// modify /////
-        } elseif ($this->url->value('modify' . $this->cid)) {
+        } elseif ($this->url->value('modify' . $this->cid.'|update' . $this->cid)) {
             $this->status = "modify";
             $this->method = "patch";
             $this->process_url = $this->url->replace('modify' . $this->cid, 'update' . $this->cid)->get();
-            if (!$this->find($this->url->value('modify' . $this->cid))) {
+            if (!$this->find($this->url->value('modify' . $this->cid.'|update'. $this->cid))) {
                 $this->status = "unknow_record";
             }
             ///// create /////
@@ -240,6 +240,11 @@ class DataEdit extends DataForm
         }
     }
 
+    /**
+     * just an alias for getForm()
+     * @param string $view 
+     * @return string the form output
+     */
     public function getEdit($view = '')
     {
         return $this->getForm($view);
