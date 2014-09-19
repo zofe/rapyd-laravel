@@ -157,6 +157,7 @@ class DemoController extends \Controller
         $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');
 
         $grid->edit('/rapyd-demo/edit', 'Edit','show|modify');
+        $grid->link('/rapyd-demo/edit',"New Article", "TR");
         $grid->orderBy('id','desc');
         $grid->paginate(10);
 
