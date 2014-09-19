@@ -35,7 +35,8 @@ in a controller
    $grid->add('{{ $author->firstname }}','Author'); //blade syntax with related field
    $grid->add('body|strip_tags|substr[0,20]','Body'); //filter (similar to twig syntax)
    $grid->add('body','Body')->filter('strip_tags|substr[0,20]'); //another way to filter
-   $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit actions
+   $grid->edit('/articles/edit', 'Edit','modify|delete'); //shortcut to link DataEdit actions
+   $grid->link('/articles/edit',"Add New", "TR");  //add button
    $grid->orderBy('article_id','desc'); //default orderby
    $grid->paginate(10); //pagination
 
@@ -76,7 +77,7 @@ datagrid supports also csv output, so it can be used as "report" tool.
    $grid->add('body','Body')
    ...
    $grid->buildCSV();  //  force download 
-   $grid->buildCSV('export_articles', 'Y-m-d.His');  //  force download with custom name and stamp
+   $grid->buildCSV('export_articles', 'Y-m-d.His');  // force download with custom stamp
    $grid->buildCSV('uploads/filename', 'Y-m-d');  // write on file 
     ...
 ```
@@ -102,7 +103,7 @@ datagrid supports also csv output, so it can be used as "report" tool.
    //some enhanced field (images, wysiwyg, autocomplete, etc..):
    $form->add('photo','Photo', 'image')->move('uploads/images/')->preview(80,80);
    $form->add('body','Body', 'redactor'); //wysiwyg editor
-   $form->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
+   $form->add('author.name','Author','autocomplete')->search(array('firstname','lastname'));
    $form->add('categories.name','Categories','tags'); //tags field
  
    $form->submit('Save');
@@ -174,7 +175,7 @@ You can directly customize form  using build() in your controller
    $edit->link("article/list","Articles", "TR")->back();
    $edit->add('title','Title', 'text')->rule('required');
    $edit->add('body','Body','textarea')->rule('required');
-   $edit->add('author.fullname','Author','autocomplete')->search(array('firstname','lastname'));
+   $edit->add('author.name','Author','autocomplete')->search(array('firstname','lastname'));
    return $edit->view('crud', compact('edit'));
 
 ```
@@ -255,12 +256,12 @@ You need also to add this to your views, to let rapyd add runtime assets:
 
 ```html
 <head>
-  ...
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+...
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-   {{ Rapyd::head() }}
+{{ Rapyd::head() }}
 </head>
 ```
 note: widget output is in standard with __Boostrap 3+__, and some widget need support of __JQuery 1.9+__
@@ -272,8 +273,8 @@ you can do this with:
 ```html
 <head>
   ...
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-   {{ Rapyd::styles() }}
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+{{ Rapyd::styles() }}
 </head>
 ....
 
