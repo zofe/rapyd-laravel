@@ -106,6 +106,11 @@ datagrid supports also csv output, so it can be used as "report" tool.
    $form->add('author.name','Author','autocomplete')->search(array('firstname','lastname'));
    $form->add('categories.name','Categories','tags'); //tags field
  
+   //you can also use now the smart syntax for all fields: 
+   $form->text('title','Title'); //field name, label
+   $form->textarea('body','Body')->rule('required'); //validation
+   ...
+ 
    $form->submit('Save');
    $form->saved(function() use ($form)
    {
@@ -176,6 +181,11 @@ You can directly customize form  using build() in your controller
    $edit->add('title','Title', 'text')->rule('required');
    $edit->add('body','Body','textarea')->rule('required');
    $edit->add('author.name','Author','autocomplete')->search(array('firstname','lastname'));
+   
+   //you can also use now the smart syntax for all fields: 
+   $edit->textarea('title','Title'); 
+   $edit->autocomplete('author.name','Author')->search(array('firstname','lastname'));
+   
    return $edit->view('crud', compact('edit'));
 
 ```
@@ -322,4 +332,4 @@ or use the one that is online:
 
 Rapyd is licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
-If Rapyd saves you time, please consider [tipping via gittip](https://www.gittip.com/zofe)
+If Rapyd saves you time, please __[support Rapyd](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QJFERQGP4ZB6A)__
