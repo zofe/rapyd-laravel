@@ -19,6 +19,39 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Zofe\Rapyd\Rapyd;
 
+/**
+ * Class DataForm
+ * @method public addText($name, $label, $validation = '')
+ * @method public addHidden($name, $label, $validation = '')
+ * @method public addPassword($name, $label, $validation = '')
+ * @method public addFile($name, $label, $validation = '')
+ * @method public addTextarea($name, $label, $validation = '')
+ * @method public addSelect($name, $label, $validation = '')
+ * @method public addRadiogroup($name, $label, $validation = '')
+ * @method public addSubmit($name, $label, $validation = '')
+ * @method public addRedactor($name, $label, $validation = '')
+ * @method public addAutocomplete($name, $label, $validation = '')
+ * @method public addTags($name, $label, $validation = '')
+ * @method public addColorpicker($name, $label, $validation = '')
+ * @method public addDate($name, $label, $validation = '')
+ * @method public addAuto($name, $label, $validation = '')
+ *
+ * @method public text($name, $label, $validation = '')
+ * @method public hidden($name, $label, $validation = '')
+ * @method public password($name, $label, $validation = '')
+ * @method public file($name, $label, $validation = '')
+ * @method public textarea($name, $label, $validation = '')
+ * @method public select($name, $label, $validation = '')
+ * @method public radiogroup($name, $label, $validation = '')
+ * @method public submit($name, $label, $validation = '')
+ * @method public redactor($name, $label, $validation = '')
+ * @method public autocomplete($name, $label, $validation = '')
+ * @method public tags($name, $label, $validation = '')
+ * @method public colorpicker($name, $label, $validation = '')
+ * @method public date($name, $label, $validation = '')
+ * @method public auto($name, $label, $validation = '')
+ * @package Zofe\Rapyd\DataForm
+ */
 class DataForm extends Widget
 {
 
@@ -536,182 +569,21 @@ class DataForm extends Widget
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
+     * Magic method to catch all appends
      *
-     * @return File
+     * @param  string $type
+     * @param  Array  $arguments
+     * @return mixed
      */
-    public function addFile($name, $label, $validation = '')
+    public function __call($name, $arguments)
     {
-        return $this->add($name, $label, 'file', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Redactor
-     */
-    public function addRedactor($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'redactor', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Select
-     */
-    public function addSelect($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'select', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Submit
-     */
-    public function addSubmit($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'submit', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Text
-     */
-    public function addText($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'text', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Textarea
-     */
-    public function addTextarea($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'textarea', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Checkbox
-     */
-    public function addCheckbox($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'checkbox', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Radiogroup
-     */
-    public function addRadiogroup($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'radiogroup', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Autocomplete
-     */
-    public function addAutocomplete($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'autocomplete', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Tags
-     */
-    public function addTags($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'tag', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Colorpicker
-     */
-    public function addColorpicker($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'colorpicker', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Date
-     */
-    public function addDate($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'date', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Hidden
-     */
-    public function addHidden($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'hidden', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Auto
-     */
-    public function addAuto($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'auto', $validation);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $validation
-     *
-     * @return Hidden
-     */
-    public function addPassword($name, $label, $validation = '')
-    {
-        return $this->add($name, $label, 'password', $validation);
+        $classname = '\Zofe\Rapyd\DataForm\Field\\'.ucfirst($name);
+        $legacy = '\Zofe\Rapyd\DataForm\Field\\'.'add'.ucfirst($name);
+        
+        if (class_exists($classname) || class_exists($legacy))
+        {
+            array_push($arguments, $name);
+            return  call_user_func_array(array($this, "add"), $arguments);
+        }
     }
 }
