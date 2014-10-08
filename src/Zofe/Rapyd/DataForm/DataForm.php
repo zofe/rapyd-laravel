@@ -57,7 +57,8 @@ class DataForm extends Widget
 
     public $model;
     public $model_relations;
-
+    public $validator; 
+    
     public $output = "";
     public $fields = array();
     public $hash = "";
@@ -264,6 +265,10 @@ class DataForm extends Widget
                 $rules[$field->name] = $field->rule;
                 $attributes[$field->name] = $field->label;
             }
+        }
+        if (isset($this->validator))
+        {
+            return !$this->validator->fails();
         }
         if (isset($rules)) {
 
