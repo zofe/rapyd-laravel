@@ -1,6 +1,7 @@
 <?php namespace Zofe\Rapyd\DataForm\Field;
 
 use Illuminate\Support\Facades\Form;
+use Illuminate\Support\Facades\Input;
 
 class Checkbox extends Field
 {
@@ -17,7 +18,10 @@ class Checkbox extends Field
     public function getValue()
     {
         parent::getValue();
-
+        if (\Request::isMethod('post') && !\Input::exists($this->name))
+        {
+            $this->value =  $this->unchecked_value;
+        }
         $this->checked = (bool) ($this->value == $this->checked_value);
     }
 
@@ -27,7 +31,6 @@ class Checkbox extends Field
 
         if (is_null($this->new_value)) {
             $this->new_value = $this->unchecked_value;
-
         }
         $this->checked = (bool) ($this->value == $this->checked_value);
     }
@@ -51,6 +54,7 @@ class Checkbox extends Field
 
             case "create":
             case "modify":
+                //dd($this->checked);
                 $output = Form::checkbox($this->name, $this->checked_value, $this->checked, $this->attributes) . $this->extra_output;
                 break;
 
