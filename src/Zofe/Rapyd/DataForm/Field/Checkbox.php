@@ -51,7 +51,7 @@ class Checkbox extends Field
 
             case "create":
             case "modify":
-                $output = Form::checkbox($this->name, $this->checked_value, $this->checked) . $this->extra_output;
+                $output = Form::checkbox($this->name, $this->checked_value, $this->checked, $this->attributes) . $this->extra_output;
                 break;
 
             case "hidden":
