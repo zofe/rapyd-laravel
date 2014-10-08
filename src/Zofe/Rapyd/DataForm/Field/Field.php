@@ -587,6 +587,14 @@ abstract class Field extends Widget
         }
     }
 
+    public function has_error($error='class="has-error"')
+    {
+        if ($this->has_error) {
+            return $error;
+        }
+        return '';
+    }
+    
     public function all()
     {
         $output  = "<label for=\"{$this->name}\" class=\"{$this->req}\">{$this->label}</label>";
