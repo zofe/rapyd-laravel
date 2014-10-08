@@ -21,20 +21,6 @@ use Zofe\Rapyd\Rapyd;
 
 /**
  * Class DataForm
- * @method public addText($name, $label, $validation = '')
- * @method public addHidden($name, $label, $validation = '')
- * @method public addPassword($name, $label, $validation = '')
- * @method public addFile($name, $label, $validation = '')
- * @method public addTextarea($name, $label, $validation = '')
- * @method public addSelect($name, $label, $validation = '')
- * @method public addRadiogroup($name, $label, $validation = '')
- * @method public addSubmit($name, $label, $validation = '')
- * @method public addRedactor($name, $label, $validation = '')
- * @method public addAutocomplete($name, $label, $validation = '')
- * @method public addTags($name, $label, $validation = '')
- * @method public addColorpicker($name, $label, $validation = '')
- * @method public addDate($name, $label, $validation = '')
- * @method public addAuto($name, $label, $validation = '')
  *
  * @method public text($name, $label, $validation = '')
  * @method public hidden($name, $label, $validation = '')
@@ -573,6 +559,33 @@ class DataForm extends Widget
         $this->saved($callable);
     }
 
+    /**
+     * Set a value to model without show anything (it appends an auto-field)
+     * It set value on insert and update (but is configurable)
+     *
+     * @param $field
+     * @param $value
+     * @param bool $insert
+     * @param bool $update
+     */
+    public function set($field, $value = null , $insert = true, $update = true)
+    {
+            
+        if (is_array($field)) {
+            foreach( $field as $key=>$val) {
+                $this->set($key, $val, $insert, $update);
+            }
+        }
+
+        $this->add($field, '', 'auto');
+        if ($insert)
+            $this->field($field)->insertValue($value);
+        
+        if ($update)
+            $this->field($field)->updateValue($value);
+
+    }
+    
     /**
      * Magic method to catch all appends
      *
