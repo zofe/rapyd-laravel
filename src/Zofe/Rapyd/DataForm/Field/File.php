@@ -237,8 +237,10 @@ class File extends Field
             case "modify":
 
                 if ($this->old_value) {
+                    $output .= '<div class="clearfix">';
                     $output .= link_to($this->web_path.$this->value, $this->value). "&nbsp;";
-                    $output .= Form::checkbox($this->name.'_remove', 1, (bool) Input::get($this->name.'_remove'))."<br/>\n";
+                    $output .= Form::checkbox($this->name.'_remove', 1, (bool) Input::get($this->name.'_remove'))." ".trans('rapyd::rapyd.delete')." <br/>\n";
+                    $output .= '</div>';
                 }
                 $output .= Form::file($this->name, $this->attributes);
                 break;
