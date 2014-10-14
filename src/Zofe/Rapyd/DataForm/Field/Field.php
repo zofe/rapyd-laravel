@@ -450,8 +450,10 @@ abstract class Field extends Widget
                 !Schema::hasColumn($this->model->getTable(), $this->db_name)
                 || is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\HasOne')
                 ) {
-                $this->model->saved(function () {
-                    $this->updateRelations();
+                
+                $self = $this; //fix old 5.3 you can't pass this in a closure
+                $this->model->saved(function () use($self) {
+                    $self->updateRelations();
                 });
 
                 //check for relation then exit
