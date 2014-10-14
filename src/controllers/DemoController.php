@@ -200,7 +200,7 @@ class DemoController extends \Controller
     public function getCustomfilter()
     {
         $filter = DataFilter::source(Article::with('author','categories'));
-        $filter->add('src','Search', 'text')->scope('freesearch');
+        $filter->text('src','Search')->scope('freesearch');
         $filter->build();
 
         $set = DataSet::source($filter);
