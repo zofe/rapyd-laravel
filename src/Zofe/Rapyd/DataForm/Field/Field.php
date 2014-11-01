@@ -447,7 +447,8 @@ abstract class Field extends Widget
         if (is_object($this->model) && isset($this->db_name)) {
 
             if (
-                !Schema::hasColumn($this->model->getTable(), $this->db_name)
+                !(Schema::connection($this->model->getConnectionName())->hasColumn($this->model->getTable(), $this->db_name)
+                || $this->model->hasSetMutator($this->db_name))
                 || is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\HasOne')
                 ) {
                 
