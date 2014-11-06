@@ -3,11 +3,18 @@
 namespace Zofe\Rapyd\DataForm;
 
 use Illuminate\Database\Eloquent\Model;
+use Zofe\Rapyd\DataForm\Field\Auto;
+use Zofe\Rapyd\DataForm\Field\Autocomplete;
+use Zofe\Rapyd\DataForm\Field\Colorpicker;
+use Zofe\Rapyd\DataForm\Field\Date;
 use Zofe\Rapyd\DataForm\Field\Field;
 use Zofe\Rapyd\DataForm\Field\File;
+use Zofe\Rapyd\DataForm\Field\Hidden;
+use Zofe\Rapyd\DataForm\Field\Password;
+use Zofe\Rapyd\DataForm\Field\Radiogroup;
 use Zofe\Rapyd\DataForm\Field\Redactor;
 use Zofe\Rapyd\DataForm\Field\Select;
-use Zofe\Rapyd\DataForm\Field\Submit;
+use Zofe\Rapyd\DataForm\Field\Tags;
 use Zofe\Rapyd\DataForm\Field\Text;
 use Zofe\Rapyd\DataForm\Field\Textarea;
 use Zofe\Rapyd\Widget;
@@ -22,20 +29,34 @@ use Zofe\Rapyd\Rapyd;
 /**
  * Class DataForm
  *
- * @method public text($name, $label, $validation = '')
- * @method public hidden($name, $label, $validation = '')
- * @method public password($name, $label, $validation = '')
- * @method public file($name, $label, $validation = '')
- * @method public textarea($name, $label, $validation = '')
- * @method public select($name, $label, $validation = '')
- * @method public radiogroup($name, $label, $validation = '')
- * @method public submit($name, $label, $validation = '')
- * @method public redactor($name, $label, $validation = '')
- * @method public autocomplete($name, $label, $validation = '')
- * @method public tags($name, $label, $validation = '')
- * @method public colorpicker($name, $label, $validation = '')
- * @method public date($name, $label, $validation = '')
- * @method public auto($name, $label, $validation = '')
+ * @method Text         text        (string $name, string $label, $validation = '')
+ * @method Hidden       hidden      (string $name, string $label, string $validation = '')
+ * @method Password     password    (string $name, string $label, string $validation = '')
+ * @method File         file        (string $name, string $label, string $validation = '')
+ * @method Textarea     textarea    (string $name, string $label, string $validation = '')
+ * @method Select       select      (string $name, string $label, string $validation = '')
+ * @method Radiogroup   radiogroup  (string $name, string $label, string $validation = '')
+ * @method Redactor     redactor    (string $name, string $label, string $validation = '')
+ * @method Autocomplete autocomplete(string $name, string $label, string $validation = '')
+ * @method Tags         tags        (string $name, string $label, string $validation = '')
+ * @method Colorpicker  colorpicker (string $name, string $label, string $validation = '')
+ * @method Date         date        (string $name, string $label, string $validation = '')
+ * @method Auto         auto        (string $name, string $label, string $validation = '')
+ *
+ * @method Text         addText        (string $name, string $label, $validation = '')
+ * @method Hidden       addHidden      (string $name, string $label, string $validation = '')
+ * @method Password     addPassword    (string $name, string $label, string $validation = '')
+ * @method File         addFile        (string $name, string $label, string $validation = '')
+ * @method Textarea     addTextarea    (string $name, string $label, string $validation = '')
+ * @method Select       addSelect      (string $name, string $label, string $validation = '')
+ * @method Radiogroup   addRadiogroup  (string $name, string $label, string $validation = '')
+ * @method Redactor     addRedactor    (string $name, string $label, string $validation = '')
+ * @method Autocomplete addAutocomplete(string $name, string $label, string $validation = '')
+ * @method Tags         addTags        (string $name, string $label, string $validation = '')
+ * @method Colorpicker  addColorpicker (string $name, string $label, string $validation = '')
+ * @method Date         addDate        (string $name, string $label, string $validation = '')
+ * @method Auto         addAuto        (string $name, string $label, string $validation = '')
+ *
  * @package Zofe\Rapyd\DataForm
  */
 class DataForm extends Widget
@@ -589,16 +610,20 @@ class DataForm extends Widget
     /**
      * Magic method to catch all appends
      *
-     * @param  string $type
+     * @param  string $name
      * @param  Array  $arguments
      * @return mixed
      */
     public function __call($name, $arguments)
     {
+
+        if (0 === strpos($name, 'add')) {
+            $name = substr($name, 3);
+        }
+
         $classname = '\Zofe\Rapyd\DataForm\Field\\'.ucfirst($name);
-        $legacy = '\Zofe\Rapyd\DataForm\Field\\'.'add'.ucfirst($name);
-        
-        if (class_exists($classname) || class_exists($legacy))
+
+        if (class_exists($classname))
         {
             array_push($arguments, $name);
             return  call_user_func_array(array($this, "add"), $arguments);
