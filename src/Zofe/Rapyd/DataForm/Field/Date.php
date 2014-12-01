@@ -48,10 +48,10 @@ class Date extends Field
     protected function humanDateToIso($humandate)
     {
         $datetime = \DateTime::createFromFormat( $this->format, $humandate);
-        if (!$datetime) return '';
+        if (!$datetime) return null;
         $timestamp = $datetime->getTimestamp();
         if ($timestamp < 1) {
-            return "";
+            return null;
         }
         $humandate = date('Y-m-d', $timestamp);
 
