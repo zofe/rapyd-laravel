@@ -9,7 +9,6 @@ use Zofe\Rapyd\Exceptions\DataSetException;
 
 class DataSet extends Widget
 {
-
     public $cid;
     public $source;
 
@@ -18,10 +17,10 @@ class DataSet extends Widget
      * @var \Illuminate\Database\Query\Builder
      */
     public $query;
+    public $url  ;
     public $data = array();
     public $hash = '';
-    public $url;
-    public $key = 'id';
+    public $key  = 'id';
 
     /**
      * @var \Illuminate\Pagination\Paginator
@@ -43,15 +42,17 @@ class DataSet extends Widget
      */
     public static function source($source)
     {
-        $ins = new static();
+        $ins         = new static();
         $ins->source = $source;
 
         //inherit cid from datafilter
-        if ($ins->source instanceof \Zofe\Rapyd\DataFilter\DataFilter) {
+        if ($ins->source instanceof \Zofe\Rapyd\DataFilter\DataFilter) 
+        {
             $ins->cid = $ins->source->cid;
         }
         //generate new component id
-        else {
+        else 
+        {
             $ins->cid = $ins->getIdentifier();
         }
 

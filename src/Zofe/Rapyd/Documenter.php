@@ -7,13 +7,20 @@ class Documenter
 {
     public static function showCode($filepath)
     {
-        if (file_exists(app_path() ."/".$filepath)) {
+        if (file_exists(app_path() ."/".$filepath)) 
+        {
             $file = app_path() ."/".$filepath;
-        } elseif (file_exists(app_path() ."/../workbench/".$filepath)) {
+        } 
+        elseif (file_exists(app_path() ."/../workbench/".$filepath)) 
+        {
             $file = app_path() ."/../workbench/".$filepath;
-        } elseif (file_exists(app_path() ."/../vendor/".$filepath)) {
+        }
+        elseif (file_exists(app_path() ."/../vendor/".$filepath)) 
+        {
             $file = app_path() ."/../vendor/".$filepath;
-        } else {
+        } 
+        else 
+        {
             return "";
         }
 
@@ -26,22 +33,23 @@ class Documenter
 
     public static function showMethod($class, $methods)
     {
-        $rclass = new ReflectionClass($class);
+        $rclass     = new ReflectionClass($class);
         $definition = implode("", array_slice(file($rclass->getFileName()), $rclass->getStartLine()-1, 1));
 
-        $code = "\n".$definition."\n....\n\n";
+        $code       = "\n".$definition."\n....\n\n";
 
         if (!is_array($methods))
             $methods = array($methods);
 
-        foreach ($methods as $method) {
-            $method = new ReflectionMethod($class, $method);
-            $filename = $method->getFileName();
+        foreach ($methods as $method)
+        {
+            $method     = new ReflectionMethod($class, $method);
+            $filename   = $method->getFileName();
             $start_line = $method->getStartLine()-1;
-            $end_line = $method->getEndLine();
-            $length = $end_line - $start_line;
-            $source = file($filename);
-            $content = implode("", array_slice($source, $start_line, $length));
+            $end_line   = $method->getEndLine();
+            $length     = $end_line - $start_line;
+            $source     = file($filename);
+            $content    = implode("", array_slice($source, $start_line, $length));
 
             $code .= $content."\n\n";
         }
