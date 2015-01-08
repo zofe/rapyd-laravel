@@ -4,14 +4,13 @@ use Illuminate\Support\Facades\Request;
 
 class Url
 {
-
     public $url;
-    protected $semantic = array(
-        'pag', 'orderby',
-        'show', 'modify',
-        'create', 'insert',
-        'update', 'delete',
-        'process');
+
+    protected $semantic = array( 'pag'    , 'orderby',
+                                 'show'   , 'modify' ,
+                                 'create' , 'insert' ,
+                                 'update' , 'delete' ,
+                                 'process');
 
     public static function unparse_str($array)
     {
@@ -28,19 +27,23 @@ class Url
     public function get()
     {
         Rapyd::getContainer('url')->to($this->current());
+
         if ($this->url == '') {
             return $this->current();
         } else {
-            $url = $this->url;
+            $url       = $this->url ;
             $this->url = '';
 
             return $url;
         }
     }
 
-    public function current($uri=false)
+    public function current($uri = false)
     {
-        if ($uri) return Request::url();
+        if ($uri) {
+            return Request::url();
+        }
+
         return Request::fullUrl();
     }
 
@@ -49,6 +52,7 @@ class Url
         if ($this->url == '') {
             $this->url = $this->current();
         }
+
         parse_str(parse_url($this->url, PHP_URL_QUERY), $params);
 
         return $params;
@@ -56,16 +60,19 @@ class Url
 
     public function append($key, $value)
     {
-        $url = $this->get();
+        $url      = $this->get();
         $qs_array = array();
+
         if (strpos($url, '?') !== false) {
-            $qs = substr($url, strpos($url, '?') + 1);
-            $url = substr($url, 0, strpos($url, '?'));
+            $qs  = substr( $url, strpos($url, '?') + 1 );
+            $url = substr( $url, 0, strpos($url, '?' )) ;
+
             parse_str($qs, $qs_array);
         }
+
         $qs_array[$key] = $value;
-        $query_string = self::unparse_str($qs_array);
-        $this->url = $url . $query_string;
+        $query_string   = self::unparse_str($qs_array);
+        $this->url      = $url . $query_string;
 
         return $this;
     }
@@ -73,14 +80,17 @@ class Url
     public function remove($keys)
     {
         $qs_array = array();
-        $url = $this->get();
+        $url      = $this->get();
+
         if (strpos($url, '?') === false) {
             $this->url = $url;
 
             return $this;
         }
-        $qs = substr($url, strpos($url, '?') + 1);
-        $url = substr($url, 0, strpos($url, '?'));
+
+        $qs  = substr( $url, strpos($url, '?') + 1 );
+        $url = substr( $url, 0, strpos($url, '?') ) ;
+
         parse_str($qs, $qs_array);
 
         if (!is_array($keys)) {
@@ -89,14 +99,14 @@ class Url
 
                 return $this;
             }
+
             $keys = array($keys);
         }
         foreach ($keys as $key) {
             unset($qs_array[$key]);
         }
         $query_string = self::unparse_str($qs_array);
-
-        $this->url = $url . $query_string;
+        $this->url    = $url . $query_string;
 
         return $this;
     }
@@ -104,11 +114,12 @@ class Url
     public function removeAll($cid = null)
     {
         $semantic = array_keys($this->semantic);
-        if (isset($cid)) {
 
+        if (isset($cid)) {
             foreach ($semantic as $key) {
                 $keys[] = $key . $cid;
             }
+
             $semantic = $keys;
         }
 
@@ -118,34 +129,39 @@ class Url
     public function replace($key, $newkey)
     {
         $qs_array = array();
-        $url = $this->get();
+        $url      = $this->get();
+
         if (strpos($url, '?') !== false) {
-            $qs = substr($url, strpos($url, '?') + 1);
-            $url = substr($url, 0, strpos($url, '?'));
+            $qs  = substr($url, strpos($url, '?') + 1);
+            $url = substr($url, 0, strpos($url, '?')) ;
+
             parse_str($qs, $qs_array);
         }
+
         if (isset($qs_array[$key])) {
             $qs_array[$newkey] = $qs_array[$key];
             unset($qs_array[$key]);
         }
+
         $query_string = self::unparse_str($qs_array);
-        $this->url = $url . $query_string;
+        $this->url    = $url . $query_string;
 
         return $this;
     }
 
     public function value($key, $default = false)
     {
-        if (strpos($key, '|')) {
+        if ( strpos($key, '|') ) {
             $keys = explode('|', $key);
             foreach ($keys as $k) {
                 $v = $this->value($k, $default);
-                if ($v != $default)
+                if ($v != $default) {
                     return $v;
-            }
+                }
+            }//foreach
 
             return $default;
-        }
+        }//if
 
         parse_str(parse_url($this->current(), PHP_URL_QUERY), $params);
         if (strpos($key, '.')) {

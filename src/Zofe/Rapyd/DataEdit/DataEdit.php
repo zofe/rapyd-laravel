@@ -242,7 +242,7 @@ class DataEdit extends DataForm
 
     /**
      * just an alias for getForm()
-     * @param string $view 
+     * @param  string $view
      * @return string the form output
      */
     public function getEdit($view = '')
