@@ -21,7 +21,7 @@ class RapydServiceProvider extends ServiceProvider
     {
         $this->package('zofe/rapyd', 'rapyd');
         include __DIR__ . '/../../routes.php';
-        include __DIR__ . '/../../macro.php' ;
+        include __DIR__ . '/../../macro.php';
     }
 
     /**

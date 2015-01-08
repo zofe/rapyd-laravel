@@ -64,8 +64,8 @@ class DataForm extends Widget
 
     public $model;
     public $model_relations;
-    public $validator; 
-    
+    public $validator;
+
     public $output = "";
     public $fields = array();
     public $hash = "";
@@ -273,8 +273,7 @@ class DataForm extends Widget
                 $attributes[$field->name] = $field->label;
             }
         }
-        if (isset($this->validator))
-        {
+        if (isset($this->validator)) {
             return !$this->validator->fails();
         }
         if (isset($rules)) {
@@ -591,9 +590,9 @@ class DataForm extends Widget
      */
     public function set($field, $value = null , $insert = true, $update = true)
     {
-            
+
         if (is_array($field)) {
-            foreach( $field as $key=>$val) {
+            foreach ($field as $key=>$val) {
                 $this->set($key, $val, $insert, $update);
             }
         }
@@ -601,12 +600,12 @@ class DataForm extends Widget
         $this->add($field, '', 'auto');
         if ($insert)
             $this->field($field)->insertValue($value);
-        
+
         if ($update)
             $this->field($field)->updateValue($value);
 
     }
-    
+
     /**
      * Magic method to catch all appends
      *
@@ -623,9 +622,9 @@ class DataForm extends Widget
 
         $classname = '\Zofe\Rapyd\DataForm\Field\\'.ucfirst($name);
 
-        if (class_exists($classname))
-        {
+        if (class_exists($classname)) {
             array_push($arguments, $name);
+
             return  call_user_func_array(array($this, "add"), $arguments);
         }
     }

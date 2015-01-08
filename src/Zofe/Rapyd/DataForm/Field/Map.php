@@ -86,43 +86,43 @@ class Map extends Field
 
 //  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
   <script>
-	function initialize()
-	{
+    function initialize()
+    {
         var $latitude = document.getElementById('latitude');
         var $longitude = document.getElementById('longitude');
         var latitude = 50.715591133433854
-		var longitude = -3.53485107421875;
-		var zoom = 7;
+        var longitude = -3.53485107421875;
+        var zoom = 7;
 
-		var LatLng = new google.maps.LatLng(latitude, longitude);
+        var LatLng = new google.maps.LatLng(latitude, longitude);
 
-		var mapOptions = {
+        var mapOptions = {
             zoom: zoom,
-			center: LatLng,
-			panControl: false,
-			zoomControl: false,
-			scaleControl: true,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		}
+            center: LatLng,
+            panControl: false,
+            zoomControl: false,
+            scaleControl: true,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
 
-		var map = new google.maps.Map(document.getElementById('map'),mapOptions);
+        var map = new google.maps.Map(document.getElementById('map'),mapOptions);
 
-		var marker = new google.maps.Marker({
-			position: LatLng,
-			map: map,
-			title: 'Drag Me!',
-			draggable: true
-		});
+        var marker = new google.maps.Marker({
+            position: LatLng,
+            map: map,
+            title: 'Drag Me!',
+            draggable: true
+        });
 
-		google.maps.event.addListener(marker, 'dragend', function (marker) {
+        google.maps.event.addListener(marker, 'dragend', function (marker) {
             var latLng = marker.latLng;
             $latitude.value = latLng.lat();
             $longitude.value = latLng.lng();
         });
 
-	}
-	initialize();
-	</script>
+    }
+    initialize();
+    </script>
 
 
                 break;

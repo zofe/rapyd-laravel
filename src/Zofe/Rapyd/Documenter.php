@@ -7,20 +7,13 @@ class Documenter
 {
     public static function showCode($filepath)
     {
-        if (file_exists(app_path() ."/".$filepath)) 
-        {
+        if (file_exists(app_path() ."/".$filepath)) {
             $file = app_path() ."/".$filepath;
-        } 
-        elseif (file_exists(app_path() ."/../workbench/".$filepath)) 
-        {
+        } elseif (file_exists(app_path() ."/../workbench/".$filepath)) {
             $file = app_path() ."/../workbench/".$filepath;
-        }
-        elseif (file_exists(app_path() ."/../vendor/".$filepath)) 
-        {
+        } elseif (file_exists(app_path() ."/../vendor/".$filepath)) {
             $file = app_path() ."/../vendor/".$filepath;
-        } 
-        else 
-        {
+        } else {
             return "";
         }
 
@@ -41,8 +34,7 @@ class Documenter
         if (!is_array($methods))
             $methods = array($methods);
 
-        foreach ($methods as $method)
-        {
+        foreach ($methods as $method) {
             $method     = new ReflectionMethod($class, $method);
             $filename   = $method->getFileName();
             $start_line = $method->getStartLine()-1;

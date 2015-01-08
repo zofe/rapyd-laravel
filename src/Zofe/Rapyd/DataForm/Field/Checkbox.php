@@ -18,8 +18,7 @@ class Checkbox extends Field
     public function getValue()
     {
         parent::getValue();
-        if (\Request::isMethod('post') && !\Input::exists($this->name))
-        {
+        if (\Request::isMethod('post') && !\Input::exists($this->name)) {
             $this->value =  $this->unchecked_value;
         }
         $this->checked = (bool) ($this->value == $this->checked_value);

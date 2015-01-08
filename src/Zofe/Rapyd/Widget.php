@@ -25,7 +25,6 @@ class Widget
 
     public static $identifier = 0;
 
-
     public function __construct()
     {
         $this->url = new Url();

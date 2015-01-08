@@ -11,7 +11,6 @@ class Url
                                  'create' , 'insert' ,
                                  'update' , 'delete' ,
                                  'process');
-                                    
 
     public static function unparse_str($array)
     {
@@ -21,6 +20,7 @@ class Url
     public function set($url)
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -28,12 +28,9 @@ class Url
     {
         Rapyd::getContainer('url')->to($this->current());
 
-        if ($this->url == '') 
-        {
+        if ($this->url == '') {
             return $this->current();
-        } 
-        else 
-        {
+        } else {
             $url       = $this->url ;
             $this->url = '';
 
@@ -43,8 +40,7 @@ class Url
 
     public function current($uri = false)
     {
-        if ($uri) 
-        {
+        if ($uri) {
             return Request::url();
         }
 
@@ -53,12 +49,12 @@ class Url
 
     public function getArray()
     {
-        if ($this->url == '') 
-        {
+        if ($this->url == '') {
             $this->url = $this->current();
         }
 
         parse_str(parse_url($this->url, PHP_URL_QUERY), $params);
+
         return $params;
     }
 
@@ -67,8 +63,7 @@ class Url
         $url      = $this->get();
         $qs_array = array();
 
-        if (strpos($url, '?') !== false) 
-        {
+        if (strpos($url, '?') !== false) {
             $qs  = substr( $url, strpos($url, '?') + 1 );
             $url = substr( $url, 0, strpos($url, '?' )) ;
 
@@ -87,29 +82,27 @@ class Url
         $qs_array = array();
         $url      = $this->get();
 
-        if (strpos($url, '?') === false) 
-        {
+        if (strpos($url, '?') === false) {
             $this->url = $url;
+
             return $this;
         }
-        
+
         $qs  = substr( $url, strpos($url, '?') + 1 );
         $url = substr( $url, 0, strpos($url, '?') ) ;
 
         parse_str($qs, $qs_array);
 
-        if (!is_array($keys)) 
-        {
-            if ($keys == 'ALL') 
-            {
+        if (!is_array($keys)) {
+            if ($keys == 'ALL') {
                 $this->url = $url;
+
                 return $this;
             }
 
             $keys = array($keys);
         }
-        foreach ($keys as $key) 
-        {
+        foreach ($keys as $key) {
             unset($qs_array[$key]);
         }
         $query_string = self::unparse_str($qs_array);
@@ -121,11 +114,9 @@ class Url
     public function removeAll($cid = null)
     {
         $semantic = array_keys($this->semantic);
-        
-        if (isset($cid)) 
-        {
-            foreach ($semantic as $key) 
-            {
+
+        if (isset($cid)) {
+            foreach ($semantic as $key) {
                 $keys[] = $key . $cid;
             }
 
@@ -140,20 +131,17 @@ class Url
         $qs_array = array();
         $url      = $this->get();
 
-        if (strpos($url, '?') !== false) 
-        {
+        if (strpos($url, '?') !== false) {
             $qs  = substr($url, strpos($url, '?') + 1);
             $url = substr($url, 0, strpos($url, '?')) ;
-            
+
             parse_str($qs, $qs_array);
         }
 
-        if (isset($qs_array[$key])) 
-        {
+        if (isset($qs_array[$key])) {
             $qs_array[$newkey] = $qs_array[$key];
             unset($qs_array[$key]);
         }
-
 
         $query_string = self::unparse_str($qs_array);
         $this->url    = $url . $query_string;
@@ -163,28 +151,24 @@ class Url
 
     public function value($key, $default = false)
     {
-        if ( strpos($key, '|') ) 
-        {
+        if ( strpos($key, '|') ) {
             $keys = explode('|', $key);
-            foreach ($keys as $k) 
-            {
+            foreach ($keys as $k) {
                 $v = $this->value($k, $default);
-                if ($v != $default)
-                {
+                if ($v != $default) {
                     return $v;
                 }
             }//foreach
+
             return $default;
         }//if
 
         parse_str(parse_url($this->current(), PHP_URL_QUERY), $params);
-        if (strpos($key, '.')) 
-        {
+        if (strpos($key, '.')) {
             list($namespace, $subkey) = explode('.', $key);
+
             return (isset($params[$namespace][$key])) ? $params[$namespace][$key] : $default;
-        } 
-        else 
-        {
+        } else {
             return (isset($params[$key])) ? $params[$key] : $default;
         }
     }
