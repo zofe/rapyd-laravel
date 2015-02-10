@@ -11,8 +11,8 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-    {{ HTML::style('packages/zofe/rapyd/assets/demo/style.css') }}
-    {{ Rapyd::styles() }}
+    {!! HTML::style('packages/zofe/rapyd/assets/demo/style.css') !!}
+    {!! Rapyd::styles() !!}
 </head>
 
 <body>
@@ -44,6 +44,6 @@
 </div>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-{{ Rapyd::scripts() }}
+{!! Rapyd::scripts() !!}
 </body>
 </html>

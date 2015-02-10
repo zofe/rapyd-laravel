@@ -1,17 +1,13 @@
 <?php
 
 
-return array(
-
+return [
     /*
     |--------------------------------------------------------------------------
     | Field Class
     |--------------------------------------------------------------------------
-    |
-    |
     */
-    'field'=> array(
-        'attributes' => array('class'=>'form-control'),
-    ),
-
-);
+    'field'=> [
+        'attributes' => ['class'=>'form-control'],
+    ],
+];

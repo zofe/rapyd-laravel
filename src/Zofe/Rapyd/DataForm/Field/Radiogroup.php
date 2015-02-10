@@ -1,6 +1,6 @@
 <?php  namespace Zofe\Rapyd\DataForm\Field;
 
-use Illuminate\Support\Facades\Form;
+use Illuminate\Html\FormFacade as Form;
 
 class Radiogroup extends Field
 {

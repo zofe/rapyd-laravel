@@ -9,8 +9,8 @@
     <h1>DataForm</h1>
     <p>
 
-        {{ $form }}
-        {{ Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", "anyForm") }}
-        {{ Documenter::showCode("zofe/rapyd/src/views/demo/form.blade.php") }}
+        {!! $form !!}
+        {!! Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", "anyForm") !!}
+        {!! Documenter::showCode("zofe/rapyd/src/views/demo/form.blade.php") !!}
     </p>
 @stop
