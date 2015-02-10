@@ -2,7 +2,7 @@
 
 namespace Zofe\Rapyd\DataForm\Field;
 
-use Illuminate\Support\Facades\Form;
+use Illuminate\Html\FormFacade as Form;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\ImageManagerStatic as ImageManager;
 

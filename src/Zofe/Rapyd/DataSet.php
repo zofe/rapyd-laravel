@@ -238,9 +238,9 @@ class DataSet extends Widget
     {
         if ($this->limit) {
             if ($this->hash != '')
-                return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->links($view);
+                return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->render($view);
             else
-                return $this->paginator->appends($this->url->remove('page')->getArray())->links($view);
+                return $this->paginator->appends($this->url->remove('page')->getArray())->render($view);
         }
     }
 

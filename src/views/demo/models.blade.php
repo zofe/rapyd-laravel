@@ -12,11 +12,11 @@
 
     </p>
 
-    {{ Documenter::showCode("zofe/rapyd/src/models/Article.php") }}
-    {{ Documenter::showCode("zofe/rapyd/src/models/ArticleDetail.php") }}
-    {{ Documenter::showCode("zofe/rapyd/src/models/Author.php") }}
-    {{ Documenter::showCode("zofe/rapyd/src/models/Category.php") }}
-    {{ Documenter::showCode("zofe/rapyd/src/models/Comment.php") }}
+    {!! Documenter::showCode("zofe/rapyd/src/models/Article.php") !!}
+    {!! Documenter::showCode("zofe/rapyd/src/models/ArticleDetail.php") !!}
+    {!! Documenter::showCode("zofe/rapyd/src/models/Author.php") !!}
+    {!! Documenter::showCode("zofe/rapyd/src/models/Category.php") !!}
+    {!! Documenter::showCode("zofe/rapyd/src/models/Comment.php") !!}
 
 @stop
 

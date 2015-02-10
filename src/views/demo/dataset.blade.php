@@ -8,14 +8,14 @@
 
 <p>
 
-    @foreach ($dataset->data as $item) {{ $item['nome'] }}<br />
+    @foreach ($dataset->data as $item) {!! $item['nome'] !!}<br />
     @endforeach
     <br />
-    {{ $dataset->links() }}
+    {!! $dataset->links() !!}
     <br />
-    <a href="{{ $dataset->orderbyLink('nome', 'desc') }}">sort a-z</a>  |  <a href="{{ $dataset->orderbyLink('nome', 'asc') }}">sort z-a</a>
+    <a href="{!! $dataset->orderbyLink('nome', 'desc') !!}">sort a-z</a>  |  <a href="{!! $dataset->orderbyLink('nome', 'asc') !!}">sort z-a</a>
 
-    {{ Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", "getSet") }}
-    {{ Documentor::showCode("zofe/rapyd/src/views/rapyd/dataset.blade.php") }}
+    {!! Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", "getSet") !!}
+    {!! Documentor::showCode("zofe/rapyd/src/views/rapyd/dataset.blade.php") !!}
 </p>
 @stop

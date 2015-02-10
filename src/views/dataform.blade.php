@@ -1,12 +1,12 @@
 
 @section('df.header')
-    {{ $df->open }}
+    {!! $df->open !!}
     @include('rapyd::toolbar', array('label'=>$df->label, 'buttons_right'=>$df->button_container['TR']))
 @show
 
 @if ($df->message != '')
 @section('df.message')
-    <div class="alert alert-success">{{ $df->message}}</div>
+    <div class="alert alert-success">{!! $df->message !!}</div>
 @show
 @endif
 
@@ -20,5 +20,5 @@
 
 @section('df.footer')
     @include('rapyd::toolbar', array('buttons_left'=>$df->button_container['BL'], 'buttons_right'=>$df->button_container['BR'] ))
-    {{ $df->close }}
+    {!! $df->close !!}
 @show

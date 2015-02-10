@@ -7,7 +7,7 @@
 
     @if(Session::has('message'))
     <div class="alert alert-success">
-        {{ Session::get('message') }}
+        {!! Session::get('message') !!}
     </div>
     @endif
 
@@ -19,7 +19,7 @@
         @else
             first click on Populate Database button, then click on menu<br />
             <br />
-            {{ link_to('rapyd-demo/schema', "Populate Database", array("class"=>"btn btn-default")) }}
+            {!! link_to('rapyd-demo/schema', "Populate Database", array("class"=>"btn btn-default")) !!}
         @endif
 
         <br />

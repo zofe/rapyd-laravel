@@ -14,10 +14,10 @@
         <div class="row">
             <div class="col-sm-8">
 
-                {{ $filter->open }}
+                {!! $filter->open !!}
                     <div class="input-group custom-search-form">
 
-                         {{ $filter->field('src') }}
+                         {!! $filter->field('src') !!}
                           <span class="input-group-btn">
                               <button class="btn btn-default" type="submit">
                                   <span class="glyphicon glyphicon-search"></span>
@@ -28,23 +28,23 @@
                          </span>
 
                     </div>
-                {{ $filter->close }}
+                {!! $filter->close !!}
 
                 <br />
                 <div class="row">
 
                 @foreach ($set->data as $item)
                     <div class="col-sm-4" style="margin-bottom: 5px">
-                        <strong>{{ $item->title }}</strong><br />
-                        <em>{{ $item->author->firstname }} {{ $item->author->lastname }}</em><br />
-                        <small>{{ implode(", ", $item->categories->lists("name"))  }}</small><br />
+                        <strong>{!! $item->title !!}</strong><br />
+                        <em>{!! $item->author->firstname !!} {!! $item->author->lastname !!}</em><br />
+                        <small>{!! implode(", ", $item->categories->lists("name"))  !!}</small><br />
                     </div>
                 @endforeach
 
                 </div>
 
                 <div>
-                    {{ $set->links() }}
+                    {!! $set->links() !!}
                     <div class="pull-right">
                         <a href="/rapyd-demo/customfilter">all articles</a> |
                         <a href="/rapyd-demo/customfilter?src=jhon+doe&search=1">jhon doe articles</a> |
@@ -68,8 +68,8 @@
         </div>
     </div>
 
-    {{ Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", "getCustomfilter") }}
-    {{ Documenter::showMethod("Zofe\\Rapyd\\Models\\Article", "scopeFreesearch") }}
-    {{ Documenter::showCode("zofe/rapyd/src/views/demo/customfilter.blade.php") }}
+    {!! Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", "getCustomfilter") !!}
+    {!! Documenter::showMethod("Zofe\\Rapyd\\Models\\Article", "scopeFreesearch") !!}
+    {!! Documenter::showCode("zofe/rapyd/src/views/demo/customfilter.blade.php") !!}
 
 @stop

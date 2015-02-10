@@ -18,7 +18,7 @@ use Zofe\Rapyd\DataForm\Field\Tags;
 use Zofe\Rapyd\DataForm\Field\Text;
 use Zofe\Rapyd\DataForm\Field\Textarea;
 use Zofe\Rapyd\Widget;
-use Illuminate\Support\Facades\Form;
+use Illuminate\Html\FormFacade as Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;

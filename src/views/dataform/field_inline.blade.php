@@ -1,21 +1,21 @@
 @if ($field->type == 'hidden')
 
-    {{ $field->output }}
+    {!! $field->output !!}
 
     @if ($field->message!='')
         <span class="help-block">
             <span class="glyphicon glyphicon-warning-sign"></span>
-            {{ $field->message }}
+            {!! $field->message !!}
         </span>
     @endif
 
 @else
-    <div class="form-group{{$field->has_error}}">
+    <div class="form-group{!!$field->has_error!!}">
 
-        <label for="{{ $field->name }}" class="sr-only">{{ $field->label.$field->star }}</label>
-        <span id="div_{{ $field->name }}">
+        <label for="{!! $field->name !!}" class="sr-only">{!! $field->label.$field->star !!}</label>
+        <span id="div_{!! $field->name !!}">
 
-            {{ $field->output }}
+            {!! $field->output !!}
 
 
             @if(count($field->messages))
