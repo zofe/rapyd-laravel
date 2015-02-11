@@ -237,7 +237,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 
 To `composer.json` add:  
-`"zofe/rapyd": "1.3.*"` for 4.*, not frequently updated (should be stable)
+`"zofe/rapyd": "1.3.*"` for 4.*, not frequently updated (should be stable)  
 `"zofe/rapyd": "dev-master"` (initial support, thanks to @tiger2wander)
 
 
