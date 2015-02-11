@@ -40,7 +40,7 @@ class Select extends Field
 
             case "create":
             case "modify":
-                $output = \Form::select($this->name, $this->options, $this->value, $this->attributes) . $this->extra_output;
+                $output = Form::select($this->name, $this->options, $this->value, $this->attributes) . $this->extra_output;
                 break;
 
             case "hidden":

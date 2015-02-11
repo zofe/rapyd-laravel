@@ -44,15 +44,16 @@ class RapydServiceProvider extends ServiceProvider
     public function register()
     {
         Rapyd::setContainer($this->app);
+        
 
         $this->app->booting(function () {
             $loader  =  \Illuminate\Foundation\AliasLoader::getInstance();
             $loader->alias('Rapyd'     , 'Zofe\Rapyd\Facades\Rapyd'     );
-            $loader->alias('DataSet'   , 'Zofe\Rapyd\Facades\DataSet'   );
-            $loader->alias('DataGrid'  , 'Zofe\Rapyd\Facades\DataGrid'  );
-            $loader->alias('DataForm'  , 'Zofe\Rapyd\Facades\DataForm'  );
-            $loader->alias('DataEdit'  , 'Zofe\Rapyd\Facades\DataEdit'  );
-            $loader->alias('DataFilter', 'Zofe\Rapyd\Facades\DataFilter');
+//            $loader->alias('DataSet'   , 'Zofe\Rapyd\Facades\DataSet'   );
+//            $loader->alias('DataGrid'  , 'Zofe\Rapyd\Facades\DataGrid'  );
+//            $loader->alias('DataForm'  , 'Zofe\Rapyd\Facades\DataForm'  );
+//            $loader->alias('DataEdit'  , 'Zofe\Rapyd\Facades\DataEdit'  );
+//            $loader->alias('DataFilter', 'Zofe\Rapyd\Facades\DataFilter');
             $loader->alias('Documenter', 'Zofe\Rapyd\Facades\Documenter');
         });
     }

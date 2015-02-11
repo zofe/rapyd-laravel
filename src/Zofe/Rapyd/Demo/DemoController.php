@@ -1,7 +1,15 @@
-<?php namespace Zofe\Rapyd\Controllers;
+<?php namespace Zofe\Rapyd\Demo;
 
+
+
+#use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Request;
+
+//use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
+
+
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +24,7 @@ use Zofe\Rapyd\Models\Article;
 use Zofe\Rapyd\Models\Author;
 use Zofe\Rapyd\Models\Category;
 
-class DemoController extends \Controller
+class DemoController extends Controller
 {
     protected function setupLayout()
     {
