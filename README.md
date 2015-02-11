@@ -320,12 +320,17 @@ An easy way to work with rapyd is:
 Rapyd comes with demo (controller, models, views)  to run it just add:
 
 
-/app/routes.php
+/app/routes.php  (Laravel 4)
 ```php
 ...
 Route::controller('rapyd-demo', 'Zofe\\Rapyd\\Controllers\\DemoController');
 ```
 
+/app/Http/routes.php  (Laravel 5)
+```php
+...
+Route::controller('rapyd-demo', 'DemoController');
+```
 then go to:
 
 /rapyd-demo
