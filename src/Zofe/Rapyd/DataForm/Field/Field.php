@@ -23,6 +23,7 @@ abstract class Field extends Widget
     public $rel_other_key;
 
     public $attributes;
+    public $css_class = "form-control";
     public $output = "";
     public $visible = true;
     public $extra_output = "";
