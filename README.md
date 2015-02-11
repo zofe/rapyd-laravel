@@ -8,7 +8,7 @@ rapyd-laravel
     <img src="http://img.shields.io/packagist/dt/zofe/rapyd.svg?style=flat" style="vertical-align: text-top">
 </a>
 
-This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.  
+This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.* (we are working on 5.* too, see at bottom).  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.  
  
 Main Website: [rapyd.com](http://www.rapyd.com)  
@@ -231,7 +231,10 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 To `composer.json` add:  
 `"zofe/rapyd": "1.3.*"` for both, not frequently updated (should be stable)  
-`"zofe/rapyd": "dev-master"` for both, with latest stuffs (may be unstable)  
+
+## Install in Laravel 5.0
+
+`"zofe/rapyd": "dev-master"` (initial support, thanks to @tiger2wander)
 
 
 In `app/config/app.php` add:  
