@@ -18,8 +18,10 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
 ## important notice:
 
 dev-master switched to laravel 5  
-if you are on laravel 4 you must use 1.3.* tag (see at bottom)
+if you are on laravel 4 you must use 1.3.* tags (see at bottom)
 
+The Wiki documentation refer to Laravel 4, but changes are minimal, mainly related to Blade.  
+(you should use {!! $widget !!}  instead  {{ $widget }} and you should import namespaces for each rapyd widget in your controllers)
 
 
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
@@ -223,10 +225,19 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
    View::make('articles', compact('filter', 'grid'))
 ```
+Laravel 4
 ```php
    # articles.blade
    {{ $filter }}
    {{ $grid }}
+
+```
+Laravel 5
+```php
+   # articles.blade
+   {!! $filter !!}
+   {!! $grid !!}
+
 ```
 
 [DataFilter explained](https://github.com/zofe/rapyd-laravel/wiki/DataFilter)  
@@ -237,8 +248,8 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 
 To `composer.json` add:  
-`"zofe/rapyd": "1.3.*"` for 4.*, not frequently updated (should be stable)  
-`"zofe/rapyd": "dev-master"` (initial support, thanks to @tiger2wander)
+`"zofe/rapyd": "1.3.*"` for Laravel 4, not frequently updated (should be stable)  
+`"zofe/rapyd": "dev-master"` (initial support for Laravel 5, thanks to @tiger2wander)
 
 
 In `app/config/app.php` add:  
