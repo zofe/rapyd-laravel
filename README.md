@@ -57,8 +57,8 @@ in a view you can just write
 ```php
 
   #articles.blade.php  
-  {{ $grid }} for L4 or  
-  {!! $grid !!} for L4 or  
+  {{ $grid }} for L4   
+  {!! $grid !!} for L5  
 
 ```
 
@@ -204,8 +204,9 @@ You can directly customize form  using build() in your controller
 
 ```php
    #crud.blade.php
-  {{ $edit }} L4 or  
-  {!! $edit !!} L5
+   
+  {{ $edit }} for L4   
+  {!! $edit !!} for L5
 ```
 [DataEdit explained](https://github.com/zofe/rapyd-laravel/wiki/DataEdit)  
 
@@ -233,11 +234,11 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 ```php
    # articles.blade
    
-   //L4  
+   //for L4  
    {{ $filter }}  
    {{ $grid }}  
 
-    //L5 
+    //for L5 
    {!! $filter !!}  
    {!! $grid !!}
 
@@ -287,8 +288,8 @@ You need also to add this to your views, to let rapyd add runtime assets:
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-{{ Rapyd::head() }}  L4 or  
-{!! Rapyd::head() !!}  L5
+{{ Rapyd::head() }}  for L4   
+{!! Rapyd::head() !!}  for L5
 
 </head>
 ```
