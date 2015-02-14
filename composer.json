@@ -17,9 +17,7 @@
     },
     "autoload": {
         "classmap": [
-            "migrations",
-            "controllers",
-            "models"
+            "migrations"
         ],
         "psr-4": {
             "Zofe\\Rapyd\\": "src/"

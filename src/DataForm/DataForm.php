@@ -80,7 +80,7 @@ class DataForm extends Widget
     protected $process_url = '';
     protected $view = 'rapyd::dataform';
     protected $orientation = 'horizontal';
-    protected $form_callable = false;
+    protected $form_callable = '';
 
     public function __construct()
     {

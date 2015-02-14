@@ -25,15 +25,18 @@ class RapydServiceProvider extends ServiceProvider
         // $this->package('zofe/rapyd', 'rapyd');
         $this->loadViewsFrom(__DIR__.'/../views', 'rapyd');
 
-        // Publish a config file
+
         $this->publishes([
-            __DIR__.'/../config/config.php', config_path('rapyd.php'),
-            __DIR__.'/../public/assets/', public_path('packages/zofe/rapyd')
-        ]);
+            __DIR__.'/../public/assets' => public_path('packages/zofe/rapyd/assets')
+        ], 'assets');
+        
+        $this->publishes([
+            __DIR__.'/../config/rapyd.php' => config_path('rapyd.php'),
+        ], 'config');
 
 
         $this->mergeConfigFrom(
-            __DIR__.'/../config/config.php', 'rapyd'
+            __DIR__.'/../config/rapyd.php', 'rapyd'
         );
 
         include __DIR__ . '/routes.php';
