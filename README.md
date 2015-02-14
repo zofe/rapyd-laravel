@@ -55,8 +55,11 @@ in a controller
 in a view you can just write
 
 ```php
-  #articles.blade.php
-  {{ $grid }}
+
+  #articles.blade.php  
+  {{ $grid }} for L4 or  
+  {!! $grid !!} for L4 or  
+
 ```
 
 
@@ -201,8 +204,8 @@ You can directly customize form  using build() in your controller
 
 ```php
    #crud.blade.php
-  {{ $edit }} L4 
-  {! $edit !} L5
+  {{ $edit }} L4 or  
+  {!! $edit !!} L5
 ```
 [DataEdit explained](https://github.com/zofe/rapyd-laravel/wiki/DataEdit)  
 
@@ -226,17 +229,16 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
    View::make('articles', compact('filter', 'grid'))
 ```
-Laravel 4
-```php
-   # articles.blade
-   {{ $filter }}
-   {{ $grid }}
 
-```
-Laravel 5
 ```php
    # articles.blade
-   {!! $filter !!}
+   
+   //L4  
+   {{ $filter }}  
+   {{ $grid }}  
+
+    //L5 
+   {!! $filter !!}  
    {!! $grid !!}
 
 ```
