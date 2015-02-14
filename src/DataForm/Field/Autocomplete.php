@@ -11,7 +11,7 @@ use Zofe\Rapyd\Rapyd;
 class Autocomplete extends Field
 {
     public $type = "autocomplete";
-    public $css_class = "autocompleter typeahead";
+    public $css_class = "form-control autocompleter typeahead";
 
     public $remote;
 
