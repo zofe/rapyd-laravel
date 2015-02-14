@@ -8,23 +8,22 @@ rapyd-laravel
     <img src="http://img.shields.io/packagist/dt/zofe/rapyd.svg?style=flat" style="vertical-align: text-top">
 </a>
 
-This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4 (and 5)  
+This is a pool of presentation and editing widgets (Grids and Forms) for laravel.  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.  
   
  Main Website: [rapyd.com](http://www.rapyd.com)  
  Demo: [rapyd.com/demo](http://www.rapyd.com/demo)  
  Documentation: [Wiki](https://github.com/zofe/rapyd-laravel/wiki)  
  
+![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
+ 
 ## important notice:
 
 dev-master switched to laravel 5  
 if you are on laravel 4 you must use 1.3.* tags (see at bottom)
 
-The Wiki documentation refer to Laravel 4, but changes are minimal, mainly related to Blade.  
-(you should use {!! $widget !!}  instead  {{ $widget }} and you should import namespaces for each rapyd widget in your controllers)
-
-
-![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
+The Wiki documentation is for Laravel 4 version, but changes are minimal, mainly related to Blade.  
+(you should use {!! $widget !!}  instead  {{ $widget }} etc..
 
 
 ## DataGrid
@@ -336,18 +335,11 @@ Rapyd comes with demo (controller, models, views)  to run it just add:
 ...
 Route::controller('rapyd-demo', 'Zofe\\Rapyd\\Controllers\\DemoController');
 ```
+for Laravel 5 the route is already defined.
 
-/app/Http/routes.php  (Laravel 5)
-```php
-...
-Route::controller('rapyd-demo', 'DemoController');
-```
 then go to:
 
 /rapyd-demo
-
-or use the one that is online:  
-[http://rapyd.com/rapyd-demo](http://www.rapyd.com/rapyd-demo)
 
 
 
