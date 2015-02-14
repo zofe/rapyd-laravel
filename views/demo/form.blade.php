@@ -10,7 +10,7 @@
     <p>
 
         {!! $form !!}
-        {!! Documenter::showMethod("Zofe\\Rapyd\\Deo\\DemoController", "anyForm") !!}
+        {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "anyForm") !!}
         {!! Documenter::showCode("zofe/rapyd/views/demo/form.blade.php") !!}
     </p>
 @stop

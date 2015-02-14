@@ -9,8 +9,8 @@ class Documenter
     {
         if (file_exists(app_path() ."/".$filepath)) {
             $file = app_path() ."/".$filepath;
-        } elseif (file_exists(app_path() ."/../workbench/".$filepath)) {
-            $file = app_path() ."/../workbench/".$filepath;
+        } elseif (file_exists(app_path() ."/../packages/".$filepath)) {
+            $file = app_path() ."/../packages/".$filepath;
         } elseif (file_exists(app_path() ."/../vendor/".$filepath)) {
             $file = app_path() ."/../vendor/".$filepath;
         } else {
