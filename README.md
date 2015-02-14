@@ -253,7 +253,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 To `composer.json` add:  
 `"zofe/rapyd": "1.3.*"` for Laravel 4, not frequently updated (should be stable)  
-`"zofe/rapyd": "dev-master"` (initial support for Laravel 5, thanks to @tiger2wander)
+`"zofe/rapyd": "2.0.*"` or _dev-master_ for Laravel 5 (kudos to @tiger2wander for PR)
 
 
 In `app/config/app.php` add:  
