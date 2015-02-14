@@ -21,19 +21,22 @@ class Rapyd
      */
     public static function setContainer(Container $container)
     {
+
         static::$container = $container;
     }
 
     /**
      * Get the Container from Rapyd
      *
-     * @param  string    $make A dependency to make on the fly
+     * @param  string    $service 
      * @return Container
      */
-    public static function getContainer($make = null)
+    public static function getContainer($service = null)
     {
-        if ($make) {
-            return static::$container->make($make);
+
+        if ($service) {
+
+            return static::$container->make($service);
         }
 
         return static::$container;
@@ -80,7 +83,7 @@ class Rapyd
         return $buffer;
     }
 
-    public static function styles()
+    public static function styles($demo = false)
     {
         $buffer = "\n";
 
@@ -89,6 +92,9 @@ class Rapyd
             $buffer .= HTML::style($item);
         }
 
+        if ($demo) {
+            $buffer .= HTML::style('packages/zofe/rapyd/assets/demo/style.css'); 
+        }
         //inline styles
         if (count(self::$styles)) {
             $buffer .= sprintf("<style type=\"text/css\">\n%s\n</style>", implode("\n", self::$styles));

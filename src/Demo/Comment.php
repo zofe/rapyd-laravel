@@ -1,4 +1,4 @@
-<?php namespace Zofe\Rapyd\Models;
+<?php namespace Zofe\Rapyd\Demo;
 
 /**
  * Comment

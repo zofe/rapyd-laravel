@@ -31,6 +31,6 @@
     <p>
 
         {!! $form !!}
-        {!! Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", array("anyAdvancedform", "getAuthorlist")) !!}
+        {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", array("anyAdvancedform", "getAuthorlist")) !!}
     </p>
 @stop

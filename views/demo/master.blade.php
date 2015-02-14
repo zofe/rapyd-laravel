@@ -10,9 +10,8 @@
     <link href="http://fonts.googleapis.com/css?family=Bitter" rel="stylesheet" type="text/css" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-
-    {!! HTML::style('packages/zofe/rapyd/assets/demo/style.css') !!}
-    {!! Rapyd::styles() !!}
+    
+    {!! Rapyd::styles(true) !!}
 </head>
 
 <body>

@@ -20,9 +20,6 @@ use Zofe\Rapyd\Facades\DataForm;
 use Zofe\Rapyd\Facades\DataEdit;
 use Zofe\Rapyd\Facades\DataFilter;
 
-use Zofe\Rapyd\Models\Article;
-use Zofe\Rapyd\Models\Author;
-use Zofe\Rapyd\Models\Category;
 
 class DemoController extends Controller
 {

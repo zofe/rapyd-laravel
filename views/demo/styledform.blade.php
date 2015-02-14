@@ -29,11 +29,15 @@
                 <div class="row">
 
                     <div class="col-sm-4">
-                        {!! Form::field('title')->all() !!}
+                        Title: {!! $form->field('title') !!}
+                        <p class="bg-danger">{!! $form->field('title')->message !!}</p>
 
-                        {!! $form->render('categories.name') !!}
+                        Categories: {!! $form->field('categories.name') !!}
+                        <p class="bg-danger">{!! $form->field('categories.name')->message !!}</p>
 
-                        {!! $form->render('photo') !!}
+                        Photo: {!! $form->field('photo') !!}
+                        <p class="bg-danger">{!! $form->field('photo')->message !!}</p>
+
 
                     </div>
 
@@ -50,7 +54,7 @@
 
        </div>
 
-        {!! Documenter::showMethod("Zofe\\Rapyd\\Controllers\\TestController", array("anyStyledform")) !!}
-        {!! Documenter::showCode("zofe/rapyd/src/views/demo/test.blade.php") !!}
+        {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", array("anyStyledform")) !!}
+        {!! Documenter::showCode("zofe/rapyd/views/demo/styledform.blade.php") !!}
 
 @stop

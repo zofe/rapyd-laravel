@@ -11,8 +11,8 @@
     <p>
         {!! $filter !!}
         {!! $grid !!}
-        {!! Documenter::showMethod("Zofe\\Rapyd\\Controllers\\DemoController", "getFilter") !!}
-        {!! Documenter::showCode("zofe/rapyd/src/views/demo/filtergrid.blade.php") !!}
+        {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "getFilter") !!}
+        {!! Documenter::showCode("zofe/rapyd/views/demo/filtergrid.blade.php") !!}
     </p>
 
 @stop
