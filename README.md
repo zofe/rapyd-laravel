@@ -131,7 +131,8 @@ datagrid supports also csv output, so it can be used as "report" tool.
 
 ```php
    #article.blade.php
-  {{ $form }}
+  {{ $form }}  for L4  
+  {!! $form !!}  for L5
 ```
 
 [DataForm explained](https://github.com/zofe/rapyd-laravel/wiki/DataForm)  
@@ -200,7 +201,8 @@ You can directly customize form  using build() in your controller
 
 ```php
    #crud.blade.php
-  {{ $edit }}
+  {{ $edit }} L4 
+  {! $edit !} L5
 ```
 [DataEdit explained](https://github.com/zofe/rapyd-laravel/wiki/DataEdit)  
 
@@ -257,26 +259,21 @@ In `app/config/app.php` add:
 then run: `$ composer update zofe/rapyd`.
 
 
-## Publish & override configuration (optional)
+## Publish & override configuration and assets
 
 You can quickly publish the configuration file (to override something) 
 by running the following Artisan command.  
 
-    $ php artisan config:publish zofe/rapyd
+Laravel 4
 
-## Publish & integrate assets (needed)
-
-
-You need to publish the assets from this package.
-
+    $ php artisan config:publish zofe/rapyd  
     $ php artisan asset:publish zofe/rapyd
 
-Note: The public assets can change overtime (because of upstream changes), it is recommended to re-publish them after update.  
-Alternatively you can add the publish command in composer.json.
 
-    "post-update-cmd": [
-        "php artisan asset:publish zofe/rapyd"
-    ],
+Laravel 5
+
+    $ php artisan vendor:publish  
+    
 
 
 You need also to add this to your views, to let rapyd add runtime assets:
@@ -288,7 +285,9 @@ You need also to add this to your views, to let rapyd add runtime assets:
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-{{ Rapyd::head() }}
+{{ Rapyd::head() }}  L4 or  
+{!! Rapyd::head() !!}  L5
+
 </head>
 ```
 note: widget output is in standard with __Boostrap 3+__, and some widget need support of __JQuery 1.9+__
