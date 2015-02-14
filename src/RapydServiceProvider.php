@@ -21,11 +21,9 @@ class RapydServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        // $this->package('zofe/rapyd', 'rapyd');
         $this->loadViewsFrom(__DIR__.'/../views', 'rapyd');
-
-
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'rapyd');
+        
         $this->publishes([
             __DIR__.'/../public/assets' => public_path('packages/zofe/rapyd/assets')
         ], 'assets');
