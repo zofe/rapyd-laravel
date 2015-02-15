@@ -6,14 +6,6 @@ use Illuminate\Support\ServiceProvider;
 
 class RapydServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Bootstrap the application events.
      *
@@ -48,8 +40,10 @@ class RapydServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app = static::make($this->app);
+        $this->app->register('Illuminate\Html\HtmlServiceProvider');
         
+        Rapyd::setContainer($this->app);
+   
         $this->app->booting(function () {
             $loader  =  \Illuminate\Foundation\AliasLoader::getInstance();
             
@@ -72,36 +66,7 @@ class RapydServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        //return array('dataset', 'datagrid');
         return [];
     }
-
-    /**
-     * Create a Rapyd container and bind all needed services
-     *
-     * @param  Container $app
-     * @return Container
-     */
-    public static function make($app = null)
-    {
-        if (!$app) {
-            $app = new Container();
-        }
-        
-        //bind 'html' and 'form' from  Illuminate/html if not already binded 
-        $app->bindIf('html', function($app)
-        {
-            return new HtmlBuilder($app['url']);
-        });
-
-        $app->bindIf('form', function($app)
-        {
-            $form = new FormBuilder($app['html'], $app['url'], $app['session.store']->getToken());
-            return $form->setSessionStore($app['session.store']);
-        });
-        
-        Rapyd::setContainer($app);
-        
-        return $app;
-    }
+    
 }
