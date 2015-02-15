@@ -334,7 +334,7 @@ Rapyd comes with demo (controller, models, views)  to run it just add:
 
 /app/routes.php  (Laravel 4)
 ```php
-...
+....
 Route::controller('rapyd-demo', 'Zofe\\Rapyd\\Controllers\\DemoController');
 ```
 for Laravel 5 the route is already defined.
