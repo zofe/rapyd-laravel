@@ -3,8 +3,7 @@
 namespace Zofe\Rapyd;
 
 use Illuminate\Support\Facades\DB;
-//use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Paginator;
+use Illuminate\Pagination\Paginator;
 use Zofe\Rapyd\Exceptions\DataSetException;
 
 class DataSet extends Widget
@@ -185,7 +184,7 @@ class DataSet extends Widget
                 }
 
                 // @TODO: must be refactored
-                $this->paginator = Paginator::make($this->source, count($this->source), $this->limit ? $this->limit : 1000000);
+                $this->paginator = new Paginator($this->source, count($this->source), $this->limit ? $this->limit : 1000000);
                 //find better way
                 $this->data = array_slice($this->source, $this->paginator->getFrom() - 1, $this->limit);
                 break;
