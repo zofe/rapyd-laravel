@@ -187,9 +187,9 @@ class DataSet extends Widget
                 }
 
                 $limit = $this->limit ? $this->limit : 100000;
-                $offset = Paginator::resolveCurrentPage()*$limit;
+                $offset = (max(Paginator::resolveCurrentPage()-1,0)) * $limit;
                 $this->data = array_slice($this->source, $offset, $limit);
-                $this->paginator = new LengthAwarePaginator($this->data, count($this->source)-1, $limit, Paginator::resolveCurrentPage(),
+                $this->paginator = new LengthAwarePaginator($this->data, count($this->source), $limit, Paginator::resolveCurrentPage(),
                     ['path' => Paginator::resolveCurrentPath()]);
 
                 break;
@@ -242,9 +242,9 @@ class DataSet extends Widget
     {
         if ($this->limit) {
             if ($this->hash != '')
-                return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->render();
+                return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->render($view);
             else
-                return $this->paginator->appends($this->url->remove('page')->getArray())->render();
+                return $this->paginator->appends($this->url->remove('page')->getArray())->render($view);
         }
     }
 
