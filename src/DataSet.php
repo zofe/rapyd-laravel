@@ -2,7 +2,10 @@
 
 namespace Zofe\Rapyd;
 
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Zofe\Rapyd\Exceptions\DataSetException;
 
@@ -183,10 +186,12 @@ class DataSet extends Widget
                     }
                 }
 
-                // @TODO: must be refactored
-                $this->paginator = new Paginator($this->source, count($this->source), $this->limit ? $this->limit : 1000000);
-                //find better way
-                $this->data = array_slice($this->source, $this->paginator->getFrom() - 1, $this->limit);
+                $limit = $this->limit ? $this->limit : 100000;
+                $offset = Paginator::resolveCurrentPage()*$limit;
+                $this->data = array_slice($this->source, $offset, $limit);
+                $this->paginator = new LengthAwarePaginator($this->data, count($this->source)-1, $limit, Paginator::resolveCurrentPage(),
+                    ['path' => Paginator::resolveCurrentPath()]);
+
                 break;
 
             case "query":
@@ -237,9 +242,9 @@ class DataSet extends Widget
     {
         if ($this->limit) {
             if ($this->hash != '')
-                return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->render($view);
+                return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->render();
             else
-                return $this->paginator->appends($this->url->remove('page')->getArray())->render($view);
+                return $this->paginator->appends($this->url->remove('page')->getArray())->render();
         }
     }
 
