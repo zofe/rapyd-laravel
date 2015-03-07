@@ -18,7 +18,7 @@ class Documenter
         }
 
         $code = file_get_contents($file);
-        $code = preg_replace("#{{ Documenter::show(.*) }}#Us", '', $code);
+        $code = preg_replace("#{!! Documenter::show(.*) !!}#Us", '', $code);
         $code = highlight_string($code, true);
 
         return "<pre>\n" . $code . "\n</pre>";
