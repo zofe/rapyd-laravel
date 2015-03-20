@@ -461,11 +461,11 @@ abstract class Field extends Widget
                 return true;
             }
 
-            //if (isset($this->new_value)) {
-            $this->model->setAttribute($this->db_name, $this->new_value);
-            //} else {
-            //    $this->model->setAttribute($this->db_name, $this->value);
-            //}
+            if (isset($this->new_value)) {
+                $this->model->setAttribute($this->db_name, $this->new_value);
+            } else {
+                $this->model->setAttribute($this->db_name, $this->value);
+            }
             if ($save) {
                 return $this->model->save();
             }
