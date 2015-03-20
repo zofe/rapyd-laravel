@@ -4,6 +4,8 @@
 
 @section('body')
 
+    @include('rapyd::demo.menu_filter')
+
     <h1>DataFilter</h1>
 
     <p>

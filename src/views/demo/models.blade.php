@@ -28,4 +28,3 @@
     @yield('body')
 
 @stop
-

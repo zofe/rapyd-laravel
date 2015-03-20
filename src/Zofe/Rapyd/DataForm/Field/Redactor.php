@@ -2,49 +2,42 @@
 
 use Illuminate\Support\Facades\Form;
 use Zofe\Rapyd\Rapyd;
-class Redactor extends Field {
-
+class Redactor extends Field
+{
   public $type = "text";
-  
+
   public function build()
   {
     $output = "";
-    $this->attributes["class"] = "form-control";
     if (parent::build() === false) return;
 
-    switch ($this->status)
-    {
+    switch ($this->status) {
       case "disabled":
       case "show":
-		  
+
 		if ($this->type =='hidden' || $this->value == "") {
           $output = "";
-		} elseif ( (!isset($this->value)) )
-        {
+		} elseif ( (!isset($this->value)) ) {
           $output = $this->layout['null_label'];
         } else {
           $output = nl2br(htmlspecialchars($this->value));
         }
-        $output = "<div class='help-block'>".$output."</div>";
+        $output = "<div class='help-block'>".$output."&nbsp;</div>";
         break;
 
       case "create":
       case "modify":
 
-
-        Rapyd::js('packages/zofe/rapyd/assets/redactor/jquery.browser.min.js');
-        Rapyd::js('packages/zofe/rapyd/assets/redactor/redactor.min.js');
-        Rapyd::css('packages/zofe/rapyd/assets/redactor/css/redactor.css');
-        $output  = Form::textarea($this->db_name, $this->value, $this->attributes);
-        $output .= Rapyd::script("
-        $(document).ready(function() {
-                 $('#".$this->name."').redactor();
-        });");
+        Rapyd::js('redactor/jquery.browser.min.js');
+        Rapyd::js('redactor/redactor.min.js');
+        Rapyd::css('redactor/css/redactor.css');
+        $output  = Form::textarea($this->name, $this->value, $this->attributes);
+        Rapyd::script("$('#".$this->name."').redactor();");
 
         break;
 
       case "hidden":
-        $output = Form::hidden($this->db_name, $this->value);
+        $output = Form::hidden($this->name, $this->value);
         break;
 
       default:;

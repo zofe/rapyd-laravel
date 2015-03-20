@@ -6,10 +6,11 @@
 class ArticleDetail extends \Eloquent
 {
 
-	protected $table = 'demo_article_detail';
-    protected $primaryKey = 'detail_id';
+    protected $table = 'demo_article_detail';
+    public $timestamps = false;
 
-    public function article() {
+    public function article()
+    {
         return $this->belongsTo('Zofe\Rapyd\Models\Article', 'article_id');
     }
 

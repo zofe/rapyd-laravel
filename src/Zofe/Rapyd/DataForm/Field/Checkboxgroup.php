@@ -13,6 +13,7 @@ class Checkboxgroup extends Field
     public $css_class = "checkbox";
     public $checked_value = 1;
     public $unchecked_value = 0;
+    public $clause = "wherein";
 
     public function getValue()
     {
@@ -39,7 +40,6 @@ class Checkboxgroup extends Field
         unset($this->attributes['id']);
         if (parent::build() === false) return;
 
-
         switch ($this->status) {
             case "disabled":
             case "show":
@@ -48,6 +48,7 @@ class Checkboxgroup extends Field
                 } else {
                     $output = $this->description;
                 }
+                $output = "<div class='help-block'>".$output."&nbsp;</div>";
                 break;
 
             case "create":
@@ -55,7 +56,7 @@ class Checkboxgroup extends Field
 
                 //dd($this->options, $this->values);
                 foreach ($this->options as $val => $label) {
-                    
+
                     $this->checked = in_array($val, $this->values);
 
                     //echo ((int)$this->checked)."<br />";
@@ -73,6 +74,5 @@ class Checkboxgroup extends Field
         }
         $this->output = $output;
     }
-
 
 }

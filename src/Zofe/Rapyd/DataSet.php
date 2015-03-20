@@ -36,7 +36,6 @@ class DataSet extends Widget
     protected $orderby_uri_asc;
     protected $orderby_uri_desc;
 
-
     /**
      * @param $source
      *
@@ -44,7 +43,7 @@ class DataSet extends Widget
      */
     public static function source($source)
     {
-        $ins = new static;
+        $ins = new static();
         $ins->source = $source;
 
         //inherit cid from datafilter
@@ -62,6 +61,7 @@ class DataSet extends Widget
     protected function table($table)
     {
         $this->query = DB::table($table);
+
         return $this->query;
     }
 
@@ -74,36 +74,36 @@ class DataSet extends Widget
     public function orderbyLink($field, $dir = "asc")
     {
         $url = ($dir == "asc") ? $this->orderby_uri_asc : $this->orderby_uri_desc;
+
         return str_replace('-field-', $field, $url);
     }
 
     public function orderBy($field, $direction="asc")
     {
         $this->orderby = array($field, $direction);
+
         return $this;
     }
 
     public function onOrderby($field, $direction="")
     {
         $orderby = $this->url->value("ord" . $this->cid);
-        if ($orderby){
+        if ($orderby) {
             $dir = ($orderby[0] === "-") ? "desc" : "asc";
-            if (ltrim($orderby,'-') == $field)
-            {
+            if (ltrim($orderby,'-') == $field) {
                 return ($direction == "" || $dir == $direction) ? true : false;
             }
 
-        }  else {
-            if (count($this->orderby) && ($this->orderby[0] == $field)){
+        } else {
+            if (count($this->orderby) && ($this->orderby[0] == $field)) {
                 $dir = $this->orderby[1];
+
                 return ($direction == "" || $dir == $direction) ? true : false;
             }
         }
 
         return false;
     }
-
-
 
     /**
      * @param $items
@@ -113,6 +113,7 @@ class DataSet extends Widget
     public function paginate($items)
     {
         $this->limit = $items;
+
         return $this;
     }
 
@@ -136,7 +137,6 @@ class DataSet extends Widget
             $this->type = "model";
             $this->query = $this->source;
 
-
         } elseif ( is_a($this->source, "\Zofe\Rapyd\DataFilter\DataFilter")) {
            $this->type = "model";
            $this->query = $this->source->query;
@@ -155,13 +155,10 @@ class DataSet extends Widget
             throw new DataSetException(' "source" must be a table name, an eloquent model or an eloquent builder. you passed: ' . get_class($this->source));
         }
 
-
-
         //build orderby urls
         $this->orderby_uri_asc = $this->url->remove('page' . $this->cid)->remove('reset' . $this->cid)->append('ord' . $this->cid, "-field-")->get() . $this->hash;
 
         $this->orderby_uri_desc = $this->url->remove('page' . $this->cid)->remove('reset' . $this->cid)->append('ord' . $this->cid, "--field-")->get() . $this->hash;
-
 
         //detect orderby
         $orderby = $this->url->value("ord" . $this->cid);
@@ -190,7 +187,7 @@ class DataSet extends Widget
 
                 // @TODO: must be refactored
                 $this->paginator = Paginator::make($this->source, count($this->source), $this->limit ? $this->limit : 1000000);
-                //find better way 
+                //find better way
                 $this->data = array_slice($this->source, $this->paginator->getFrom() - 1, $this->limit);
                 break;
 
@@ -209,9 +206,9 @@ class DataSet extends Widget
                     $this->data = $this->query->get();
                 }
 
-
                 break;
         }
+
         return $this;
     }
 
@@ -221,6 +218,7 @@ class DataSet extends Widget
     public function getSet()
     {
         $this->build();
+
         return $this;
     }
 

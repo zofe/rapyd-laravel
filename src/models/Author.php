@@ -1,27 +1,28 @@
 <?php namespace Zofe\Rapyd\Models;
 
-
 /**
  * Author
  */
 class Author extends \Eloquent
 {
 
-	protected $table = 'demo_users';
-    protected $primaryKey = 'user_id';
+    protected $table = 'demo_users';
 
     protected $appends = array('fullname');
-    
-    public function articles() {
+
+    public function articles()
+    {
         return $this->hasMany('Zofe\Rapyd\Models\Article');
     }
 
-    public function comments() {
+    public function comments()
+    {
         return $this->hasMany('Zofe\Rapyd\Models\Comment');
     }
 
-    public function getFullnameAttribute() {
-        return $this->attributes['fullname'] = $this->firstname ." ". $this->lastname;
+    public function getFullnameAttribute($value)
+    {
+        return $this->firstname ." ". $this->lastname;
     }
-    
+
 }

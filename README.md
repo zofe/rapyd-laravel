@@ -1,70 +1,28 @@
 rapyd-laravel
 =============
 
+<a href="https://packagist.org/packages/zofe/rapyd">
+    <img src="http://img.shields.io/packagist/v/zofe/rapyd.svg?style=flat" style="vertical-align: text-top">
+</a>
+<a href="https://packagist.org/packages/zofe/rapyd">
+    <img src="http://img.shields.io/packagist/dt/zofe/rapyd.svg?style=flat" style="vertical-align: text-top">
+</a>
+
 This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.  
+ 
 Main Website: [rapyd.com](http://www.rapyd.com)  
-Demo: [rapyd.com/demo](http://www.rapyd.com/demo)
+Demo: [rapyd.com/demo](http://www.rapyd.com/demo)  
+Documentation: [Wiki](https://github.com/zofe/rapyd-laravel/wiki)  
 
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
-
-## DataSet
-
-DataSet can paginate results starting from query, eloquent collection or multidimensional array.  
-It add the ability to order result and keep persistence of all params in query string.
-
-i.e.:
-```
-/dataset/uri?page=2&ord=-name   will get page 2 order by "name" descending
-/dataset/uri?page=3&ord=name&other=xx  will get page 3 order by "name" and keeping "other=xx" 
-```
-
-in a controller 
-
-```php
-   //using table name
-   $dataset = DataSet::source("tablename")->paginate(10)->getSet();
-
-   //or using query
-   $dataset = DataSet::source(DB::table('users')->select('name', 'email'))->paginate(10)->getSet();
-
-   //or using eloquent model or eloquent builder 
-   $dataset = DataSet::source(new Article)->paginate(10)->getSet();
-   $dataset = DataSet::source(Article::with('author'))->paginate(10)->getSet();
-
-   //or using array
-   $dataset = DataSet::source($multidimensional_array)->paginate(10)->getSet();
-```
-
-in a view you can use
-
-```php
-<p>
-    //cycle
-    @foreach ($dataset->data as $item)
-
-        //field
-        {{ $item->title }}<br />
-        //field from relation
-        {{ $item->author->name }}<br />
-
-    @endforeach
-
-    //pagination links
-    {{ $dataset->links() }} <br />
-
-    //sort link
-    {{ $dataset->orderbyLink('title', 'asc') }} <br />
-</p>
-```
-
 
 
 ## DataGrid
 
-DataGrid extend DataSet to make data-grid output with few lines of fluent code.  
+DataGrid extend [DataSet](https://github.com/zofe/rapyd-laravel/wiki/DataSet) to make data-grid output with few lines of fluent code.  
 It build a bootstrap striped table, with pagination at bottom and order-by links on table header.
-It support also  blade syntax inline. 
+It support also blade syntax, filters, closures etc..
 
 in a controller 
 
@@ -72,17 +30,16 @@ in a controller
    $grid = DataGrid::source(Article::with('author'));  //same source types of DataSet
    
    $grid->add('title','Title', true); //field name, label, sortable
-   $grid->add('author.firstname','Body'); //relation.fieldname 
+   $grid->add('author.fullname','author'); //relation.fieldname 
    $grid->add('{{ substr($body,0,20) }}...','Body'); //blade syntax with main field
    $grid->add('{{ $author->firstname }}','Author'); //blade syntax with related field
-   $grid->edit('/dataedit/uri', 'Edit','modify|delete'); //shortcut to link DataEdit actions
+   $grid->add('body|strip_tags|substr[0,20]','Body'); //filter (similar to twig syntax)
+   $grid->add('body','Body')->filter('strip_tags|substr[0,20]'); //another way to filter
+   $grid->edit('/articles/edit', 'Edit','modify|delete'); //shortcut to link DataEdit actions
+   $grid->link('/articles/edit',"Add New", "TR");  //add button
    $grid->orderBy('article_id','desc'); //default orderby
    $grid->paginate(10); //pagination
 
-   View::make('articles', array('grid'=>$grid->getGrid()))
-
-   //since we use also __toString() you can do..
-   ...
    View::make('articles', compact('grid'))
 
 ```
@@ -100,17 +57,32 @@ styling a datagrid
 ```php
    ...
    $grid->add('title','Title', true)->style("width:100px"); //adding style to th
-   $grid->add('body','Body')->attributes(array("class"=>"custom_column")); //adding class to a th
+   $grid->add('body','Body')->attr("class","custom_column"); //adding class to a th
    ...
     //row and cell manipulation via closure
     $grid->row(function ($row) {
-       if ($row->cells[0]->value > 15) {
-           $row->cells[0]->style("font-weight:bold");
-           $row->style("color:#f00");
+       if ($row->cell('public')->value < 1) {
+           $row->cell('title')->style("color:Gray");
+           $row->style("background-color:#CCFF66");
        }  
     });
     ...
 ```
+
+datagrid supports also csv output, so it can be used as "report" tool.
+
+```php
+   ...
+   $grid->add('title','Title');
+   $grid->add('body','Body')
+   ...
+   $grid->buildCSV();  //  force download 
+   $grid->buildCSV('export_articles', 'Y-m-d.His');  // force download with custom stamp
+   $grid->buildCSV('uploads/filename', 'Y-m-d');  // write on file 
+    ...
+```
+
+
 
 ## DataForm
 
@@ -128,14 +100,18 @@ styling a datagrid
    $form->add('title','Title', 'text'); //field name, label, type
    $form->add('body','Body', 'textarea')->rule('required'); //validation
 
-   //you can also use shorthand methods, add{Type}(...
-   $form->addText('title','Title'); //field name, label
-   $form->addTextarea('body','Body')->rule('required');
-
-   //then a submit button
+   //some enhanced field (images, wysiwyg, autocomplete, etc..):
+   $form->add('photo','Photo', 'image')->move('uploads/images/')->preview(80,80);
+   $form->add('body','Body', 'redactor'); //wysiwyg editor
+   $form->add('author.name','Author','autocomplete')->search(array('firstname','lastname'));
+   $form->add('categories.name','Categories','tags'); //tags field
+ 
+   //you can also use now the smart syntax for all fields: 
+   $form->text('title','Title'); //field name, label
+   $form->textarea('body','Body')->rule('required'); //validation
+   ...
+ 
    $form->submit('Save');
-
-   //at the end you can use closure to add stuffs or redirect after save
    $form->saved(function() use ($form)
    {
         $form->message("ok record saved");
@@ -150,7 +126,39 @@ styling a datagrid
   {{ $form }}
 ```
 
-note: DataForm can also work without entity, just as Form builder, use __DataForm::create()__ instead of DataForm::source in this case
+[DataForm explained](https://github.com/zofe/rapyd-laravel/wiki/DataForm)  
+
+ 
+### customize form in view
+
+You can directly customize form  using build() in your controller
+
+ ```php
+     ...
+     $form->build();
+     View::make('article', compact('form'))
+ ```
+ then in the view you can use something like this:
+ 
+```php
+   #article.blade.php
+    {{ $form->header }}
+
+        {{ $form->message }} <br />
+
+        @if(!$form->message)
+        
+            Title:  {{ $form->field('title') }}<br /> 
+            Body:  {{ $form->field('body') }}
+            ...
+            
+        @endif
+
+    {{ $form->footer }}
+```
+[custom form layout explained](https://github.com/zofe/rapyd-laravel/wiki/Custom-Form-Layout)  
+[custom form layout demo](http://www.rapyd.com/rapyd-demo/styledform)  
+
 
 ## DataEdit
   DataEdit extends DataForm, it's a full CRUD application for given Entity.  
@@ -169,9 +177,15 @@ note: DataForm can also work without entity, just as Form builder, use __DataFor
 ```php
    //simple crud for Article entity
    $edit = DataEdit::source(new Article);
+   $edit->link("article/list","Articles", "TR")->back();
    $edit->add('title','Title', 'text')->rule('required');
    $edit->add('body','Body','textarea')->rule('required');
-   $edit->add('photo','Photo', 'file')->rule('image')->move('uploads/');
+   $edit->add('author.name','Author','autocomplete')->search(array('firstname','lastname'));
+   
+   //you can also use now the smart syntax for all fields: 
+   $edit->textarea('title','Title'); 
+   $edit->autocomplete('author.name','Author')->search(array('firstname','lastname'));
+   
    return $edit->view('crud', compact('edit'));
 
 ```
@@ -180,8 +194,8 @@ note: DataForm can also work without entity, just as Form builder, use __DataFor
    #crud.blade.php
   {{ $edit }}
 ```
+[DataEdit explained](https://github.com/zofe/rapyd-laravel/wiki/DataEdit)  
 
-note: we use _$edit->view_  method  instead _View::make_ for a reason: DataEdit must manage  redirects. With other widgets you should use View facade as default.    
 
 ## DataFilter
 DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by default using 'like' operator).   
@@ -190,6 +204,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 ```php
    $filter = DataFilter::source(new Article);
+   $filter->attributes(array('class'=>'form-inline'));
    $filter->add('title','Title', 'text');
    $filter->submit('search');
    $filter->reset('reset');
@@ -206,13 +221,17 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    {{ $filter }}
    {{ $grid }}
 ```
+
+[DataFilter explained](https://github.com/zofe/rapyd-laravel/wiki/DataFilter)  
+[Custom layout and custom query scope](http://www.rapyd.com/rapyd-demo/customfilter) 
+
+
 ## Install in Laravel 4.1 & 4.2
 
 
 To `composer.json` add:  
-`"zofe/rapyd": "1.1.*"` for 4.1 or  
-`"zofe/rapyd": "1.2.*"` for 4.2 or  
-`"zofe/rapyd": "dev-master"` for 4.1, with latest stuffs (may be unstable)  
+`"zofe/rapyd": "1.3.*"` for both, not frequently updated (should be stable)  
+`"zofe/rapyd": "dev-master"` for both, with latest stuffs (may be unstable)  
 
 
 In `app/config/app.php` add:  
@@ -221,8 +240,14 @@ In `app/config/app.php` add:
 then run: `$ composer update zofe/rapyd`.
 
 
+## Publish & override configuration (optional)
 
-## Publish & integrate assets
+You can quickly publish the configuration file (to override something) 
+by running the following Artisan command.  
+
+    $ php artisan config:publish zofe/rapyd
+
+## Publish & integrate assets (needed)
 
 
 You need to publish the assets from this package.
@@ -239,18 +264,35 @@ Alternatively you can add the publish command in composer.json.
 
 You need also to add this to your views, to let rapyd add runtime assets:
 
-```php
+```html
 <head>
-  ...
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+...
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-   {{ Rapyd::head() }}
+{{ Rapyd::head() }}
 </head>
 ```
 note: widget output is in standard with __Boostrap 3+__, and some widget need support of __JQuery 1.9+__
 so be sure to include dependencies as above
+
+A better choice is to split css and javascipts and move javascript at bottom, just before body to speedup the page,
+you can do this with:
+
+```html
+<head>
+  ...
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+{{ Rapyd::styles() }}
+</head>
+....
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+   {{ Rapyd::scripts() }}
+</body>
+```
 
 
 
@@ -264,7 +306,7 @@ Ok so you need a DataGrid and DataEdit.
 You can build widgets where you want (even multiple widgets on same route).
 An easy way to work with rapyd is:
   * make a route to a controller for each entity you need to manage
-  * make the entity controller with one method for each widget (one for a datagrid and one for a dataedit)
+  * make the controller with one method for each widget (i.e.: one for a datagrid and one for a dataedit)
   * make an empty view, include bootstrap and display content that rapyd will build for you
 
 
@@ -290,4 +332,4 @@ or use the one that is online:
 
 Rapyd is licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
-If Rapyd saves you time, please consider [tipping via gittip](https://www.gittip.com/zofe)
+If Rapyd saves you time, please __[support Rapyd](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QJFERQGP4ZB6A)__

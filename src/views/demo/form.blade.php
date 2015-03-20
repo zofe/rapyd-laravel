@@ -4,6 +4,8 @@
 
 @section('body')
 
+    @include('rapyd::demo.menu_form')
+
     <h1>DataForm</h1>
     <p>
 

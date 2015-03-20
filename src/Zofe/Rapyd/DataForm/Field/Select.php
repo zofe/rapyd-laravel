@@ -9,7 +9,7 @@ class Select extends Field
     public $description = "";
     public $clause = "where";
 
-    function getValue()
+    public function getValue()
     {
         parent::getValue();
         foreach ($this->options as $value => $description) {
@@ -19,12 +19,10 @@ class Select extends Field
         }
     }
 
-    function build()
+    public function build()
     {
         $output = "";
-        if (!isset($this->style) AND !isset($this->attributes['style'])) {
-            $this->style = "width:290px;";
-        }
+
         unset($this->attributes['type'], $this->attributes['size']);
         if (parent::build() === false)
             return;
@@ -37,7 +35,7 @@ class Select extends Field
                 } else {
                     $output = $this->description;
                 }
-                $output = "<div class='help-block'>".$output."</div>";
+                $output = "<div class='help-block'>".$output."&nbsp;</div>";
                 break;
 
             case "create":

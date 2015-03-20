@@ -9,6 +9,3 @@
 @if (in_array("delete", $actions))
     <a class="text-danger" title="@lang('rapyd::rapyd.delete')" href="{{ $uri }}?delete={{ $id }}"><span class="glyphicon glyphicon-trash"> </span></a>
 @endif
-
-
-

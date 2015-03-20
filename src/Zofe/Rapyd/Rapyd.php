@@ -2,6 +2,7 @@
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\HTML;
+use Illuminate\Support\Facades\Input;
 
 class Rapyd
 {
@@ -9,6 +10,9 @@ class Rapyd
     protected static $container;
     protected static $js = array();
     protected static $css = array();
+    protected static $scripts = array();
+    protected static $styles = array();
+    protected static $form;
 
     /**
      * Bind a Container to Rapyd
@@ -23,7 +27,7 @@ class Rapyd
     /**
      * Get the Container from Rapyd
      *
-     * @param string $make A dependency to make on the fly
+     * @param  string    $make A dependency to make on the fly
      * @return Container
      */
     public static function getContainer($make = null)
@@ -47,29 +51,111 @@ class Rapyd
         foreach (self::$js as $item) {
             $buffer .= HTML::script($item);
         }
+
+        //inline styles & scripts
+        if (count(self::$styles)) {
+            $buffer .= sprintf("<style type=\"text/css\">\n%s\n</style>", implode("\n", self::$styles));
+        }
+        if (count(self::$scripts)) {
+            $buffer .= sprintf("\n<script language=\"javascript\" type=\"text/javascript\">\n\$(document).ready(function () {\n\n %s \n\n});\n</script>\n", implode("\n", self::$scripts));
+        }
+
+        return $buffer;
+    }
+
+    public static function scripts()
+    {
+        $buffer = "\n";
+
+        //js links
+        foreach (self::$js as $item) {
+            $buffer .= HTML::script($item);
+        }
+
+        //inline scripts
+        if (count(self::$scripts)) {
+            $buffer .= sprintf("\n<script language=\"javascript\" type=\"text/javascript\">\n\$(document).ready(function () {\n\n %s \n\n});\n\n</script>\n", implode("\n", self::$scripts));
+        }
+
+        return $buffer;
+    }
+
+    public static function styles()
+    {
+        $buffer = "\n";
+
+        //css links
+        foreach (self::$css as $item) {
+            $buffer .= HTML::style($item);
+        }
+
+        //inline styles
+        if (count(self::$styles)) {
+            $buffer .= sprintf("<style type=\"text/css\">\n%s\n</style>", implode("\n", self::$styles));
+        }
+
         return $buffer;
     }
 
     public static function js($js)
     {
-        if (!in_array($js, self::$js))
-            self::$js[] = $js;
+        if (!in_array('packages/zofe/rapyd/assets/'.$js, self::$js))
+            self::$js[] = 'packages/zofe/rapyd/assets/'.$js;
     }
 
     public static function css($css)
     {
-        if (!in_array($css, self::$css))
-            self::$css[] = $css;
+        if (!in_array('packages/zofe/rapyd/assets/'.$css, self::$css))
+            self::$css[] = 'packages/zofe/rapyd/assets/'.$css;
     }
 
     public static function script($script)
     {
-        return sprintf("\n<script language=\"javascript\" type=\"text/javascript\">\n %s \n</script>\n", $script);
+        self::$scripts[] = $script;
     }
 
     public static function style($style)
     {
-        return sprintf("<style type=\"text/css\">\n%s\n</style>", $style);
+        self::$styles[] = $style;
     }
 
+    public static function pop_script()
+    {
+        return array_pop(self::$scripts);
+    }
+
+    public static function pop_style()
+    {
+        return array_pop(self::$styles);
+    }
+
+    public static function qs($value, $default = false)
+    {
+        if ($value == 'id' && !Input::has('id')) {
+            $value = 'show|modify|delete|do_delete|update';
+        }
+        $url = new Url();
+
+        return $url->value($value, $default);
+    }
+
+    public static function url($set = '')
+    {
+        $url = new Url();
+        if ($set != '') {
+            $url->set($set);
+        }
+
+        return $url;
+    }
+
+    public static function setForm($form)
+    {
+        static::$form = $form;
+    }
+
+    public static function getForm()
+    {
+        return static::$form;
+    }
 }

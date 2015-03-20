@@ -4,20 +4,18 @@
 
     @if (isset($label))
     <div class="pull-left">
-        {{ $label }}
+        <h2>{{ $label }}</h2>
     </div>
     @endif
     @if (isset($buttons_left) && count($buttons_left))
-    <div class="pull-left col-sm-offset-2">
-        @foreach ($buttons_left as $button)
-        {{ $button }}
+    <div class="pull-left">
+        @foreach ($buttons_left as $button) {{ $button }}
         @endforeach
     </div>
     @endif
     @if (isset($buttons_right) && count($buttons_right))
     <div class="pull-right">
-        @foreach ($buttons_right as $button)
-        {{ $button }}
+        @foreach ($buttons_right as $button) {{ $button }}
         @endforeach
     </div>
     @endif

@@ -25,7 +25,7 @@
                 @endif
              @endif
                 {{ $column->label }}
-            </th> 
+            </th>
      @endforeach
     </tr>
     </thead>
@@ -37,7 +37,7 @@
             @endforeach
         </tr>
     @endforeach
-    </tbody> 
+    </tbody>
 </table>
 
 
