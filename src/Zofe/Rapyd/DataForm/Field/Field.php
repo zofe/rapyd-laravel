@@ -46,8 +46,8 @@ abstract class Field extends Widget
     //data settings
     public $model;
     public $model_relations;
-    public $insert_value = null;
-    public $update_value = null;
+    public $insert_value = -999;
+    public $update_value = -999;
     public $show_value = null; //default value in visualization
     public $options = array();
     public $mask = null;
@@ -271,9 +271,9 @@ abstract class Field extends Widget
             }
             $this->is_refill = true;
 
-        } elseif (($this->status == "create") && ($this->insert_value != null)) {
+        } elseif (($this->status == "create") && ($this->insert_value != -999)) {
             $this->value = $this->insert_value;
-        } elseif (($this->status == "modify") && ($this->update_value != null)) {
+        } elseif (($this->status == "modify") && ($this->update_value != -999)) {
             $this->value = $this->update_value;
         } elseif (($this->status == "show") && ($this->show_value != null)) {
             $this->value = $this->show_value;
@@ -354,9 +354,9 @@ abstract class Field extends Widget
 
                 $this->new_value = HTML::xssfilter(Input::get($this->name));
             }
-        } elseif (($this->action == "insert") && ($this->insert_value != null)) {
+        } elseif (($this->action == "insert") && ($this->insert_value != -999)) {
             $this->new_value = $this->insert_value;
-        } elseif (($this->action == "update") && ($this->update_value != null)) {
+        } elseif (($this->action == "update") && ($this->update_value != -999)) {
             $this->new_value = $this->update_value;
         } else {
             $this->action = "idle";
