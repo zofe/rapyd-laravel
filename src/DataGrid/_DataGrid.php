@@ -1,21 +1,19 @@
-<?php
+<?php namespace Zofe\Rapyd\DataGrid;
 
-namespace Zofe\DataGrid;
-
-use Illuminate\Support\Str;
-#use Zofe\Rapyd\Persistence;
+use Illuminate\Support\Facades\View;
+use Zofe\Rapyd\DataSet as DataSet;
+use Zofe\Rapyd\Persistence;
 
 class DataGrid extends DataSet
 {
 
     protected $fields = array();
+    /** @var Column[]  */
     public $columns = array();
     public $headers = array();
     public $rows = array();
     public $output = "";
-    public $label = "";
     public $attributes = array("class" => "table");
-    public $button_container = array( "TR"=>array(), "BL"=>array(), "BR"=>array() );
     protected $row_callable = array();
 
     /**
@@ -35,22 +33,15 @@ class DataGrid extends DataSet
 
         return $column;
     }
-    
+
+    //todo: like "field" for DataForm, should be nice to work with "cell" as instance and "row" as collection of cells
     public function build($view = '')
     {
-        ($view == '') and $view = 'datagrid.datagrid';
+        ($view == '') and $view = 'rapyd::datagrid';
         parent::build();
-        #Persistence::save();
-        $this->buildRows();
 
-        return blade($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label));
-    }
+        Persistence::save();
 
-    /**
-     * build rows and cell array
-     */
-    protected function buildRows()
-    {
         foreach ($this->data as $tablerow) {
 
             $row = new Row($tablerow);
@@ -76,15 +67,16 @@ class DataGrid extends DataSet
             }
             $this->rows[] = $row;
         }
+
+        return \View::make($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label));
     }
-    
 
     public function buildCSV($file = '', $timestamp = '', $sanitize = true,$del = array())
     {
         $this->limit = null;
         parent::build();
 
-        $segments = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        $segments = \Request::segments();
 
         $filename = ($file != '') ? basename($file, '.csv') : end($segments);
         $filename = preg_replace('/[^0-9a-z\._-]/i', '',$filename);
@@ -144,7 +136,7 @@ class DataGrid extends DataSet
         } else {
             $output = ob_get_clean();
 
-            //return \Response::make(rtrim($output, "\n"), 200, $headers);
+            return \Response::make(rtrim($output, "\n"), 200, $headers);
         }
     }
 
@@ -206,7 +198,7 @@ class DataGrid extends DataSet
             $key = ($column->key != '') ?  $column->key : $this->key;
             $keyvalue = @$tablerow->{$key};
 
-            $value = blade('datagrid.actions', array('uri' => $column->uri, 'id' => $keyvalue, 'actions' => $column->actions));
+            $value = \View::make('rapyd::datagrid.actions', array('uri' => $column->uri, 'id' => $keyvalue, 'actions' => $column->actions));
 
         }
 
@@ -215,7 +207,7 @@ class DataGrid extends DataSet
 
     public function getGrid($view = '')
     {
-        $this->output = $this->build($view);
+        $this->output = $this->build($view)->render();
 
         return $this->output;
     }
@@ -242,11 +234,6 @@ class DataGrid extends DataSet
         return $this->add('_edit', $label)->actions($uri, explode('|', $actions))->key($key);
     }
 
-    /**
-     * get column output 
-     * @param $column_name
-     * @return \Zofe\DataGrid\Column;
-     */
     public function getColumn($column_name)
     {
         if (isset($this->columns[$column_name])) {
@@ -254,11 +241,11 @@ class DataGrid extends DataSet
         }
     }
 
-    /**
-     * ad a closure to the rows
-     * @param callable $callable
-     * @return $this
-     */
+    public function addActions($uri, $label='Edit', $actions='show|modify|delete', $key = '')
+    {
+        return $this->edit($uri, $label, $actions, $key);
+    }
+
     public function row(\Closure $callable)
     {
         $this->row_callable[] = $callable;
@@ -266,23 +253,9 @@ class DataGrid extends DataSet
         return $this;
     }
 
-    /**
-     * sanitize cell output if needed
-     * 
-     * @param $string
-     * @return mixed
-     */
     protected function sanitize($string)
     {
-        return Str::words(nl2br(htmlspecialchars($string)), 30);
+        return str_limit(nl2br(htmlspecialchars($string)), 30);
     }
 
-    /**
-     * return a attributes in string format
-     * @return string
-     */
-    public function buildAttributes()
-    {
-        return array_to_attributes($this->attributes);
-    }
 }

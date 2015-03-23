@@ -2,12 +2,9 @@
 
 namespace Zofe\Rapyd;
 
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use Zofe\Rapyd\Exceptions\DataSetException;
+use Zofe\Burp\BurpEvent;
+use Zofe\Rapyd\Helpers\Arr;
 
 class DataSet extends Widget
 {
@@ -15,17 +12,20 @@ class DataSet extends Widget
     public $source;
 
     /**
-     *
      * @var \Illuminate\Database\Query\Builder
      */
     public $query;
+    protected $valid_sources = array(
+        'Illuminate\Database\Eloquent\Model',
+        'Illuminate\Database\Eloquent\Builder',
+        'Illuminate\Database\Query\Builder');
     public $url  ;
     public $data = array();
     public $hash = '';
     public $key  = 'id';
 
     /**
-     * @var \Illuminate\Pagination\Paginator
+     //* @var \Illuminate\Pagination\Paginator
      */
     public $paginator;
 
@@ -34,51 +34,71 @@ class DataSet extends Widget
     protected $type;
     protected $limit;
     protected $orderby;
-    protected $orderby_uri_asc;
-    protected $orderby_uri_desc;
-
+    protected $page = 1;
+    
     /**
-     * @param $source
+     * Main method, set source
      *
+     * @param $source
      * @return static
      */
     public static function source($source)
     {
-        $ins         = new static();
-        $ins->source = $source;
+        $ins = new static();
+        $ins->source = $ins->fixQuery($source);
+        $ins->query = $ins->source;
 
-        //inherit cid from datafilter
-        if ($ins->source instanceof \Zofe\Rapyd\DataFilter\DataFilter) {
-            $ins->cid = $ins->source->cid;
-        }
-        //generate new component id
-        else {
-            $ins->cid = $ins->getIdentifier();
-        }
+        $ins->total_rows = $ins->getCount();
+        $ins->key = $ins->getKeyName();
 
+        //bind burp events
+        BurpEvent::listen('dataset.sort', array($ins, 'sort'));
+        BurpEvent::listen('dataset.page', array($ins, 'page'));
         return $ins;
-    }
 
-    protected function table($table)
-    {
-        $this->query = DB::table($table);
-
-        return $this->query;
     }
 
     /**
-     * @param        $field
-     * @param string $dir
+     * Sort source (quequed event by burp)
      *
-     * @return mixed
+     * @param $direction
+     * @param $field
+     */
+    public function sort($direction, $field)
+    {
+        $this->orderBy($field, $direction);
+    }
+
+    /**
+     * Set current page number (quequed event by burp)
+     *
+     * @param $page
+     */
+    public function page($page)
+    {
+        $this->page = $page;
+    }
+    
+    /**
+     * build an order by link
+     *
+     * @param string $field
+     * @param string $dir
+     * @return string
      */
     public function orderbyLink($field, $dir = "asc")
     {
-        $url = ($dir == "asc") ? $this->orderby_uri_asc : $this->orderby_uri_desc;
-
-        return str_replace('-field-', $field, $url);
+        $dir = ($dir == "asc") ? '' : '-';
+        return link_route('orderby', array($dir, $field));
     }
-
+    
+    /**
+     * setup an order by
+     *
+     * @param $field
+     * @param string $direction
+     * @return $this
+     */
     public function orderBy($field, $direction="asc")
     {
         $this->orderby = array($field, $direction);
@@ -86,146 +106,155 @@ class DataSet extends Widget
         return $this;
     }
 
-    public function onOrderby($field, $direction="")
+    /**
+     * return true if dataset is sorting by dield
+     *
+     * @param $field
+     * @param string $dir
+     * @return bool
+     */
+    public function onOrderby($field, $dir="")
     {
-        $orderby = $this->url->value("ord" . $this->cid);
-        if ($orderby) {
-            $dir = ($orderby[0] === "-") ? "desc" : "asc";
-            if (ltrim($orderby,'-') == $field) {
-                return ($direction == "" || $dir == $direction) ? true : false;
-            }
-
-        } else {
-            if (count($this->orderby) && ($this->orderby[0] == $field)) {
-                $dir = $this->orderby[1];
-
-                return ($direction == "" || $dir == $direction) ? true : false;
-            }
-        }
-
-        return false;
+        $dir = ($dir == "asc") ? '' : '-';
+        return is_route('orderby', array($dir, $field));
     }
 
     /**
-     * @param $items
+     * setup a limit
      *
+     * @param $limit
+     * @param $offset
+     */
+    protected function limit($limit, $offset)
+    {
+        $this->limit = array($limit, $offset);
+    }
+
+    /**
+     * set number of items for single page (we're using "paginate" name,
+     * like the eloquent "paginate" method on query builder)
+     *
+     * @param $items
      * @return $this
      */
     public function paginate($items)
     {
-        $this->limit = $items;
-
-        return $this;
-    }
-
-    public function build()
-    {
-        if (is_string($this->source) && strpos(" ", $this->source) === false) {
-            //tablename
-            $this->type = "query";
-            $this->query = $this->table($this->source);
-        } elseif (is_a($this->source, "\Illuminate\Database\Eloquent\Model")) {
-            $this->type = "model";
-            $this->query = $this->source;
-            $this->key = $this->source->getKeyName();
-
-        } elseif ( is_a($this->source, "\Illuminate\Database\Eloquent\Builder")) {
-            $this->type = "model";
-            $this->query = $this->source;
-            $this->key = $this->source->getModel()->getKeyName();
-
-        } elseif ( is_a($this->source, "\Illuminate\Database\Query\Builder")) {
-            $this->type = "model";
-            $this->query = $this->source;
-
-        } elseif ( is_a($this->source, "\Zofe\Rapyd\DataFilter\DataFilter")) {
-           $this->type = "model";
-           $this->query = $this->source->query;
-
-            if (is_a($this->query, "\Illuminate\Database\Eloquent\Model")) {
-                $this->key = $this->query->getKeyName();
-            } elseif ( is_a($this->query, "\Illuminate\Database\Eloquent\Builder")) {
-                $this->key = $this->query->getModel()->getKeyName();
-            }
-
-        }
-        //array
-        elseif (is_array($this->source)) {
-            $this->type = "array";
-        } else {
-            throw new DataSetException(' "source" must be a table name, an eloquent model or an eloquent builder. you passed: ' . get_class($this->source));
-        }
-
-        //build orderby urls
-        $this->orderby_uri_asc = $this->url->remove('page' . $this->cid)->remove('reset' . $this->cid)->append('ord' . $this->cid, "-field-")->get() . $this->hash;
-
-        $this->orderby_uri_desc = $this->url->remove('page' . $this->cid)->remove('reset' . $this->cid)->append('ord' . $this->cid, "--field-")->get() . $this->hash;
-
-        //detect orderby
-        $orderby = $this->url->value("ord" . $this->cid);
-        if ($orderby) {
-            $this->orderby_field = ltrim($orderby, "-");
-            $this->orderby_direction = ($orderby[0] === "-") ? "desc" : "asc";
-            $this->orderBy($this->orderby_field, $this->orderby_direction);
-        }
-
-        //build subset of data
-        switch ($this->type) {
-            case "array":
-                //orderby
-                if (isset($this->orderby)) {
-                    list($field, $direction) = $this->orderby;
-                    $column = array();
-                    foreach ($this->source as $key => $row) {
-                        $column[$key] = is_object($row) ? $row->{$field} : $row[$field];
-                    }
-                    if ($direction == "asc") {
-                        array_multisort($column, SORT_ASC, $this->source);
-                    } else {
-                        array_multisort($column, SORT_DESC, $this->source);
-                    }
-                }
-
-                $limit = $this->limit ? $this->limit : 100000;
-                $offset = (max(Paginator::resolveCurrentPage()-1,0)) * $limit;
-                $this->data = array_slice($this->source, $offset, $limit);
-                $this->paginator = new LengthAwarePaginator($this->data, count($this->source), $limit, Paginator::resolveCurrentPage(),
-                    ['path' => Paginator::resolveCurrentPath()]);
-
-                break;
-
-            case "query":
-            case "model":
-                //orderby
-
-                if (isset($this->orderby)) {
-                    $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1]);
-                }
-                //limit-offset
-                if (isset($this->limit)) {
-                    $this->paginator = $this->query->paginate($this->limit);
-                    $this->data = $this->paginator;
-                } else {
-                    $this->data = $this->query->get();
-                }
-
-                break;
-        }
-
+        $this->per_page = $items;
         return $this;
     }
 
     /**
+     * flush events, build pagination and sort items
+     * 
+     * @return $this
+     */
+    public function build()
+    {
+        BurpEvent::flush('dataset.sort');
+        BurpEvent::flush('dataset.page');
+
+        $this->paginator =  Paginator::make($this->total_rows, $this->per_page, $this->page);
+        $offset = $this->paginator->offset();
+        $this->limit($this->per_page, $offset);
+
+        if (is_array($this->source)) {
+
+            //orderby
+            if (isset($this->orderby)) {
+                list($field, $direction) = $this->orderby;
+                Arr::orderBy($this->source, $field, $direction);
+            }
+
+            //limit-offset
+            if (isset($this->limit)) {
+                $this->source = array_slice($this->source, $this->limit[1], $this->limit[0]);
+            }
+            $this->data = $this->source;
+            
+        } else {
+
+            //orderby
+            if (isset($this->orderby)) {
+                $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1]);
+            }
+
+            //limit-offset
+            if (isset($this->per_page)) {
+                $this->query = $this->query->skip($offset)->take($this->per_page);
+                
+            }
+            $this->data = $this->query->get();
+        }
+        return $this;
+    }
+
+    /**
+     * check if  source is valid, then detect items count
+     *
+     * @mixed \Exception | int
+     */
+    protected function getCount()
+    {
+        if (is_array($this->source)) {
+
+            return count($this->source);
+
+        } elseif(is_object($this->source)) {
+
+            foreach ($this->valid_sources as $valid) {
+                if (is_a($this->source, $valid)) return $this->query->count();
+            }
+
+        }
+        throw new \Exception(' "source" must be a table name, an eloquent model or an eloquent builder. you passed: ' . get_class($this->source));
+    }
+    
+    /**
+     * check if source is plain text, so a table name, and start query from that table
+     *
+     * @return $this
+     */
+    protected function fixQuery($source)
+    {
+        if (is_string($source) && strpos(" ", $source) === false) {
+            return DB::table($source);
+        }
+        return $source;
+    }
+
+    /**
+     * if possible detact key-name (to be used in datagrid)
+     *
+     * @return string
+     */
+    public function getKeyName()
+    {
+        if (is_a($this->source, '\Illuminate\Database\Eloquent\Model')) {
+            return $this->source->getKeyName();
+        }
+
+        if (is_a($this->source, '\Illuminate\Database\Eloquent\Builder')) {
+            return $this->source->getModel()->getKeyName();
+        }
+
+        return 'id';
+    }
+    
+    /**
+     * convention, widgets should have a method get{name}
+     * that exec build() an return the object
+     *
      * @return $this
      */
     public function getSet()
     {
         $this->build();
-
         return $this;
     }
 
     /**
+     * get subset of items (current page) of source
+     *
      * @return array
      */
     public function getData()
@@ -235,19 +264,19 @@ class DataSet extends Widget
 
     /**
      * @param string $view
-     *
      * @return mixed
      */
-    public function links($view = null)
+    public function links($view = 'rapyd::pagination')
     {
         if ($this->limit) {
-            if ($this->hash != '')
-                return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->render($view);
-            else
-                return $this->paginator->appends($this->url->remove('page')->getArray())->render($view);
+            return $this->paginator->links($view);
         }
     }
 
+    /**
+     * return true if pagination is needed
+     * @return bool
+     */
     public function havePagination()
     {
         return (bool) $this->limit;

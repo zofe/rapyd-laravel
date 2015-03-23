@@ -1,140 +1,178 @@
-<?php
+<?php namespace Zofe\Rapyd\DataForm;
 
-namespace Zofe\Rapyd\DataForm;
+use Zofe\Burp\BurpEvent;
+use Zofe\Rapyd\DataForm\Fields\Field;
 
-use Illuminate\Database\Eloquent\Model;
-use Zofe\Rapyd\DataForm\Field\Auto;
-use Zofe\Rapyd\DataForm\Field\Autocomplete;
-use Zofe\Rapyd\DataForm\Field\Colorpicker;
-use Zofe\Rapyd\DataForm\Field\Date;
-use Zofe\Rapyd\DataForm\Field\Field;
-use Zofe\Rapyd\DataForm\Field\File;
-use Zofe\Rapyd\DataForm\Field\Hidden;
-use Zofe\Rapyd\DataForm\Field\Password;
-use Zofe\Rapyd\DataForm\Field\Radiogroup;
-use Zofe\Rapyd\DataForm\Field\Redactor;
-use Zofe\Rapyd\DataForm\Field\Select;
-use Zofe\Rapyd\DataForm\Field\Tags;
-use Zofe\Rapyd\DataForm\Field\Text;
-use Zofe\Rapyd\DataForm\Field\Textarea;
-use Zofe\Rapyd\Widget;
-use Illuminate\Html\FormFacade as Form;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
-use Zofe\Rapyd\Rapyd;
-
-/**
- * Class DataForm
- *
- * @method Text         text        (string $name, string $label, $validation = '')
- * @method Hidden       hidden      (string $name, string $label, string $validation = '')
- * @method Password     password    (string $name, string $label, string $validation = '')
- * @method File         file        (string $name, string $label, string $validation = '')
- * @method Textarea     textarea    (string $name, string $label, string $validation = '')
- * @method Select       select      (string $name, string $label, string $validation = '')
- * @method Radiogroup   radiogroup  (string $name, string $label, string $validation = '')
- * @method Redactor     redactor    (string $name, string $label, string $validation = '')
- * @method Autocomplete autocomplete(string $name, string $label, string $validation = '')
- * @method Tags         tags        (string $name, string $label, string $validation = '')
- * @method Colorpicker  colorpicker (string $name, string $label, string $validation = '')
- * @method Date         date        (string $name, string $label, string $validation = '')
- * @method Auto         auto        (string $name, string $label, string $validation = '')
- *
- * @method Text         addText        (string $name, string $label, $validation = '')
- * @method Hidden       addHidden      (string $name, string $label, string $validation = '')
- * @method Password     addPassword    (string $name, string $label, string $validation = '')
- * @method File         addFile        (string $name, string $label, string $validation = '')
- * @method Textarea     addTextarea    (string $name, string $label, string $validation = '')
- * @method Select       addSelect      (string $name, string $label, string $validation = '')
- * @method Radiogroup   addRadiogroup  (string $name, string $label, string $validation = '')
- * @method Redactor     addRedactor    (string $name, string $label, string $validation = '')
- * @method Autocomplete addAutocomplete(string $name, string $label, string $validation = '')
- * @method Tags         addTags        (string $name, string $label, string $validation = '')
- * @method Colorpicker  addColorpicker (string $name, string $label, string $validation = '')
- * @method Date         addDate        (string $name, string $label, string $validation = '')
- * @method Auto         addAuto        (string $name, string $label, string $validation = '')
- *
- * @package Zofe\Rapyd\DataForm
- */
-class DataForm extends Widget
+class DataForm
 {
-
     public $model;
-    public $model_relations;
+    
+    
+    public $fields;
+    public $values = array();
+    
+    public $multipart = false;
+    public $output = '';
     public $validator;
 
-    public $output = "";
-    public $fields = array();
-    public $hash = "";
-    public $error = "";
+    public $process_status = "idle";
+    public $status = "edit";
+    public $action = "idle";
 
     public $open;
     public $close;
-
+    public $label;
+    public $button_container = array( "TR"=>array(), "BL"=>array(), "BR"=>array() );
+    public $message = "";
+    public $message_class = "alert alert-success"; 
+    public $rules = "";
+    public $error = "";
     protected $method = 'POST';
     protected $redirect = null;
-    protected $source;
     protected $process_url = '';
-    protected $view = 'rapyd::dataform';
     protected $orientation = 'horizontal';
-    protected $form_callable = '';
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->process_url = $this->url->append('process', 1)->get();
-        $this->model_relations = new \ArrayObject();
-    }
+    protected $form_callable = false;
+    protected $attributes = array('class' => "form-horizontal", 'role' => "form", 'method' => 'POST');
+    
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param string $type
-     * @param string $validation
+     * Main method, set source (model) or create an empty form
      *
-     * @return mixed
+     * @param $source
+     * @return static
      */
-    public function add($name, $label, $type, $validation = '')
+    public static function create($source = null)
     {
-        if (strpos($type, "\\") !== false) {
-            $field_class = $type;
-        } else {
-            $field_class = '\Zofe\Rapyd\DataForm\Field\\' .  ucfirst($type);
+        $ins = new static();
+        $ins->process_url = link_route('save');
+        $ins->fields = new FieldCollection();
+        if (is_object($source) && is_a($source, '\Illuminate\Database\Eloquent\Model')) {
+            $ins->model = $source;
+            //$ins->status = ($ins->model->exists) ? "modify" : "create";
         }
-
-        //instancing
-        if (isset($this->model)) {
-            $field_obj = new $field_class($name, $label, $this->model, $this->model_relations);
-        } else {
-            $field_obj = new $field_class($name, $label);
-        }
-
-        if (!$field_obj instanceof Field) {
-            throw new \InvalidArgumentException('Third argument («type») must point to class inherited Field class');
-        }
-
-        if ($field_obj->type == "file") {
-            $this->multipart = true;
-        }
-
-        //default group
-        if (isset($this->default_group) && !isset($field_obj->group)) {
-            $field_obj->group = $this->default_group;
-        }
-        $this->fields[$name] = $field_obj;
-
-        return $field_obj;
+        BurpEvent::listen('dataform.save', array($ins, 'save'));
+        return $ins;
     }
 
     /**
-     * remove field from list
+     * alias for create()
+     * 
+     * @param string $source
+     * @return DataForm
+     */
+    public static function source($source = '')
+    {
+        return self::create($source);
+    }
+
+    /**
+     * save data on model or just fill fields values
+     *
+     * @return bool
+     */
+    public function save()
+    {
+        $this->setFieldValues();
+        $valid = $this->isValid();
+        
+        if ($valid) {
+            $this->getFieldValues();
+            $valid = $this->saveModel();
+        }
+        
+        if ($valid) {
+            
+            $this->process_status = "success";
+            
+            //callable
+            if ($this->form_callable) {
+   
+                $callable = $this->form_callable;
+                $result = $callable($this);
+                
+                //todo: verificare se nella closure c'è un header location un redirect di laravel (e in caso, gestirlo)
+                if ($result) {
+                    return $result;
+                }
+
+            }
+            //cleanup submits if success
+            if ($this->process_status == 'success') {
+                $this->removeFieldType('submit');
+                
+            }
+        }
+        
+        //altrimenti non è valido o è fallito il salvataggio
+        $this->process_status = "error";
+    }
+    
+    /**
+     * set field values
+     *
+     * @return bool
+     */
+    protected function setFieldValues($from_model = false)
+    {
+        foreach ($this->fields as $field)
+        {
+            if ($field->default_value) {
+                $field->setValue($field->default_value);
+            }
+            if ($field->request_refill == true && is_route('save') ) {
+                $field->setValue(request_input($field->name, $field->default_value));
+                $field->is_refill = true;
+                
+            } elseif ($from_model && isset($this->model)) {
+                
+                if ($this->model->offsetExists($field->name)) {
+
+                    $field->setValue($this->model->{$field->name});
+                }
+            }
+        }
+    }
+
+    /**
+     * get field values 
+     *
+     * @return bool
+     */
+    protected function getFieldValues() {
+        foreach ($this->fields as $field)
+        {
+            $this->values[$field->name] = $field->getValue($field->name);
+        }
+    }
+
+    protected function saveModel() {
+        if (isset($this->model)) {
+
+            foreach ($this->values as $name => $value)
+            {
+                if ($this->model->offsetExists($name)) {
+                    
+                    $this->model->setAttribute($name, $value);
+                }
+
+            }
+            if ($this->model->offsetExists('created_at') || $this->model->offsetExists('created_at')) {
+                $this->model->touch();
+            }
+            return $this->model->save();
+            
+        } else {
+            return true;
+        }
+    }
+    
+    /**
+     * remove field from fields list
+     *
      * @param $fieldname
      * @return $this
      */
-    public function remove($fieldname)
+    public function removeField($fieldname)
     {
         if (isset($this->fields[$fieldname]))
             unset($this->fields[$fieldname]);
@@ -144,16 +182,13 @@ class DataForm extends Widget
 
     /**
      * remove field where type==$type from field list and button container
+     *
      * @param $type
      * @return $this
      */
-    public function removeType($type)
+    public function removeFieldType($type)
     {
-        foreach ($this->fields as $fieldname => $field) {
-            if ($field->type == $type) {
-                unset($this->fields[$fieldname]);
-            }
-        }
+        $this->fields->removeType($type);
         foreach ($this->button_container as $container => $buttons) {
             foreach ($buttons as $key=>$button) {
                 if (strpos($button, 'type="'.$type.'"')!==false) {
@@ -164,12 +199,51 @@ class DataForm extends Widget
 
         return $this;
     }
+    
+    /**
+     * get entire field output (label, output, and messages)
+     * 
+     * @param $field_name
+     * @param  array  $attributes
+     * @return string
+     */
+    public function render($field_name, array $attributes = array())
+    {
+        $field = $this->fields->get($field_name, $attributes);
+        return (is_object($field)) ? $field->all() : null;
+    }
 
     /**
+     * get field instance from fields array
+     * 
+     * @param $field_name
+     * @param  array    $attributes
+     * @return \Zofe\Rapyd\DataForm\Field $field
+     */
+    public function field($field_name, array $attributes = array())
+    {
+        return $this->fields->get($field_name, $attributes);
+    }
+    
+    /**
+     * add field to the form using name, label and type
+     * 
+     * @param $name
+     * @param $label
+     * @param $type
+     * @return mixed
+     */
+    public function add($name, $label, $type)
+    {
+        return $this->fields->add($name, $label, $type);
+    }
+    
+    /**
+     * add a submit button
+     *
      * @param string $name
      * @param string $position
      * @param array  $options
-     *
      * @return $this
      */
     public function submit($name, $position = "BL", $options = array())
@@ -179,86 +253,24 @@ class DataForm extends Widget
 
         return $this;
     }
-
+    
     /**
-     * @param string $name
-     * @param string $position
-     * @param array  $options
+     * Magic method to catch all appends using $form->{fieldtype}(...)
      *
-     * @return $this
+     * @param  string $name
+     * @param  Array $arguments
+     * @return mixed
      */
-    public function reset($name = "", $position = "BL")
+    public function __call($name, $arguments)
     {
-        if ($name == "") $name = trans('rapyd::rapyd.reset');
-        $this->link($this->url->current(true), $name, $position);
-
-        return $this;
-    }
-
-    /**
-     * get field instance from fields array
-     * @param $field_name
-     * @param  array                      $ttributes
-     * @return \Zofe\Rapyd\DataForm\Field $field
-     */
-    public function field($field_name, array $attributes = array())
-    {
-        if (isset($this->fields[$field_name])) {
-            $field = $this->fields[$field_name];
-            if (count($attributes)) {
-                $field->attributes($attributes);
-                $field->build();
-            }
-
-            return $field;
+        if (count($arguments) === 2) {
+            return $this->add($arguments[0], $arguments[1], $name);
         }
     }
 
     /**
-     * get entire field output (label, output, and messages)
-     * @param $field_name
-     * @param  array  $ttributes
-     * @return string
-     */
-    public function render($field_name, array $attributes = array())
-    {
-        $field = $this->field($field_name, $attributes);
-
-        return $field->all();
-    }
-
-    /**
-     * @return static
-     */
-    public static function create()
-    {
-        $ins = new static();
-        $ins->cid = $ins->getIdentifier();
-        $ins->sniffStatus();
-        $ins->sniffAction();
-
-        return $ins;
-    }
-
-    /**
-     * @param \Illuminate\Database\Eloquent\Model $source
+     * field validation, check all validation rules
      *
-     * @return static
-     */
-    public static function source($source = '')
-    {
-        $ins = new static();
-        if (is_object($source) && is_a($source, "\Illuminate\Database\Eloquent\Model")) {
-            $ins->model = $source;
-        }
-        $ins->cid = $ins->getIdentifier();
-        $ins->sniffStatus();
-        $ins->sniffAction();
-
-        return $ins;
-    }
-
-    /**
      * @return bool
      */
     protected function isValid()
@@ -266,19 +278,22 @@ class DataForm extends Widget
         if ($this->error != "") {
             return false;
         }
+
+        $rules = array();
+        $messages = array();
+        $attributes = array();
         foreach ($this->fields as $field) {
-            $field->action = $this->action;
+            //$field->action = $this->action;
             if (isset($field->rule)) {
                 $rules[$field->name] = $field->rule;
+                $messages[$field->name] = null;
                 $attributes[$field->name] = $field->label;
             }
         }
-        if (isset($this->validator)) {
-            return !$this->validator->fails();
+        if (!isset($this->validator)) {
+            $this->validator = validator($_POST, $rules, $messages, $attributes);
         }
         if (isset($rules)) {
-
-            $this->validator = Validator::make(Input::all(), $rules, array(), $attributes);
 
             return !$this->validator->fails();
         } else {
@@ -287,59 +302,12 @@ class DataForm extends Widget
     }
 
     /**
-     * append error (to be used in passed/saved closure)
-     * @param string $url
-     * @param string $name
-     * @param string $position
-     * @param array  $attributes
-     *
-     * @return $this
-     */
-    public function error($error)
-    {
-        $this->process_status = 'error';
-        $this->message = '';
-        $this->error .= $error;
-
-        return $this;
-    }
-
-    /**
-     * @param string $process_status
-     *
-     * @return bool
-     */
-    public function on($process_status = "false")
-    {
-        if (is_array($process_status))
-            return (bool) in_array($this->process_status, $process_status);
-        return ($this->process_status == $process_status);
-    }
-
-    protected function sniffStatus()
-    {
-        if (isset($this->model)) {
-            $this->status = ($this->model->exists) ? "modify" : "create";
-        } else {
-            $this->status = "create";
-        }
-    }
-
-    /**
-     * needed by DataEdit, to build standard action buttons
-     */
-    protected function buildButtons()
-    {
-
-    }
-
-    /**
-     * build each field and share some data from dataform to field (form status, validation errors)
+     * build each field and share some data from dataform to field 
+     * (form status, validation errors)
      */
     protected function buildFields()
     {
         $messages = (isset($this->validator)) ? $this->validator->messages() : false;
-
         foreach ($this->fields as $field) {
             $field->status = $this->status;
             $field->orientation = $this->orientation;
@@ -351,96 +319,18 @@ class DataForm extends Widget
         }
     }
 
-    protected function sniffAction()
-    {
-
-        if (Request::isMethod('post') && ($this->url->value('process'))) {
-            $this->action = ($this->status == "modify") ? "update" : "insert";
-        }
-    }
-
-    protected function process()
-    {
-        //database save
-        switch ($this->action) {
-            case "update":
-            case "insert":
-                //validation failed
-                if (!$this->isValid()) {
-                    $this->process_status = "error";
-                    foreach ($this->fields as $field) {
-                        $field->action = "idle";
-                    }
-
-                    return false;
-                } else {
-                    $this->process_status = "success";
-                }
-                foreach ($this->fields as $field) {
-                    $field->action = $this->action;
-                    $result = $field->autoUpdate();
-                    if (!$result) {
-                        $this->process_status = "error";
-
-                        return false;
-                    }
-                }
-                if (isset($this->model)) {
-                    $return = $this->model->save();
-                } else {
-                    $return = true;
-                }
-                if (!$return) {
-                    $this->process_status = "error";
-                }
-
-                return $return;
-                break;
-            case "delete":
-                $return = $this->model->delete();
-                if (!$return) {
-                    $this->process_status = "error";
-                } else {
-                    $this->process_status = "success";
-                }
-                break;
-            case "idle":
-                $this->process_status = "show";
-
-                return true;
-                break;
-            default:
-                return false;
-        }
-    }
-
-    protected function buildForm()
-    {
-        $this->prepareForm();
-        $df = $this;
-
-        return View::make($this->view, compact('df'));
-    }
-
+    /**
+     * prepare some var (form open tag, errors, etc) 
+     */
     public function prepareForm()
     {
-        $form_attr = array('url' => $this->process_url, 'class' => "form-horizontal", 'role' => "form", 'method' => $this->method);
-        $form_attr = array_merge($form_attr, $this->attributes);
-
-        // See if we need a multipart form
-        foreach ($this->fields as $field_obj) {
-            if (in_array($field_obj->type, array('file','image'))) {
-                $form_attr['files'] = 'true';
-                break;
-            }
-        }
         // Set the form open and close
         if ($this->status == 'show') {
             $this->open = '<div class="form">';
             $this->close = '</div>';
         } else {
 
-            $this->open = Form::open($form_attr);
+            $this->open = Form::open($this->process_url, $this->attributes);
             $this->close = Form::hidden('save', 1) . Form::close();
 
             if ($this->method == "GET") {
@@ -452,58 +342,27 @@ class DataForm extends Widget
             $this->error .=  implode('<br />',$this->errors->all());
         }
     }
-
-    /**
-     * build form output and prepare form partials (header / footer / ..)
-     * @param string $view
-     */
-    public function build($view = '')
+    
+    public function build($view = null)
     {
-        if (isset($this->attributes['class']) and strpos($this->attributes['class'], 'form-inline') !== false) {
-            $this->view = 'rapyd::dataform_inline';
-            $this->orientation = 'inline';
-        }
-        if ($this->output != '') return;
-        if ($view != '') $this->view = $view;
+        $this->setFieldValues(true);
+        BurpEvent::flush('dataform.save');
 
-        $this->process();
-
-        //callable
-        if ($this->form_callable && $this->process_status == "success") {
-            $callable = $this->form_callable;
-            $result = $callable($this);
-            if ($result && is_a($result, 'Illuminate\Http\RedirectResponse')) {
-                $this->redirect = $result;
-            }
-            //reprocess if an error is added in closure
-            if ($this->process_status == 'error') {
-                $this->process();
-            }
-        }
-        //cleanup submits if success
-        if ($this->process_status == 'success') {
-            $this->removeType('submit');
-        }
-        $this->buildButtons();
+        $view = ($view) ? $view : 'dataform.dataform';
         $this->buildFields();
-        $dataform = $this->buildForm();
-        $this->output = $dataform->render();
-
-        $sections = $dataform->renderSections();
+        $this->prepareForm();
+        $this->output = blade($view, array('df'=>$this));
+        
+        //build each section reparately (for custom forms) 
+        $sections = blade($view, array('df'=>$this), null, false)->renderSections();
         $this->header = $sections['df.header'];
         $this->footer = $sections['df.footer'];
         $this->body = @$sections['df.fields'];
-        Rapyd::setForm($this);
     }
-
-    /**
-     * @param  string $view
-     * @return string
-     */
-    public function getForm($view = '')
+    
+    public function getForm($view = null)
     {
         $this->build($view);
-
         return $this->output;
     }
 
@@ -513,8 +372,6 @@ class DataForm extends Widget
             try {
                 $this->getForm();
             }
-                //to avoid the error "toString() must not throw an exception" (PHP limitation)
-                //just return error as string
             catch (\Exception $e) {
                 return '<div class="alert alert-danger">'.
                 $e->getMessage() ."<br>\n".
@@ -522,56 +379,23 @@ class DataForm extends Widget
                 "Line: " . $e->getLine().'</div>';
             }
         }
-
         return $this->output;
     }
 
     /**
-     * @return bool
-     */
-    public function hasRedirect()
-    {
-        return ($this->redirect != null) ? true : false;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRedirect()
-    {
-        return $this->redirect;
-    }
-
-    /**
-     * @param string $viewname
-     * @param array  $array    of values for view
+     * build form and check if process status is "success"
+     * execute a callable
      *
-     * @return View|Redirect
-     */
-    public function view($viewname, $array = array())
-    {
-        if (!isset($array['form'])) {
-            $form = $this->getForm();
-            $array['form'] = $form;
-        }
-        if ($this->hasRedirect()) {
-            return (is_a($this->redirect, 'Illuminate\Http\RedirectResponse')) ? $this->redirect : Redirect::to($this->redirect);
-        }
-
-        return View::make($viewname, $array);
-    }
-
-    /**
-     * build form and check if process status is "success" then execute a callable
      * @param callable $callable
      */
     public function saved(\Closure $callable)
     {
-         $this->form_callable = $callable;
+        $this->form_callable = $callable;
     }
 
     /**
      * alias for saved
+     *
      * @param callable $callable
      */
     public function passed(\Closure $callable)
@@ -580,52 +404,72 @@ class DataForm extends Widget
     }
 
     /**
-     * Set a value to model without show anything (it appends an auto-field)
-     * It set value on insert and update (but is configurable)
+     * append error (to be used in passed/saved closure)
      *
-     * @param $field
-     * @param $value
-     * @param bool $insert
-     * @param bool $update
+     * @param string $url
+     * @param string $name
+     * @param string $position
+     * @param array  $attributes
+     *
+     * @return $this
      */
-    public function set($field, $value = null , $insert = true, $update = true)
+    public function error($error, $show_form = false)
     {
-
-        if (is_array($field)) {
-            foreach ($field as $key=>$val) {
-                $this->set($key, $val, $insert, $update);
-            }
-        }
-
-        $this->add($field, '', 'auto');
-        if ($insert)
-            $this->field($field)->insertValue($value);
-
-        if ($update)
-            $this->field($field)->updateValue($value);
-
+        $this->process_status = 'error';
+        $this->message = ($show_form) ? '' : $error;
+        if (!$show_form) $this->removeFieldType('submit');
+        $this->message_class = 'alert alert-danger';
+        $this->error .= $error;
+        $this->errors[] = $error;
+        return $this;
     }
 
     /**
-     * Magic method to catch all appends
-     *
-     * @param  string $name
-     * @param  Array  $arguments
-     * @return mixed
+     * replace form content with a message (error or success)
+     * 
+     * @param $message
+     * @return $this
      */
-    public function __call($name, $arguments)
+    public function message($message)
     {
+        $this->message =  $message;
 
-        if (0 === strpos($name, 'add')) {
-            $name = substr($name, 3);
-        }
+        return $this;
+    }
 
-        $classname = '\Zofe\Rapyd\DataForm\Field\\'.ucfirst($name);
+    /**
+     * @param string $url
+     * @param string $name
+     * @param string $position
+     * @param array  $attributes
+     *
+     * @return $this
+     */
+    public function link($url, $name, $position="BL", $attributes=array())
+    {
+        /*$match_url = trim(parse_url($url, PHP_URL_PATH),'/');
+        if (Request::path()!= $match_url) {
+            $url = Persistence::get($match_url);
+        }*/
 
-        if (class_exists($classname)) {
-            array_push($arguments, $name);
+        $attributes = array_merge(array("class"=>"btn btn-default"), $attributes);
+        $this->button_container[$position][] =  link_url($url, $name, $attributes);
+        $this->links[] = $url;
 
-            return  call_user_func_array(array($this, "add"), $arguments);
-        }
+        return $this;
+    }
+
+    /**
+     * @param string $route
+     * @param string $name
+     * @param array  $parameters
+     * @param string $position
+     * @param array  $attributes
+     *
+     * @return $this
+     */
+    public function linkRoute($route, $name, $parameters=array(), $position="BL", $attributes=array())
+    {
+        return $this->link(link_route($route, $parameters), $name, $position, $attributes);
     }
 }

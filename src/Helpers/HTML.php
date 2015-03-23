@@ -2,7 +2,6 @@
 
 class HTML
 {
-
     public static function buildAttributes(array $attributes = null)
     {
         if (empty($attributes))
@@ -55,5 +54,4 @@ class HTML
 
         return $string;
     }
-
 }
