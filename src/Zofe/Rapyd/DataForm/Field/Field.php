@@ -15,6 +15,7 @@ abstract class Field extends Widget
     public $label;
     public $name;
     public $relation;
+    public $relations;
     public $rel_name;
     public $rel_field;
     public $rel_key;
@@ -97,9 +98,19 @@ abstract class Field extends Widget
     {
         //detect relation or relation.field
         $relation = null;
+        $relations = null;
+
+        //field.relation.deeprelation //(unmanaged)
+//        if (preg_match('#^([a-z0-9_-]+)\.([a-z0-9_-]+){2,}$#i', $name, $matches)) {
+//            $name = last($matches);
+//            $this->relations = array_slice($matches, 1);
+//        }
+        
+        //field.relation
         if (preg_match('#^([a-z0-9_-]+)\.([a-z0-9_-]+)$#i', $name, $matches)) {
             $relation = $matches[1];
             $name = $matches[2];
+        //field
         } elseif (preg_match('#^[a-z0-9_-]+$#i', $name)) {
             $relation = $name;
         }
@@ -528,6 +539,9 @@ abstract class Field extends Widget
                     break;
             }
         }
+
+        
+        
     }
 
     public function extraOutput()

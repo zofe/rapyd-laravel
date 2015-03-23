@@ -191,7 +191,7 @@ class DataEdit extends DataForm
         } else {
             $match_url = trim(parse_url($url, PHP_URL_PATH),'/');
             if (Request::path()!= $match_url) {
-                $url = Persistence::get($match_url);
+                $url = \Zofe\Rapyd\Persistence::get($match_url);
             }
         }
 
