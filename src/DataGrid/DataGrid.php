@@ -171,6 +171,9 @@ class DataGrid extends DataSet
         } elseif (is_object($tablerow)) {
 
             $value = @$tablerow->{$column->name};
+            if ($sanitize) {
+                $value = $this->sanitize($value);
+            }
         //fieldname in an array
         } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
 
