@@ -82,7 +82,7 @@ abstract class Field extends Widget
     {
         parent::__construct();
 
-        $this->attributes = Config::get('rapyd::field.attributes');
+        $this->attributes = Config::get('rapyd.field.attributes');
         $this->model = $model;
         $this->model_relations = $model_relations;
 

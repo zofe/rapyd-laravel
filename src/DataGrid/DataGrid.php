@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\View;
 use Zofe\Rapyd\DataSet as DataSet;
 use Zofe\Rapyd\Persistence;
+use Illuminate\Support\Facades\Config;
 
 class DataGrid extends DataSet
 {
@@ -255,7 +256,8 @@ class DataGrid extends DataSet
 
     protected function sanitize($string)
     {
-        return str_limit(nl2br(htmlspecialchars($string)), 30);
+        $result = nl2br(htmlspecialchars($string));
+        return Config::get('rapyd.sanitize.num_characters') > 0 ? str_limit($result, Config::get('rapyd.sanitize.num_characters')) : $result;
     }
 
 }
