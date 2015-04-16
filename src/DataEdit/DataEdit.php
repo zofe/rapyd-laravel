@@ -78,7 +78,11 @@ class DataEdit extends DataForm
     {
         $model = $this->model;
         $this->model = $model::find($id);
-
+        if (!$this->model) {
+            // belts and braces check - no model = doesn't exist (without being masked missing object property)
+            // potential candidate for custom exception handling
+            return false;
+        }
         return $this->model->exists;
     }
 
