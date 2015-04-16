@@ -474,8 +474,6 @@ class DataForm extends Widget
         $this->process();
 
         //callable
-        var_dump($this->form_callable);
-        var_dump($this->process_status);
         if ($this->form_callable && $this->process_status == "success") {
             $callable = $this->form_callable;
             $result = $callable($this);
