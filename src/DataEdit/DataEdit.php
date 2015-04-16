@@ -6,6 +6,7 @@ use Zofe\Rapyd\DataForm\DataForm;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Zofe\Rapyd\Persistence;
 
 class DataEdit extends DataForm
 {
