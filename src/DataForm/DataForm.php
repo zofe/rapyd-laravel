@@ -387,6 +387,11 @@ class DataForm extends Widget
                 }
                 if (isset($this->model)) {
                     $return = $this->model->save();
+                    if (!$return) {
+                        // in the cases where an error has not been returned, but a record has been inserted or updated
+                        // the model->save() method returns null which need to interpret as success
+                        $return = true;
+                    }
                 } else {
                     $return = true;
                 }
@@ -469,6 +474,8 @@ class DataForm extends Widget
         $this->process();
 
         //callable
+        var_dump($this->form_callable);
+        var_dump($this->process_status);
         if ($this->form_callable && $this->process_status == "success") {
             $callable = $this->form_callable;
             $result = $callable($this);
