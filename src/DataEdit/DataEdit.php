@@ -6,6 +6,8 @@ use Zofe\Rapyd\DataForm\DataForm;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Config;
+use Zofe\Rapyd\Persistence;
 
 class DataEdit extends DataForm
 {
@@ -77,7 +79,11 @@ class DataEdit extends DataForm
     {
         $model = $this->model;
         $this->model = $model::find($id);
-
+        if (!$this->model) {
+            // belts and braces check - no model = doesn't exist (without being masked missing object property)
+            // potential candidate for custom exception handling
+            return false;
+        }
         return $this->model->exists;
     }
 
@@ -206,37 +212,45 @@ class DataEdit extends DataForm
      */
     protected function buildButtons()
     {
+        // load button position defaults. We could load these into an array however we would still need to provide
+        // a failsafe check for each setting so long hand here reduces processing overall
+        $saveButtonPosition = Config::get('rapyd.data_edit.button_position.save') != '' ? Config::get('rapyd.data_edit.button_position.save') : 'BL';
+        $showButtonPosition = Config::get('rapyd.data_edit.button_position.show') != '' ? Config::get('rapyd.data_edit.button_position.show') : 'TR';
+        $modifyButtonPosition = Config::get('rapyd.data_edit.button_position.modify') != '' ? Config::get('rapyd.data_edit.button_position.modify') : 'TR';
+        $undoButtonPosition = Config::get('rapyd.data_edit.button_position.undo') != '' ? Config::get('rapyd.data_edit.button_position.undo') : 'TR';
+        $deleteButtonPosition = Config::get('rapyd.data_edit.button_position.delete') != '' ? Config::get('rapyd.data_edit.button_position.delete') : 'BL';
+
         //show
         if ($this->status == "show") {
 
-            $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), trans('rapyd::rapyd.modify'), "TR");
+            $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), trans('rapyd::rapyd.modify'), $showButtonPosition);
 
         }
 
         //modify
         if ($this->status == "modify") {
             if (in_array('update',$this->back_on)) {
-                $this->link($this->back_url, trans('rapyd::rapyd.undo'), "TR");
+                $this->link($this->back_url, trans('rapyd::rapyd.undo'), $undoButtonPosition);
             } else {
-                $this->link($this->url->replace('modify' . $this->cid, 'show' . $this->cid)->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "TR");
+                $this->link($this->url->replace('modify' . $this->cid, 'show' . $this->cid)->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), $modifyButtonPosition);
             }
 
-            $this->submit(trans('rapyd::rapyd.save'), 'BL');
+            $this->submit(trans('rapyd::rapyd.save'), $saveButtonPosition);
         }
         //crete
         if ($this->status == "create" && $this->action!= 'delete') {
-            $this->submit(trans('rapyd::rapyd.save'), 'BL');
+            $this->submit(trans('rapyd::rapyd.save'), $saveButtonPosition);
         }
         //delete
         if ($this->status == "delete") {
             if (in_array('do_delete',$this->back_on)) {
-                $this->link($this->back_url, trans('rapyd::rapyd.undo'), "BL");
+                $this->link($this->back_url, trans('rapyd::rapyd.undo'), $undoButtonPosition);
             } else {
-                $this->link($this->url->replace('delete' . $this->cid, 'show' . $this->cid)->replace('do_delete' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), "BL");
+                $this->link($this->url->replace('delete' . $this->cid, 'show' . $this->cid)->replace('do_delete' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), $deleteButtonPosition);
             }
 
             $do_delete_url = $this->url->replace('delete' . $this->cid, 'do_delete' . $this->cid)->get();
-            $this->formButton($do_delete_url, 'delete', trans('rapyd::rapyd.delete'), "BL");
+            $this->formButton($do_delete_url, 'delete', trans('rapyd::rapyd.delete'), $deleteButtonPosition);
         }
     }
 
