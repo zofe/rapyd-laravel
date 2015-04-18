@@ -169,7 +169,7 @@ class DataSet extends Widget
             $this->orderby_field = ltrim($orderby, "-");
             $this->orderby_direction = ($orderby[0] === "-") ? "desc" : "asc";
             if ($this->canOrderby($this->orderby_field)) {
-                $this->orderBy($this->orderby_field, $this->orderby_direction);                
+                $this->orderBy($this->orderby_field, $this->orderby_direction);
             }
         }
 
@@ -266,7 +266,7 @@ class DataSet extends Widget
     public function addOrderBy($fieldname)
     {
         $this->orderby_check = true;
-        $this->orderby_fields += (array)$fieldname;
+        $this->orderby_fields = array_merge($this->orderby_fields, (array)$fieldname);
     }
     
     protected function canOrderby($fieldname)
