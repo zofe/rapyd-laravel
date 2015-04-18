@@ -31,7 +31,9 @@ class DataGrid extends DataSet
         if (!in_array($name,array("_edit"))) {
             $this->headers[] = $label;
         }
-
+        if ($orderby) {
+            $this->addOrderBy($column->orderby_field);
+        }
         return $column;
     }
 
@@ -216,13 +218,17 @@ class DataGrid extends DataSet
     public function __toString()
     {
         if ($this->output == "") {
+
+           //to avoid the error "toString() must not throw an exception"
+           //http://stackoverflow.com/questions/2429642/why-its-impossible-to-throw-exception-from-tostring/27307132#27307132
            try {
-                $this->getGrid();
+               $this->getGrid();
            }
-           //to avoid the error "toString() must not throw an exception" (PHP limitation)
-           //just return error as string
            catch (\Exception $e) {
-               return $e->getMessage(). " Line ".$e->getLine();
+               $previousHandler = set_exception_handler(function (){ });
+               restore_error_handler();
+               call_user_func($previousHandler, $e);
+               die;
            }
 
         }
