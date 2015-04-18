@@ -133,6 +133,7 @@ class DemoController extends Controller
     public function getSet()
     {
         $set = DataSet::source(Article::with('author', 'categories'));
+        $set->addOrderBy(['title','id']);
         $set->paginate(9);
         $set->build();
 
