@@ -267,6 +267,8 @@ class DataSet extends Widget
     {
         $this->orderby_check = true;
         $this->orderby_fields = array_merge($this->orderby_fields, (array)$fieldname);
+        
+        return $this;
     }
     
     protected function canOrderby($fieldname)
