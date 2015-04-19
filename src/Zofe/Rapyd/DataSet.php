@@ -26,7 +26,8 @@ class DataSet extends Widget
      * @var \Illuminate\Pagination\Paginator
      */
     public $paginator;
-
+    protected $orderby_check = false;
+    protected $orderby_fields = [];
     protected $orderby_field;
     protected $orderby_direction;
     protected $type;
@@ -164,7 +165,9 @@ class DataSet extends Widget
         if ($orderby) {
             $this->orderby_field = ltrim($orderby, "-");
             $this->orderby_direction = ($orderby[0] === "-") ? "desc" : "asc";
-            $this->orderBy($this->orderby_field, $this->orderby_direction);
+            if ($this->canOrderby($this->orderby_field)) {
+                $this->orderBy($this->orderby_field, $this->orderby_direction);
+            }
         }
 
         //build subset of data
@@ -249,4 +252,20 @@ class DataSet extends Widget
         return (bool) $this->limit;
     }
 
+    /**
+     * add the ability to check & enable "order by" of given field/s
+     * by default you can order by
+     *
+     * @param mixed $fieldname
+     */
+    public function addOrderBy($fieldname)
+    {
+        $this->orderby_check = true;
+        $this->orderby_fields += (array)$fieldname;
+    }
+
+    protected function canOrderby($fieldname)
+    {
+        return (!$this->orderby_check || in_array($fieldname, $this->orderby_fields));
+    }
 }

@@ -510,19 +510,19 @@ class DataForm extends Widget
     public function __toString()
     {
         if ($this->output == "") {
+            //to avoid the error "toString() must not throw an exception"
+            //http://stackoverflow.com/questions/2429642/why-its-impossible-to-throw-exception-from-tostring/27307132#27307132
             try {
                 $this->getForm();
             }
-                //to avoid the error "toString() must not throw an exception" (PHP limitation)
-                //just return error as string
             catch (\Exception $e) {
-                return '<div class="alert alert-danger">'.
-                $e->getMessage() ."<br>\n".
-                "File: <small>".$e->getFile() . "</small><br>\n".
-                "Line: " . $e->getLine().'</div>';
+                $previousHandler = set_exception_handler(function (){ });
+                restore_error_handler();
+                call_user_func($previousHandler, $e);
+                die;
             }
-        }
 
+        }
         return $this->output;
     }
 
