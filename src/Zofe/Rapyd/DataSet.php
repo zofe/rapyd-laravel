@@ -261,11 +261,12 @@ class DataSet extends Widget
     public function addOrderBy($fieldname)
     {
         $this->orderby_check = true;
-        $this->orderby_fields += (array)$fieldname;
+        $this->orderby_fields = array_merge($this->orderby_fields, (array)$fieldname);
     }
 
     protected function canOrderby($fieldname)
     {
         return (!$this->orderby_check || in_array($fieldname, $this->orderby_fields));
+        
     }
 }
