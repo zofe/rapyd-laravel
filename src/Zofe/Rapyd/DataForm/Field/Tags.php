@@ -45,12 +45,7 @@ class Tags extends Field
         return $this;
 
     }
-
-//    public function getNewValue()
-//    {
-//        parent::getNewValue();
-//        die($this->new_value);
-//    }
+    
     public function getValue()
     {
 
@@ -98,20 +93,23 @@ class Tags extends Field
             }
         } else {
 
-            $values = explode($this->serialization_sep, $this->value);
-            $name = $this->record_label;
-            $key = $this->record_id;
-            $this->fill_tags = "";
-            if (count($values)) {
-                foreach ($values as $item) {
-                    $row = new \stdClass();
-                    $row->$key = $item;
-                    $row->$name = $item;
-                    $this->fill_tags .= "
+            if ($this->value) {
+                $values = explode($this->serialization_sep, $this->value);
+                $name = $this->record_label;
+                $key = $this->record_id;
+                $this->fill_tags = "";
+                if (count($values)) {
+                    //var_dump($values);
+                    foreach ($values as $item) {
+                        $row = new \stdClass();
+                        $row->$key = $item;
+                        $row->$name = $item;
+                        $this->fill_tags .= "
                       $('#{$this->name}').tagsinput('add', ".json_encode($row).");";
-                    $description_arr[] = $item;
+                        $description_arr[] = $item;
+                    }
+                    $this->description = implode($this->separator, $description_arr);
                 }
-                $this->description = implode($this->separator, $description_arr);
             }
         }
 
