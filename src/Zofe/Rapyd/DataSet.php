@@ -27,7 +27,7 @@ class DataSet extends Widget
      */
     public $paginator;
     protected $orderby_check = false;
-    protected $orderby_fields = [];
+    protected $orderby_fields = array();
     protected $orderby_field;
     protected $orderby_direction;
     protected $type;
