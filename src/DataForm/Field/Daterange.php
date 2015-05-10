@@ -63,8 +63,8 @@ class Daterange extends Date
                 //$this->attributes['class'] = "form-control";
 
 
-                $from = Form::text($this->name . '[]', @$this->values[0], $this->attributes);
-                $to = Form::text($this->name . '[]', @$this->values[1], $this->attributes);
+                $from = Form::text($this->name . '[from]', @$this->values[0], $this->attributes);
+                $to = Form::text($this->name . '[to]', @$this->values[1], $this->attributes);
 
                 $output = '
                             <div id="range_' . $this->name . '_container">
