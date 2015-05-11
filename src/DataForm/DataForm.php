@@ -187,7 +187,7 @@ class DataForm extends Widget
      *
      * @return $this
      */
-    public function reset($name = "", $position = "BL")
+    public function reset($name = "", $position = "BL", $options = array())
     {
         if ($name == "") $name = trans('rapyd::rapyd.reset');
         $this->link($this->url->current(true), $name, $position);
