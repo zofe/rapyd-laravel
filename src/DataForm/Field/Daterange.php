@@ -14,7 +14,7 @@ class Daterange extends Date
 
     public function getValue()
     {
-        parent::getValue();
+        Field::getValue();
         $this->values = explode($this->serialization_sep, $this->value);
         foreach ($this->values as $value) {
             $values[] = $this->humanDateToIso($value);
