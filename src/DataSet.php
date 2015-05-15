@@ -248,9 +248,11 @@ class DataSet extends Widget
     {
         if ($this->limit) {
             if ($this->hash != '')
-                return $this->paginator->appends($this->url->remove('page'.$this->cid)->getArray())->fragment($this->hash)->render($view);
+                $links =  $this->paginator->appends($this->url->remove('page'.$this->cid)->getArray())->fragment($this->hash)->render($view);
             else
-                return $this->paginator->appends($this->url->remove('page'.$this->cid)->getArray())->render($view);
+                $links =  $this->paginator->appends($this->url->remove('page'.$this->cid)->getArray())->render($view);
+            
+            return str_replace('/?', '?', urldecode($links));
         }
     }
 

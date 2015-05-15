@@ -31,7 +31,7 @@ class Daterange extends Date
         Field::getValue();
         $this->values = explode($this->serialization_sep, $this->value);
         foreach ($this->values as $value) {
-            $values[] = $this->humanDateToIso($value);
+            $values[] = $this->isoDateToHuman($value);
         }
         if (isset($values)) {
             $this->value = implode($this->serialization_sep, $values);
@@ -59,11 +59,7 @@ class Daterange extends Date
 
             case "create":
             case "modify":
-                if ($this->value != "") {
-                    if (!$this->is_refill) {
-                        $this->value = $this->isoDateToHuman($this->value);
-                    }
-                }
+
 
                 Rapyd::css('datepicker/datepicker3.css');
                 Rapyd::js('datepicker/bootstrap-datepicker.js');
