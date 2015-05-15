@@ -10,7 +10,8 @@ class Date extends Field
     public $type = "date";
     public $format = 'm/d/Y';
     public $language = 'en';
-
+    public $clause = "where";
+    
     /**
      * set instarnal preview date format
      * @param $format valid php date format

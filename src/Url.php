@@ -6,7 +6,7 @@ class Url
 {
     public $url;
 
-    protected $semantic = array( 'pag'    , 'orderby',
+    protected $semantic = array( 'page'    , 'orderby',
                                  'show'   , 'modify' ,
                                  'create' , 'insert' ,
                                  'update' , 'delete' ,
@@ -14,7 +14,7 @@ class Url
 
     public static function unparse_str($array)
     {
-        return '?' . preg_replace('/%5B[0-9]+%5D/simU', '[]', http_build_query($array));
+        return '?' . urldecode(http_build_query($array));//preg_replace('/%5B[0-9]+%5D/simU', '[]', http_build_query($array));
     }
 
     public function set($url)

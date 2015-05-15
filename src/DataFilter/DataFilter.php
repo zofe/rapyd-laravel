@@ -52,8 +52,8 @@ class DataFilter extends DataForm
     protected function sniffAction()
     {
 
-        $this->reset_url = $this->url->remove('ALL')->append('reset', 1)->get();
-        $this->process_url = $this->url->remove('ALL')->append('search', 1)->get();
+        $this->reset_url = $this->url->remove('ALL')->append('reset'.$this->cid, 1)->get();
+        $this->process_url = $this->url->remove('ALL')->append('search'.$this->cid, 1)->get();
 
         ///// search /////
         if ($this->url->value('search')) {
@@ -84,17 +84,19 @@ class DataFilter extends DataForm
                 foreach ($this->fields as $field) {
 
                     $field->getValue();
+                    $field->getNewValue();
+                    $value = $field->new_value;
 
                     //query scope
                     $query_scope = $field->query_scope;
                     if ($query_scope) {
 
                         if (is_a($query_scope, '\Closure')) {
-                            $this->query = $query_scope($this->query, $field->value);
+                            $this->query = $query_scope($this->query, $value);
 
                         } elseif (isset($this->model) && method_exists($this->model, "scope".$query_scope)) {
                             $query_scope = "scope".$query_scope;
-                            $this->query = $this->model->$query_scope($this->query, $field->value);
+                            $this->query = $this->model->$query_scope($this->query, $value);
 
                         }
                         continue;
@@ -122,18 +124,17 @@ class DataFilter extends DataForm
 
                         }
                     }
-
-                    if ($field->value != "") {
+                    
+                    if ($value != "" or (is_array($value)  and count($value)) ) {
                         if (strpos($field->name, "_copy") > 0) {
                             $name = substr($field->db_name, 0, strpos($field->db_name, "_copy"));
                         } else {
                             $name = $field->db_name;
                         }
 
-                        $value = $field->value;
+                        //$value = $field->value;
 
                         if ($deep_where) {
-
                             //exception for multiple value fields on BelongsToMany
                             if ($rel_type == 'Illuminate\Database\Eloquent\Relations\BelongsToMany' and
                                 in_array($field->type, array('tags','checks'))  )
@@ -147,9 +148,9 @@ class DataFilter extends DataForm
                                   }
 
                                   if ($field->clause == 'where') {
-                                      foreach ($values as $value) {
-                                          $this->query = $this->query->whereHas($field->rel_name, function ($q) use ($field, $value) {
-                                              $q->where($field->rel_fq_key,'=', $value);
+                                      foreach ($values as $v) {
+                                          $this->query = $this->query->whereHas($field->rel_name, function ($q) use ($field, $v) {
+                                              $q->where($field->rel_fq_key,'=', $v);
                                           });
                                       }
                                   }

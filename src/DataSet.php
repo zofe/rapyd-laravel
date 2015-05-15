@@ -191,11 +191,13 @@ class DataSet extends Widget
                 }
 
                 $limit = $this->limit ? $this->limit : 100000;
-                $offset = (max(Paginator::resolveCurrentPage()-1,0)) * $limit;
+                $current_page = $this->url->value('page'.$this->cid, 0);
+                $offset = (max($current_page-1,0)) * $limit;
                 $this->data = array_slice($this->source, $offset, $limit);
-                $this->paginator = new LengthAwarePaginator($this->data, count($this->source), $limit, Paginator::resolveCurrentPage(),
-                    ['path' => Paginator::resolveCurrentPath()]);
-
+                $this->paginator = new LengthAwarePaginator($this->data, count($this->source), $limit, $current_page,
+                    ['path' => Paginator::resolveCurrentPath(),
+                    'pageName' => "page".$this->cid,
+                    ]);
                 break;
 
             case "query":
@@ -206,8 +208,9 @@ class DataSet extends Widget
                     $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1]);
                 }
                 //limit-offset
-                if (isset($this->limit)) {
-                    $this->paginator = $this->query->paginate($this->limit);
+                if (isset($this->limit)){
+                    
+                    $this->paginator = $this->query->paginate($this->limit, ['*'], 'page'.$this->cid);
                     $this->data = $this->paginator;
                 } else {
                     $this->data = $this->query->get();
@@ -215,7 +218,6 @@ class DataSet extends Widget
 
                 break;
         }
-
         return $this;
     }
 
@@ -246,9 +248,9 @@ class DataSet extends Widget
     {
         if ($this->limit) {
             if ($this->hash != '')
-                return $this->paginator->appends($this->url->remove('page')->getArray())->fragment($this->hash)->render($view);
+                return $this->paginator->appends($this->url->remove('page'.$this->cid)->getArray())->fragment($this->hash)->render($view);
             else
-                return $this->paginator->appends($this->url->remove('page')->getArray())->render($view);
+                return $this->paginator->appends($this->url->remove('page'.$this->cid)->getArray())->render($view);
         }
     }
 
