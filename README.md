@@ -156,17 +156,21 @@ You can directly customize form  using build() in your controller
    #article.blade.php
     {{ $form->header }}
 
-        {{ $form->message }} <br />
+        {!! $form->message !!} <br />
 
         @if(!$form->message)
-        
-            Title:  {{ $form->field('title') }}<br /> 
-            Body:  {{ $form->field('body') }}
+            <div class="row">
+                <div class="col-sm-4">
+                     {!! $form->render('title') !!}
+                </div>
+                <div class="col-sm-8">
+                    {!! $form->render('body') !!}
+                </div>
+            </div> 
             ...
-            
         @endif
 
-    {{ $form->footer }}
+    {!! $form->footer !!}
 ```
 [custom form layout explained](https://github.com/zofe/rapyd-laravel/wiki/Custom-Form-Layout)  
 [custom form layout demo](http://www.rapyd.com/rapyd-demo/styledform)  
