@@ -154,7 +154,7 @@ You can directly customize form  using build() in your controller
  
 ```php
    #article.blade.php
-    {{ $form->header }}
+    {!! $form->header !!}
 
         {!! $form->message !!} <br />
 
