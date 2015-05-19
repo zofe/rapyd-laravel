@@ -1,6 +1,8 @@
 rapyd-laravel
 =============
 
+[![Join the chat at https://gitter.im/zofe/rapyd-laravel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zofe/rapyd-laravel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 <a href="https://packagist.org/packages/zofe/rapyd">
     <img src="http://img.shields.io/packagist/v/zofe/rapyd.svg?style=flat" style="vertical-align: text-top">
 </a>
