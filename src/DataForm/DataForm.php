@@ -19,6 +19,7 @@ use Zofe\Rapyd\DataForm\Field\Text;
 use Zofe\Rapyd\DataForm\Field\Textarea;
 use Zofe\Rapyd\Widget;
 use Illuminate\Html\FormFacade as Form;
+use Illuminate\Html\HtmlFacade as HTML;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
@@ -190,7 +191,9 @@ class DataForm extends Widget
     public function reset($name = "", $position = "BL", $options = array())
     {
         if ($name == "") $name = trans('rapyd::rapyd.reset');
-        $this->link($this->url->current(true), $name, $position, $options);
+        $options = array_merge(array("class"=>"btn btn-default"), $options);
+        $this->button_container[$position][] =  HTML::link($this->reset_url, $name, $options);
+        $this->links[] = $this->reset_url;
 
         return $this;
     }
