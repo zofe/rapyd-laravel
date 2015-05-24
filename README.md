@@ -268,6 +268,32 @@ In `app/config/app.php` add:
 then run: `$ composer update zofe/rapyd`.
 
 
+## Namespace consideration, Extending etc.
+
+To use widgets you can: 
+- just use the global aliases: `\DataGrid::source()...` (please note the '\')
+- or import facades:
+```php
+    use Zofe\Rapyd\Facades\DataSet;
+    use Zofe\Rapyd\Facades\DataGrid;
+    use Zofe\Rapyd\Facades\DataForm;
+    use Zofe\Rapyd\Facades\DataForm;
+    use Zofe\Rapyd\Facades\DataEdit;
+    ..
+    DataGrid::source()... 
+```
+- or you can extend each class 
+```php
+    Class MyDataGrid extends Zofe\Rapyd\DataGrid\DataGrid {
+    ...
+    }
+    Class MyDataEdit extends Zofe\Rapyd\DataEdit\DataEdit {
+    ...
+    }
+    ..
+    MyDataGrid::source()
+```
+
 ## Publish & override configuration and assets
 
 You can quickly publish the configuration file (to override something) 
