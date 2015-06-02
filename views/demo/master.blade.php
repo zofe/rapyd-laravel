@@ -41,7 +41,14 @@
                 @yield('content')
             </div>
 
+            @if (isset($is_rapyd) AND $is_rapyd)
 
+                <br />
+                <br />
+                <div id="disqus_thread"></div>
+
+
+            @endif
         </div>
 
 
@@ -57,6 +64,7 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 {!! Rapyd::scripts() !!}
 @if (isset($is_rapyd) AND $is_rapyd)
+    
     <div class="privacy-overlay">
         <div class="privacy-modal"></div>
     </div>
