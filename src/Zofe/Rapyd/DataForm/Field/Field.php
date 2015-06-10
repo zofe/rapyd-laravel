@@ -554,7 +554,7 @@ abstract class Field extends Widget
      * @param $string
      * @return string
      */
-    protected function parseString($string)
+    public function parseString($string)
     {
         if (is_object($this->model) && strpos($string, '{{') !== false) {
             $fields = $this->model->getAttributes();

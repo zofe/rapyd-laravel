@@ -21,8 +21,9 @@ class Image extends File
     {
         parent::__construct($name, $label, $model, $model_relations);
 
-        \Event::listen('rapyd.uploaded.'.$this->name, function () {
-            $this->imageProcess();
+        $that = $this;
+        \Event::listen('rapyd.uploaded.'.$this->name, function () use ($that) {
+            $that->imageProcess();
         });
     }
 
@@ -82,7 +83,7 @@ class Image extends File
     /**
      * postprocess image if needed
      */
-    protected function imageProcess()
+    public function imageProcess()
     {
         if ($this->saved) {
             if (!$this->image)  $this->image = ImageManager::make($this->saved);

@@ -10,13 +10,13 @@ class File extends Field
 
     public $type = "file";
     protected $file = null;
-    protected $path = 'uploads/';
+    public $path = 'uploads/';
     protected $web_path = '';
     protected $filename = '';
     protected $saved = '';
     protected $unlink_file = true;
     protected $upload_deferred = false;
-    protected $recursion = false;
+    public $recursion = false;
 
     public function rule($rule)
     {
@@ -48,19 +48,20 @@ class File extends Field
                 //deferred upload
                 if ($this->upload_deferred) {
                     if (isset($this->model) and isset($this->db_name)) {
-                        $this->model->saved(function () use ($filename) {
-                            if ($this->recursion) return;
-                            $this->recursion = true;
+                        $that = $this;
+                        $this->model->saved(function () use ($filename, $that) {
+                            if ($that->recursion) return;
+                            $that->recursion = true;
 
-                            $this->path =  $this->parseString($this->path);
-                            $filename = $this->parseString($filename);
-                            $filename = $this->sanitizeFilename($filename);
-                            $this->new_value = $filename;
-                            if ($this->uploadFile($filename)) {
-                                if (is_a($this->relation, 'Illuminate\Database\Eloquent\Relations\Relation'))
-                                    $this->updateRelations();
+                            $that->path =  $that->parseString($that->path);
+                            $filename = $that->parseString($filename);
+                            $filename = $that->sanitizeFilename($filename);
+                            $that->new_value = $filename;
+                            if ($that->uploadFile($filename)) {
+                                if (is_a($that->relation, 'Illuminate\Database\Eloquent\Relations\Relation'))
+                                    $that->updateRelations();
                                 else
-                                    $this->updateName(true);
+                                    $that->updateName(true);
                             }
 
                         });
@@ -112,7 +113,7 @@ class File extends Field
         return true;
     }
 
-    protected function sanitizeFilename($filename)
+    public function sanitizeFilename($filename)
     {
         $filename = preg_replace('/\s+/', '_', $filename);
         $filename = preg_replace('/[^a-zA-Z0-9\._-]/', '', $filename);
@@ -178,7 +179,7 @@ class File extends Field
     /**
      * @return update field name
      */
-    protected function uploadFile($filename, $safe = false)
+    public function uploadFile($filename, $safe = false)
     {
         if ($safe) {
             try {
@@ -198,7 +199,7 @@ class File extends Field
     /**
      * @return update field name
      */
-    protected function updateName($save)
+    public function updateName($save)
     {
         if (isset($this->new_value)) {
             $this->model->setAttribute($this->db_name, $this->new_value);
