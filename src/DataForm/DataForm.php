@@ -197,8 +197,8 @@ class DataForm extends Widget
 
     /**
      * get field instance from fields array
-     * @param $field_name
-     * @param  array                      $ttributes
+     * @param string $field_name
+     * @param array $attributes
      * @return \Zofe\Rapyd\DataForm\Field $field
      */
     public function field($field_name, array $attributes = array())

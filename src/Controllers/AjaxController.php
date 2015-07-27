@@ -15,16 +15,18 @@ class AjaxController extends Controller
            $field = (array) $field;
 
            $f = array_shift($field);
-           $query = $entity::where($f,"like", Input::get("q")."%");
+           $query = $entity::where($f,"like", "%" . Input::get("q") . "%");
 
            if (count($field)) {
                foreach ($field as $f) {
-                   $query = $query->orWhere($f,"like", Input::get("q")."%");
+                   $query = $query->orWhere($f,"like", "%" . Input::get("q") . "%");
                }
 
            }
+           //reduce http response size & avoid security data leak issue
+           $return_fields = array_merge((array)$ajax['field'], ['id']);
 
-           return $query->take(10)->get();
+           return $query->take(10)->get($return_fields);
        }
 
     }
