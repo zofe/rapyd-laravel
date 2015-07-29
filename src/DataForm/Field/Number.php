@@ -13,17 +13,6 @@ class Number extends Field
     public $clause = "where";
     public $rule = "integer";
 
-    /**
-     * overwrite new value to store a iso date
-     */
-    public function getNewValue()
-    {
-        parent::getNewValue();
-        if ($this->new_value == "") {
-            $this->new_value = null;
-        }
-    }
-
     public function build()
     {
         $output = "";
