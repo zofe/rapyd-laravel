@@ -12,6 +12,7 @@ class Number extends Field
 {
     public $type = "number";
     public $clause = "where";
+    public $rule = "integer";
 
     public function build()
     {
@@ -30,7 +31,7 @@ class Number extends Field
                 } elseif ((!isset($this->value))) {
                     $output = $this->layout['null_label'];
                 } else {
-                    $output = intval($this->value);
+                    $output = $this->value;
                 }
                 $output = "<div class='help-block'>" . $output . "&nbsp;</div>";
                 break;
