@@ -34,7 +34,7 @@ class Numberrange extends Number
                 } elseif ((!isset($this->value))) {
                     $output = $this->layout['null_label'];
                 } else {
-                    $output = intval($this->value);
+                    $output = $this->value;
                 }
                 $output = "<div class='help-block'>" . $output . "&nbsp;</div>";
                 break;
