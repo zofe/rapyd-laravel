@@ -5,7 +5,6 @@ namespace Zofe\Rapyd\DataForm\Field;
 use Illuminate\Html\FormFacade as Form;
 use Zofe\Rapyd\Rapyd;
 
-
 // Mapping to HTML5 Input type
 // http://www.w3.org/TR/html-markup/input.number.html
 class Number extends Field
@@ -13,6 +12,17 @@ class Number extends Field
     public $type = "number";
     public $clause = "where";
     public $rule = "integer";
+
+    /**
+     * overwrite new value to store a iso date
+     */
+    public function getNewValue()
+    {
+        parent::getNewValue();
+        if ($this->new_value == "") {
+            $this->new_value = null;
+        }
+    }
 
     public function build()
     {
