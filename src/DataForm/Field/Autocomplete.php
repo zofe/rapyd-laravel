@@ -157,11 +157,12 @@ class Autocomplete extends Field
                     });
                     blod_{$this->name}.initialize();
 
-                    $('#th_{$this->name} .typeahead').typeahead(null, {
-                        name: '{$this->name}',
+                    $('#th_{$this->name} .typeahead').typeahead({
                         displayKey: '{$this->record_label}',
                         highlight: true,
                         minLength: {$this->min_chars},
+                    }, {
+                        name: '{$this->name}',
                         source: blod_{$this->name}.ttAdapter(),
                         templates: {
                             suggestion: Handlebars.compile('{{{$this->record_label}}}')
