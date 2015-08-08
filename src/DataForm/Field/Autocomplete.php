@@ -46,6 +46,18 @@ class Autocomplete extends Field
 
     }
 
+    public function minChars($len)
+    {
+        $this->min_chars = $len;
+        return $this;
+    }
+
+    public function mustMatch($bool)
+    {
+        $this->must_match = $bool;
+        return $this;
+    }
+
     public function getValue()
     {
         if (!$this->is_local && !$this->record_label && $this->rel_field != "") {
