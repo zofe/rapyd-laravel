@@ -58,14 +58,32 @@ class DataGrid extends DataSet
                 $cell->parseFilters($column->filters);
                 if ($column->cell_callable) {
                     $callable = $column->cell_callable;
-                    $cell->value($callable($cell->value, $tablerow));
+                    $methodReflection = new \ReflectionFunction($callable);
+                    $argCount = $methodReflection->getNumberOfParameters();
+                    if ($argCount === 1)
+                    {
+                        $cell->value($callable($cell->value));
+                    }
+                    elseif ($argCount === 2)
+                    {
+                        $cell->value($callable($cell->value, $tablerow));
+                    }
                 }
                 $row->add($cell);
             }
 
             if (count($this->row_callable)) {
                 foreach ($this->row_callable as $callable) {
-                    $callable($row, $tablerow);
+                    $methodReflection = new \ReflectionFunction($callable);
+                    $argCount = $methodReflection->getNumberOfParameters();
+                    if ($argCount === 1)
+                    {
+                        $callable($row);
+                    }
+                    elseif ($argCount === 2)
+                    {
+                        $callable($row, $tablerow);
+                    }
                 }
             }
             $this->rows[] = $row;
@@ -126,7 +144,17 @@ class DataGrid extends DataSet
 
             if (count($this->row_callable)) {
                 foreach ($this->row_callable as $callable) {
-                    $callable($row, $tablerow);
+                    $methodReflection = new \ReflectionFunction($callable);
+                    $argCount = $methodReflection->getNumberOfParameters();
+                    if ($argCount === 1)
+                    {
+                        $callable($row);
+                    }
+                    elseif ($argCount === 2)
+                    {
+                        $callable($row, $tablerow);
+                    }
+                    
                 }
             }
 
