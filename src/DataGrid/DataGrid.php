@@ -28,7 +28,7 @@ class DataGrid extends DataSet
     {
         $column = new Column($name, $label, $orderby);
         $this->columns[$column->name] = $column;
-        if (!in_array($name,array("_edit", "_blank"))) {
+        if (!in_array($name,array("_edit"))) {
             $this->headers[] = $label;
         }
         if ($orderby) {
