@@ -50,11 +50,6 @@ class Redactor extends Field
 
         Rapyd::script("$('#".$this->name."').redactor({".$redactor_params."});");
 
-		$redactor = "$('#".$this->name."').redactor({
-			imageUpload: '" . $this->model->redactor_upload_url . "'
-		});";
-		
-
         break;
 
       case "hidden":
