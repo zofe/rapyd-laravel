@@ -46,6 +46,18 @@ class Autocomplete extends Field
 
     }
 
+    public function minChars($len)
+    {
+        $this->min_chars = $len;
+        return $this;
+    }
+
+    public function mustMatch($bool)
+    {
+        $this->must_match = $bool;
+        return $this;
+    }
+
     public function getValue()
     {
         if (!$this->is_local && !$this->record_label && $this->rel_field != "") {
@@ -117,7 +129,13 @@ class Autocomplete extends Field
                 } elseif ($this->value == "") {
                     $output = "";
                 } else {
-                    $output = nl2br(htmlspecialchars($this->value));
+                    if ($this->relation != null) {
+                        $name = $this->rel_field;
+                        $value = @$this->relation->get()->first()->$name;
+                    } else {
+                        $value = $this->value;
+                    }
+                    $output = nl2br(htmlspecialchars($value));
                 }
                 $output = "<div class='help-block'>".$output."&nbsp;</div>";
                 break;
@@ -147,26 +165,44 @@ class Autocomplete extends Field
                     var blod_{$this->name} = new Bloodhound({
                         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('auto_{$this->name}'),
                         queryTokenizer: Bloodhound.tokenizers.whitespace,
-                        remote: '{$this->remote}?q=%QUERY'
+                        remote: {
+                            url: '{$this->remote}?q=%QUERY',
+                            ajax: {
+                                complete: function(response){
+                                    response.responseJSON.forEach(function (item) {
+                                        blod_{$this->name}.valueCache[item.{$this->record_label}] = item.{$this->record_id};
+                                    });
+                                }
+                            }
+                        }
                     });
+                    blod_{$this->name}.valueCache = {};
                     blod_{$this->name}.initialize();
 
-                    $('#th_{$this->name} .typeahead').typeahead(null, {
-                        name: '{$this->name}',
-                        displayKey: '{$this->record_label}',
+                    $('#th_{$this->name} .typeahead').typeahead({
                         highlight: true,
                         minLength: {$this->min_chars},
+                    }, {
+                        displayKey: '{$this->record_label}',
+                        name: '{$this->name}',
                         source: blod_{$this->name}.ttAdapter(),
                         templates: {
                             suggestion: Handlebars.compile('{{{$this->record_label}}}')
                         }
                     }).on("typeahead:selected typeahead:autocompleted",
-                        function (e,data) { $('#{$this->name}').val(data.{$this->record_id});
-
+                        function (e,data) {
+                            $('#{$this->name}').val(data.{$this->record_id});
                     }).on("typeahead:closed",
                         function (e,data) {
-                            if ($(this).val() == '') {
-                                $('#{$this->name}').val('');
+                            if ('{$this->must_match}') {
+                                if ( !($.trim($(this).val()) in blod_{$this->name}.valueCache) ) {
+                                    $('#{$this->name}').val('');
+                                    $(this).val('');
+                                }
+                            } else {
+                                if ($(this).val() == '') {
+                                    $('#{$this->name}').val('');
+                                }
                             }
                     });
 acp;

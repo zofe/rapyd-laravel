@@ -15,6 +15,8 @@ use Zofe\Rapyd\DataForm\Field\Radiogroup;
 use Zofe\Rapyd\DataForm\Field\Redactor;
 use Zofe\Rapyd\DataForm\Field\Select;
 use Zofe\Rapyd\DataForm\Field\Tags;
+use Zofe\Rapyd\DataForm\Field\Number;
+use Zofe\Rapyd\DataForm\Field\Numberrange;
 use Zofe\Rapyd\DataForm\Field\Text;
 use Zofe\Rapyd\DataForm\Field\Textarea;
 use Zofe\Rapyd\Widget;
@@ -39,6 +41,8 @@ use Zofe\Rapyd\Rapyd;
  * @method Redactor     redactor    (string $name, string $label, string $validation = '')
  * @method Autocomplete autocomplete(string $name, string $label, string $validation = '')
  * @method Tags         tags        (string $name, string $label, string $validation = '')
+ * @method Number       number      (string $name, string $label, string $validation = '')
+ * @method Numberrange  numberrange (string $name, string $label, string $validation = '')
  * @method Colorpicker  colorpicker (string $name, string $label, string $validation = '')
  * @method Date         date        (string $name, string $label, string $validation = '')
  * @method Auto         auto        (string $name, string $label, string $validation = '')
@@ -53,6 +57,8 @@ use Zofe\Rapyd\Rapyd;
  * @method Redactor     addRedactor    (string $name, string $label, string $validation = '')
  * @method Autocomplete addAutocomplete(string $name, string $label, string $validation = '')
  * @method Tags         addTags        (string $name, string $label, string $validation = '')
+ * @method Number       addNumber      (string $name, string $label, string $validation = '')
+ * @method Numberrange  addNumberrange (string $name, string $label, string $validation = '')
  * @method Colorpicker  addColorpicker (string $name, string $label, string $validation = '')
  * @method Date         addDate        (string $name, string $label, string $validation = '')
  * @method Auto         addAuto        (string $name, string $label, string $validation = '')
@@ -197,8 +203,8 @@ class DataForm extends Widget
 
     /**
      * get field instance from fields array
-     * @param $field_name
-     * @param  array                      $ttributes
+     * @param string $field_name
+     * @param array $attributes
      * @return \Zofe\Rapyd\DataForm\Field $field
      */
     public function field($field_name, array $attributes = array())
