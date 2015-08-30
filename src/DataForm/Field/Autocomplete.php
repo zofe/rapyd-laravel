@@ -195,9 +195,13 @@ class Autocomplete extends Field
                     }).on("typeahead:closed",
                         function (e,data) {
                             if ('{$this->must_match}') {
-                                if ( !($.trim($(this).val()) in blod_{$this->name}.valueCache) ) {
+                                var _label = $.trim($(this).val());
+                                if ( !(_label in blod_{$this->name}.valueCache) ) {
                                     $('#{$this->name}').val('');
                                     $(this).val('');
+                                } else {
+                                    //Fill data to hidden input, when direct copy data to input without choose from auto-complete results.
+                                    $('#{$this->name}').val(blod_{$this->name}.valueCache[_label]);
                                 }
                             } else {
                                 if ($(this).val() == '') {
