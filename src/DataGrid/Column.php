@@ -21,6 +21,11 @@ class Column
 
     public function __construct($name, $label = null, $orderby = false)
     {
+
+        if (!$name) {
+            throw new \Exception('$name must be given when creating Column object.');
+        }
+
         $this->name = $name;
 
         //check for filters
