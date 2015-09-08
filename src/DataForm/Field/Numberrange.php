@@ -2,7 +2,7 @@
 
 namespace Zofe\Rapyd\DataForm\Field;
 
-use Illuminate\Html\FormFacade as Form;
+use Form;
 use Zofe\Rapyd\Rapyd;
 
 class Numberrange extends Number
