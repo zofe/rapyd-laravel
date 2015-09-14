@@ -117,15 +117,13 @@ abstract class Field extends Widget
             $this->rel_field = $name;
             $this->name = ($name != $relation) ? $relation . "_" . $name : $name;
 
-            $relclass = get_class($this->relation);
-
-            if ($relclass == 'Illuminate\Database\Eloquent\Relations\BelongsTo') {
+            if (is_a(@$this->relation, 'Illuminate\Database\Eloquent\Relations\BelongsTo')){
                 $this->db_name = $this->relation->getForeignKey();
             } else {
                 $this->db_name = $name;
             }
 
-            if (in_array($relclass, array('Illuminate\Database\Eloquent\Relations\BelongsToMany'))) {
+            if (is_a(@$this->relation, 'Illuminate\Database\Eloquent\Relations\BelongsToMany')){
 
                 $this->rel_other_key = $this->relation->getOtherKey();
 
@@ -282,9 +280,9 @@ abstract class Field extends Widget
 
             $methodClass = get_class($this->relation);
 
-            switch ($methodClass) {
+            switch (true) {
                 //es. "categories" per "Article"
-                case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
+                case $this->relation instanceof \Illuminate\Database\Eloquent\Relations\BelongsToMany:
 
                     // some kind of field on belongsToMany works with multiple values, most of time in serialized way
                     //in this case I need to fill value using a serialized array of related collection
@@ -298,13 +296,13 @@ abstract class Field extends Widget
 
                     break;
                 //es. "author" per "Article"
-                case 'Illuminate\Database\Eloquent\Relations\BelongsTo':
+                case $this->relation instanceof \Illuminate\Database\Eloquent\Relations\BelongsTo:
                     $fk = $this->relation->getForeignKey(); //value I need is the ForeingKey
                     $this->value = $this->model->getAttribute($fk);
                     break;
 
                 //es. "article_detail" per "article"
-                case 'Illuminate\Database\Eloquent\Relations\HasOne':
+                case $this->relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne:
                     $this->value = @$this->relation->get()->first()->$name; //value I need is the field value on related table
 //                     @$this->model->$relation->$name;
 
@@ -450,7 +448,6 @@ abstract class Field extends Widget
         $this->getNewValue();
 
         if (is_object($this->model) && isset($this->db_name)) {
-
             if (
                 !(Schema::connection($this->model->getConnectionName())->hasColumn($this->model->getTable(), $this->db_name)
                 || $this->model->hasSetMutator($this->db_name))
