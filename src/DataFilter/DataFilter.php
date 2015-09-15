@@ -107,16 +107,17 @@ class DataFilter extends DataForm
 
                     if (isset($this->model) && $field->relation != null) {
                         $rel_type = get_class($field->relation);
-                        if (in_array($rel_type,
-                            array('Illuminate\Database\Eloquent\Relations\HasOne',
-                                  'Illuminate\Database\Eloquent\Relations\HasMany',
-                                  'Illuminate\Database\Eloquent\Relations\BelongsTo',
-                                  'Illuminate\Database\Eloquent\Relations\BelongsToMany'
 
-                            )))
-                        {
-                            if ($rel_type == 'Illuminate\Database\Eloquent\Relations\BelongsTo' and
-                                in_array($field->type, array('select', 'radiogroup', 'autocomplete'))){
+                        if (
+                            is_a($field->relation, 'Illuminate\Database\Eloquent\Relations\HasOne')
+                            || is_a($field->relation, 'Illuminate\Database\Eloquent\Relations\HasMany')
+                            || is_a($field->relation, 'Illuminate\Database\Eloquent\Relations\BelongsTo')
+                            || is_a($field->relation, 'Illuminate\Database\Eloquent\Relations\BelongsToMany')
+                        ){
+                            if (
+                                is_a($field->relation, 'Illuminate\Database\Eloquent\Relations\BelongsTo') and
+                                in_array($field->type, array('select', 'radiogroup', 'autocomplete'))
+                            ){
                                     $deep_where = false;
                             } else {
                                 $deep_where = true;
@@ -136,9 +137,10 @@ class DataFilter extends DataForm
 
                         if ($deep_where) {
                             //exception for multiple value fields on BelongsToMany
-                            if ($rel_type == 'Illuminate\Database\Eloquent\Relations\BelongsToMany' and
-                                in_array($field->type, array('tags','checks'))  )
-                            {
+                            if (
+                                is_a($field->relation, 'Illuminate\Database\Eloquent\Relations\BelongsToMany') and
+                                in_array($field->type, array('tags','checks'))
+                            ){
                                   $values = explode($field->serialization_sep, $value);
 
                                   if ($field->clause == 'wherein') {
