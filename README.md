@@ -33,6 +33,9 @@ To `composer.json` add:
 add this service provider on your app.php:  
 `'Zofe\Rapyd\RapydServiceProvider',`
 
+then publish assets:  
+`$ php artisan vendor:publish`
+
 
 ## DataGrid
 
@@ -308,8 +311,7 @@ You need also to add this to your views, to let rapyd add runtime assets:
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-{{ Rapyd::head() }}  for L4   
-{!! Rapyd::head() !!}  for L5
+{!! Rapyd::head() !!} 
 
 </head>
 ```

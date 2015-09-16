@@ -149,7 +149,7 @@ class DemoController extends Controller
         $grid->add('title','Title');
         $grid->add('{{ str_limit($body,4) }}','Body');
         $grid->add('{{ $author->fullname }}','Author', 'author_id');
-        $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');
+        $grid->add('{{ implode(", ", $categories->lists("name")->all()) }}','Categories');
 
         $grid->edit('/rapyd-demo/edit', 'Edit','show|modify');
         $grid->link('/rapyd-demo/edit',"New Article", "TR");
@@ -183,7 +183,7 @@ class DemoController extends Controller
         $grid->add('id','ID', true)->style("width:70px");
         $grid->add('title','Title', true);
         $grid->add('author.fullname','Author');
-        $grid->add('{{ implode(", ", $categories->lists("name")) }}','Categories');
+        $grid->add('{{ implode(", ", $categories->lists("name")->all()) }}','Categories');
         $grid->add('publication_date|strtotime|date[m/d/Y]','Date', true);
         $grid->add('body|strip_tags|substr[0,20]','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify|delete');
@@ -213,10 +213,10 @@ class DemoController extends Controller
         $form->add('body','Body', 'redactor');
 
         //belongs to
-        $form->add('author_id','Author','select')->options(Author::lists('firstname', 'id'));
+        $form->add('author_id','Author','select')->options(Author::lists('firstname', 'id')->all());
 
         //belongs to many (field name must be the relation name)
-        $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'id'));
+        $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'id')->all());
         $form->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
         $form->add('color','Color','colorpicker');
         $form->add('public','Public','checkbox');
@@ -238,7 +238,7 @@ class DemoController extends Controller
         $form->add('title','Title', 'text')->rule('required|min:5');
 
         //simple autocomplete on options (built as local json array)
-        $form->add('author_id','Author','autocomplete')->options(Author::lists('firstname', 'id'));
+        $form->add('author_id','Author','autocomplete')->options(Author::lists('firstname', 'id')->all());
 
         //autocomplete with relation.field to manage a belongsToMany
         $form->add('author.fullname','Author','autocomplete')->search(array("firstname", "lastname"));
@@ -290,7 +290,7 @@ class DemoController extends Controller
         $edit->add('body','Body', 'redactor');
         $edit->add('detail.note','Note', 'textarea')->attributes(array('rows'=>2));
         $edit->add('detail.note_tags','Note tags', 'text');
-        $edit->add('author_id','Author','select')->options(Author::lists("firstname", "id"));
+        $edit->add('author_id','Author','select')->options(Author::lists("firstname", "id")->all());
         $edit->add('publication_date','Date','date')->format('d/m/Y', 'it');
         $edit->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
         $edit->add('public','Public','checkbox');
