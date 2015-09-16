@@ -33,7 +33,7 @@ dev-master switched to laravel 5.1
 2. run `$ composer update zofe/rapyd`
 
 
-3. add this in the "provider" array on your app.php:  
+3. add this in the "provider" array on your config/app.php:  
  `Zofe\Rapyd\RapydServiceProvider::class,`  
   or for < 5.1  
  `'Zofe\Rapyd\RapydServiceProvider',`
@@ -42,7 +42,8 @@ dev-master switched to laravel 5.1
 4. then publish assets:  
  `$ php artisan vendor:publish`  
   or for < 5.0  
- `$ php artisan asset:publish zofe/rapyd`
+ `$ php artisan asset:publish zofe/rapyd`  
+ `$ php artisan config:publish zofe/rapyd`
   
 
 ## DataGrid
