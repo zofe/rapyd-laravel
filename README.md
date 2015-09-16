@@ -24,14 +24,21 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
 
 dev-master switched to laravel 5.1  
 
-To `composer.json` add:  
+1. To `composer.json` add:  
 `"zofe/rapyd": "2.1.*"` for Laravel 5.1  
 `"zofe/rapyd": "2.0.*"` for Laravel 5.0  
 `"zofe/rapyd": "1.3.*"` for Laravel 4.*  
 
 
-add this service provider on your app.php:  
+2. run `composer update zofe/rapyd`
+
+
+3. add this in the "provider" array on your app.php:  
+ `Zofe\Rapyd\RapydServiceProvider::class,`
+
+or for > 5.0  
 `'Zofe\Rapyd\RapydServiceProvider',`
+
 
 then publish assets:  
 `$ php artisan vendor:publish`
