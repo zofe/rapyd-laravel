@@ -35,7 +35,7 @@ dev-master switched to laravel 5.1
 
 3. add this in the "provider" array on your app.php:  
  `Zofe\Rapyd\RapydServiceProvider::class,`  
-  or for > 5.0  
+  or for < 5.1  
  `'Zofe\Rapyd\RapydServiceProvider',`
 
 
