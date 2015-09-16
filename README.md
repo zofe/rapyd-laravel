@@ -30,7 +30,7 @@ dev-master switched to laravel 5.1
 `"zofe/rapyd": "1.3.*"` for Laravel 4.*  
 
 
-2. run `composer update zofe/rapyd`
+2. run `$ composer update zofe/rapyd`
 
 
 3. add this in the "provider" array on your app.php:  
@@ -40,8 +40,10 @@ dev-master switched to laravel 5.1
 
 
 4. then publish assets:  
-`$ php artisan vendor:publish`
-
+ `$ php artisan vendor:publish`  
+  or for < 5.0  
+ `$ php artisan asset:publish zofe/rapyd`
+  
 
 ## DataGrid
 
