@@ -19,13 +19,19 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
  
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
  
-## important notice:
 
-dev-master switched to laravel 5  
-if you are on laravel 4 you must use 1.3.* tags (see at bottom)
+## Install in Laravel 5.1, 5.0, 4.*
 
-The Wiki documentation is for Laravel 4 version, but changes are minimal, mainly related to Blade.  
-(you should use {!! $widget !!}  instead  {{ $widget }} etc..
+dev-master switched to laravel 5.1  
+
+To `composer.json` add:  
+`"zofe/rapyd": "2.1.*"` for Laravel 5.1
+`"zofe/rapyd": "2.0.*"` for Laravel 5.0
+`"zofe/rapyd": "1.3.*"` for Laravel 4.*
+
+
+add this service provider on your app.php:  
+`'Zofe\Rapyd\RapydServiceProvider',`
 
 
 ## DataGrid
@@ -50,7 +56,7 @@ in a controller
    $grid->orderBy('article_id','desc'); //default orderby
    $grid->paginate(10); //pagination
 
-   View::make('articles', compact('grid'))
+   view('articles', compact('grid'))
 
 ```
 
@@ -59,8 +65,8 @@ in a view you can just write
 ```php
 
   #articles.blade.php  
-  {{ $grid }} for L4   
-  {!! $grid !!} for L5  
+
+  {!! $grid !!} 
 
 ```
 
@@ -131,13 +137,13 @@ datagrid supports also csv output, so it can be used as "report" tool.
         $form->link("/another/url","Next Step");
    });
 
-   View::make('article', compact('form'))
+   view('article', compact('form'))
 ```
 
 ```php
    #article.blade.php
-  {{ $form }}  for L4  
-  {!! $form !!}  for L5
+
+  {!! $form !!}
 ```
 
 [DataForm explained](https://github.com/zofe/rapyd-laravel/wiki/DataForm)  
@@ -150,7 +156,7 @@ You can directly customize form  using build() in your controller
  ```php
      ...
      $form->build();
-     View::make('article', compact('form'))
+     view('article', compact('form'))
  ```
  then in the view you can use something like this:
  
@@ -210,9 +216,8 @@ You can directly customize form  using build() in your controller
 
 ```php
    #crud.blade.php
-   
-  {{ $edit }} for L4   
-  {!! $edit !!} for L5
+ 
+  {!! $edit !!} 
 ```
 [DataEdit explained](https://github.com/zofe/rapyd-laravel/wiki/DataEdit)  
 
@@ -234,17 +239,12 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
    $grid->add('{{ substr($body,0,20) }}...','Body');
    $grid->paginate(10);
 
-   View::make('articles', compact('filter', 'grid'))
+   view('articles', compact('filter', 'grid'))
 ```
 
 ```php
    # articles.blade
    
-   //for L4  
-   {{ $filter }}  
-   {{ $grid }}  
-
-    //for L5 
    {!! $filter !!}  
    {!! $grid !!}
 
@@ -254,18 +254,6 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 [Custom layout and custom query scope](http://www.rapyd.com/rapyd-demo/customfilter) 
 
 
-## Install in Laravel 4.* and 5.0
-
-
-To `composer.json` add:  
-`"zofe/rapyd": "1.3.*"` for Laravel 4, not frequently updated (should be stable)  
-`"zofe/rapyd": "2.0.*"` or _dev-master_ for Laravel 5 (kudos to @tiger2wander for PR)
-
-
-In `app/config/app.php` add:  
-`'Zofe\Rapyd\RapydServiceProvider',`
-
-then run: `$ composer update zofe/rapyd`.
 
 
 ## Namespace consideration, Extending etc.
