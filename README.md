@@ -25,9 +25,9 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
 dev-master switched to laravel 5.1  
 
 To `composer.json` add:  
-`"zofe/rapyd": "2.1.*"` for Laravel 5.1
-`"zofe/rapyd": "2.0.*"` for Laravel 5.0
-`"zofe/rapyd": "1.3.*"` for Laravel 4.*
+`"zofe/rapyd": "2.1.*"` for Laravel 5.1  
+`"zofe/rapyd": "2.0.*"` for Laravel 5.0  
+`"zofe/rapyd": "1.3.*"` for Laravel 4.*  
 
 
 add this service provider on your app.php:  
