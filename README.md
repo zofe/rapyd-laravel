@@ -34,13 +34,12 @@ dev-master switched to laravel 5.1
 
 
 3. add this in the "provider" array on your app.php:  
- `Zofe\Rapyd\RapydServiceProvider::class,`
+ `Zofe\Rapyd\RapydServiceProvider::class,`  
+  or for > 5.0  
+ `'Zofe\Rapyd\RapydServiceProvider',`
 
-or for > 5.0  
-`'Zofe\Rapyd\RapydServiceProvider',`
 
-
-then publish assets:  
+4. then publish assets:  
 `$ php artisan vendor:publish`
 
 
