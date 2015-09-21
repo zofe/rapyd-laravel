@@ -1,16 +1,8 @@
 <?php namespace Zofe\Rapyd\Demo;
 
 
-
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-
-
 
 
 class DemoController extends Controller
@@ -28,22 +20,22 @@ class DemoController extends Controller
 
     public function getSchema()
     {
-        Schema::dropIfExists("demo_users");
-        Schema::dropIfExists("demo_articles");
-        Schema::dropIfExists("demo_article_detail");
-        Schema::dropIfExists("demo_comments");
-        Schema::dropIfExists("demo_categories");
-        Schema::dropIfExists("demo_article_category");
+        \Schema::dropIfExists("demo_users");
+        \Schema::dropIfExists("demo_articles");
+        \Schema::dropIfExists("demo_article_detail");
+        \Schema::dropIfExists("demo_comments");
+        \Schema::dropIfExists("demo_categories");
+        \Schema::dropIfExists("demo_article_category");
 
         //create all tables
-        Schema::table("demo_users", function ($table) {
+        \Schema::table("demo_users", function ($table) {
             $table->create();
             $table->increments('id');
             $table->string('firstname', 100);
             $table->string('lastname', 100);
             $table->timestamps();
         });
-        Schema::table("demo_articles", function ($table) {
+        \Schema::table("demo_articles", function ($table) {
             $table->create();
             $table->increments('id');
             $table->integer('author_id')->unsigned();
@@ -54,14 +46,14 @@ class DemoController extends Controller
             $table->timestamp('publication_date');
             $table->timestamps();
         });
-        Schema::table("demo_article_detail", function ($table) {
+        \Schema::table("demo_article_detail", function ($table) {
             $table->create();
             $table->increments('id');
             $table->integer('article_id')->unsigned();
             $table->text('note');
             $table->string('note_tags', 200);
         });
-        Schema::table("demo_comments", function ($table) {
+        \Schema::table("demo_comments", function ($table) {
             $table->create();
             $table->increments('id');
             $table->integer('user_id')->unsigned();
@@ -69,14 +61,14 @@ class DemoController extends Controller
             $table->text('comment');
             $table->timestamps();
         });
-        Schema::table("demo_categories", function ($table) {
+        \Schema::table("demo_categories", function ($table) {
             $table->create();
             $table->increments('id');
             $table->integer('parent_id')->unsigned();
             $table->string('name', 100);
             $table->timestamps();
         });
-        Schema::table("demo_article_category", function ($table) {
+        \Schema::table("demo_article_category", function ($table) {
             $table->create();
             $table->integer('article_id')->unsigned();
             $table->integer('category_id')->unsigned();
@@ -84,17 +76,17 @@ class DemoController extends Controller
         });
 
         //populate all tables
-        $users = DB::table('demo_users');
+        $users = \DB::table('demo_users');
         $users->insert(array('firstname' => 'Jhon', 'lastname' => 'Doe'));
         $users->insert(array('firstname' => 'Jane', 'lastname' => 'Doe'));
 
-        $categories = DB::table('demo_categories');
+        $categories = \DB::table('demo_categories');
         for ($i=1; $i<=5; $i++) {
             $categories->insert(array(
                     'name' => 'Category '.$i)
             );
         }
-        $articles = DB::table('demo_articles');
+        $articles = \DB::table('demo_articles');
         for ($i=1; $i<=20; $i++) {
             $articles->insert(array(
                     'author_id' => rand(1,2),
@@ -104,13 +96,13 @@ class DemoController extends Controller
                     'public' => true,)
             );
         }
-        $categories =  DB::table('demo_article_category');
+        $categories =  \DB::table('demo_article_category');
         $categories->insert(array('article_id' => 1,'category_id' => 1));
         $categories->insert(array('article_id' => 1,'category_id' => 2));
         $categories->insert(array('article_id' => 20,'category_id' => 2));
         $categories->insert(array('article_id' => 20,'category_id' => 3));
 
-        $comments =  DB::table('demo_comments');
+        $comments =  \DB::table('demo_comments');
         $comments->insert(array(
                 'user_id' => 1,
                 'article_id' => 2,
@@ -276,7 +268,7 @@ class DemoController extends Controller
 
     public function anyEdit()
     {
-        if (Input::get('do_delete')==1) return  "not the first";
+        if (\Input::get('do_delete')==1) return  "not the first";
 
         $edit = \DataEdit::source(new Article());
         $edit->label('Edit Article');
@@ -299,15 +291,15 @@ class DemoController extends Controller
     public function getAuthorlist()
     {
         //needed only if you want a custom remote ajax call for a custom search
-        return Author::where("firstname","like", Input::get("q")."%")
-            ->orWhere("lastname","like", Input::get("q")."%")->take(10)->get();
+        return Author::where("firstname","like", \Input::get("q")."%")
+            ->orWhere("lastname","like", \Input::get("q")."%")->take(10)->get();
 
     }
 
     public function getCategorylist()
     {
         //needed only if you want a custom remote ajax call for a custom search
-        return Category::where("name","like", Input::get("q")."%")->take(10)->get();
+        return Category::where("name","like", \Input::get("q")."%")->take(10)->get();
 
     }
 
