@@ -55,7 +55,7 @@ It support also blade syntax, filters, closures etc..
 in a controller 
 
 ```php
-   $grid = DataGrid::source(Article::with('author'));  //same source types of DataSet
+   $grid = \DataGrid::source(Article::with('author'));  //same source types of DataSet
    
    $grid->add('title','Title', true); //field name, label, sortable
    $grid->add('author.fullname','author'); //relation.fieldname 
@@ -122,10 +122,10 @@ datagrid supports also csv output, so it can be used as "report" tool.
 
 ```php
    //start with empty form to create new Article
-   $form = DataForm::source(new Article);
+   $form = \DataForm::source(new Article);
    
    //or find a record to update some value
-   $form = DataForm::source(Article::find(1));
+   $form = \DataForm::source(Article::find(1));
 
    //add fields to the form
    $form->add('title','Title', 'text'); //field name, label, type
@@ -212,7 +212,7 @@ You can directly customize form  using build() in your controller
 
 ```php
    //simple crud for Article entity
-   $edit = DataEdit::source(new Article);
+   $edit = \DataEdit::source(new Article);
    $edit->link("article/list","Articles", "TR")->back();
    $edit->add('title','Title', 'text')->rule('required');
    $edit->add('body','Body','textarea')->rule('required');
@@ -240,13 +240,13 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 
 ```php
-   $filter = DataFilter::source(new Article);
+   $filter = \DataFilter::source(new Article);
    $filter->attributes(array('class'=>'form-inline'));
    $filter->add('title','Title', 'text');
    $filter->submit('search');
    $filter->reset('reset');
    
-   $grid = DataGrid::source($filter);
+   $grid = \DataGrid::source($filter);
    $grid->add('nome','Title', true);
    $grid->add('{{ substr($body,0,20) }}...','Body');
    $grid->paginate(10);
@@ -298,14 +298,6 @@ To use widgets you can:
 
 You can quickly publish the configuration file (to override something) 
 by running the following Artisan command.  
-
-Laravel 4
-
-    $ php artisan config:publish zofe/rapyd  
-    $ php artisan asset:publish zofe/rapyd
-
-
-Laravel 5
 
     $ php artisan vendor:publish  
     
@@ -360,17 +352,8 @@ An easy way to work with rapyd is:
   * make an empty view, include bootstrap and display content that rapyd will build for you
 
 
-Rapyd comes with demo (controller, models, views)  to run it just add:
-
-
-/app/routes.php  (Laravel 4)
-```php
-....
-Route::controller('rapyd-demo', 'Zofe\\Rapyd\\Controllers\\DemoController');
-```
-for Laravel 5 the route is already defined, you sould find rapyd routes in `app/Http/rapyd.php`  
-
-then go to:
+Rapyd comes with demo (controller, models, views) a route is defined in `app/Http/rapyd.php`  
+so go to:
 
 /rapyd-demo
 
