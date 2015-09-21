@@ -423,6 +423,9 @@ abstract class Field extends Widget
         if (is_array($options)) {
             $this->options += $options;
         }
+        else {
+            $this->options += $options->all();
+        }
 
         return $this;
     }
