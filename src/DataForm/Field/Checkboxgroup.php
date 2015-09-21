@@ -15,6 +15,11 @@ class Checkboxgroup extends Field
     public $unchecked_value = 0;
     public $clause = "wherein";
 
+    public function separator($separator)
+    {
+        $this->separator = $separator;
+    }
+
     public function getValue()
     {
         parent::getValue();
