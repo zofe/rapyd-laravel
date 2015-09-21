@@ -11,6 +11,11 @@ class Radiogroup extends Field
     public $separator = "&nbsp;&nbsp;";
     public $clause = "where";
 
+    public function separator($separator)
+    {
+        $this->separator = $separator;
+    }
+
     public function getValue()
     {
         parent::getValue();
