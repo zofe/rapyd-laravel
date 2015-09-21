@@ -10,11 +10,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-use Zofe\Rapyd\Facades\DataSet;
-use Zofe\Rapyd\Facades\DataGrid;
-use Zofe\Rapyd\Facades\DataForm;
-use Zofe\Rapyd\Facades\DataEdit;
-use Zofe\Rapyd\Facades\DataFilter;
+
 
 
 class DemoController extends Controller
@@ -22,12 +18,12 @@ class DemoController extends Controller
 
     public function getIndex()
     {
-        return  View::make('rapyd::demo.demo');
+        return  view('rapyd::demo.demo');
     }
 
     public function getModels()
     {
-        return  View::make('rapyd::demo.models');
+        return  view('rapyd::demo.models');
     }
 
     public function getSchema()
@@ -132,18 +128,18 @@ class DemoController extends Controller
 
     public function getSet()
     {
-        $set = DataSet::source(Article::with('author', 'categories'));
+        $set = \DataSet::source(Article::with('author', 'categories'));
         $set->addOrderBy(['title','id']);
         $set->paginate(9);
         $set->build();
 
-        return  View::make('rapyd::demo.set', compact('set'));
+        return  view('rapyd::demo.set', compact('set'));
     }
 
     public function getGrid()
     {
 
-        $grid = DataGrid::source(Article::with('author', 'categories'));
+        $grid = \DataGrid::source(Article::with('author', 'categories'));
 
         $grid->add('id','ID', true)->style("width:100px");
         $grid->add('title','Title');
@@ -165,12 +161,12 @@ class DemoController extends Controller
            }
         });
 
-        return  View::make('rapyd::demo.grid', compact('grid'));
+        return  view('rapyd::demo.grid', compact('grid'));
     }
 
     public function getFilter()
     {
-        $filter = DataFilter::source(Article::with('author','categories'));
+        $filter = \DataFilter::source(Article::with('author','categories'));
         $filter->add('title','Title', 'text');
         $filter->add('categories.name','Categories','tags');
         $filter->add('publication_date','publication date','daterange')->format('m/d/Y', 'en');
@@ -178,7 +174,7 @@ class DemoController extends Controller
         $filter->reset('reset');
         $filter->build();
 
-        $grid = DataGrid::source($filter);
+        $grid = \DataGrid::source($filter);
         $grid->attributes(array("class"=>"table table-striped"));
         $grid->add('id','ID', true)->style("width:70px");
         $grid->add('title','Title', true);
@@ -189,25 +185,25 @@ class DemoController extends Controller
         $grid->edit('/rapyd-demo/edit', 'Edit','modify|delete');
         $grid->paginate(10);
 
-        return  View::make('rapyd::demo.filtergrid', compact('filter', 'grid'));
+        return  view('rapyd::demo.filtergrid', compact('filter', 'grid'));
     }
 
     public function getCustomfilter()
     {
-        $filter = DataFilter::source(Article::with('author','categories'));
+        $filter = \DataFilter::source(Article::with('author','categories'));
         $filter->text('src','Search')->scope('freesearch');
         $filter->build();
 
-        $set = DataSet::source($filter);
+        $set = \DataSet::source($filter);
         $set->paginate(9);
         $set->build();
 
-        return  View::make('rapyd::demo.customfilter', compact('filter', 'set'));
+        return  view('rapyd::demo.customfilter', compact('filter', 'set'));
     }
 
     public function anyForm()
     {
-        $form = DataForm::source(Article::find(1));
+        $form = \DataForm::source(Article::find(1));
 
         $form->add('title','Title', 'text')->rule('required|min:5');
         $form->add('body','Body', 'redactor');
@@ -228,12 +224,12 @@ class DemoController extends Controller
             $form->link("/rapyd-demo/form","back to the form");
         });
 
-        return View::make('rapyd::demo.form', compact('form'));
+        return view('rapyd::demo.form', compact('form'));
     }
 
     public function anyAdvancedform()
     {
-        $form = DataForm::source(Article::find(1));
+        $form = \DataForm::source(Article::find(1));
 
         $form->add('title','Title', 'text')->rule('required|min:5');
 
@@ -256,12 +252,12 @@ class DemoController extends Controller
             $form->link("/rapyd-demo/advancedform","back to the form");
         });
 
-        return View::make('rapyd::demo.advancedform', compact('form'));
+        return view('rapyd::demo.advancedform', compact('form'));
     }
 
     public function anyStyledform()
     {
-        $form = DataForm::source(Article::find(1));
+        $form = \DataForm::source(Article::find(1));
 
         $form->add('title','Title', 'text')->rule('required|min:5');
         $form->add('body','Body', 'redactor');
@@ -275,14 +271,14 @@ class DemoController extends Controller
         });
         $form->build();
 
-        return View::make('rapyd::demo.styledform', compact('form'));
+        return view('rapyd::demo.styledform', compact('form'));
     }
 
     public function anyEdit()
     {
         if (Input::get('do_delete')==1) return  "not the first";
 
-        $edit = DataEdit::source(new Article());
+        $edit = \DataEdit::source(new Article());
         $edit->label('Edit Article');
         $edit->link("rapyd-demo/filter","Articles", "TR")->back();
         $edit->add('title','Title', 'text')->rule('required|min:5');
