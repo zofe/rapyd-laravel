@@ -42,7 +42,5 @@
 
 
 @if ($dg->havePagination())
-    <div class="pagination">
     {!! $dg->links() !!}
-    </div>
 @endif

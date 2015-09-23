@@ -16,22 +16,24 @@ class RapydServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../views', 'rapyd');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'rapyd');
         
-        $this->publishes([
-            __DIR__.'/../public/assets' => public_path('packages/zofe/rapyd/assets')
-        ], 'assets');
+        //assets
+        $this->publishes([__DIR__.'/../public/assets' => public_path('packages/zofe/rapyd/assets')], 'assets');
         
-        $this->publishes([
-            __DIR__.'/../config/rapyd.php' => config_path('rapyd.php'),
-        ], 'config');
+        //config
+        $this->publishes([__DIR__.'/../config/rapyd.php' => config_path('rapyd.php')], 'config');
+        $this->mergeConfigFrom( __DIR__.'/../config/rapyd.php', 'rapyd');
+
+        
         
         $this->publishes([
             __DIR__.'/routes.php' => app_path('/Http/rapyd.php'),
         ], 'routes');
 
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/rapyd.php', 'rapyd'
-        );
 
+        if (! $this->app->routesAreCached()) {
+            require __DIR__.'/routes.php';
+        }
+        
         if (file_exists($file = app_path('/Http/rapyd.php')))
         {
             include $file;
@@ -49,6 +51,7 @@ class RapydServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        
         $this->app->register('Illuminate\Html\HtmlServiceProvider');
         $this->app->register('Zofe\Burp\BurpServiceProvider');
         
