@@ -101,7 +101,7 @@ class DataGrid extends DataSet
             $headers  = array(
                 'Content-Type' => 'text/csv',
                 'Pragma'=>'no-cache',
-                '"Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
                 'Content-Disposition' => 'attachment; filename="' . $filename.'"');
 
             $handle = fopen('php://output', 'w');
@@ -141,6 +141,55 @@ class DataGrid extends DataSet
 
             return \Response::make(rtrim($output, "\n"), 200, $headers);
         }
+    }
+
+    public function buildExcel($filename = '', $timestamp = '_Ymd_His', $sanitize = true)
+    {
+        $this->source->build(); //build filter first to apply query params.
+        parent::build();
+
+        $filename = preg_replace('/[^0-9a-z\._-]/i', '', $filename);
+        $filename .= date($timestamp);
+
+
+        \Excel::create($filename, function ($excel) use($sanitize) {
+
+            $excel->sheet('Sheetname', function($sheet) use($sanitize) {
+
+                foreach ($this->data as $tablerow) {
+                    $row = new Row($tablerow);
+
+                    foreach ($this->columns as $column) {
+                        if (in_array($column->name,array("_edit")))
+                            continue;
+
+                        $cell = new Cell($column->name);
+                        $sanitize = (count($column->filters) || $column->cell_callable) ? false : true;
+                        $value = $this->getCellValue($column, $tablerow, $sanitize);
+                        $cell->value($value);
+                        $cell->parseFilters($column->filters);
+                        if ($column->cell_callable) {
+                            $callable = $column->cell_callable;
+                            $cell->value($callable($cell->value));
+                        }
+                        $row->add($cell);
+                    }
+
+                    if (count($this->row_callable)) {
+                        foreach ($this->row_callable as $callable) {
+                            $callable($row);
+                        }
+                    }
+                    //avoiding output html codes
+                    $_row = array_map(function($val) {return strip_tags($val);}, $row->toArray());
+                    $sheet->appendRow($_row);
+                }
+
+            });
+
+        //it calls die() internally, so no return needed;
+        })->export('xls');
+
     }
 
     protected function getCellValue($column, $tablerow, $sanitize = true)

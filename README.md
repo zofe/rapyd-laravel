@@ -8,4 +8,4 @@
 
 1. fix security issue on 'readonly' mode
 
-2. add Number Field Type
+2. add Datagrid::buildExcel() function （add maatwebsite/excel by composer）
