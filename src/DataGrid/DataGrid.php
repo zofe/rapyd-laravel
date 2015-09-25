@@ -155,6 +155,7 @@ class DataGrid extends DataSet
         \Excel::create($filename, function ($excel) use($sanitize) {
 
             $excel->sheet('Sheetname', function($sheet) use($sanitize) {
+                $sheet->appendRow($this->headers);
 
                 foreach ($this->data as $tablerow) {
                     $row = new Row($tablerow);
@@ -187,7 +188,7 @@ class DataGrid extends DataSet
 
             });
 
-        //it calls die() internally, so no return needed;
+            //it calls die() internally, so no return needed;
         })->export('xls');
 
     }
@@ -210,7 +211,7 @@ class DataGrid extends DataSet
 
             $value = $this->parser->compileString($column->name, $array);
 
-        //eager loading smart syntax  relation.field
+            //eager loading smart syntax  relation.field
         } elseif (preg_match('#^[a-z0-9_-]+(?:\.[a-z0-9_-]+)+$#i',$column->name, $matches) && is_object($tablerow) ) {
             //switch to blade and god bless eloquent
             $_relation = '$'.trim(str_replace('.','->', $column->name));
@@ -220,19 +221,19 @@ class DataGrid extends DataSet
             $array = array_merge($fields, $relations) ;
             $value = $this->parser->compileString($expression, $array);
 
-        //fieldname in a collection
+            //fieldname in a collection
         } elseif (is_object($tablerow)) {
 
             $value = @$tablerow->{$column->name};
             if ($sanitize) {
                 $value = $this->sanitize($value);
             }
-        //fieldname in an array
+            //fieldname in an array
         } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
 
             $value = $tablerow[$column->name];
 
-        //none found, cell will have the column name
+            //none found, cell will have the column name
         } else {
             $value = $column->name;
         }
@@ -269,17 +270,17 @@ class DataGrid extends DataSet
     {
         if ($this->output == "") {
 
-           //to avoid the error "toString() must not throw an exception"
-           //http://stackoverflow.com/questions/2429642/why-its-impossible-to-throw-exception-from-tostring/27307132#27307132
-           try {
-               $this->getGrid();
-           }
-           catch (\Exception $e) {
-               $previousHandler = set_exception_handler(function (){ });
-               restore_error_handler();
-               call_user_func($previousHandler, $e);
-               die;
-           }
+            //to avoid the error "toString() must not throw an exception"
+            //http://stackoverflow.com/questions/2429642/why-its-impossible-to-throw-exception-from-tostring/27307132#27307132
+            try {
+                $this->getGrid();
+            }
+            catch (\Exception $e) {
+                $previousHandler = set_exception_handler(function (){ });
+                restore_error_handler();
+                call_user_func($previousHandler, $e);
+                die;
+            }
 
         }
 
