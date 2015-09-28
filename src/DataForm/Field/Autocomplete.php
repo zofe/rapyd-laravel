@@ -20,11 +20,11 @@ class Autocomplete extends Field
     public $record_id;
     public $record_label;
 
-    public $must_match = false;
+    public $must_match = true;
     public $auto_fill = false;
     public $parent_id = '';
 
-    public $min_chars = '2';
+    public $min_chars = 1;
     public $clause = "where";
     public $is_local;
     public $description;
