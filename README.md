@@ -64,6 +64,20 @@ in a controller
    $grid->add('body|strip_tags|substr[0,20]','Body'); //filter (similar to twig syntax)
    $grid->add('body','Body')->filter('strip_tags|substr[0,20]'); //another way to filter
    $grid->edit('/articles/edit', 'Edit','modify|delete'); //shortcut to link DataEdit actions
+   
+   //cell closure
+   $grid->add('revision','Revision')->cell( function( $value, $row) {
+        return ($value != '') ? "rev.{$value}" : "no revisions for art. {$row->id}";
+   });
+   
+   //row closure
+   $grid->row(function ($row) {
+       if ($row->cell('public')->value < 1) {
+           $row->cell('title')->style("color:Gray");
+           $row->style("background-color:#CCFF66");
+       }  
+   });
+   
    $grid->link('/articles/edit',"Add New", "TR");  //add button
    $grid->orderBy('article_id','desc'); //default orderby
    $grid->paginate(10); //pagination
