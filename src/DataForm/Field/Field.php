@@ -578,7 +578,9 @@ abstract class Field extends Widget
             }
 
             if ($this->orientation == 'inline') {
-                $this->attributes["placeholder"] = $this->label;
+                if ($this->type!='select') {
+                    $this->attributes["placeholder"] = $this->label;
+                }
             }
 
         }
