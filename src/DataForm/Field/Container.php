@@ -35,7 +35,7 @@ class Container extends Field
             case "show":
             case "create":
             case "modify":
-                    $output = $this->parseString($this->pattern, $this->is_view);
+                    $output = '<div>'.$this->parseString($this->pattern, $this->is_view).'</div>';
                 break;
             case "hidden":
                 $output = "";
