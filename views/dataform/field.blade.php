@@ -1,4 +1,4 @@
-@if (in_array($field->type, array('hidden','auto')))
+@if (in_array($field->type, array('hidden','auto')) OR !$field->has_wrapper )
 
     {!! $field->output !!}
 
@@ -12,9 +12,14 @@
 @else
     <div class="form-group{!!$field->has_error!!}">
 
-        <label for="{!! $field->name !!}" class="col-sm-2 control-label{!! $field->req !!}">{!! $field->label !!}</label>
-        <div class="col-sm-10" id="div_{!! $field->name !!}">
-
+        @if ($field->has_label)
+            <label for="{!! $field->name !!}" class="col-sm-2 control-label{!! $field->req !!}">{!! $field->label !!}</label>
+            <div class="col-sm-10" id="div_{!! $field->name !!}">
+        @else
+            <div class="col-sm-12" id="div_{!! $field->name !!}">
+        @endif
+            
+            
             {!! $field->output !!}
 
             @if(count($field->messages))
@@ -28,5 +33,7 @@
 
         </div>
 
+            
+            
     </div>
 @endif
