@@ -64,6 +64,20 @@ in a controller
    $grid->add('body|strip_tags|substr[0,20]','Body'); //filter (similar to twig syntax)
    $grid->add('body','Body')->filter('strip_tags|substr[0,20]'); //another way to filter
    $grid->edit('/articles/edit', 'Edit','modify|delete'); //shortcut to link DataEdit actions
+   
+   //cell closure
+   $grid->add('revision','Revision')->cell( function( $value, $row) {
+        return ($value != '') ? "rev.{$value}" : "no revisions for art. {$row->id}";
+   });
+   
+   //row closure
+   $grid->row(function ($row) {
+       if ($row->cell('public')->value < 1) {
+           $row->cell('title')->style("color:Gray");
+           $row->style("background-color:#CCFF66");
+       }  
+   });
+   
    $grid->link('/articles/edit',"Add New", "TR");  //add button
    $grid->orderBy('article_id','desc'); //default orderby
    $grid->paginate(10); //pagination
@@ -134,13 +148,18 @@ datagrid supports also csv output, so it can be used as "report" tool.
    //some enhanced field (images, wysiwyg, autocomplete, etc..):
    $form->add('photo','Photo', 'image')->move('uploads/images/')->preview(80,80);
    $form->add('body','Body', 'redactor'); //wysiwyg editor
-   $form->add('author.name','Author','autocomplete')->search(array('firstname','lastname'));
+   $form->add('author.name','Author','autocomplete')->search(['firstname','lastname']);
    $form->add('categories.name','Categories','tags'); //tags field
  
    //you can also use now the smart syntax for all fields: 
    $form->text('title','Title'); //field name, label
    $form->textarea('body','Body')->rule('required'); //validation
+ 
+   //change form orientation
+   $form->attributes(['class'=>'form-inline']);
+ 
    ...
+ 
  
    $form->submit('Save');
    $form->saved(function() use ($form)
@@ -216,11 +235,11 @@ You can directly customize form  using build() in your controller
    $edit->link("article/list","Articles", "TR")->back();
    $edit->add('title','Title', 'text')->rule('required');
    $edit->add('body','Body','textarea')->rule('required');
-   $edit->add('author.name','Author','autocomplete')->search(array('firstname','lastname'));
+   $edit->add('author.name','Author','autocomplete')->search(['firstname','lastname']);
    
    //you can also use now the smart syntax for all fields: 
    $edit->textarea('title','Title'); 
-   $edit->autocomplete('author.name','Author')->search(array('firstname','lastname'));
+   $edit->autocomplete('author.name','Author')->search(['firstname','lastname']);
    
    return $edit->view('crud', compact('edit'));
 
@@ -241,7 +260,7 @@ It should be used in conjunction with a DataSet or DataGrid to filter results.
 
 ```php
    $filter = \DataFilter::source(new Article);
-   $filter->attributes(array('class'=>'form-inline'));
+   $filter->attributes(['class'=>'form-inline']);
    $filter->add('title','Title', 'text');
    $filter->submit('search');
    $filter->reset('reset');
