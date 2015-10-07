@@ -261,8 +261,7 @@ It also support query scopes (see eloquent documentation), closures, and a cool 
 
 ```php
    $filter = \DataFilter::source(new Article);
-   $filter->attributes(['class'=>'form-inline']);
-   
+
    //simple where 
    $filter->add('title','Title', 'text');
           
