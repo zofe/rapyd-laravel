@@ -89,16 +89,23 @@ class DataFilter extends DataForm
 
                     //query scope
                     $query_scope = $field->query_scope;
+                    $query_scope_params = $field->query_scope_params;
                     if ($query_scope) {
 
                         if (is_a($query_scope, '\Closure')) {
-                            $this->query = $query_scope($this->query, $value);
+
+                            array_unshift($query_scope_params, $value);
+                            array_unshift($query_scope_params, $this->query);
+                            $this->query = call_user_func_array($query_scope, $query_scope_params);
 
                         } elseif (isset($this->model) && method_exists($this->model, "scope".$query_scope)) {
+                            
                             $query_scope = "scope".$query_scope;
-                            $this->query = $this->model->$query_scope($this->query, $value);
-
-                        }
+                            array_unshift($query_scope_params, $value);
+                            array_unshift($query_scope_params, $this->query);
+                            $this->query = call_user_func_array([$this->model, $query_scope], $query_scope_params);
+                            
+                        } 
                         continue;
                     }
 

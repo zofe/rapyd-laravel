@@ -256,12 +256,28 @@ You can directly customize form  using build() in your controller
 ## DataFilter
 DataFilter extends DataForm, each field you add and each value you fill in that form is used to build a __where clause__ (by default using 'like' operator).   
 It should be used in conjunction with a DataSet or DataGrid to filter results.  
+It also support query scopes (see eloquent documentation), closures, and a cool DeepHasScope trait see samples:
 
 
 ```php
    $filter = \DataFilter::source(new Article);
    $filter->attributes(['class'=>'form-inline']);
+   
+   //simple where 
    $filter->add('title','Title', 'text');
+          
+   //custom query scope, you can define the query logic in your model
+   $filter->add('search','Search text', 'text')->scope('myscope');
+      
+   //cool deep "whereHas" (you must use DeepHasScope trait bundled on your model)
+   //this can build a where on a very deep relation.field
+   $filter->add('search','Search text', 'text')->scope('hasRel','relation.relation.relation.field')
+   
+   //closure query scope, you can define on the fly the where
+   $filter->add('search','Search text', 'text')->scope( function ($query, $value) {
+         return $query->whereIn('field', ["1","3",$value]);
+   })
+   
    $filter->submit('search');
    $filter->reset('reset');
    

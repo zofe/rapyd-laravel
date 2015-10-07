@@ -67,6 +67,7 @@ abstract class Field extends Widget
     public $has_wrapper = true;
     public $messages = array();
     public $query_scope;
+    public $query_scope_params = [];
 
     // layout
     public $layout = array(
@@ -194,9 +195,12 @@ abstract class Field extends Widget
         return $this;
     }
 
-    public function scope($scope)
+    public function scope()
     {
+        $args = func_get_args();
+        $scope = array_shift($args);
         $this->query_scope = $scope;
+        $this->query_scope_params = $args;
 
         return $this;
     }
