@@ -271,7 +271,7 @@ It also support query scopes (see eloquent documentation), closures, and a cool 
       
    //cool deep "whereHas" (you must use DeepHasScope trait bundled on your model)
    //this can build a where on a very deep relation.field
-   $filter->add('search','Search text', 'text')->scope('hasRel','relation.relation.relation.field')
+   $filter->add('search','Search text', 'text')->scope('hasRel','relation.relation.field')
    
    //closure query scope, you can define on the fly the where
    $filter->add('search','Search text', 'text')->scope( function ($query, $value) {
