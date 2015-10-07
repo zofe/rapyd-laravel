@@ -4,9 +4,12 @@ namespace Zofe\Rapyd\DataFilter;
 
 trait DeepHasScope {
 
-    public function scopeHasRel($query, $value, $relation, $operator = '=')
+    public function scopeHasRel($query, $value, $relation, $operator = 'LIKE', $value_pattern='%%%s%%')
     {
         $relations = explode('.', $relation);
+        if (strtoupper(trim($operator)) == "LIKE") {
+            $value = sprintf($value_pattern, $value);
+        }
         if (count($relations) < 2)
         {
             throw new \LogicException('Relation param must contain at least 2 elements: "relation.field"'. $relation);
