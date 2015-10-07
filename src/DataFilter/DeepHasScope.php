@@ -24,7 +24,7 @@ trait DeepHasScope {
         {
             return $query->where($field, $operator, $value);
         }
-        elseif(count($relations)>1)
+        else
         {
             $rel = array_shift($relations);
             return $query->whereHas($rel, function ($q) use ($value, $relations, $operator) {
