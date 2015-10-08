@@ -41,6 +41,13 @@
 </table>
 
 
-@if ($dg->havePagination())
-    {!! $dg->links() !!}
-@endif
+<div class="btn-toolbar" role="toolbar">
+    @if ($dg->havePagination())
+        <div class="pull-left">
+        {!! $dg->links() !!}
+        </div>
+        <div class="pull-right">
+            {!! $dg->totalRows() !!}
+        </div>
+    @endif
+</div>
