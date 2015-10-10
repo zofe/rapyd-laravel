@@ -8,16 +8,16 @@ use Zofe\Rapyd\Rapyd;
 class Date extends Field
 {
     public $type = "date";
-    public $format = 'm/d/Y';
-    public $language = 'en';
+    public $format = 'Y-m-d';
+    public $language = 'zh-CN';
     public $clause = "where";
-    
+
     /**
      * set instarnal preview date format
      * @param $format valid php date format
      * @param string $language valid DatePicker language string http://bootstrap-datepicker.readthedocs.org/en/release/options.html#language
      */
-    public function format($format, $language = 'en')
+    public function format($format, $language = 'zh-CN')
     {
         $this->format = $format;
         $this->language = $language;
