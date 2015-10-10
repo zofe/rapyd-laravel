@@ -9,6 +9,7 @@ class Multiselect extends Field
     public $size = null;
     public $description = "";
     public $separator = "&nbsp;&nbsp;";
+    public $serialization_sep = ",";
     public $format = "%s";
     public $css_class = "multiselect";
     public $checked_value = 1;
