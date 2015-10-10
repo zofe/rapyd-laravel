@@ -141,12 +141,14 @@ class DataFilter extends DataForm
                         }
 
                         //$value = $field->value;
-
+                       
                         if ($deep_where) {
                             //exception for multiple value fields on BelongsToMany
                             if (
-                                is_a($field->relation, 'Illuminate\Database\Eloquent\Relations\BelongsToMany') and
-                                in_array($field->type, array('tags','checks'))
+                                (is_a($field->relation, 'Illuminate\Database\Eloquent\Relations\BelongsToMany')
+                                || is_a($field->relation, 'Illuminate\Database\Eloquent\Relations\BelongsTo')
+                                ) and
+                                in_array($field->type, array('tags','checks','multiselect'))
                             ){
                                   $values = explode($field->serialization_sep, $value);
 
@@ -246,6 +248,9 @@ class DataFilter extends DataForm
                                     break;
                                 case "orwhere":
                                     $this->query = $this->query->orWhere($name, $field->operator, $value);
+                                    break;
+                                case "wherein":
+                                    $this->query = $this->query->whereIn($name,  explode($field->serialization_sep, $value));
                                     break;
                                 case "wherebetween":
                                     $values = explode($field->serialization_sep, $value);
