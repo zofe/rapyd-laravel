@@ -58,7 +58,7 @@ class DataGrid extends DataSet
                 $cell->parseFilters($column->filters);
                 if ($column->cell_callable) {
                     $callable = $column->cell_callable;
-                    $cell->value($callable($cell->value, $tablerow));
+                    $cell->value($callable($cell->value));
                 }
                 $row->add($cell);
             }

@@ -73,7 +73,6 @@ class DataForm extends Widget
     public $validator;
 
     public $output = "";
-    public $custom_output = null;
     public $fields = array();
     public $hash = "";
     public $error = "";
@@ -491,10 +490,7 @@ class DataForm extends Widget
             $result = $callable($this);
             if ($result && is_a($result, 'Illuminate\Http\RedirectResponse')) {
                 $this->redirect = $result;
-            } elseif ($result && is_a($result, 'Illuminate\View\View')) {
-                $this->custom_output = $result;
             }
-            
             //reprocess if an error is added in closure
             if ($this->process_status == 'error') {
                 $this->process();
@@ -557,14 +553,6 @@ class DataForm extends Widget
     }
 
     /**
-     * @return bool
-     */
-    public function hasCustomOutput()
-    {
-        return ($this->custom_output != null) ? true : false;
-    }
-    
-    /**
      * @return string
      */
     public function getRedirect()
@@ -587,9 +575,7 @@ class DataForm extends Widget
         if ($this->hasRedirect()) {
             return (is_a($this->redirect, 'Illuminate\Http\RedirectResponse')) ? $this->redirect : Redirect::to($this->redirect);
         }
-        if ($this->hasCustomOutput()) {
-            return $this->custom_output;
-        }
+
         return View::make($viewname, $array);
     }
 

@@ -63,11 +63,8 @@ abstract class Field extends Widget
     public $options_table = '';
     public $options_key = null;
     public $has_error = '';
-    public $has_label = true;
-    public $has_wrapper = true;
     public $messages = array();
     public $query_scope;
-    public $query_scope_params = [];
 
     // layout
     public $layout = array(
@@ -195,12 +192,9 @@ abstract class Field extends Widget
         return $this;
     }
 
-    public function scope()
+    public function scope($scope)
     {
-        $args = func_get_args();
-        $scope = array_shift($args);
         $this->query_scope = $scope;
-        $this->query_scope_params = $args;
 
         return $this;
     }
@@ -292,7 +286,7 @@ abstract class Field extends Widget
 
                     // some kind of field on belongsToMany works with multiple values, most of time in serialized way
                     //in this case I need to fill value using a serialized array of related collection
-                    if (in_array($this->type, array('tags','checks','multiselect'))) {
+                    if (in_array($this->type, array('tags','checks'))) {
                         $relatedCollection = $this->relation->get(); //Collection of attached models
                         $relatedIds = $relatedCollection->modelKeys(); //array of attached models ids
                         $this->value = implode($this->serialization_sep, $relatedIds);
@@ -549,37 +543,22 @@ abstract class Field extends Widget
     /**
      * parse blade syntax string using current model
      * @param $string
-     * @param bool $is_view
      * @return string
      */
-    protected function parseString($string, $is_view = false)
+    protected function parseString($string)
     {
-        if (is_object($this->model) && (strpos($string,'{{') !== false || $is_view)) {
+        if (is_object($this->model) && strpos($string, '{{') !== false) {
             $fields = $this->model->getAttributes();
             $relations = $this->model->getRelations();
-            $array = array_merge($fields, $relations, ['model'=>$this->model]) ;
-            $string = ($is_view) ? view($string, $array) : $this->parser->compileString($string, $array);
+            $array = array_merge($fields, $relations) ;
+            $string = $this->parser->compileString($string, $array);
         }
 
         return $string;
     }
 
-    /**
-     * parse blade view passing current model 
-     * @param $view
-     * @return string
-     */
-    protected function parseView($view)
-    {
-        return $this->parseString($view, true);
-    }
-    
-
     public function build()
     {
-        if($this->label == '') {
-            $this->has_wrapper = false;
-        }
         $this->getValue();
         $this->star = (!($this->status == "show") and $this->required) ? '&nbsp;*' : '';
         $this->req = (!($this->status == "show") and $this->required) ? ' required' : '';
@@ -599,9 +578,7 @@ abstract class Field extends Widget
             }
 
             if ($this->orientation == 'inline') {
-                if ($this->type!='select') {
-                    $this->attributes["placeholder"] = $this->label;
-                }
+                $this->attributes["placeholder"] = $this->label;
             }
 
         }
@@ -629,10 +606,7 @@ abstract class Field extends Widget
 
     public function all()
     {
-        $output  = "";
-        if ($this->has_wrapper && $this->has_label) {
-            $output .= "<label for=\"{$this->name}\" class=\"{$this->req}\">{$this->label}</label>";            
-        }
+        $output  = "<label for=\"{$this->name}\" class=\"{$this->req}\">{$this->label}</label>";
         $output .= $this->output;
         $output  = '<span id="div_'.$this->name.'">'.$output.'</span>';
         if ($this->has_error) {
