@@ -8,7 +8,7 @@ use Zofe\Rapyd\Rapyd;
 class Colorpicker extends Field
 {
     public $type = "colorpicker";
-    public $rule = 'regex:/^#[A-Fa-f0-9]{6}$/';
+    public $rule = ['regex:/^#[A-Fa-f0-9]{6}$/'];
 
     public function build()
     {
