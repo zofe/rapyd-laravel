@@ -157,11 +157,11 @@ abstract class Field extends Widget
      */
     public function rule($rule)
     {
-	    $rule = is_string($rule) ? explode('|', $rule) : $rule;
-	    $this->rule = array_unique(array_merge($this->rule, $rule));
-	    if (in_array('required', $this->rule) and !isset($this->no_star)) {
-		    $this->required = true;
-	    }
+        $rule = is_string($rule) ? explode('|', $rule) : $rule;
+        $this->rule = array_unique(array_merge($this->rule, $rule));
+        if (in_array('required', $this->rule) and !isset($this->no_star)) {
+            $this->required = true;
+        }
 
         return $this;
     }
