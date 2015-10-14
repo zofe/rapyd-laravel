@@ -9,7 +9,7 @@ use Intervention\Image\ImageManagerStatic as ImageManager;
 class Image extends File
 {
     public $type = "image";
-    public $rule = "mimes:jpeg,png";
+    public $rule = ["mimes:jpeg,png"];
 
     protected $image;
     protected $image_callable;
