@@ -73,7 +73,7 @@ abstract class Field extends Widget
         'null_label' => '[未填写]',
     );
 
-    public $rule = '';
+    public $rule = [];
 
     public $star = '';
     public $req = '';
@@ -154,8 +154,9 @@ abstract class Field extends Widget
      */
     public function rule($rule)
     {
-        $this->rule = trim($this->rule."|".$rule, "|");
-        if ((strpos($this->rule, "required") !== false) and !isset($this->no_star)) {
+        $rule = is_string($rule) ? explode('|', $rule) : $rule;
+        $this->rule = array_unique(array_merge($this->rule, $rule));
+        if (in_array('required', $this->rule) and !isset($this->no_star)) {
             $this->required = true;
         }
 
