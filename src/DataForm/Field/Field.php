@@ -167,6 +167,34 @@ abstract class Field extends Widget
         return $this;
     }
 
+    /**
+     * Laravel Validation unique
+     *
+     * Auto except current model
+     *
+     * http://laravel.com/docs/5.1/validation#rule-unique
+     */
+    public function unique($id = null, $idClumn = null, $extra = null)
+    {
+        $id = $id ?: $this->model->id ?: 'NULL';
+        $idClumn = $idClumn ?: $this->model->getKeyName();
+
+        $parts = [
+            "unique:{$this->model->getConnectionName()}.{$this->model->getTable()}",
+            $this->db_name,
+            $id,
+            $idClumn
+        ];
+
+        if ($extra) {
+            $parts []= trim($extra, ',');
+        }
+
+        $this->rule(join(',', $parts));
+
+        return $this;
+    }
+
     public function mode($mode)
     {
 
