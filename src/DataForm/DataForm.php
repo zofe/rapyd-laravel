@@ -573,7 +573,7 @@ class DataForm extends Widget
      *
      * @return View|Redirect
      */
-    public function view($viewname, $array = array())
+    public function view($viewname = 'rapyd::form', $array = [])
     {
         if (!isset($array['form'])) {
             $form = $this->getForm();
