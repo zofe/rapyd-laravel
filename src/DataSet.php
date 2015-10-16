@@ -265,7 +265,8 @@ class DataSet extends Widget
                 $links =  $this->paginator->appends($this->url->remove('page'.$this->cid)->getArray())->fragment($this->hash)->render($view);
             else
                 $links =  $this->paginator->appends($this->url->remove('page'.$this->cid)->getArray())->render($view);
-            
+
+            $links = str_replace('#pjax','%23pajax',$links);
             return str_replace('/?', '?', $links);
         }
     }
