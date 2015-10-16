@@ -146,7 +146,8 @@ class DataGrid extends DataSet
     protected function getCellValue($column, $tablerow, $sanitize = true)
     {
         //blade
-        if (strpos($column->name, '{{') !== false) {
+        if (strpos($column->name, '{{') !== false || 
+            strpos($column->name, '{!!') !== false) {
 
             if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
                 $fields = $tablerow->getAttributes();
