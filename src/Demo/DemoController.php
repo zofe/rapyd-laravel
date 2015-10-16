@@ -304,6 +304,7 @@ class DemoController extends Controller
         if (\Input::get('do_delete')==1) return  "not the first";
 
         $edit = \DataEdit::source(new Article());
+        $edit->link("rapyd-demo/nudegrid","Articles", "TR");
         $edit->label('Edit Article');
         $edit->add('title','Title', 'text')->rule('required|min:5');
         $edit->add('public','Public','checkbox');
@@ -315,8 +316,10 @@ class DemoController extends Controller
     {
         //embed some widgets and isolate the dom using riot & pjax
         $embed1 = \DataEmbed::source('/rapyd-demo/nudegrid', 'embed1');
-        $embed2 = \DataEmbed::source('/rapyd-demo/nudeedit?modify=1', 'embed2');
         $embed1->build();
+        
+        $embed2 = \DataEmbed::source('/rapyd-demo/nudeedit?modify=1', 'embed2');
+        $embed2->build();
         return view('rapyd::demo.embed', compact('embed1','embed2'));
 
     }
