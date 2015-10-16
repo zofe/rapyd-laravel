@@ -65,7 +65,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.4/riot+compiler.min.js"></script>
-
 {!! Rapyd::scripts() !!}
 <script>riot.mount('*')</script>
 
