@@ -315,13 +315,12 @@ class DemoController extends Controller
     public function getEmbed()
     {
         //embed some widgets and isolate the dom using riot & pjax
-        $embed1 = \DataEmbed::source('/rapyd-demo/nudegrid', 'embed1');
-        $embed1->build();
-        
-        $embed2 = \DataEmbed::source('/rapyd-demo/nudeedit?modify=1', 'embed2');
-        $embed2->build();
-        return view('rapyd::demo.embed', compact('embed1','embed2'));
+        $embed1 = \DataEmbed::source('/rapyd-demo/nudegrid', 'embed1')->build();
 
+        //if you prefer you can simply use an html tag
+        $embed2 = '<dataembed id="embed1" remote="/rapyd-demo/nudeedit?modify=1"></dataembed>';
+        
+        return view('rapyd::demo.embed', compact('embed1','embed2'));
     }
 
     public function getAuthorlist()

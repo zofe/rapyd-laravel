@@ -9,7 +9,7 @@
     
     <h1>DataEmbed</h1>
 
-    DataEmbed can embed an url and then isolate it in the dom.<br />
+    DataEmbed can embed a url and then isolate it in the dom.<br />
     So you can build multiple widgets in page, and all actions will be execued without page reload<br />  
     
     Scenarios (where you cant reload the page): 
@@ -20,7 +20,7 @@
     </ul>
     You have only to give the endpoint url and an id, then it will be loded and will work isolated in the dom.<br />
     <br />
-    Requirements are jquey, riotjs, pjax in your master layout:
+    Requirements are jquery, riotjs, pjax in your master layout:
     <pre>
     <code>
         <?php echo htmlentities('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -48,6 +48,8 @@
     
     <p>
         {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "getEmbed") !!}
+        {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "getNudegrid") !!}
+        {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "anyNudeedit") !!}
         {!! Documenter::showCode("zofe/rapyd/views/demo/embed.blade.php") !!}
     </p>
 @stop
