@@ -14,22 +14,11 @@
     
     Scenarios (where you cant reload the page): 
     <ul>
-        <li>a form in a bootstrap modals</li>
+        <li>a form in a bootstrap modal</li>
         <li>a login-form in a cached page</li>
         <li>a comment widget in a static page</li>
     </ul>
     You have only to give the endpoint url and an id, then it will be loded and will work isolated in the dom.<br />
-    <br />
-    Requirements are jquery, riotjs, pjax in your master layout:
-    <pre>
-    <code>
-        <?php echo htmlentities('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.4/riot+compiler.min.js"></script>
-        {!! Rapyd::scripts() !!}
-        <script>riot.mount("*")</script>');?>
-    </code>
-    </pre>
     <br />
 
     <div class="container">
@@ -45,11 +34,23 @@
             </div>
         </div>
     </div>
-    
-    <p>
-        {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "getEmbed") !!}
-        {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "getNudegrid") !!}
-        {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "anyNudeedit") !!}
-        {!! Documenter::showCode("zofe/rapyd/views/demo/embed.blade.php") !!}
-    </p>
+
+    Requirements are jquery, riotjs, pjax in your master layout:
+    <pre>
+    <code>
+        <?php echo htmlentities('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.4/riot+compiler.min.js"></script>
+        {!! Rapyd::scripts() !!}
+        <script>riot.mount("*")</script>
+        ..
+      </body>');?>
+    </code>
+    </pre>
+
+    {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "getEmbed") !!}
+    {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "getNudegrid") !!}
+    {!! Documenter::showMethod("Zofe\\Rapyd\\Demo\\DemoController", "anyNudeedit") !!}
+    {!! Documenter::showCode("zofe/rapyd/views/demo/embed.blade.php") !!}
+
 @stop
