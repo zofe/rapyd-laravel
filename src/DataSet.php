@@ -35,6 +35,7 @@ class DataSet extends Widget
 
     protected $type;
     protected $limit;
+    protected $total_rows;
     protected $orderby;
     protected $orderby_uri_asc;
     protected $orderby_uri_desc;
@@ -194,7 +195,8 @@ class DataSet extends Widget
                 $current_page = $this->url->value('page'.$this->cid, 0);
                 $offset = (max($current_page-1,0)) * $limit;
                 $this->data = array_slice($this->source, $offset, $limit);
-                $this->paginator = new LengthAwarePaginator($this->data, count($this->source), $limit, $current_page,
+                $this->total_rows = count($this->source);
+                $this->paginator = new LengthAwarePaginator($this->data, $this->total_rows, $limit, $current_page,
                     ['path' => Paginator::resolveCurrentPath(),
                     'pageName' => "page".$this->cid,
                     ]);
@@ -202,8 +204,8 @@ class DataSet extends Widget
 
             case "query":
             case "model":
+                $this->total_rows = $this->query->count();
                 //orderby
-
                 if (isset($this->orderby)) {
                     $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1]);
                 }
@@ -232,6 +234,8 @@ class DataSet extends Widget
     }
 
     /**
+     * current data collection
+     * 
      * @return array
      */
     public function getData()
@@ -239,6 +243,16 @@ class DataSet extends Widget
         return $this->data;
     }
 
+    /**
+     * total row count 
+     * 
+     * @return string
+     */
+    public function totalRows()
+    {
+        return $this->total_rows;
+    }
+    
     /**
      * @param string $view
      *
