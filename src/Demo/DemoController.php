@@ -318,7 +318,7 @@ class DemoController extends Controller
         $embed1 = \DataEmbed::source('/rapyd-demo/nudegrid', 'embed1')->build();
 
         //if you prefer you can simply use an html tag
-        $embed2 = '<dataembed id="embed1" remote="/rapyd-demo/nudeedit?modify=1"></dataembed>';
+        $embed2 = '<dataembed id="embed2" remote="/rapyd-demo/nudeedit?modify=1"></dataembed>';
         
         return view('rapyd::demo.embed', compact('embed1','embed2'));
     }
