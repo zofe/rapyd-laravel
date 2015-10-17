@@ -10,6 +10,7 @@ class Rapyd
     protected static $container;
     protected static $js         = array();
     protected static $css        = array();
+    protected static $tag        = array();
     protected static $scripts    = array();
     protected static $styles     = array();
     protected static $form;
@@ -54,7 +55,11 @@ class Rapyd
         foreach (self::$js as $item) {
             $buffer .= HTML::script($item);
         }
-
+        //riot tags
+        foreach (self::$tag as $item) {
+            $buffer .= HTML::script($item, ['type'=>'riot/tag']);
+        }
+        
         //inline styles & scripts
         if (count(self::$styles)) {
             $buffer .= sprintf("<style type=\"text/css\">\n%s\n</style>", implode("\n", self::$styles));
@@ -74,7 +79,12 @@ class Rapyd
         foreach (self::$js as $item) {
             $buffer .= HTML::script($item);
         }
-
+        
+        //riot tags
+        foreach (self::$tag as $item) {
+            $buffer .= HTML::script($item, ['type'=>'riot/tag']);
+        }
+        
         //inline scripts
         if (count(self::$scripts)) {
             $buffer .= sprintf("\n<script language=\"javascript\" type=\"text/javascript\">\n\$(document).ready(function () {\n\n %s \n\n});\n\n</script>\n", implode("\n", self::$scripts));
@@ -115,6 +125,12 @@ class Rapyd
             self::$css[] = 'packages/zofe/rapyd/assets/'.$css;
     }
 
+    public static function tag($tag)
+    {
+        if (!in_array('packages/zofe/rapyd/assets/'.$tag, self::$tag))
+            self::$tag[] = 'packages/zofe/rapyd/assets/'.$tag;
+    }
+    
     public static function script($script)
     {
         self::$scripts[] = $script;

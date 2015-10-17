@@ -135,7 +135,7 @@ class DemoController extends Controller
 
         $grid->add('id','ID', true)->style("width:100px");
         $grid->add('title','Title');
-        $grid->add('{{ str_limit($body,4) }}','Body');
+        $grid->add('{!! str_limit($body,4) !!}','Body');
         $grid->add('{{ $author->fullname }}','Author', 'author_id');
         $grid->add('{{ implode(", ", $categories->lists("name")->all()) }}','Categories');
 
@@ -286,6 +286,41 @@ class DemoController extends Controller
 
         return $edit->view('rapyd::demo.edit', compact('edit'));
 
+    }
+
+    public function getNudegrid()
+    {
+        $grid = \DataGrid::source(Article::with('author','categories'));
+        $grid->attributes(array("class"=>"table table-striped"));
+        $grid->add('id','ID', true)->style("width:70px");
+        $grid->add('title','Title', true);
+        $grid->edit('/rapyd-demo/nudeedit', 'Edit','modify|delete');
+        $grid->paginate(10);
+        return $grid;
+    }
+    
+    public function anyNudeedit()
+    {
+        if (\Input::get('do_delete')==1) return  "not the first";
+
+        $edit = \DataEdit::source(new Article());
+        $edit->link("rapyd-demo/nudegrid","Articles", "TR");
+        $edit->label('Edit Article');
+        $edit->add('title','Title', 'text')->rule('required|min:5');
+        $edit->add('public','Public','checkbox');
+        return $edit->view();
+    }
+    
+    
+    public function getEmbed()
+    {
+        //embed some widgets and isolate the dom using riot & pjax
+        $embed1 = \DataEmbed::source('/rapyd-demo/nudegrid', 'embed1')->build();
+
+        //if you prefer you can simply use an html tag
+        $embed2 = '<dataembed id="embed2" remote="/rapyd-demo/nudeedit?modify=1"></dataembed>';
+        
+        return view('rapyd::demo.embed', compact('embed1','embed2'));
     }
 
     public function getAuthorlist()

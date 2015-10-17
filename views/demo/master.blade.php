@@ -60,9 +60,14 @@
 
 <div id="footer">
 </div>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.4/riot+compiler.min.js"></script>
 {!! Rapyd::scripts() !!}
+<script>riot.mount('*')</script>
+
 @if (isset($is_rapyd) AND $is_rapyd)
     
     <div class="privacy-overlay">
