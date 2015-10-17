@@ -62,9 +62,11 @@ abstract class Field extends Widget
     public $is_hidden = false;
     public $options_table = '';
     public $options_key = null;
-    public $has_error = '';
+    public $orientation = 'horizontal';
+    public $has_placeholder = false;
     public $has_label = true;
     public $has_wrapper = true;
+    public $has_error = '';
     public $messages = array();
     public $query_scope;
     public $query_scope_params = [];
@@ -628,7 +630,7 @@ abstract class Field extends Widget
                 $this->attributes['type'] = ($this->$attribute == 'input') ? 'text' : $this->$attribute;
             }
 
-            if ($this->orientation == 'inline') {
+            if ($this->orientation == 'inline' || $this->has_placeholder) {
                 if ($this->type!='select') {
                     $this->attributes["placeholder"] = $this->label;
                 }
@@ -661,7 +663,7 @@ abstract class Field extends Widget
     {
         $output  = "";
         if ($this->has_wrapper && $this->has_label && $this->orientation != 'inline') {
-            $output .= "<label for=\"{$this->name}\" class=\"{$this->req}\">{$this->label}</label>";            
+            $output .= "<label for=\"{$this->name}\" class=\"{$this->req}\">{$this->label}</label>";
         }
         $output .= $this->output;
         $output  = '<span id="div_'.$this->name.'">'.$output.'</span>';

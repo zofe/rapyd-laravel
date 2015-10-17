@@ -87,6 +87,8 @@ class DataForm extends Widget
     protected $process_url = '';
     protected $view = 'rapyd::dataform';
     protected $orientation = 'horizontal';
+    protected $has_labels = true;
+    protected $has_placeholders = false;
     protected $form_callable = '';
 
     public function __construct()
@@ -350,6 +352,8 @@ class DataForm extends Widget
         foreach ($this->fields as $field) {
             $field->status = $this->status;
             $field->orientation = $this->orientation;
+            $field->has_label = $this->has_labels;
+            $field->has_placeholder = $this->has_placeholders;
             if ($messages and $messages->has($field->name)) {
                 $field->messages = $messages->get($field->name);
                 $field->has_error = " has-error";
@@ -474,6 +478,13 @@ class DataForm extends Widget
         if (isset($this->attributes['class']) and strpos($this->attributes['class'], 'form-inline') !== false) {
             $this->view = 'rapyd::dataform_inline';
             $this->orientation = 'inline';
+            $this->has_labels = false;
+        }
+        if (isset($this->attributes['class']) and strpos($this->attributes['class'], 'without-labels') !== false) {
+            $this->has_labels = false;
+        }
+        if (isset($this->attributes['class']) and strpos($this->attributes['class'], 'with-placeholders') !== false) {
+            $this->has_placeholders = true;
         }
         if ($this->output != '') return;
         if ($view != '') $this->view = $view;
@@ -633,6 +644,13 @@ class DataForm extends Widget
 
     }
 
+    public function compact()
+    {
+        $this->has_labels = false;
+        $this->has_placeholders = true;
+        return $this;
+    }
+    
     /**
      * Magic method to catch all appends
      *
