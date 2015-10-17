@@ -660,7 +660,7 @@ abstract class Field extends Widget
     public function all()
     {
         $output  = "";
-        if ($this->has_wrapper && $this->has_label) {
+        if ($this->has_wrapper && $this->has_label && $this->orientation != 'inline') {
             $output .= "<label for=\"{$this->name}\" class=\"{$this->req}\">{$this->label}</label>";            
         }
         $output .= $this->output;
