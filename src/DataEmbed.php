@@ -25,6 +25,8 @@ class DataEmbed
         $id  = $this->id;
         \Rapyd::tag('tags/dataembed.html');
         $this->output = view($view, compact('url','id'))->render();
+        
+        return $this->output;
     }
     
     public function __toString()
