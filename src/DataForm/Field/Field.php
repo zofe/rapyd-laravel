@@ -629,10 +629,9 @@ abstract class Field extends Widget
             }
 
             if ($this->orientation == 'inline') {
-                //Local Hacking By YuBing
-                //if ($this->type!='select') {
+                if ($this->type != 'select') {
                     $this->attributes["placeholder"] = $this->label;
-                //  }
+                }
             }
 
         }
