@@ -200,6 +200,11 @@ class File extends Field
      */
     protected function updateName($save)
     {
+        if (!(\Schema::connection($this->model->getConnectionName())->hasColumn($this->model->getTable(), $this->db_name)
+            || $this->model->hasSetMutator($this->db_name)))
+        {
+            return true;
+        }
         if (isset($this->new_value)) {
             $this->model->setAttribute($this->db_name, $this->new_value);
         } else {
