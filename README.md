@@ -11,3 +11,5 @@
 2. add Datagrid::buildExcel() function （add maatwebsite/excel by composer）
 
 3. Date组件默认的format改成'Y-m-d', lang改为'zh-CN'，方便兼容HTML5自带的日期组件。
+
+4. 添加QNFile Field，七牛的文件上传控件
