@@ -18,6 +18,7 @@
             <li @if (Request::is('rapyd-demo/filter*', 'rapyd-demo/customfilter*')) class="active"@endif>{!! link_to("rapyd-demo/filter", "DataFilter") !!}</li>
             <li @if (Request::is('rapyd-demo/form*','rapyd-demo/advancedform*','rapyd-demo/styledform*')) class="active"@endif>{!! link_to("rapyd-demo/form", "DataForm") !!}</li>
             <li @if (Request::is('rapyd-demo/edit*')) class="active"@endif>{!! link_to("rapyd-demo/edit", "DataEdit") !!}</li>
+            <li @if (Request::is('rapyd-demo/embed*')) class="active"@endif>{!! link_to("rapyd-demo/embed", "DataEmbed") !!}</li>
         </ul>
     </div>
 </nav>

@@ -20,7 +20,7 @@ h2, .h2 {
 
 .container {
   width: auto;
-  max-width: 960px;
+  max-width: 978px;
 }
 
 
@@ -90,7 +90,7 @@ h2, .h2 {
 }
 
 .navbar.main ul li{
-    font-size: 18px;
+    font-size: 16px;
 }
 .navbar.main ul li a {      
     color: #777;

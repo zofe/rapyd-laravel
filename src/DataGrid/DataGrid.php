@@ -15,6 +15,8 @@ class DataGrid extends DataSet
     public $rows = array();
     public $output = "";
     public $attributes = array("class" => "table");
+    public $checkbox_form = false;
+    
     protected $row_callable = array();
 
     /**
@@ -58,7 +60,7 @@ class DataGrid extends DataSet
                 $cell->parseFilters($column->filters);
                 if ($column->cell_callable) {
                     $callable = $column->cell_callable;
-                    $cell->value($callable($cell->value));
+                    $cell->value($callable($cell->value, $tablerow));
                 }
                 $row->add($cell);
             }
@@ -196,7 +198,8 @@ class DataGrid extends DataSet
     protected function getCellValue($column, $tablerow, $sanitize = true)
     {
         //blade
-        if (strpos($column->name, '{{') !== false) {
+        if (strpos($column->name, '{{') !== false || 
+            strpos($column->name, '{!!') !== false) {
 
             if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
                 $fields = $tablerow->getAttributes();
