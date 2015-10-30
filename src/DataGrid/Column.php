@@ -23,7 +23,7 @@ class Column
     {
 
         if (!$name) {
-            throw new \Exception('$name must be given when creating Column object.');
+            throw new \Exception('$name must be given when creating Column object.');    
         }
 
         $this->name = $name;

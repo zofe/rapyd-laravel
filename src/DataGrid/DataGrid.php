@@ -58,7 +58,7 @@ class DataGrid extends DataSet
                 $cell->parseFilters($column->filters);
                 if ($column->cell_callable) {
                     $callable = $column->cell_callable;
-                    $cell->value($callable($cell->value, $tablerow));
+                    $cell->value($callable($cell->value));
                 }
                 $row->add($cell);
             }
@@ -101,7 +101,7 @@ class DataGrid extends DataSet
             $headers  = array(
                 'Content-Type' => 'text/csv',
                 'Pragma'=>'no-cache',
-                '"Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
                 'Content-Disposition' => 'attachment; filename="' . $filename.'"');
 
             $handle = fopen('php://output', 'w');
@@ -143,6 +143,56 @@ class DataGrid extends DataSet
         }
     }
 
+    public function buildExcel($filename = '', $timestamp = '_Ymd_His', $sanitize = true)
+    {
+        $this->source->build(); //build filter first to apply query params.
+        parent::build();
+
+        $filename = preg_replace('/[^0-9a-z\._-]/i', '', $filename);
+        $filename .= date($timestamp);
+
+
+        \Excel::create($filename, function ($excel) use($sanitize) {
+
+            $excel->sheet('Sheetname', function($sheet) use($sanitize) {
+                $sheet->appendRow($this->headers);
+
+                foreach ($this->data as $tablerow) {
+                    $row = new Row($tablerow);
+
+                    foreach ($this->columns as $column) {
+                        if (in_array($column->name,array("_edit")))
+                            continue;
+
+                        $cell = new Cell($column->name);
+                        $sanitize = (count($column->filters) || $column->cell_callable) ? false : true;
+                        $value = $this->getCellValue($column, $tablerow, $sanitize);
+                        $cell->value($value);
+                        $cell->parseFilters($column->filters);
+                        if ($column->cell_callable) {
+                            $callable = $column->cell_callable;
+                            $cell->value($callable($cell->value));
+                        }
+                        $row->add($cell);
+                    }
+
+                    if (count($this->row_callable)) {
+                        foreach ($this->row_callable as $callable) {
+                            $callable($row);
+                        }
+                    }
+                    //avoiding output html codes
+                    $_row = array_map(function($val) {return strip_tags($val);}, $row->toArray());
+                    $sheet->appendRow($_row);
+                }
+
+            });
+
+            //it calls die() internally, so no return needed;
+        })->export('xls');
+
+    }
+
     protected function getCellValue($column, $tablerow, $sanitize = true)
     {
         //blade
@@ -161,7 +211,7 @@ class DataGrid extends DataSet
 
             $value = $this->parser->compileString($column->name, $array);
 
-        //eager loading smart syntax  relation.field
+            //eager loading smart syntax  relation.field
         } elseif (preg_match('#^[a-z0-9_-]+(?:\.[a-z0-9_-]+)+$#i',$column->name, $matches) && is_object($tablerow) ) {
             //switch to blade and god bless eloquent
             $_relation = '$'.trim(str_replace('.','->', $column->name));
@@ -171,19 +221,19 @@ class DataGrid extends DataSet
             $array = array_merge($fields, $relations) ;
             $value = $this->parser->compileString($expression, $array);
 
-        //fieldname in a collection
+            //fieldname in a collection
         } elseif (is_object($tablerow)) {
 
             $value = @$tablerow->{$column->name};
             if ($sanitize) {
                 $value = $this->sanitize($value);
             }
-        //fieldname in an array
+            //fieldname in an array
         } elseif (is_array($tablerow) && isset($tablerow[$column->name])) {
 
             $value = $tablerow[$column->name];
 
-        //none found, cell will have the column name
+            //none found, cell will have the column name
         } else {
             $value = $column->name;
         }
@@ -220,17 +270,17 @@ class DataGrid extends DataSet
     {
         if ($this->output == "") {
 
-           //to avoid the error "toString() must not throw an exception"
-           //http://stackoverflow.com/questions/2429642/why-its-impossible-to-throw-exception-from-tostring/27307132#27307132
-           try {
-               $this->getGrid();
-           }
-           catch (\Exception $e) {
-               $previousHandler = set_exception_handler(function (){ });
-               restore_error_handler();
-               call_user_func($previousHandler, $e);
-               die;
-           }
+            //to avoid the error "toString() must not throw an exception"
+            //http://stackoverflow.com/questions/2429642/why-its-impossible-to-throw-exception-from-tostring/27307132#27307132
+            try {
+                $this->getGrid();
+            }
+            catch (\Exception $e) {
+                $previousHandler = set_exception_handler(function (){ });
+                restore_error_handler();
+                call_user_func($previousHandler, $e);
+                die;
+            }
 
         }
 

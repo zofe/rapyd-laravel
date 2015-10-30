@@ -10,7 +10,7 @@
     @endif
 
 @else
-    <div class="form-group{!!$field->has_error!!}" id="fg_{!! $field->name !!}">
+    <div class="form-group{!!$field->has_error!!}">
 
         <label for="{!! $field->name !!}" class="sr-only">{!! $field->label.$field->star !!}</label>
         <span id="div_{!! $field->name !!}">
