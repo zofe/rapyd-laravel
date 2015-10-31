@@ -358,7 +358,6 @@ abstract class Field extends Widget
         } elseif ((isset($this->model)) && (Input::get($this->name) === null) && ($this->model->offsetExists($this->db_name))) {
 
             $this->value = $this->model->getAttribute($this->db_name);
-
         }
 
         $this->old_value = $this->value;
@@ -395,10 +394,12 @@ abstract class Field extends Widget
             $this->new_value = $this->insert_value;
         } elseif (($this->action == "update") && ($this->update_value != null)) {
             $this->new_value = $this->update_value;
+        } elseif ($this->type == 'auto') {
+            //if is auto and no default is matched, keep the old value
+            $this->new_value = $this->value;
         } else {
             $this->action = "idle";
         }
-
         if ($this->new_value == "") {
             $this->new_value = null;
         }
@@ -503,12 +504,8 @@ abstract class Field extends Widget
                 //check for relation then exit
                 return true;
             }
-
-            //if (isset($this->new_value)) {
+            
             $this->model->setAttribute($this->db_name, $this->new_value);
-            //} else {
-            //    $this->model->setAttribute($this->db_name, $this->value);
-            //}
             if ($save) {
                 return $this->model->save();
             }
