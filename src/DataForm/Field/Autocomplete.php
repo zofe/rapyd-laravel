@@ -192,7 +192,7 @@ class Autocomplete extends Field
                     }).on("typeahead:selected typeahead:autocompleted",
                         function (e,data) {
                             $('#{$this->name}').val(data.{$this->record_id});
-                    }).on("typeahead:closed",
+                    }).on("typeahead:closed,typeahead:change",
                         function (e,data) {
                             if ('{$this->must_match}') {
                                 var _label = $.trim($(this).val());
@@ -209,6 +209,13 @@ class Autocomplete extends Field
                                 }
                             }
                     });
+                    $('#th_{$this->name} .typeahead').keypress(function (e) {
+                        if (e.which == 13) {
+                            e.preventDefault();
+                        }
+                    });
+                    
+                    
 acp;
 
                     Rapyd::script($script);
