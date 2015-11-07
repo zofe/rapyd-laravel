@@ -65,7 +65,7 @@ class QNFile extends Field
         foreach (json_decode($this->value ?: '{}', true) as $name => $value) {
             $value = (isset($value) && is_array($value)) ? $value : [];
             foreach ($value as $key) {
-                if ($this->fileType == 'doc') {
+                if ($this->fileType == 'document') {
                     $links[$key] = [
                         'url' => config('rapyd.qn-doc-store')->url($key),
                         'title' => config('rapyd.qn-doc-store')->title($key)
