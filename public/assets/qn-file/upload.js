@@ -52,10 +52,12 @@ function Uploader($trigger, opts) {
 
 	// 写入fileList的函数
 	this.pushFileKey = function (key) {
+		if (typeof fileList[opts.inputName][opts.name] == 'undefined') {
+			fileList[opts.inputName][opts.name] = [];
+		}
 		if (fileList[opts.inputName][opts.name].indexOf(key) == -1) {
 			fileList[opts.inputName][opts.name].push(key);
 		}
-		console.log(fileList);
 	};
 
 	this.isModify = function () {
@@ -133,7 +135,6 @@ function Uploader($trigger, opts) {
 	// 已经存在的文件的预览
 	this.showUploadFiles = function () {
 		var files = fileList[opts.inputName][opts.name];
-		console.log(files);
 		$.each(files ? files : [], function (idx, key) {
 			var $div = $('<div/>', {
 				'class': 'file-block img-thumbnail text-center',
