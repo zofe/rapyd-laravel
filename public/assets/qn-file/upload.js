@@ -2,22 +2,6 @@
  * Created by zhwei on 15/10/28.
  */
 
-// 支持的上传类型
-var FILE_TYPES = {
-	'doc': {
-		title: '文档',
-		ext: 'pdf,xls,xlsx,doc,docx',
-		upUrl: '/admin/upload-token/document',
-		downUrl: null
-	},
-	'image': {
-		title: '图片',
-		ext: 'jpeg,jpg,gif,png',
-		upUrl: '/admin/upload-token/image',
-		downUrl: '/admin/image-download-url?width=100&height=100'
-	}
-};
-
 // 存放当前页面中所有的uploader实例
 var uploaderList = [];
 
@@ -25,80 +9,62 @@ var uploaderList = [];
 var fileList = {};
 var fileLinks = {};
 
-$(document).ready(function () {
-	$('.qn-upload-links').each(function () {
-		var text = $(this).text().trim();
-		if (text) {
-			$.each(JSON.parse(text), function ($name, $value) {
-				fileLinks[$name] = $value;
-			});
-		}
-	});
-
-	$('.qn-upload').each(function () {
-		$this = $(this);
-		$this.css('display', 'none');
-		if (this.tagName == 'INPUT') {
-			var up = new Uploader($this);
-			up.render();
-			uploaderList.push(up);
-		} else {
-			$this.find('span.qn-upload-part').each(function () {
-				var up = new Uploader($(this));
-				up.render();
-				uploaderList.push(up);
-			});
-		}
-	});
+$('.qn-upload-links').each(function () {
+	var text = $(this).text().trim();
+	if (text) {
+		$.each(JSON.parse(text), function ($name, $value) {
+			fileLinks[$name] = $value;
+		});
+	}
 });
+
+jQuery.fn.qnUploader = function (opts) {
+	var up = new Uploader($(this), opts);
+	up.render();
+	uploaderList.push(up);
+};
 
 var PREFIX_UPLOADER_BLOCK = 'qn-upload-block-';
 var PREFIX_UPLOADER_PICKER = 'qn-upload-picker-';
 
-function Uploader($trigger, submitName) {
-	// <span data-name="images" data-type="image">
-	this.name = $trigger.data('name');
-
+function Uploader($trigger, opts) {
 	// 上层的的div
-	this.parentTrigger = $trigger.closest('.qn-upload');
-	this.submitName = this.parentTrigger.data('name');
+	this.group = $trigger.closest('.qn-upload');
 
 	// 各种变量
-	this.staus = this.parentTrigger.data('status');
-	this.staus = this.staus ? this.staus : 'modify'; // 默认modify
-	this.type = $trigger.data('type'); // 具体的上传类型由子标签上的`data-type`决定
-	this.typeConfig = FILE_TYPES[this.type];
-	this.browseBtnId = PREFIX_UPLOADER_PICKER + this.name;
-	this.containerId = PREFIX_UPLOADER_BLOCK + this.name;
-	this.isRequired = this.parentTrigger.data('required');
+	this.isRequired = opts.required;
+
+	this.browseBtnId = PREFIX_UPLOADER_PICKER + opts.name;
+	this.containerId = PREFIX_UPLOADER_BLOCK + opts.name;
 
 	// 创建 or 拿到填充数据的input
-	this.input = this.parentTrigger.siblings('[name=' + this.submitName + ']');
+	this.input = this.group.siblings('[name=' + opts.inputName + ']');
 	this.input.css('display', 'none');
 
 	// 准备fileList里的存放位置
-	if (typeof fileList[this.submitName] == 'undefined') {
-		fileList[this.submitName] = {};
+	if (typeof fileList[opts.inputName] == 'undefined') {
+		fileList[opts.inputName] = {};
 	}
-	fileList[this.submitName][this.name] = [];
+	fileList[opts.inputName][opts.name] = [];
 
 	// 方便调用
 	var self = this;
 
 	// 写入fileList的函数
 	this.pushFileKey = function (key) {
-		if (fileList[this.submitName][this.name].indexOf(key) == -1) {
-			fileList[this.submitName][this.name].push(key);
+		if (fileList[opts.inputName][opts.name].indexOf(key) == -1) {
+			fileList[opts.inputName][opts.name].push(key);
 		}
+		console.log(fileList);
 	};
 
 	this.isModify = function () {
-		return ['modify', 'create'].indexOf(this.staus) > -1;
+		return ['modify', 'create'].indexOf(opts.status) > -1;
 	};
 
 	// 生成上传控件
 	this.render = function () {
-		this.parentTrigger.before($('<div/>', {
+		this.group.before($('<div/>', {
 			'id': this.containerId,
 			'class': 'panel panel-default',
 			'style': 'margin-top: 15px;',
@@ -106,8 +72,8 @@ function Uploader($trigger, submitName) {
 				$('<div/>', {
 					'class': 'panel-heading',
 					'html': [
-						'<span style="margin-right: 1em;">' + (this.isRequired ? '* ' : '') + this.name + '</span>',
-						this.isModify() ? '<span id="' + this.browseBtnId + '" class="btn btn-primary btn-sm">添加' + this.typeConfig.title + '（可多选）</span>' : ''
+						'<span style="margin-right: 1em;">' + (this.isRequired ? '* ' : '') + opts.name + '</span>',
+						this.isModify() ? '<span id="' + this.browseBtnId + '" class="btn btn-primary btn-sm">添加' + opts.typeTitle + '（可多选）</span>' : ''
 					]
 				}),
 				$('<div/>', {'class': 'panel-body'})
@@ -119,7 +85,7 @@ function Uploader($trigger, submitName) {
 
 		var val = this.getValue();
 		if (val) {
-			fileList[this.submitName] = val;
+			fileList[opts.inputName] = val;
 			this.showUploadFiles();
 		}
 
@@ -135,7 +101,7 @@ function Uploader($trigger, submitName) {
 
 	// 填充form
 	this.fillForm = function () {
-		this.input.val(JSON.stringify(fileList[this.submitName]));
+		this.input.val(JSON.stringify(fileList[opts.inputName]));
 	};
 
 	this.imagePreview = function (file) {
@@ -166,7 +132,8 @@ function Uploader($trigger, submitName) {
 
 	// 已经存在的文件的预览
 	this.showUploadFiles = function () {
-		var files = fileList[this.submitName][this.name];
+		var files = fileList[opts.inputName][opts.name];
+		console.log(files);
 		$.each(files ? files : [], function (idx, key) {
 			var $div = $('<div/>', {
 				'class': 'file-block img-thumbnail text-center',
@@ -176,7 +143,7 @@ function Uploader($trigger, submitName) {
 			});
 			self.previewer.append($div);
 
-			if (self.type == 'image') {
+			if (opts.type == 'image') {
 				$div.prepend('<p><a href="' + fileLinks[key].url + '" target="_blank"><img src="' + fileLinks[key].small + '"></a></p>');
 			} else {
 				$div.prepend('<p><a href="' + fileLinks[key].url + '" target="_blank">' + fileLinks[key].title + '</a></p>');
@@ -193,8 +160,8 @@ function Uploader($trigger, submitName) {
 			'html': '<p><span class="btn btn-xs btn-warning file-delete">0%</span></p>'
 		});
 
-		if (this.type == 'image') {
-			$div.prepend(this.imagePreview(file))
+		if (opts.type == 'image') {
+			$div.prepend(this.imagePreview(file));
 		} else {
 			$div.prepend('<small>' + file.name + '</small>');
 		}
@@ -204,10 +171,10 @@ function Uploader($trigger, submitName) {
 	};
 
 	this.bindRequired = function () {
-		this.parentTrigger.closest('form').submit(function (event) {
-			if (fileList[self.submitName][self.name].length == 0) {
+		this.group.closest('form').submit(function (event) {
+			if (fileList[opts.inputName][opts.name].length == 0) {
 				event.preventDefault();
-				alert(self.name + '不能为空');
+				alert(opts.name + '不能为空');
 			}
 		})
 	};
@@ -218,9 +185,9 @@ function Uploader($trigger, submitName) {
 			var $block = $(this).closest('.file-block');
 			var key = $block.data('key');
 			if (key != undefined) {
-				var idx = fileList[self.submitName][self.name].indexOf(key);
+				var idx = fileList[opts.inputName][opts.name].indexOf(key);
 				if (idx > -1) {
-					fileList[self.submitName][self.name].splice(idx, 1)
+					fileList[opts.inputName][opts.name].splice(idx, 1)
 				}
 			}
 			$block.fadeOut('fast');
@@ -238,17 +205,17 @@ function Uploader($trigger, submitName) {
 			runtimes: 'html5,flash,html4',    //上传模式,依次退化
 			filters: {
 				mime_types: [{
-					title: this.typeConfig.title,
-					extensions: this.typeConfig.ext
+					title: opts.typeTitle,
+					extensions: opts.ext
 				}]
 			},
-			uptoken_url: this.typeConfig.upUrl,            //Ajax请求upToken的Url，**强烈建议设置**（服务端提供）
-			downtoken_url: this.typeConfig.downUrl,
+			uptoken_url: opts.upUrl,            //Ajax请求upToken的Url，**强烈建议设置**（服务端提供）
+			downtoken_url: opts.downUrl,
 			save_key: true,   // 默认 false。若在服务端生成uptoken的上传策略中指定了 `sava_key`，则开启，SDK在前端将不对key进行任何处理
 			domain: 'http://',   //bucket 域名，下载资源时用到，**有downtoken_url，这个就不需要了。**
 			max_file_size: '100mb',   //最大文件体积限制
 			chunk_size: '3mb',  //分块上传时，每片的体积 (这个值如果大于4M，会被qiniu js sdk reset)
-			flash_swf_url: '/bower/plupload/js/Moxie.swf',  //引入flash,相对路径
+			flash_swf_url: './Moxie.swf',  //引入flash,相对路径
 			max_retries: 3,      //上传失败最大重试次数
 			dragdrop: false,     //开启可拖曳上传
 			auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传,
@@ -282,7 +249,8 @@ function Uploader($trigger, submitName) {
 					var $block = $('#block-' + file.id);
 					var _info = $.parseJSON(info);
 					$block.data('key', _info.key);
-					$block.find('img').prop('src', _info.url);
+					var url = (opts.mode == 'private') ? _info.url : 'http://' + opts.domain + '/' + _info.key + '?imageView2/1/w/100/h/100';
+					$block.find('img').prop('src', url);
 					self.pushFileKey(_info.key);
 					self.fillForm();
 				},
@@ -296,5 +264,5 @@ function Uploader($trigger, submitName) {
 				}
 			}
 		});
-	}
+	};
 }
