@@ -86,7 +86,7 @@ function Uploader($trigger, opts) {
 		this.initQiNiuUploader();
 
 		var val = this.getValue();
-		if (val) {
+		if (!$.isEmptyObject(val) && $.isPlainObject(val)) {
 			fileList[opts.inputName] = val;
 			this.showUploadFiles();
 		}
