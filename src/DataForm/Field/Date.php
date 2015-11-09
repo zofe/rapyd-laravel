@@ -141,7 +141,7 @@ class Date extends Field
                 break;
             default:;
         }
-        $this->output = $output;
+        $this->output = "\n".$output."\n". $this->extra_output."\n";
     }
 
 }
