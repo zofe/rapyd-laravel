@@ -634,6 +634,9 @@ abstract class Field extends Widget
             }
 
         }
+        if ($this->required) {
+            $this->attributes["required"] = "required";
+        }
         if (!isset($this->attributes['id']))
             $this->attributes['id'] = $this->name;
         if (isset($this->css_class)) {
