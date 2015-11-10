@@ -9,6 +9,7 @@ class Datetime extends Field
 {
     public $type = "datetime";
     public $format = 'm/d/Y H:i';
+    public $store_as = 'Y-m-d H:i:s';
     public $language = 'en';
 
     /**
@@ -16,11 +17,13 @@ class Datetime extends Field
      * @param $format valid php datetime format
      * @param string $language valid datetimePicker language string http://www.malot.fr/bootstrap-datetimepicker/
      */
-    public function format($format, $language = 'en')
+    public function format($format, $language = 'en', $store_as =null)
     {
         $this->format = $format;
         $this->language = $language;
-
+        if ($store_as) {
+            $this->store_as = $store_as;
+        }
         return $this;
     }
 
@@ -29,7 +32,7 @@ class Datetime extends Field
      */
     protected function isodatetimeToHuman($isodatetime)
     {
-        $datetime = \dateTime::createFromFormat( 'Y-m-d H:i', $isodatetime);
+        $datetime = \dateTime::createFromFormat( $this->store_as, $isodatetime);
         if (!$datetime) return '';
         $timestamp = $datetime->getTimestamp();
         if ($timestamp < 1) {
@@ -51,7 +54,7 @@ class Datetime extends Field
         if ($timestamp < 1) {
             return "";
         }
-        $humandatetime = date('Y-m-d H:i', $timestamp);
+        $humandatetime = date($this->store_as, $timestamp);
 
         return $humandatetime;
     }
