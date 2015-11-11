@@ -583,7 +583,7 @@ abstract class Field extends Widget
      */
     protected function parseString($string, $is_view = false)
     {
-        if (is_object($this->model) && (strpos($string,'{{') !== false || $is_view)) {
+        if (is_object($this->model) && (strpos($string,'{{') !== false || strpos($string,'{!!') !== false || $is_view)) {
             $fields = $this->model->getAttributes();
             $relations = $this->model->getRelations();
             $array = array_merge($fields, $relations, ['model'=>$this->model]) ;
