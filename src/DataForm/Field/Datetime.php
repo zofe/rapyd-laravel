@@ -8,7 +8,7 @@ use Zofe\Rapyd\Rapyd;
 class Datetime extends Field
 {
     public $type = "datetime";
-    public $format = 'm/d/Y H:i';
+    public $format = 'm/d/Y H:i:s';
     public $store_as = 'Y-m-d H:i:s';
     public $language = 'en';
 

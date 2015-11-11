@@ -6,6 +6,9 @@ trait DeepHasScope {
 
     public function scopeHasRel($query, $value, $relation, $operator = 'LIKE', $value_pattern='%%%s%%')
     {
+        if ($value===null) {
+            return $query;
+        }
         $relations = explode('.', $relation);
         if (strtoupper(trim($operator)) == "LIKE") {
             $value = sprintf($value_pattern, $value);
