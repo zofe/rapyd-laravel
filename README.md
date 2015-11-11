@@ -262,8 +262,11 @@ It also support query scopes (see eloquent documentation), closures, and a cool 
 ```php
    $filter = \DataFilter::source(new Article);
 
-   //simple where 
+   //simple like 
    $filter->add('title','Title', 'text');
+          
+   //simple where with exact match
+   $filter->add('id', 'ID', 'text')->clause('where')->operator('=');
           
    //custom query scope, you can define the query logic in your model
    $filter->add('search','Search text', 'text')->scope('myscope');
