@@ -224,6 +224,10 @@ class DataEdit extends DataForm
         //show
         if ($this->status == "show") {
 
+            //  bugfix: 新建对象成功的页面里,修改按钮的参数不对. 这样修改不会影响 item/?show 页面的按钮参数.
+            $this->url->remove('insert');
+            $this->url->append('modify', $this->model->id);
+
             $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), trans('rapyd::rapyd.modify'), $showButtonPosition);
 
         }
