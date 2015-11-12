@@ -90,6 +90,8 @@ class DataForm extends Widget
     protected $has_labels = true;
     protected $has_placeholders = false;
     protected $form_callable = '';
+    protected $parents = array();
+    protected $conditions = array();
 
     public function __construct()
     {
@@ -149,6 +151,23 @@ class DataForm extends Widget
             unset($this->fields[$fieldname]);
 
         return $this;
+    }
+
+    /**
+     * Specify a dependency relation between two fields.
+     *
+     * @param $parentName
+     * @param $childName
+     * @param $value
+     * @param $operator
+     */
+    public function dependency($parentName, $childName, $value, $operator=null)
+    {
+        $this->parents[$childName] = $parentName;
+        $this->conditions[$childName] = [
+            'value' => $value,
+            'operator' => $operator,
+        ];
     }
 
     /**
@@ -343,10 +362,31 @@ class DataForm extends Widget
     }
 
     /**
+     * Reorder fields so that dependencies are moved to children of the parent.
+     */
+    protected function structureDependencies()
+    {
+        while(count($this->parents) > 0) {
+            foreach ($this->parents as $childName => $parentName) {
+                // We process child leaves first, moving them from the form into their parent.
+                if (!in_array($childName, $this->parents)) {
+                    $value = $this->conditions[$childName]['value'];
+                    $operator = $this->conditions[$childName]['operator'];
+                    $this->field($parentName)->addChild($this->field($childName), $value, $operator);
+                    // Once the child has been put under its parent, the form doesn't need to care about it.
+                    unset($this->fields[$childName]);
+                    unset($this->parents[$childName]);
+                }
+            }
+        }
+    }
+
+    /**
      * build each field and share some data from dataform to field (form status, validation errors)
      */
     protected function buildFields()
     {
+        $this->structureDependencies();
         $messages = (isset($this->validator)) ? $this->validator->messages() : false;
 
         foreach ($this->fields as $field) {

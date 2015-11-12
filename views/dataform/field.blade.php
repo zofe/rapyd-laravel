@@ -18,8 +18,7 @@
         @else
             <div class="col-sm-12" id="div_{!! $field->name !!}">
         @endif
-            
-            
+
             {!! $field->output !!}
 
             @if(count($field->messages))
@@ -31,9 +30,11 @@
                 @endforeach
             @endif
 
-        </div>
-
-            
-            
+            </div>
     </div>
+    @foreach($field->children as $child)
+        <div class="conditional" data-cond-option="{!! $field->name . $field->arrayFragment() !!}" data-cond-value="{!! $child['value'] !!}" data-cond-operator="{!! $child['operator'] !!}">
+            @include('rapyd::dataform.field', ['field' => $child['child']])
+        </div>
+    @endforeach
 @endif

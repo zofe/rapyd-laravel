@@ -20,6 +20,11 @@ class Checkboxgroup extends Field
         $this->separator = $separator;
     }
 
+    public function arrayFragment()
+    {
+        return '[]';
+    }
+
     public function getValue()
     {
         parent::getValue();
