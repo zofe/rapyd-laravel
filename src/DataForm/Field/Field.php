@@ -62,9 +62,11 @@ abstract class Field extends Widget
     public $is_hidden = false;
     public $options_table = '';
     public $options_key = null;
-    public $has_error = '';
+    public $orientation = 'horizontal';
+    public $has_placeholder = false;
     public $has_label = true;
     public $has_wrapper = true;
+    public $has_error = '';
     public $messages = array();
     public $query_scope;
     public $query_scope_params = [];
@@ -356,7 +358,6 @@ abstract class Field extends Widget
         } elseif ((isset($this->model)) && (Input::get($this->name) === null) && ($this->model->offsetExists($this->db_name))) {
 
             $this->value = $this->model->getAttribute($this->db_name);
-
         }
 
         $this->old_value = $this->value;
@@ -393,10 +394,12 @@ abstract class Field extends Widget
             $this->new_value = $this->insert_value;
         } elseif (($this->action == "update") && ($this->update_value != null)) {
             $this->new_value = $this->update_value;
+        } elseif ($this->type == 'auto') {
+            //if is auto and no default is matched, keep the old value
+            $this->new_value = $this->value;
         } else {
             $this->action = "idle";
         }
-
         if ($this->new_value == "") {
             $this->new_value = null;
         }
@@ -501,12 +504,8 @@ abstract class Field extends Widget
                 //check for relation then exit
                 return true;
             }
-
-            //if (isset($this->new_value)) {
+            
             $this->model->setAttribute($this->db_name, $this->new_value);
-            //} else {
-            //    $this->model->setAttribute($this->db_name, $this->value);
-            //}
             if ($save) {
                 return $this->model->save();
             }
@@ -584,7 +583,7 @@ abstract class Field extends Widget
      */
     protected function parseString($string, $is_view = false)
     {
-        if (is_object($this->model) && (strpos($string,'{{') !== false || $is_view)) {
+        if (is_object($this->model) && (strpos($string,'{{') !== false || strpos($string,'{!!') !== false || $is_view)) {
             $fields = $this->model->getAttributes();
             $relations = $this->model->getRelations();
             $array = array_merge($fields, $relations, ['model'=>$this->model]) ;
@@ -628,8 +627,8 @@ abstract class Field extends Widget
                 $this->attributes['type'] = ($this->$attribute == 'input') ? 'text' : $this->$attribute;
             }
 
-            if ($this->orientation == 'inline') {
-                if ($this->type != 'select') {
+            if ($this->orientation == 'inline' || $this->has_placeholder) {
+                if ($this->type!='select') {
                     $this->attributes["placeholder"] = $this->label;
                 }
             }
@@ -660,8 +659,8 @@ abstract class Field extends Widget
     public function all()
     {
         $output  = "";
-        if ($this->has_wrapper && $this->has_label) {
-            $output .= "<label for=\"{$this->name}\" class=\"{$this->req}\">{$this->label}</label>";            
+        if ($this->has_wrapper && $this->has_label && $this->orientation != 'inline') {
+            $output .= "<label for=\"{$this->name}\" class=\"{$this->req}\">{$this->label}</label>";
         }
         $output .= $this->output;
         $output  = '<span id="div_'.$this->name.'">'.$output.'</span>';

@@ -4,12 +4,14 @@ namespace Zofe\Rapyd\DataForm\Field;
 
 use Illuminate\Html\FormFacade as Form;
 use Illuminate\Support\Facades\Input;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
 {
 
     public $type = "file";
     protected $file = null;
+    protected $file_callable;
     protected $path = 'uploads/';
     protected $web_path = '';
     protected $filename = '';
@@ -18,6 +20,30 @@ class File extends Field
     protected $upload_deferred = false;
     protected $recursion = false;
 
+    public function __construct($name, $label, &$model = null, &$model_relations = null)
+    {
+        parent::__construct($name, $label, $model, $model_relations);
+
+        \Event::listen('rapyd.uploaded.'.$this->name, function () {
+            $this->fileProcess();
+        });
+    }
+
+    /**
+     * postprocess file if needed
+     */
+    protected function fileProcess()
+    {
+        if ($this->saved) {
+//            if (!$this->file)  $this->file = Input::file($this->name);
+            if ($this->file_callable) {
+                $callable = $this->file_callable;
+                $callable($this);
+            }
+        }
+    }
+    
+    
     public function rule($rule)
     {
         //we should consider rules only on upload
@@ -28,6 +54,18 @@ class File extends Field
         return $this;
     }
 
+    /**
+     * store a closure to make something with file post process
+     * @param  callable $callable
+     * @return $this
+     */
+    public function file(\Closure $callable)
+    {
+        $this->file_callable = $callable;
+
+        return $this;
+    }
+    
     public function autoUpdate($save = false)
     {
 
@@ -200,6 +238,11 @@ class File extends Field
      */
     protected function updateName($save)
     {
+        if (!(\Schema::connection($this->model->getConnectionName())->hasColumn($this->model->getTable(), $this->db_name)
+            || $this->model->hasSetMutator($this->db_name)))
+        {
+            return true;
+        }
         if (isset($this->new_value)) {
             $this->model->setAttribute($this->db_name, $this->new_value);
         } else {
