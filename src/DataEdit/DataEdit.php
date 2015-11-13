@@ -224,7 +224,7 @@ class DataEdit extends DataForm
         //show
         if ($this->status == "show") {
 
-            //  bugfix: 新建对象成功的页面里,修改按钮的参数不对. 这样修改不会影响 item/?show 页面的按钮参数.
+            //  in create success page, url's "insert=1" should be replace to "modify=xxx"
             $this->url->remove('insert');
             $this->url->append('modify', $this->model->id);
 
