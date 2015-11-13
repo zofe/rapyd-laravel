@@ -171,6 +171,9 @@ class Autocomplete extends Field
                                 complete: function(response){
                                     response.responseJSON.forEach(function (item) {
                                         blod_{$this->name}.valueCache[item.{$this->record_label}] = item.{$this->record_id};
+                                        if ( item.{$this->record_label} == $('#auto_{$this->name}').val() ) {
+                                            $('#{$this->name}').val(item.{$this->record_id});
+                                        }
                                     });
                                 }
                             }
@@ -196,10 +199,7 @@ class Autocomplete extends Field
                         function (e,data) {
                             if ('{$this->must_match}') {
                                 var _label = $.trim($(this).val());
-                                if ( !(_label in blod_{$this->name}.valueCache) ) {
-                                    $('#{$this->name}').val('');
-                                    $(this).val('');
-                                } else {
+                                if ( _label in blod_{$this->name}.valueCache ) {
                                     //Fill data to hidden input, when direct copy data to input without choose from auto-complete results.
                                     $('#{$this->name}').val(blod_{$this->name}.valueCache[_label]);
                                 }
