@@ -1,34 +1,20 @@
-rapyd-laravel
-=============
+## Fork from https://github.com/zofe/rapyd-laravel
 
-[![Join the chat at https://gitter.im/zofe/rapyd-laravel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zofe/rapyd-laravel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+## the ‘dev’ branch is newest code, master branch keeps the same as upstream.
 
-<a href="https://packagist.org/packages/zofe/rapyd">
-    <img src="http://img.shields.io/packagist/v/zofe/rapyd.svg?style=flat" style="vertical-align: text-top">
-</a>
-<a href="https://packagist.org/packages/zofe/rapyd">
-    <img src="http://img.shields.io/packagist/dt/zofe/rapyd.svg?style=flat" style="vertical-align: text-top">
-</a>
+## dev branch only tested under Laravel 5.1.
 
-This is a pool of presentation and editing widgets (Grids and Forms) for laravel.  
-Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.  
-  
- Main Website: [rapyd.com](http://www.rapyd.com)  
- Demo: [rapyd.com/demo](http://www.rapyd.com/demo)  
- Documentation: [Wiki](https://github.com/zofe/rapyd-laravel/wiki)  
- 
-![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
- 
+## added features:
 
-## Install in Laravel 5.1, 5.0, 4.*
+1. fix security issue on 'readonly' mode
 
-dev-master switched to laravel 5.1  
+2. add Datagrid::buildExcel() function （add maatwebsite/excel by composer）
 
-1. To `composer.json` add:  
-`"zofe/rapyd": "2.1.*"` for Laravel 5.1  
-`"zofe/rapyd": "2.0.*"` for Laravel 5.0  
-`"zofe/rapyd": "1.3.*"` for Laravel 4.*  
+3. Date组件默认的format改成'Y-m-d', lang改为'zh-CN'，方便兼容HTML5自带的日期组件。
 
+
+4. 添加QNFile Field，七牛的文件上传控件
+=======
 
 2. run `$ composer update zofe/rapyd`
 
@@ -401,3 +387,4 @@ so go to:
 Rapyd is licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 If Rapyd saves you time, please __[support Rapyd](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QJFERQGP4ZB6A)__
+

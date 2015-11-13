@@ -9,6 +9,7 @@ use Zofe\Rapyd\DataForm\Field\Colorpicker;
 use Zofe\Rapyd\DataForm\Field\Date;
 use Zofe\Rapyd\DataForm\Field\Field;
 use Zofe\Rapyd\DataForm\Field\File;
+use Zofe\Rapyd\DataForm\Field\QNFile;
 use Zofe\Rapyd\DataForm\Field\Hidden;
 use Zofe\Rapyd\DataForm\Field\Password;
 use Zofe\Rapyd\DataForm\Field\Radiogroup;
@@ -51,6 +52,7 @@ use Zofe\Rapyd\Rapyd;
  * @method Hidden       addHidden      (string $name, string $label, string $validation = '')
  * @method Password     addPassword    (string $name, string $label, string $validation = '')
  * @method File         addFile        (string $name, string $label, string $validation = '')
+ * @method QNFile       addQNFile        (string $name, string $label, string $validation = '')
  * @method Textarea     addTextarea    (string $name, string $label, string $validation = '')
  * @method Select       addSelect      (string $name, string $label, string $validation = '')
  * @method Radiogroup   addRadiogroup  (string $name, string $label, string $validation = '')
@@ -388,6 +390,11 @@ class DataForm extends Widget
                     $this->process_status = "success";
                 }
                 foreach ($this->fields as $field) {
+                    //Field may be setted on other mode like "readonly", should not update it's value.
+                    if ($field->mode != 'editable') {
+                        continue;
+                    }
+
                     $field->action = $this->action;
                     $result = $field->autoUpdate();
                     if (!$result) {

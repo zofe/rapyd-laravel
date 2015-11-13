@@ -75,7 +75,7 @@ abstract class Field extends Widget
     public $layout = array(
         'field_separator' => '<br />',
         'option_separator' => '',
-        'null_label' => '[null]',
+        'null_label' => '[未填写]',
     );
 
     public $rule = [];

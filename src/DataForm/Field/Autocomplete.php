@@ -20,11 +20,11 @@ class Autocomplete extends Field
     public $record_id;
     public $record_label;
 
-    public $must_match = false;
+    public $must_match = true;
     public $auto_fill = false;
     public $parent_id = '';
 
-    public $min_chars = '2';
+    public $min_chars = 1;
     public $clause = "where";
     public $is_local;
     public $description;
@@ -130,8 +130,8 @@ class Autocomplete extends Field
                     $output = "";
                 } else {
                     if ($this->relation != null) {
-                        $name = $this->rel_field;
-                        $value = @$this->relation->get()->first()->$name;
+                        list($table, $name) = explode('_', $this->name);
+                        $value = $this->model->$table->$name;
                     } else {
                         $value = $this->value;
                     }
@@ -171,6 +171,9 @@ class Autocomplete extends Field
                                 complete: function(response){
                                     response.responseJSON.forEach(function (item) {
                                         blod_{$this->name}.valueCache[item.{$this->record_label}] = item.{$this->record_id};
+                                        if ( item.{$this->record_label} == $('#auto_{$this->name}').val() ) {
+                                            $('#{$this->name}').val(item.{$this->record_id});
+                                        }
                                     });
                                 }
                             }
@@ -196,10 +199,7 @@ class Autocomplete extends Field
                         function (e,data) {
                             if ('{$this->must_match}') {
                                 var _label = $.trim($(this).val());
-                                if ( !(_label in blod_{$this->name}.valueCache) ) {
-                                    $('#{$this->name}').val('');
-                                    $(this).val('');
-                                } else {
+                                if ( _label in blod_{$this->name}.valueCache ) {
                                     //Fill data to hidden input, when direct copy data to input without choose from auto-complete results.
                                     $('#{$this->name}').val(blod_{$this->name}.valueCache[_label]);
                                 }

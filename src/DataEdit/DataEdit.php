@@ -224,6 +224,10 @@ class DataEdit extends DataForm
         //show
         if ($this->status == "show") {
 
+            //  in create success page, url's "insert=1" should be replace to "modify=xxx"
+            $this->url->remove('insert');
+            $this->url->append('modify', $this->model->id);
+
             $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), trans('rapyd::rapyd.modify'), $showButtonPosition);
 
         }
