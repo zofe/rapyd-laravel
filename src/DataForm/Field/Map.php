@@ -12,11 +12,18 @@ class Map extends Field
     public $type = "map";
     public $lat = "lat";
     public $lon = "lon";
+    public $zoom = 12;
 
     public function latlon($lat, $lon)
     {
         $this->lat = $lat;
         $this->lon = $lon;
+        return $this;
+    }
+
+    public function zoom($zoom)
+    {
+        $this->zoom = $zoom;
         return $this;
     }
     
@@ -71,7 +78,7 @@ class Map extends Field
                 } elseif ((!isset($this->value))) {
                     $output = $this->layout['null_label'];
                 } else {
-                    //immagine statica della mappa su lat e lon  su api google
+                    $output = "<img border=\"0\" src=\"//maps.googleapis.com/maps/api/staticmap?center={$this->value['lat']},{$this->value['lon']}&zoom={$this->zoom}&size=500x500\">";
                    
                 }
                 $output = "<div class='help-block'>" . $output . "</div>";
@@ -90,7 +97,7 @@ class Map extends Field
             {
                 var latitude = document.getElementById('{$this->lat}');
                 var longitude = document.getElementById('{$this->lon}');
-                var zoom = 7;
+                var zoom = {$this->zoom};
         
                 var LatLng = new google.maps.LatLng(latitude.value, longitude.value);
         
