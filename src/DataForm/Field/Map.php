@@ -10,6 +10,50 @@ class Map extends Field
 {
 
     public $type = "map";
+    public $lat = "lat";
+    public $lon = "lon";
+
+    public function latlon($lat, $lon)
+    {
+        $this->lat = $lat;
+        $this->lon = $lon;
+        return $this;
+    }
+    
+    public function getValue()
+    {
+        if (isset($this->model)) 
+        {
+            $this->value['lat'] = $this->model->getAttribute($this->lat);
+            $this->value['lon'] = $this->model->getAttribute($this->lon);
+            $this->description =  implode(',', array_values($this->value));
+        }
+    }
+
+    public function getNewValue()
+    {
+        $process = (\Input::get('search') || \Input::get('save')) ? true : false;
+        if ($process && \Input::exists($this->lat)) {
+            $this->new_value['lat'] = \Input::get($this->lat);
+            $this->new_value['lon'] = \Input::get($this->lon);
+        
+        }
+    }
+    
+    public function autoUpdate($save = false)
+    {
+        if (isset($this->model))
+        {
+            $this->getValue();
+            $this->getNewValue();
+            $this->model->setAttribute($this->lat, $this->new_value['lat']);
+            $this->model->setAttribute($this->lon, $this->new_value['lon']);
+            if ($save) {
+                return $this->model->save();
+            }
+        }
+        return true;
+    }
     
     public function build()
     {
@@ -35,20 +79,20 @@ class Map extends Field
 
             case "create":
             case "modify":
-                $output  = Form::text($this->lat, $this->attributes);
-                $output .= Form::text($this->lon, $this->attributes);
-                $output .= '<div id="map" style="width:500px; height:500px"></div>';
-            $output .= '<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>';
+                $output  = Form::hidden($this->lat, $this->value['lat'], ['id'=>$this->lat]);
+                $output .= Form::hidden($this->lon, $this->value['lon'], ['id'=>$this->lon]);
+                $output .= '<div id="map_'.$this->name.'" style="width:500px; height:500px"></div>';
+                $output .= '<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>';
                 
-            Rapyd::script("
+            \Rapyd::script("
         
             function initialize()
             {
-                var latitude = document.getElementById('latitude');
-                var longitude = document.getElementById('longitude');
+                var latitude = document.getElementById('{$this->lat}');
+                var longitude = document.getElementById('{$this->lon}');
                 var zoom = 7;
         
-                var LatLng = new google.maps.LatLng(latitude, longitude);
+                var LatLng = new google.maps.LatLng(latitude.value, longitude.value);
         
                 var mapOptions = {
                     zoom: zoom,
@@ -59,7 +103,7 @@ class Map extends Field
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 }
         
-                var map = new google.maps.Map(document.getElementById('map'),mapOptions);
+                var map = new google.maps.Map(document.getElementById('map_{$this->name}'),mapOptions);
         
                 var marker = new google.maps.Marker({
                     position: LatLng,
@@ -68,10 +112,9 @@ class Map extends Field
                     draggable: true
                 });
         
-                google.maps.event.addListener(marker, 'dragend', function (marker) {
-                    var latLng = marker.latLng;
-                    latitude.value = LatLng.lat();
-                    longitude.value = LatLng.lng();
+                google.maps.event.addListener(marker, 'dragend', function (event) {
+                    latitude.value = event.latLng.lat();
+                    longitude.value = event.latLng.lng();
                 });
         
             }
