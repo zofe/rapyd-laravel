@@ -30,6 +30,9 @@
     </tr>
     </thead>
     <tbody>
+    @if (count($dg->rows) == 0)
+        <tr><td colspan="{!! count($dg->columns) !!}">{!! trans('rapyd::rapyd.no_records') !!}</td></tr>
+    @endif
     @foreach ($dg->rows as $row)
         <tr{!! $row->buildAttributes() !!}>
             @foreach ($row->cells as $cell)
