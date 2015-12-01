@@ -18,6 +18,7 @@ return array(
     'err'        => 'Error reading record.',
     'err_unknown'=> 'Error, no record selected',
     'err_dup_pk' => 'Error, duplicated primary key',
+    'no_records' => 'There are no records to show.',
     'conf_delete'=> 'Do you want to eliminate the record?',
 
 );
