@@ -18,6 +18,7 @@ return array(
     'err'        => 'Si è verificato un errore',
     'err_unknown'=> 'Si è verificato un errore, nessun record su cui operare.',
     'err_dup_pk' => 'Si è verificato un errore, chiave primaria non univoca.',
+    'no_records' => 'Non ci sono record da mostrare',
     'conf_delete'=> 'Vuoi davvero eliminare il record corrente?',
 
 );
