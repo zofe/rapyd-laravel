@@ -50,6 +50,7 @@ abstract class Field extends Widget
     public $insert_value = null;
     public $update_value = null;
     public $show_value = null; //default value in visualization
+    public $edited = false;
     public $options = array();
     public $mask = null;
     public $group;
@@ -391,8 +392,10 @@ abstract class Field extends Widget
                 $this->new_value = HTML::xssfilter(Input::get($this->name));
             }
         } elseif (($this->action == "insert") && ($this->insert_value != null)) {
+            $this->edited = true;
             $this->new_value = $this->insert_value;
         } elseif (($this->action == "update") && ($this->update_value != null)) {
+            $this->edited = true;
             $this->new_value = $this->update_value;
         } elseif ($this->type == 'auto') {
             //if is auto and no default is matched, keep the old value
@@ -484,11 +487,20 @@ abstract class Field extends Widget
         return $this;
     }
 
+    public function editable() 
+    {
+        if ($this->mode == 'readonly') {
+            return $this->edited;
+        }
+        return true;
+    }
+    
     public function autoUpdate($save = false)
     {
         $this->getValue();
         $this->getNewValue();
-
+        if (!$this->editable()) return true;
+        
         if (is_object($this->model) && isset($this->db_name)) {
             if (
                 !(Schema::connection($this->model->getConnectionName())->hasColumn($this->model->getTable(), $this->db_name)
