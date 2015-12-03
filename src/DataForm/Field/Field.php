@@ -88,7 +88,7 @@ abstract class Field extends Widget
     {
         parent::__construct();
 
-        $this->attributes = Config::get('rapyd.field.attributes');
+        $this->attributes = config('rapyd.fields.attributes', ['class'=>'form-control']);
         $this->model = $model;
         $this->model_relations = $model_relations;
 

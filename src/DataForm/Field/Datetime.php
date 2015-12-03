@@ -12,6 +12,16 @@ class Datetime extends Field
     public $store_as = 'Y-m-d H:i:s';
     public $language = 'en';
 
+    public function __construct($name, $label, &$model = null, &$model_relations = null)
+    {
+        
+        parent::__construct($name, $label, $model, $model_relations);
+        $this->language = config('app.locale', $this->language);
+        $this->format = config('rapyd.fields.date.format', $this->format);
+        $this->store_as = config('rapyd.fields.date.store_as', $this->store_as);
+        //dd($this->language, $this->format, $this->store_as);
+    }
+    
     /**
      * set instarnal preview datetime format
      * @param $format valid php datetime format
@@ -32,13 +42,13 @@ class Datetime extends Field
      */
     protected function isodatetimeToHuman($isodatetime)
     {
-        $datetime = \dateTime::createFromFormat( $this->store_as, $isodatetime);
+        $datetime = \DateTime::createFromFormat( $this->store_as, $isodatetime);
         if (!$datetime) return '';
         $timestamp = $datetime->getTimestamp();
         if ($timestamp < 1) {
             return "";
         }
-        $isodate = date($this->format, $timestamp);
+        $isodatetime = date($this->format, $timestamp);
 
         return $isodatetime;
     }
@@ -48,7 +58,7 @@ class Datetime extends Field
      */
     protected function humandatetimeToIso($humandatetime)
     {
-        $datetime = \dateTime::createFromFormat( $this->format, $humandatetime);
+        $datetime = \DateTime::createFromFormat( $this->format, $humandatetime);
         if (!$datetime) return '';
         $timestamp = $datetime->getTimestamp();
         if ($timestamp < 1) {
@@ -117,7 +127,7 @@ class Datetime extends Field
                 if ($this->language != "en") {
                     Rapyd::js('datetimepicker/locales/bootstrap-datetimepicker.'.$this->language.'.js');
                 }
-
+                
                 $output  = Form::text($this->name, $this->value,  $this->attributes);
                 Rapyd::script("
                         $('#".$this->name."').datetimepicker({

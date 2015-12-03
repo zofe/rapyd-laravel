@@ -11,6 +11,14 @@ class Date extends Field
     public $format = 'm/d/Y';
     public $language = 'en';
     public $clause = "where";
+
+
+    public function __construct($name, $label, &$model = null, &$model_relations = null)
+    {
+        parent::__construct($name, $label, $model, $model_relations);
+        $this->language = config('app.locale', $this->language);
+        $this->format = config('rapyd.fields.date.format', $this->format);
+    }
     
     /**
      * set instarnal preview date format

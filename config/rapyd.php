@@ -30,10 +30,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Field Class
+    | Field's default configuration
     |--------------------------------------------------------------------------
     */
-    'field'=> [
+    'fields'=> [
         'attributes' => ['class'=>'form-control'],
+        'date' => [
+            'format' => 'm/d/Y',
+        ],
+        'datetime' => [
+            'format' => 'm/d/Y H:i:s',
+            'store_as' => 'Y-m-d H:i:s',
+        ],
     ],
+    
 ];
