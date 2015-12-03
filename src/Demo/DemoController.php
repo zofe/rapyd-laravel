@@ -115,9 +115,52 @@ class DemoController extends Controller
                 @unlink($file);
         }
 
+        if (class_exists('\Baum\Node')) {
+            $this->getMenusSchema();
+        }
+
         return \Redirect::to("rapyd-demo")->with("message", "Database filled");
     }
 
+    public function getMenusSchema()
+    {
+        \Schema::dropIfExists("demo_menus");
+
+        \Schema::create('demo_menus', function($table)
+        {
+            $table->increments('id');
+            $table->string('title');
+
+            // These columns are needed for Baum's Nested Set implementation to work.
+            // Column names may be changed, but they *must* all exist and be modified
+            // in the model.
+            // Take a look at the model scaffold comments for details.
+            // We add indexes on parent_id, lft, rgt columns by default.
+
+            $table->integer('parent_id')->nullable()->index();
+            $table->integer('lft')->nullable()->index();
+            $table->integer('rgt')->nullable()->index();
+            $table->integer('depth')->nullable();
+
+            $table->timestamps();
+        });
+
+        $menus = [
+            ['id' => 1, 'title' => '--- the root node of the menu ---', 'children' => [
+                ['id' => 2, 'title' => 'Accessories', 'children' => [
+                    ['id' => 3, 'title' => 'Cables']
+                ]],
+                ['id' => 4, 'title' => 'Laptops', 'children' => [
+                    ['id' => 5, 'title' => 'PC Laptops'],
+                    ['id' => 6, 'title' => 'Macbooks (Air/Pro)']
+                ]],
+                ['id' => 7, 'title' => 'Desktops'],
+                ['id' => 8, 'title' => 'Monitors'],
+                ['id' => 9, 'title' => 'Cell Phones']
+            ],
+        ]];
+        Menu::buildTree($menus);
+    }
     public function getSet()
     {
         $set = \DataSet::source(Article::with('author', 'categories'));
@@ -287,6 +330,28 @@ class DemoController extends Controller
         return $edit->view('rapyd::demo.edit', compact('edit'));
 
     }
+
+    public function anyDatatree()
+    {
+        if (!class_exists('\Baum\Node')) {
+            die("You need to install Baum\\Baum and repopulate the database to use the DataTree");
+        }
+
+        // for demo purposes only, ensure the root exists
+        $root = Menu::firstOrNew(['id' => 1]);
+        $root->save();
+
+        // load the root model
+        $root = Menu::find(1) or App::abort(404);
+
+        $tree = \DataTree::source($root);
+        $tree->add('title');
+        $tree->edit("/admin/menu/edit", 'Edit', 'modify|delete');
+        $tree->submit('Save the order');
+
+        return view('rapyd::demo.tree', compact('tree'));
+    }
+
 
     public function getNudegrid()
     {
