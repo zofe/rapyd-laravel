@@ -17,8 +17,8 @@ class Datetime extends Field
         
         parent::__construct($name, $label, $model, $model_relations);
         $this->language = config('app.locale', $this->language);
-        $this->format = config('rapyd.fields.date.format', $this->format);
-        $this->store_as = config('rapyd.fields.date.store_as', $this->store_as);
+        $this->format = config('rapyd.fields.datetime.format', $this->format);
+        $this->store_as = config('rapyd.fields.datetime.store_as', $this->store_as);
         //dd($this->language, $this->format, $this->store_as);
     }
     
