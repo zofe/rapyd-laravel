@@ -18,7 +18,7 @@
     },
     "suggest": {
         "baum/baum": "Allows to use the DataTree widget"
-    }
+    },
     "autoload": {
         "classmap": [
             "migrations"
