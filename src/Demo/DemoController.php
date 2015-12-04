@@ -346,12 +346,23 @@ class DemoController extends Controller
 
         $tree = \DataTree::source($root);
         $tree->add('title');
-        $tree->edit("/admin/menu/edit", 'Edit', 'modify|delete');
+        $tree->edit("/rapyd-demo/menuedit", 'Edit', 'modify|delete');
         $tree->submit('Save the order');
 
         return view('rapyd::demo.tree', compact('tree'));
     }
 
+
+    public function anyMenuedit()
+    {
+        if (\Input::get('do_delete') == 1) return "not the first";
+
+        $edit = \DataEdit::source(new Menu());
+        $edit->link("rapyd-demo/datatree","Menu", "TR")->back();
+        $edit->label('Edit Menu Item');
+        $edit->add('title','Title', 'text');
+        return $edit->view('rapyd::demo.edit', compact('edit'));
+    }
 
     public function getNudegrid()
     {
