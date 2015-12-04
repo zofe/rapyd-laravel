@@ -95,6 +95,7 @@ h2, .h2 {
 .navbar.main ul li a {      
     color: #777;
     font-family:'Lucida Grande', Helvetica, sans-serif;
+    padding: 10px;
 }
 .navbar.main li.active a {      
     color: #000;
