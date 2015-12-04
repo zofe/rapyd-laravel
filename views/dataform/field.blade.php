@@ -10,7 +10,7 @@
     @endif
 
 @else
-    <div class="form-group{!!$field->has_error!!}" id="fg_{!! $field->name !!}">
+    <div class="form-group clearfix{!!$field->has_error!!}" id="fg_{!! $field->name !!}" >
 
         @if ($field->has_label)
             <label for="{!! $field->name !!}" class="col-sm-2 control-label{!! $field->req !!}">{!! $field->label !!}</label>
