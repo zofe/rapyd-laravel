@@ -19,6 +19,7 @@
             <li @if (Request::is('rapyd-demo/form*','rapyd-demo/advancedform*','rapyd-demo/styledform*')) class="active"@endif>{!! link_to("rapyd-demo/form", "DataForm") !!}</li>
             <li @if (Request::is('rapyd-demo/edit*')) class="active"@endif>{!! link_to("rapyd-demo/edit", "DataEdit") !!}</li>
             <li @if (Request::is('rapyd-demo/embed*')) class="active"@endif>{!! link_to("rapyd-demo/embed", "DataEmbed") !!}</li>
+            <li @if (Request::is('rapyd-demo/datatree*')) class="active"@endif>{!! link_to("rapyd-demo/datatree", "DataTree") !!}</li>
         </ul>
     </div>
 </nav>

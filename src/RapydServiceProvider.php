@@ -69,6 +69,7 @@ class RapydServiceProvider extends ServiceProvider
             $loader->alias('DataEdit'  , 'Zofe\Rapyd\Facades\DataEdit'  );
             $loader->alias('DataFilter', 'Zofe\Rapyd\Facades\DataFilter');
             $loader->alias('DataEmbed' , 'Zofe\Rapyd\Facades\DataEmbed');
+            $loader->alias('DataTree' , 'Zofe\Rapyd\Facades\DataTree');
             $loader->alias('Documenter', 'Zofe\Rapyd\Facades\Documenter');
         });
     }

@@ -16,6 +16,9 @@
         "intervention/image": "2.*",
         "zofe/burp": "2.*"
     },
+    "suggest": {
+        "baum/baum": "Allows to use the DataTree widget"
+    },
     "autoload": {
         "classmap": [
             "migrations"
