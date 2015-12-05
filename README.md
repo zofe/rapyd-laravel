@@ -305,6 +305,25 @@ It also support query scopes (see eloquent documentation), closures, and a cool 
 [Custom layout and custom query scope](http://www.rapyd.com/rapyd-demo/customfilter) 
 
 
+## DataTree
+
+The DataTree extends the DataGrid, and displays sortable tree widget. It supports all the
+methods of the DataGrid with the exception of pagination and sorting. Another difference is
+you need to pass in an already loaded Baum Model, not an empty Model or Query Builder.
+
+To use this widget you need to `php composer.phar require baum/baum` and make sure your
+model extends `Baum\Node`.
+
+```php
+    // the root node won't appear, only its sub-nodes will be displayed.
+    $root = Menu::find(1) or App::abort(404);
+
+    $tree = \DataTree::source($root);
+    $tree->add('title');
+    $tree->edit("/menu/edit", 'Edit', 'modify|delete');
+    $tree->submit('Save the order');
+    return view('menu-list', compact('tree'));
+```
 
 
 ## Namespace consideration, Extending etc.
