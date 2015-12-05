@@ -100,6 +100,13 @@ class DataTree extends DataGrid
             $var = json_decode($var, true);
         }
 
+        if (!$var) {
+
+            // the client submitted an empty tree, there's nothing to move
+
+            return;
+        }
+
         $movements = [];
         $subtreeId = $this->source->getKey();
 
@@ -148,7 +155,7 @@ class DataTree extends DataGrid
         $unmoved = new \Baum\Extensions\Eloquent\Collection();
 
         foreach ($dictionary as $n) {
-            if (!in_array($n->getKey(),$movedIds)){
+            if (!in_array($n->getKey(), $movedIds)) {
                 $unmoved[] = $n;
             }
         }
