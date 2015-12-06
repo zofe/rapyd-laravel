@@ -14,18 +14,16 @@ class DataTree extends DataGrid
 {
     public $attributes = array("class" => "datatree", "method" => "POST");
     public $data;
-    static $css = [];
-    static $styles = [];
-    static $js = [];
-    static $scripts = [];
+    public $source;
 
     /**
      * @var Node
      */
-    public $source;
     protected $maxDepth = 5;
     protected $group = 0;
     protected $name = 'items';
+    protected $onChange;
+    protected $autoSave;
 
     public static function source($source)
     {
@@ -316,6 +314,8 @@ class DataTree extends DataGrid
     }
 
     /**
+     * Add a submit button to allow saving the current order of the nodes
+     *
      * @param string $name
      * @param string $position
      * @param array $options
@@ -330,6 +330,15 @@ class DataTree extends DataGrid
         return $this;
     }
 
+    /**
+     * Get/Set maximum depth of the tree. Nesting beyond this limit will not
+     * be allowed.
+     *
+     * Defaults to 5.
+     *
+     * @param integer $value
+     * @return $this|int
+     */
     public function maxDepth($value = null)
     {
         if (func_num_args()) {
@@ -338,6 +347,44 @@ class DataTree extends DataGrid
         }
         return $this->maxDepth;
     }
+
+    /**
+     * Get/Set a custom javascript string to be executed at each order change.
+     *
+     * @param string $value
+     * @return $this|string
+     */
+    public function onChange($value = null)
+    {
+        if (func_num_args()) {
+            $this->onChange = $value;
+            return $this;
+        }
+        return $this->onChange;
+    }
+
+    /**
+     * Enable/Disable automatic ajax-saving at each change
+     * @param null $value
+     * @return $this
+     */
+
+    public function autoSave($value = null)
+    {
+        if (func_num_args()) {
+            $this->autoSave = $value;
+            return $this;
+        }
+        return $this->autoSave;
+    }
+
+    /**
+     * Set the group of the DataTree. Multiple DataTrees of the same
+     * group will be able to exchange items.
+     *
+     * @param null $value
+     * @return $this|int
+     */
 
     public function group($value = null)
     {
@@ -348,6 +395,13 @@ class DataTree extends DataGrid
         return $this->group;
     }
 
+    /**
+     * Get/Set the input name of the DataTree data. You have to change
+     * this if you display multiple datatrees in the same page.
+     *
+     * @param null $value
+     * @return $this|string
+     */
     public function name($value = null)
     {
         if (func_num_args()) {
@@ -361,6 +415,9 @@ class DataTree extends DataGrid
 
     public function initJsWidget()
     {
+        $onChange = $this->onChange ?: '';
+        $ajax = $this->autoSave ? '$.post("", {"'.$this->name().'": $(this).nestable("serialize")});' : '';
+
         $script = '
 
 $("[data-instance-id=\\"' . $this->attributes['data-instance-id'] . '\\"]").each(function(){
@@ -393,8 +450,8 @@ $("[data-instance-id=\\"' . $this->attributes['data-instance-id'] . '\\"]").each
         var ol = $(this).children(".datatree-list");
         if (ol.length) rapyd.datatree.updateDepth(ol);
         var updated = rapyd.datatree.updateForm($(this), form, "' . $this->name . '");
-        // $(this).parents(".datatree").first().submit();
-
+        '.$ajax.'
+        '.$onChange.'
     });
     $(".datatree").submit(function () {
         var action = $(this).attr("action") || document.location.href;
