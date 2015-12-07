@@ -110,6 +110,8 @@ class Rapyd
             $buffer .= sprintf("<style type=\"text/css\">\n%s\n</style>", implode("\n", self::$styles));
         }
 
+        $buffer .= HTML::style('packages/zofe/rapyd/assets/rapyd.css');
+
         return $buffer;
     }
 
