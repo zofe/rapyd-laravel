@@ -4,8 +4,6 @@ namespace Zofe\Rapyd\DataForm\Field;
 
 use Illuminate\Html\FormFacade as Form;
 
-//TODO google map (rethink extending container)
-
 class Map extends Field
 {
 
@@ -121,7 +119,7 @@ class Map extends Field
                     zoom: zoom,
                     center: LatLng,
                     panControl: false,
-                    zoomControl: false,
+                    zoomControl: true,
                     scaleControl: true,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 }
