@@ -29,8 +29,18 @@ class Map extends Field
     
     public function getValue()
     {
-        if (isset($this->model)) 
-        {
+        $process = (\Input::get('search') || \Input::get('save')) ? true : false;
+        
+        if ($this->request_refill == true && $process && \Input::exists($this->lat) ) {
+            $this->value['lat'] = \Input::get($this->lat);
+            $this->value['lon'] = \Input::get($this->lon);
+            $this->is_refill = true;
+            
+        } elseif (($this->status == "create") && ($this->insert_value != null)) {
+            $this->value = $this->insert_value;
+        } elseif (($this->status == "modify") && ($this->update_value != null)) {
+            $this->value = $this->update_value;
+        } elseif (isset($this->model)) {
             $this->value['lat'] = $this->model->getAttribute($this->lat);
             $this->value['lon'] = $this->model->getAttribute($this->lon);
             $this->description =  implode(',', array_values($this->value));
@@ -43,7 +53,13 @@ class Map extends Field
         if ($process && \Input::exists($this->lat)) {
             $this->new_value['lat'] = \Input::get($this->lat);
             $this->new_value['lon'] = \Input::get($this->lon);
-        
+
+        } elseif (($this->action == "insert") && ($this->insert_value != null)) {
+            $this->edited = true;
+            $this->new_value = $this->insert_value;
+        } elseif (($this->action == "update") && ($this->update_value != null)) {
+            $this->edited = true;
+            $this->new_value = $this->update_value;
         }
     }
     
