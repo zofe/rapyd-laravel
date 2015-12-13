@@ -44,7 +44,13 @@ dev-master switched to laravel 5.1
   or for < 5.0  
  `$ php artisan asset:publish zofe/rapyd`  
  `$ php artisan config:publish zofe/rapyd`
-  
+
+
+5. (optional) enable demo, uncomment the route:  
+```php
+#  /app/Http/rapyd.php
+// Route::controller('rapyd-demo','\Zofe\Rapyd\Demo\DemoController');
+```
 
 ## DataGrid
 
