@@ -1,7 +1,7 @@
 <?php namespace Zofe\Rapyd;
 
-use Illuminate\Html\FormBuilder;
-use Illuminate\Html\HtmlBuilder;
+use Collective\Html\FormBuilder;
+use Collective\Html\HtmlBuilder;
 use Illuminate\Support\ServiceProvider;
 
 class RapydServiceProvider extends ServiceProvider
@@ -52,7 +52,7 @@ class RapydServiceProvider extends ServiceProvider
     public function register()
     {
         
-        $this->app->register('Illuminate\Html\HtmlServiceProvider');
+        $this->app->register('Collective\Html\HtmlServiceProvider');
         $this->app->register('Zofe\Burp\BurpServiceProvider');
         
         Rapyd::setContainer($this->app);

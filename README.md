@@ -20,11 +20,12 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
  
 
-## Install in Laravel 5.1, 5.0, 4.*
+## Install in Laravel 5.2, 5.1, 5.0, 4.*
 
-dev-master switched to laravel 5.1  
+dev-master is on laravel 5.1  
 
 1. To `composer.json` add:  
+`"zofe/rapyd": "2.2.*"` for Laravel 5.2  
 `"zofe/rapyd": "2.1.*"` for Laravel 5.1  
 `"zofe/rapyd": "2.0.*"` for Laravel 5.0  
 `"zofe/rapyd": "1.3.*"` for Laravel 4.*  
@@ -44,7 +45,13 @@ dev-master switched to laravel 5.1
   or for < 5.0  
  `$ php artisan asset:publish zofe/rapyd`  
  `$ php artisan config:publish zofe/rapyd`
-  
+
+
+5. (optional) enable demo, uncomment the route:  
+```php
+#  /app/Http/rapyd.php
+// Route::controller('rapyd-demo','\Zofe\Rapyd\Demo\DemoController');
+```
 
 ## DataGrid
 
