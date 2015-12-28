@@ -1,7 +1,7 @@
 <?php namespace Zofe\Rapyd;
 
 use Illuminate\Container\Container;
-use Illuminate\Html\HtmlFacade as HTML;
+use Collective\Html\HtmlFacade as HTML;
 use Illuminate\Support\Facades\Input;
 
 class Rapyd
