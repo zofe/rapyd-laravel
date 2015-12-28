@@ -4,7 +4,7 @@ namespace Zofe\Rapyd\DataTree;
 
 use Baum\Node;
 use Illuminate\Support\Collection;
-use Illuminate\Html\FormFacade as Form;
+use Collective\Html\FormFacade as Form;
 use Zofe\Rapyd\DataGrid\Cell;
 use Zofe\Rapyd\DataGrid\DataGrid;
 use Zofe\Rapyd\DataGrid\Row;
