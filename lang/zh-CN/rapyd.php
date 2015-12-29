@@ -18,6 +18,7 @@ return array(
     'err'        => '数据读取错误。',
     'err_unknown'=> '错误，你没有选中任何数据。',
     'err_dup_pk' => '错误，数据主键重复。',
+    'no_records' => '没有可以显示的数据。',
     'conf_delete'=> '你确定要删除这行数据?',
 
 );
