@@ -391,13 +391,13 @@ you can do this with:
 <head>
   ...
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-{{ Rapyd::styles() }}
+{!! Rapyd::styles() !!}
 </head>
 ....
 
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-   {{ Rapyd::scripts() }}
+   {!! Rapyd::scripts() !!}
 </body>
 ```
 
