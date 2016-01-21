@@ -12,6 +12,13 @@ class Container extends Field
     public $pattern = '';
     public $is_view = false;
     
+    
+    public function autoUpdate($save = false)
+    {
+        $this->getValue();
+        return true;
+    }
+
     public function content($pattern)
     {
         $this->pattern = $pattern;
