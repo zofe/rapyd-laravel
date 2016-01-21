@@ -1,6 +1,6 @@
 <?php namespace Zofe\Rapyd\DataForm\Field;
 
-use Illuminate\Support\Facades\Form;
+use Collective\Html\FormFacade as Form;
 
 class Multiselect extends Field
 {
@@ -57,7 +57,7 @@ class Multiselect extends Field
             case "create":
             case "modify":
                 $this->attributes['multiple'] = 'multiple';
-                $output .= \Form::select($this->name . '[]', $this->options, $this->values, $this->attributes);
+                $output .= Form::select($this->name . '[]', $this->options, $this->values, $this->attributes);
                 $output .= $this->extra_output;
                 break;
 
