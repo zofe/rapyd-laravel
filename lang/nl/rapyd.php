@@ -12,13 +12,13 @@ return array(
     'back'    => 'Terug',
 
     //dataedit
-    'inserted'   => 'Nieuw bestand toegevoegd.',
-    'updated'    => 'Het bestand is aangepast.',
-    'deleted'    => 'Het bestand is verwijderd.',
-    'err'        => 'Fout bij het lezen van het bestand.',
-    'err_unknown'=> 'Fout, er is geen bestand geselecteerd',
+    'inserted'   => 'Nieuw record toegevoegd.',
+    'updated'    => 'De record is aangepast.',
+    'deleted'    => 'De record is verwijderd.',
+    'err'        => 'Fout bij het lezen van de record.',
+    'err_unknown'=> 'Fout, er is geen record geselecteerd',
     'err_dup_pk' => 'Fout, deze unieke id bestaat reeds',
     'no_records' => 'Er is niets te tonen.',
-    'conf_delete'=> 'Wil je dit bestand verwijderen?',
+    'conf_delete'=> 'Wil je deze record verwijderen?',
 
 );
