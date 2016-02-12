@@ -49,6 +49,8 @@ abstract class Field extends Widget
     public $model_relations;
     public $insert_value = null;
     public $update_value = null;
+    public $insert_description = null;
+    public $update_description = null;
     public $show_value = null; //default value in visualization
     public $edited = false;
     public $options = array();
@@ -238,10 +240,10 @@ abstract class Field extends Widget
         return $this;
     }
 
-    public function insertValue($insert_value)
+    public function insertValue($insert_value, $insert_description = null)
     {
         $this->insert_value = $insert_value;
-
+        $this->insert_description = $insert_description;
         return $this;
     }
 
@@ -252,10 +254,10 @@ abstract class Field extends Widget
         return $this;
     }
 
-    public function updateValue($update_value)
+    public function updateValue($update_value, $update_description = null)
     {
         $this->update_value = $update_value;
-
+        $this->update_description = $update_description;
         return $this;
     }
 
@@ -311,8 +313,14 @@ abstract class Field extends Widget
 
         } elseif (($this->status == "create") && ($this->insert_value != null)) {
             $this->value = $this->insert_value;
+            if ($this->insert_description != null) {
+                $this->description = $this->insert_description;
+            }
         } elseif (($this->status == "modify") && ($this->update_value != null)) {
             $this->value = $this->update_value;
+            if ($this->update_description != null) {
+                $this->description = $this->update_description;
+            }
         } elseif (($this->status == "show") && ($this->show_value != null)) {
             $this->value = $this->show_value;
         } elseif (isset($this->model) && $this->relation != null) {
