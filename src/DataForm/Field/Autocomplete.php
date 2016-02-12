@@ -151,6 +151,8 @@ class Autocomplete extends Field
                 } elseif (count($this->local_options)) {
 
                     $autocomplete = $this->description;
+                } elseif ($this->description!=''){
+                    $autocomplete = $this->description;
                 } else {
                     $autocomplete = $this->value;
                 }
