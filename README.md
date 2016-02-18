@@ -132,6 +132,11 @@ datagrid supports also csv output, so it can be used as "report" tool.
    $grid->buildCSV('export_articles', 'Y-m-d.His');  // force download with custom stamp
    $grid->buildCSV('uploads/filename', 'Y-m-d');  // write on file 
     ...
+    $grid->buildCSV('uploads/filename', 'Y-m-d', false); // without sanitize cells
+    
+    $as_excel = ['delimiter'=>',', 'enclosure'=>'"', 'line_ending'=>"\n"];  
+    $grid->buildCSV('uploads/filename', 'Y-m-d', true, $as_excel); // with customizations
+    
 ```
 
 
