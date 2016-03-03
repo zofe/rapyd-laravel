@@ -9,7 +9,7 @@ class Checkbox extends Field
     public $type = "checkbox";
     public $size = null;
     public $checked = false;
-    public $css_class = "checkbox";
+    public $css_class = "";
     public $checked_value = 1;
     public $unchecked_value = 0;
     public $checked_output = 'yes';
@@ -54,7 +54,8 @@ class Checkbox extends Field
             case "create":
             case "modify":
                 //dd($this->checked);
-                $output = Form::checkbox($this->name, $this->checked_value, $this->checked, $this->attributes) . $this->extra_output;
+                $this->attributes = str_replace('form-control','',$this->attributes);
+                $output = Form::checkbox($this->name, $this->checked_value, $this->checked, $this->attributes) .' '. $this->extra_output;
                 break;
 
             case "hidden":
