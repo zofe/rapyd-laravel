@@ -28,6 +28,7 @@ class Autocomplete extends Field
     public $clause = "where";
     public $is_local;
     public $description;
+    public $change;
 
     //getvalue quando è local
 
@@ -46,6 +47,12 @@ class Autocomplete extends Field
 
     }
 
+    public function change($callback)
+    {
+        $this->change = $callback;
+        return $this;
+    }
+    
     public function minChars($len)
     {
         $this->min_chars = $len;
@@ -194,6 +201,8 @@ class Autocomplete extends Field
                     }).on("typeahead:selected typeahead:autocompleted",
                         function (e,data) {
                             $('#{$this->name}').val(data.{$this->record_id});
+                            {$this->change}
+                            
                     }).on("typeahead:closed,typeahead:change",
                         function (e,data) {
                             if ('{$this->must_match}') {
