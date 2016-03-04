@@ -452,7 +452,7 @@ class DataForm extends Widget
         }
         // Set the form open and close
         if ($this->status == 'show') {
-            $this->open = '<div class="form">';
+            $this->open = '<div class="'.(isset($form_attr['class']) ? $form_attr['class'] : 'form' ).'">';
             $this->close = '</div>';
         } else {
 
