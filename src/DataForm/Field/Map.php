@@ -103,7 +103,7 @@ class Map extends Field
                 $output  = Form::hidden($this->lat, $this->value['lat'], ['id'=>$this->lat]);
                 $output .= Form::hidden($this->lon, $this->value['lon'], ['id'=>$this->lon]);
                 $output .= '<div id="map_'.$this->name.'" style="width:500px; height:500px"></div>';
-                $output .= '<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>';
+                $output .= '<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>';
                 
             \Rapyd::script("
         
@@ -125,19 +125,22 @@ class Map extends Field
                 }
         
                 var map = new google.maps.Map(document.getElementById('map_{$this->name}'),mapOptions);
-        
                 var marker = new google.maps.Marker({
                     position: LatLng,
                     map: map,
                     title: 'Drag Me!',
                     draggable: true
                 });
-        
-                google.maps.event.addListener(marker, 'dragend', function (event) {
-                    latitude.value = event.latLng.lat();
-                    longitude.value = event.latLng.lng();
-                });
-        
+
+                var update_hidden_fields = function () {
+                    latitude.value = marker.getPosition().lat();
+                    longitude.value = marker.getPosition().lng();
+                }
+                google.maps.event.addListener(marker, 'dragend', update_hidden_fields);
+
+                $(document.getElementById('map_{$this->name}')).data('map', map);
+                $(document.getElementById('map_{$this->name}')).data('marker', marker);
+                $(document.getElementById('map_{$this->name}')).data('update_hidden_fields', update_hidden_fields);
             }
             initialize();
         ");
