@@ -41,7 +41,7 @@ class Date extends Field
     {
         $isodate = str_replace(" 00:00:00", "", $isodate);
         $datetime = \DateTime::createFromFormat( 'Y-m-d', $isodate);
-        if (!$datetime) return '';
+        if (!$datetime || $isodate == '0000-00-00') return '';
 
         $isodate = $datetime->format($this->format);
         return $isodate;
