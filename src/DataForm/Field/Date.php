@@ -41,13 +41,9 @@ class Date extends Field
     {
         $isodate = str_replace(" 00:00:00", "", $isodate);
         $datetime = \DateTime::createFromFormat( 'Y-m-d', $isodate);
-        if (!$datetime) return '';
-        $timestamp = $datetime->getTimestamp();
-        if ($timestamp < 1) {
-            return "";
-        }
-        $isodate = date($this->format, $timestamp);
+        if (!$datetime || $isodate == '0000-00-00') return '';
 
+        $isodate = $datetime->format($this->format);
         return $isodate;
     }
 
@@ -58,12 +54,8 @@ class Date extends Field
     {
         $datetime = \DateTime::createFromFormat( $this->format, $humandate);
         if (!$datetime) return null;
-        $timestamp = $datetime->getTimestamp();
-        if ($timestamp < 1) {
-            return null;
-        }
-        $humandate = date('Y-m-d', $timestamp);
 
+        $humandate = $datetime->format('Y-m-d');
         return $humandate;
     }
 
