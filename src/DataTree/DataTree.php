@@ -59,7 +59,8 @@ class DataTree extends DataGrid
         Persistence::save();
         $this->rows = $this->makeRowsRecursive($this->data);
 
-        return \View::make($view, array('dg' => $this, 'buttons' => $this->button_container, 'label' => $this->label));
+        $this->output = \View::make($view, array('dg' => $this, 'buttons' => $this->button_container, 'label' => $this->label))->render();
+        return $this->output;
     }
 
     protected function makeRowsRecursive($data, $depth = 0)
