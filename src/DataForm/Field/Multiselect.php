@@ -20,7 +20,12 @@ class Multiselect extends Field
     {
         parent::getValue();
 
-        $this->values = explode($this->serialization_sep, $this->value);
+        if (is_array($this->value)) {
+            $this->values = $this->value;
+        }
+        else {
+            $this->values = explode($this->serialization_sep, $this->value);
+        }
 
         $description_arr = array();
         foreach ($this->options as $value => $description) {
