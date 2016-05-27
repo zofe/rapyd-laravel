@@ -71,7 +71,8 @@ class DataForm extends Widget
     public $model;
     public $model_relations;
     public $validator;
-
+    public $validator_messages = array();
+    
     public $output = "";
     public $custom_output = null;
     public $fields = array();
@@ -268,6 +269,15 @@ class DataForm extends Widget
     }
 
     /**
+     * add custom error messages to the validator inscance
+     * @param array $messages
+     */
+    public function errors($messages = [])
+    {
+        $this->validator_messages = $messages; 
+    }
+    
+    /**
      * @return bool
      */
     protected function isValid()
@@ -287,7 +297,7 @@ class DataForm extends Widget
         }
         if (isset($rules)) {
 
-            $this->validator = Validator::make(Input::all(), $rules, array(), $attributes);
+            $this->validator = Validator::make(Input::all(), $rules, $this->validator_messages, $attributes);
 
             return !$this->validator->fails();
         } else {
