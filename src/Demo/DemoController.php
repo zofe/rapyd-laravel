@@ -41,7 +41,7 @@ class DemoController extends Controller
             $table->integer('author_id')->unsigned();
             $table->string('title', 200);
             $table->text('body');
-            $table->string('photo', 200);
+            $table->string('photo', 200)->nullable();
             $table->boolean('public');
             $table->timestamp('publication_date');
             $table->timestamps();
@@ -64,7 +64,7 @@ class DemoController extends Controller
         \Schema::table("demo_categories", function ($table) {
             $table->create();
             $table->increments('id');
-            $table->integer('parent_id')->unsigned();
+            $table->integer('parent_id')->unsigned()->nullable();
             $table->string('name', 100);
             $table->timestamps();
         });
