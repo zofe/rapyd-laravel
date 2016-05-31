@@ -17,6 +17,14 @@ Burp::get(null, 'ord=(-?)(\w+)', array('as'=>'orderby', function($direction, $fi
 //todo: dataedit  
 
 
-Route::get('rapyd-ajax/{hash}', array('as' => 'rapyd.remote', 'uses' => '\Zofe\Rapyd\Controllers\AjaxController@getRemote'));
-//Route::controller('rapyd-demo', '\Zofe\Rapyd\Demo\DemoController');
+if (version_compare(app()->version(), '5.2')>0)
+{
+    Route::group(['middleware' => 'web'], function () {
+        Route::get('rapyd-ajax/{hash}', array('as' => 'rapyd.remote', 'uses' => '\Zofe\Rapyd\Controllers\AjaxController@getRemote'));
+        //Route::controller('rapyd-demo', '\Zofe\Rapyd\Demo\DemoController');
 
+    });
+} else {
+    Route::get('rapyd-ajax/{hash}', array('as' => 'rapyd.remote', 'uses' => '\Zofe\Rapyd\Controllers\AjaxController@getRemote'));
+    //Route::controller('rapyd-demo', '\Zofe\Rapyd\Demo\DemoController');
+}
