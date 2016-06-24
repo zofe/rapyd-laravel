@@ -640,7 +640,7 @@ abstract class Field extends Widget
             $this->has_wrapper = false;
         }
         $this->getValue();
-        $this->star = (!($this->status == "show") and $this->required) ? '&nbsp;*' : '';
+//        $this->star = (!($this->status == "show") and $this->required) ? '&nbsp;*' : '';
         $this->req = (!($this->status == "show") and $this->required) ? ' required' : '';
         if (($this->status == "hidden" || $this->visible === false || in_array($this->type, array("hidden", "auto")))) {
             $this->is_hidden = true;
