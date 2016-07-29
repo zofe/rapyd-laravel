@@ -30,6 +30,8 @@ class Tags extends Field
     public $is_local;
     public $description = '';
 
+    public $fill_tags = '';
+
     public function options($options)
     {
         $this->is_local = true;
