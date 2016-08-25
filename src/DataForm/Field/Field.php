@@ -73,6 +73,12 @@ abstract class Field extends Widget
     public $messages = array();
     public $query_scope;
     public $query_scope_params = [];
+    
+    /**
+     * auto apply xss filter or not
+     * @var bool
+     */
+    public $with_xss_filter = true;
 
     // layout
     public $layout = array(
@@ -699,5 +705,17 @@ abstract class Field extends Widget
         }
 
         return $output;
+    }
+    
+    /**
+     * Set auto apply xss filter or not
+     *
+     * @param bool|true $trueOrFalse
+     * @return $this
+     */
+    public function withXssFilter($trueOrFalse = true)
+    {
+        $this->with_xss_filter = (bool) $trueOrFalse;
+        return $this;
     }
 }
