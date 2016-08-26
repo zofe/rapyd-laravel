@@ -73,6 +73,12 @@ abstract class Field extends Widget
     public $messages = array();
     public $query_scope;
     public $query_scope_params = [];
+    
+    /**
+     * auto apply xss filter or not
+     * @var bool
+     */
+    public $with_xss_filter = true;
 
     // layout
     public $layout = array(
@@ -307,7 +313,11 @@ abstract class Field extends Widget
                 }
 
             } else {
-                $this->value = HTML::xssfilter(Input::get($this->name));
+                if($this->with_xss_filter) {
+                    $this->value = HTML::xssfilter(Input::get($this->name));
+                } else {
+                    $this->value = Input::get($this->name);
+                }
             }
             $this->is_refill = true;
 
@@ -396,8 +406,11 @@ abstract class Field extends Widget
                 }
 
             } else {
-
-                $this->new_value = HTML::xssfilter(Input::get($this->name));
+                if($this->with_xss_filter) {
+                    $this->new_value = HTML::xssfilter(Input::get($this->name));
+                } else {
+                    $this->new_value = Input::get($this->name);
+                }
             }
         } elseif (($this->action == "insert") && ($this->insert_value != null)) {
             $this->edited = true;
@@ -699,5 +712,17 @@ abstract class Field extends Widget
         }
 
         return $output;
+    }
+    
+    /**
+     * Set auto apply xss filter or not
+     *
+     * @param bool|true $trueOrFalse
+     * @return $this
+     */
+    public function withXssFilter($trueOrFalse = true)
+    {
+        $this->with_xss_filter = (bool) $trueOrFalse;
+        return $this;
     }
 }
