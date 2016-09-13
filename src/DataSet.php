@@ -204,18 +204,19 @@ class DataSet extends Widget
 
             case "query":
             case "model":
-                $this->total_rows = $this->query->count();
                 //orderby
                 if (isset($this->orderby)) {
                     $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1]);
                 }
+
                 //limit-offset
                 if (isset($this->limit)){
-                    
                     $this->paginator = $this->query->paginate($this->limit, ['*'], 'page'.$this->cid);
                     $this->data = $this->paginator;
+                    $this->total_rows = $this->paginator->total();
                 } else {
                     $this->data = $this->query->get();
+                    $this->total_rows = count($this->data);
                 }
 
                 break;
