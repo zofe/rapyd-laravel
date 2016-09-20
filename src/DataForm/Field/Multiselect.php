@@ -22,8 +22,7 @@ class Multiselect extends Field
 
         if (is_array($this->value)) {
             $this->values = $this->value;
-        }
-        else {
+        } else {
             $this->values = explode($this->serialization_sep, $this->value);
         }
 
@@ -62,6 +61,8 @@ class Multiselect extends Field
             case "create":
             case "modify":
                 $this->attributes['multiple'] = 'multiple';
+                $this->attributes['data-placeholder'] = $this->attributes['placeholder'];
+                $this->attributes['placeholder'] = null;
                 $output .= Form::select($this->name . '[]', $this->options, $this->values, $this->attributes);
                 $output .= $this->extra_output;
                 break;
@@ -72,6 +73,7 @@ class Multiselect extends Field
 
             default:
         }
+
         $this->output = $output;
     }
 }
