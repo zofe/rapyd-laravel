@@ -95,14 +95,14 @@ class Image extends File
             if (count($this->resize)) {
                 foreach ($this->resize as $resize) {
                     $this->image->resize($resize["width"], $resize["height"]);
-                    $this->image->save($resize["filename"]);
+                    $this->image->save($this->parseString($resize["filename"]));
                 }
             }
 
             if (count($this->fit)) {
                 foreach ($this->fit as $fit) {
                     $this->image->fit($fit["width"], $fit["height"]);
-                    $this->image->save($fit["filename"]);
+                    $this->image->save($this->parseString($fit["filename"]));
                 }
             }
 
