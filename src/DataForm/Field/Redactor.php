@@ -5,6 +5,14 @@ use Zofe\Rapyd\Rapyd;
 class Redactor extends Field
 {
   public $type = "text";
+  public $upload_url = null; 
+
+  public function upload($url)
+  {
+      $this->upload_url = $url;
+
+      return $this;
+  }
 
   public function build()
   {
@@ -32,7 +40,15 @@ class Redactor extends Field
         Rapyd::js('redactor/redactor.min.js');
         Rapyd::css('redactor/css/redactor.css');
         $output  = Form::textarea($this->name, $this->value, $this->attributes);
-        Rapyd::script("$('#".$this->name."').redactor();");
+
+		$redactor_params = '';
+
+		if ($this->upload_url)
+		{
+			$redactor_params = "imageUpload: '" . $this->upload_url . "?_token=" . csrf_token() . "'";
+		}
+
+        Rapyd::script("$('#".$this->name."').redactor({".$redactor_params."});");
 
         break;
 
