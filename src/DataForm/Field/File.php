@@ -102,7 +102,10 @@ class File extends Field
                             }
 
                         });
-                        $this->model->save();
+						
+                        if ($save) {
+							$this->model->save();
+						}
                     }
 
                 //direct upload
