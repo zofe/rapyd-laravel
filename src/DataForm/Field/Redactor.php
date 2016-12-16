@@ -32,7 +32,7 @@ class Redactor extends Field
         Rapyd::js('redactor/redactor.min.js');
         Rapyd::css('redactor/css/redactor.css');
         $output  = Form::textarea($this->name, $this->value, $this->attributes);
-        Rapyd::script("$('#".$this->name."').redactor();");
+        Rapyd::script("$('[id=\"".$this->name."\"]').redactor();");
 
         break;
 
