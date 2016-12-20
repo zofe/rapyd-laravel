@@ -11,6 +11,7 @@ class Map extends Field
     public $lat = "lat";
     public $lon = "lon";
     public $zoom = 12;
+    public $key;
 
     public function latlon($lat, $lon)
     {
@@ -24,7 +25,23 @@ class Map extends Field
         $this->zoom = $zoom;
         return $this;
     }
-    
+
+    public function key($key)
+    {
+        $this->key = $key;
+        return $this;
+    }
+
+    public function getUrl()
+    {
+        $url = 'https://maps.googleapis.com/maps/api/js?v=3.exp';
+        if ($this->key)
+        {
+            $url .= '&key=' . $this->key;
+        }
+        return $url;
+    }
+
     public function getValue()
     {
         $process = (\Input::get('search') || \Input::get('save')) ? true : false;
@@ -103,7 +120,7 @@ class Map extends Field
                 $output  = Form::hidden($this->lat, $this->value['lat'], ['id'=>$this->lat]);
                 $output .= Form::hidden($this->lon, $this->value['lon'], ['id'=>$this->lon]);
                 $output .= '<div id="map_'.$this->name.'" style="width:500px; height:500px"></div>';
-                $output .= '<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>';
+                $output .= '<script src="' . $this->getUrl() . '"></script>';
                 
             \Rapyd::script("
         
