@@ -104,7 +104,7 @@ class DataGrid extends DataSet
             $headers  = array(
                 'Content-Type' => 'text/csv',
                 'Pragma'=>'no-cache',
-                '"Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
                 'Content-Disposition' => 'attachment; filename="' . $filename.'"');
 
             $handle = fopen('php://output', 'w');
