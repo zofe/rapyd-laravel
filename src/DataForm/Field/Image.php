@@ -143,6 +143,7 @@ class Image extends File
                     $output .= Form::checkbox($this->name.'_remove', 1, (bool) Input::get($this->name.'_remove'))." ".trans('rapyd::rapyd.delete')." <br/>\n";
                     $output .= '</div>';
                 }
+				$this->attributes['multiple accept'] = 'image/jpeg,image/png';
                 $output .= Form::file($this->name, $this->attributes);
                 break;
 
