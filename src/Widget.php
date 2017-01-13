@@ -20,7 +20,7 @@ class Widget
     public $action            = "idle";
 
     // TR: Top right - BL: Bottom left - BR: Bottom right
-    public $button_container  = array( "TR"=>array(), "BL"=>array(), "BR"=>array() );
+    public $button_container  = array( "TR"=>array(), "BL"=>array(), "BR"=>array(), "BC"=>array() );
     public $message           = "";
     public $links             = array();
 

@@ -20,7 +20,7 @@
     @endif
 
     @section('df.footer')
-        @include('rapyd::toolbar', array('buttons_left'=>$df->button_container['BL'], 'buttons_right'=>$df->button_container['BR'] ))
+        @include('rapyd::toolbar', array('buttons_left'=>$df->button_container['BL'], 'buttons_right'=>$df->button_container['BR'], 'buttons_center'=>$df->button_container['BC'] ))
         {!! $df->close !!}
     @show
 </div>
