@@ -50,7 +50,7 @@
             <div class="pull-left">
                 {!! $dg->links() !!}
             </div>
-            <div class="pull-right">
+            <div class="pull-right rpd-total-rows">
                 {!! $dg->totalRows() !!}
             </div>
         @endif
