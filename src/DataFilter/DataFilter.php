@@ -77,7 +77,7 @@ class DataFilter extends DataForm
 
         //database save
         switch ($this->action) {
-            case 'search':
+            case "search":
                 // prepare the WHERE clause
                 foreach ($this->fields as $field) {
                     $field->getValue();
@@ -95,9 +95,9 @@ class DataFilter extends DataForm
                             array_unshift($query_scope_params, $this->query);
                             $this->query = call_user_func_array($query_scope, $query_scope_params);
 
-                        } elseif (isset($this->model) && method_exists($this->model, 'scope'.$query_scope)) {
+                        } elseif (isset($this->model) && method_exists($this->model, "scope".$query_scope)) {
 
-                            $query_scope = 'search'.$query_scope;
+                            $query_scope = "scope".$query_scope;
                             array_unshift($query_scope_params, $value);
                             array_unshift($query_scope_params, $this->query);
                             $this->query = call_user_func_array([$this->model, $query_scope], $query_scope_params);
