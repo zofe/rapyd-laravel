@@ -63,6 +63,7 @@ class DataGrid extends DataSet
                     $callable = $column->cell_callable;
                     $cell->value($callable($cell->value, $tablerow));
                 }
+                $cell->attributes = $column->attributes;
                 $row->add($cell);
             }
 
