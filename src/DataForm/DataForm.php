@@ -398,6 +398,11 @@ class DataForm extends Widget
                     $this->process_status = "success";
                 }
                 foreach ($this->fields as $field) {
+                    //Field may be setted on other mode like "readonly", should not update it's value.
+                    if ($field->mode != 'editable') {
+                        continue;
+                    }
+
                     $field->action = $this->action;
                     $result = $field->autoUpdate();
                     if (!$result) {
