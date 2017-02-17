@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class DataFilter extends DataForm
 {
-
     public $cid;
     public $source;
     protected $process_url = '';
@@ -31,8 +30,9 @@ class DataFilter extends DataForm
         $ins = new static();
         $ins->source = $source;
         $ins->query = $source;
-        if (is_object($source) && (is_a($source, "\Illuminate\Database\Eloquent\Builder") ||
-                                  is_a($source, "\Illuminate\Database\Eloquent\Model"))) {
+        if (is_object($source) &&
+            (is_a($source, "\Illuminate\Database\Eloquent\Builder") ||
+              is_a($source, "\Illuminate\Database\Eloquent\Model"))) {
             $ins->model = $source->getModel();
         }
         $ins->cid = $ins->getIdentifier();
@@ -51,7 +51,6 @@ class DataFilter extends DataForm
 
     protected function sniffAction()
     {
-
         $this->reset_url = $this->url->remove('ALL')->append('reset'.$this->cid, 1)->get();
         $this->process_url = $this->url->remove('ALL')->append('search'.$this->cid, 1)->get();
 
@@ -79,10 +78,8 @@ class DataFilter extends DataForm
         //database save
         switch ($this->action) {
             case "search":
-
                 // prepare the WHERE clause
                 foreach ($this->fields as $field) {
-
                     $field->getValue();
                     $field->getNewValue();
                     $value = $field->new_value;
@@ -99,13 +96,13 @@ class DataFilter extends DataForm
                             $this->query = call_user_func_array($query_scope, $query_scope_params);
 
                         } elseif (isset($this->model) && method_exists($this->model, "scope".$query_scope)) {
-                            
+
                             $query_scope = "scope".$query_scope;
                             array_unshift($query_scope_params, $value);
                             array_unshift($query_scope_params, $this->query);
                             $this->query = call_user_func_array([$this->model, $query_scope], $query_scope_params);
-                            
-                        } 
+
+                        }
                         continue;
                     }
 
@@ -132,7 +129,7 @@ class DataFilter extends DataForm
 
                         }
                     }
-                    
+
                     if ($value != "" or (is_array($value)  and count($value)) ) {
                         if (strpos($field->name, "_copy") > 0) {
                             $name = substr($field->db_name, 0, strpos($field->db_name, "_copy"));
@@ -141,7 +138,7 @@ class DataFilter extends DataForm
                         }
 
                         //$value = $field->value;
-                       
+
                         if ($deep_where) {
                             //exception for multiple value fields on BelongsToMany
                             if (
@@ -236,6 +233,9 @@ class DataFilter extends DataForm
                         //not deep, where is on main entity
                         } else {
 
+                            // Add relation prefix to where clause
+                            $name = (null !== $field->relation ? $field->relation . '.' . $name : $name);
+
                             switch ($field->clause) {
                                 case "like":
                                     $this->query = $this->query->where($name, 'LIKE', '%' . $value . '%');
@@ -300,7 +300,7 @@ class DataFilter extends DataForm
 
                     }
                 }
-                // dd($this->query->toSql());
+
                 break;
             case "reset":
                 $this->process_status = "show";
