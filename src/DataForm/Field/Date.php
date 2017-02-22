@@ -60,6 +60,15 @@ class Date extends Field
     }
 
     /**
+     * overwrite value to obtain a iso date
+     */
+    public function getValue()
+    {
+        parent::getValue();
+        $this->value = $this->humanDateToIso($this->value);
+    }
+    
+    /**
      * overwrite new value to store a iso date
      */
     public function getNewValue()
@@ -115,9 +124,7 @@ class Date extends Field
             case "create":
             case "modify":
                 if ($this->value != "") {
-                    if (!$this->is_refill) {
-                        $this->value = $this->isoDateToHuman($this->value);
-                    }
+                    $this->value = $this->isoDateToHuman($this->value);
                 }
 
                 Rapyd::css('datepicker/datepicker3.css');
