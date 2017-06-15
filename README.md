@@ -19,6 +19,11 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
  
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
  
+## A couple of minutes of your time 
+
+I came from an era where there was mutual appreciation among programmers, I would like to use two minutes of your time to recognize my usefulness and my experience on linkedin, if you use this library and benefit from it.. please link-me and write a short review.  
+Thanks to Mihai Berende for having done it already  
+[me@linkedin](https://www.linkedin.com/in/feliceostuni/)
 
 ## Install in Laravel 5.2, 5.1, 5.0, 4.*
 
@@ -433,4 +438,4 @@ so go to:
 
 Rapyd is licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
-If Rapyd saves you time, please __[support Rapyd](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QJFERQGP4ZB6A)__
+Pay me a coffee __[paypal donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QJFERQGP4ZB6A)__
