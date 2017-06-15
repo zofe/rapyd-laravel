@@ -438,4 +438,4 @@ so go to:
 
 Rapyd is licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
-Pay me a coffee __[paypal donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QJFERQGP4ZB6A)__
+#(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QJFERQGP4ZB6A)__
