@@ -69,8 +69,7 @@ class Checkboxgroup extends Field
 
                     $this->checked = in_array($val, $this->values);
 
-                    //echo ((int)$this->checked)."<br />";
-                    $output .= sprintf($this->format, Form::checkbox($this->name.'[]', $val, $this->checked) . $label) . $this->separator;
+                    $output .= sprintf($this->format, "<div class=\"cg__item\"><label>" . Form::checkbox($this->name.'[]', $val, $this->checked) . $label . "</label></div>");
                 }
                 $output .= $this->extra_output;
 
