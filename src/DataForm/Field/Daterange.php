@@ -43,7 +43,7 @@ class Daterange extends Date
         $output = "";
 
         unset($this->attributes['type']);
-        if (parent::build() === false) return;
+        if (Field::build() === false) return;
         
         switch ($this->status) {
 
