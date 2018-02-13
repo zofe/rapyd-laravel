@@ -7,7 +7,7 @@
 
     @if ($df->message != '')
     @section('df.message')
-        <div class="alert alert-success">{!! $df->message !!}</div>
+        <div class="alert alert-warning"><b>{!! $df->message !!}</b></div>
     @show
     @endif
 
