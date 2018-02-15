@@ -55,7 +55,7 @@ class Checkbox extends Field
             case "modify":
                 //dd($this->checked);
                 $this->attributes = str_replace('form-control','',$this->attributes);
-                $output = Form::checkbox($this->name, $this->checked_value, $this->checked, $this->attributes) .' '. $this->extra_output;
+                $output = '<div>'.Form::checkbox($this->name, $this->checked_value, $this->checked, $this->attributes) .' '. $this->extra_output.'</div>';
                 break;
 
             case "hidden":
