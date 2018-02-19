@@ -160,9 +160,9 @@ class DataSet extends Widget
         }
 
         //build orderby urls
-        $this->orderby_uri_asc = $this->url->remove('page' . $this->cid)->remove('reset' . $this->cid)->append('ord' . $this->cid, "-field-")->get() . $this->hash;
+        $this->orderby_uri_asc = $this->url->remove('page'.$this->cid)->remove('reset'.$this->cid)->append('ord' . $this->cid, "-field-")->get().'#'.$this->hash;
 
-        $this->orderby_uri_desc = $this->url->remove('page' . $this->cid)->remove('reset' . $this->cid)->append('ord' . $this->cid, "--field-")->get() . $this->hash;
+        $this->orderby_uri_desc = $this->url->remove('page'.$this->cid)->remove('reset'.$this->cid)->append('ord' . $this->cid, "--field-")->get().'#'.$this->hash;
 
         //detect orderby
         $orderby = $this->url->value("ord" . $this->cid);
