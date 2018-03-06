@@ -224,17 +224,17 @@ class DataEdit extends DataForm
         //show
         if ($this->status == "show") {
 
-            $this->link($this->url->replace('show' . $this->cid, 'modify' . $this->cid)->get(), trans('rapyd::rapyd.modify'), $showButtonPosition);
+            $this->link(url()->previous(), trans('rapyd::rapyd.undo'), $showButtonPosition);
 
         }
 
         //modify
         if ($this->status == "modify") {
-            if (in_array('update',$this->back_on)) {
-                $this->link($this->back_url, trans('rapyd::rapyd.undo'), $undoButtonPosition);
-            } else {
-                $this->link($this->url->replace('modify' . $this->cid, 'show' . $this->cid)->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), $modifyButtonPosition);
-            }
+            //if (in_array('update',$this->back_on)) {
+                $this->link(url()->previous(), trans('rapyd::rapyd.undo'), $undoButtonPosition);
+            //} else {
+                //$this->link($this->url->replace('modify' . $this->cid, 'show' . $this->cid)->replace('update' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), $modifyButtonPosition);
+            //}
 
             $this->submit(trans('rapyd::rapyd.save'), $saveButtonPosition);
         }
@@ -244,13 +244,14 @@ class DataEdit extends DataForm
         }
         //delete
         if ($this->status == "delete") {
-            if (in_array('do_delete',$this->back_on)) {
-                $this->link($this->back_url, trans('rapyd::rapyd.undo'), $undoButtonPosition);
-            } else {
-                $this->link($this->url->replace('delete' . $this->cid, 'show' . $this->cid)->replace('do_delete' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), $deleteButtonPosition);
-            }
+            //if (in_array('do_delete',$this->back_on)) {
+                $this->link(url()->previous(), trans('rapyd::rapyd.undo'), $undoButtonPosition);
+            //} else {
+            //    $this->link($this->url->replace('delete' . $this->cid, 'show' . $this->cid)->replace('do_delete' . $this->cid, 'show' . $this->cid)->get(), trans('rapyd::rapyd.undo'), $deleteButtonPosition);
+            //}
 
             $do_delete_url = $this->url->replace('delete' . $this->cid, 'do_delete' . $this->cid)->get();
+            
             $this->formButton($do_delete_url, 'delete', trans('rapyd::rapyd.delete'), $deleteButtonPosition);
         }
     }
