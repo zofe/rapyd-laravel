@@ -99,7 +99,7 @@ class DataSet extends Widget
             }
 
         } else {
-            if (count($this->orderby) && ($this->orderby[0] == $field)) {
+            if (!empty($this->orderby) && ($this->orderby[0] == $field)) {
                 $dir = $this->orderby[1];
 
                 return ($direction == "" || $dir == $direction) ? true : false;
