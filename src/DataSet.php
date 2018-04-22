@@ -151,6 +151,9 @@ class DataSet extends Widget
                 $this->key = $this->query->getModel()->getKeyName();
             }
 
+        } elseif ( is_a($this->source, "\PDOStatement")) {
+            $this->type = "PDOStatement";
+
         }
         //array
         elseif (is_array($this->source)) {
@@ -176,6 +179,38 @@ class DataSet extends Widget
 
         //build subset of data
         switch ($this->type) {
+            case "PDOStatement":
+                //orderby is handled by the code providing the PDOStatement
+
+                //calculate page variable.
+                $limit = $this->limit ? $this->limit : 100000;
+                $current_page = $this->url->value('page'.$this->cid, 0);
+                $offset = (max($current_page-1,0)) * $limit;
+
+                $rows = array();
+                $skip = $cnt = 0;
+                foreach ($this->source as $row) {
+                    //skip ahead past the offset.
+                    if ($skip < $offset) {
+                        $skip++;
+                        continue;
+                    }
+                    //gather the rows to render
+                    elseif ($cnt <= $limit ) {
+                        $rows[$cnt] = $row;
+                        $cnt++;
+                    }
+                }
+
+                $this->data = $rows;
+                // PDOStatement often do not know how many rows there are until all have been fetched.
+                $this->total_rows = null;
+                $this->paginator = new Paginator($this->data, $limit, $current_page,
+                    ['path' => Paginator::resolveCurrentPath(),
+                        'pageName' => "page".$this->cid,
+                    ]);
+                break;
+
             case "array":
                 //orderby
                 if (isset($this->orderby)) {
