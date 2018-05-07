@@ -121,7 +121,7 @@ class DataSet extends Widget
         return $this;
     }
 
-    public function build()
+    public function build($rowproc = null)
     {
         if (is_string($this->source) && strpos(" ", $this->source) === false) {
             //tablename
@@ -204,10 +204,14 @@ class DataSet extends Widget
                         $skip++;
                         continue;
                     }
-                    //gather the rows to render.
+                    //gather the rows to render
                     else {
-                        $rows[$cnt] = $row;
-                        $cnt++;
+                        if (is_callable($rowproc)) {
+                            $rowproc($row);
+                        } else {
+                            $rows[$cnt] = $row;
+                            $cnt++;
+                        }
                     }
                     // If limit is set and we are passed it, break out of loop.
                     if (isset($limit) && ($cnt > $limit)) {
