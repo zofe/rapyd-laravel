@@ -72,10 +72,13 @@ class Autocomplete extends Field
         }
 
         parent::getValue();
-        if (count($this->local_options)) {
-            foreach ($this->options as $value => $description) {
-                if ($this->value == $value) {
-                    $this->description = $description;
+
+        if (is_array($pages)) {
+            if (count($this->local_options)) {
+                foreach ($this->options as $value => $description) {
+                    if ($this->value == $value) {
+                        $this->description = $description;
+                    }
                 }
             }
         }
