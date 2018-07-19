@@ -434,9 +434,13 @@ so go to:
 
 
 
-## License
+## License & Contacts
 
 Rapyd is licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+Please join me and review my work on [Linkedin](https://www.linkedin.com/in/feliceostuni/)
+
+thanks
 
 <!--- (https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QJFERQGP4ZB6A)__
 -->
