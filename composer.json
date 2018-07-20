@@ -14,7 +14,7 @@
         "illuminate/support": "~5.6",
         "laravelcollective/html": "~5.6",
         "intervention/image": "2.4.2",
-        "zofe/burp": "3.1.*"
+        "zofe/burp": "2.*"
     },
     "suggest": {
         "baum/baum": "Allows to use the DataTree widget"
