@@ -19,6 +19,28 @@ Burp::get(null, 'ord=(-?)(\w+)', array('as'=>'orderby', function($direction, $fi
 
 
 Route::group(['middleware' => 'web'], function () {
+
     Route::get('rapyd-ajax/{hash}', array('as' => 'rapyd.remote', 'uses' => '\Zofe\Rapyd\Controllers\AjaxController@getRemote'));
-    Route::resource('rapyd-demo', \Zofe\Rapyd\Demo\DemoController::class);
+
+    Route::namespace('Zofe\Rapyd\Demo')->prefix('rapyd-demo')->group(function() {
+        Route::get('/',             'DemoController@getIndex');
+        Route::get('/models',       'DemoController@getModels');
+        Route::get('/schema',       'DemoController@getSchema');
+        Route::get('/menus-schema', 'DemoController@getMenusSchema');
+        Route::get('/set',          'DemoController@getSet');
+        Route::get('/grid',         'DemoController@getGrid');
+        Route::get('/filter',       'DemoController@getFilter');
+        Route::get('/custom-filter','DemoController@getCustomfilter');
+        Route::any('/form',         'DemoController@anyForm');
+        Route::any('/advanced-form','DemoController@anyAdvancedform');
+        Route::any('/styled-form',  'DemoController@anyStyledform');
+        Route::any('/data-tree',    'DemoController@anyDatatree');
+        Route::any('/menuedit',     'DemoController@anyMenuedit');
+        Route::get('/nudegrid',     'DemoController@getNudegrid');
+        Route::any('/nudeedit',     'DemoController@anyNudeedit');
+        Route::any('/embed',        'DemoController@getEmbed');
+        Route::get('/author-list',  'DemoController@getAuthorlist');
+        Route::get('/category-list','DemoController@getCategorylist');
+    });
+
 });
