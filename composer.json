@@ -10,11 +10,11 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "~5.0",
-        "laravelcollective/html": "~5.0",
-        "intervention/image": "2.*",
-        "zofe/burp": "2.*"
+        "php": ">=5.6.0",
+        "illuminate/support": "~5.6",
+        "laravelcollective/html": "~5.6",
+        "intervention/image": "2.4.2",
+        "zofe/burp": "3.1.*"
     },
     "suggest": {
         "baum/baum": "Allows to use the DataTree widget"
@@ -25,6 +25,13 @@
         ],
         "psr-4": {
             "Zofe\\Rapyd\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Zofe\\Rapyd\\RapydServiceProvider"
+            ]
         }
     }
 }

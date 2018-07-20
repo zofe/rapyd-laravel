@@ -23,11 +23,12 @@ class RapydServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/../config/rapyd.php' => config_path('rapyd.php')], 'config');
         $this->mergeConfigFrom( __DIR__.'/../config/rapyd.php', 'rapyd');
 
-        
-        
+
         $this->publishes([
-            __DIR__.'/routes.php' => app_path('/Http/rapyd.php'),
+            __DIR__.'/routes.php' => base_path('/routes/rapyd.php'),
         ], 'routes');
+
+
 
 
         if (! $this->app->routesAreCached()) {
