@@ -20,7 +20,7 @@
                     <div class="col-sm-4" style="margin-bottom: 5px">
                         <strong>{!! $item->title !!}</strong><br />
                         <em>{!! $item->author->firstname !!} {!! $item->author->lastname !!}</em><br />
-                        <small>{!! implode(", ", $item->categories->lists("name")->all())  !!}</small><br />
+                        <small>{!! implode(", ", $item->categories->pluck("name")->all())  !!}</small><br />
                     </div>
                 @endforeach
 

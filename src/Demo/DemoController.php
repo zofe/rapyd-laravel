@@ -180,7 +180,7 @@ class DemoController extends Controller
         $grid->add('title','Title');
         $grid->add('{!! str_limit($body,4) !!}','Body');
         $grid->add('{{ $author->fullname }}','Author', 'author_id');
-        $grid->add('{{ implode(", ", $categories->lists("name")->all()) }}','Categories');
+        $grid->add('{{ implode(", ", $categories->pluck("name")->all()) }}','Categories');
 
         $grid->edit('/rapyd-demo/edit', 'Edit','show|modify');
         $grid->link('/rapyd-demo/edit',"New Article", "TR");
@@ -214,7 +214,7 @@ class DemoController extends Controller
         $grid->add('id','ID', true)->style("width:70px");
         $grid->add('title','Title', true);
         $grid->add('author.fullname','Author');
-        $grid->add('{{ implode(", ", $categories->lists("name")->all()) }}','Categories');
+        $grid->add('{{ implode(", ", $categories->pluck("name")->all()) }}','Categories');
         $grid->add('publication_date|strtotime|date[m/d/Y]','Date', true);
         $grid->add('body|strip_tags|substr[0,20]','Body');
         $grid->edit('/rapyd-demo/edit', 'Edit','modify|delete');
