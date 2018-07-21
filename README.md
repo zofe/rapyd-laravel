@@ -25,11 +25,16 @@ I came from an era where there was mutual appreciation among programmers, I woul
 Thanks to Mihai Berende for having done it already  
 [me@linkedin](https://www.linkedin.com/in/feliceostuni/)
 
-## Install in Laravel 5.2, 5.1, 5.0, 4.*
+## Install in Laravel 5.6, .. 5.2, 5.1, 5.0, 4.*
 
-dev-master should work laravel 5.2 but is tested on 5.1 (LTS)   
+dev-master should work with laravel 5.6 but (I'm still working)   
 
 1. To `composer.json` add:  
+
+`"zofe/rapyd": "2.6.*"` for Laravel 5.6 (initial support)
+
+..ehm.. i was busy for a some time..  
+
 `"zofe/rapyd": "2.2.*"` for Laravel 5.2  
 `"zofe/rapyd": "2.1.*"` for Laravel 5.1  
 `"zofe/rapyd": "2.0.*"` for Laravel 5.0  
