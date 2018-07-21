@@ -33,7 +33,7 @@ dev-master should work with laravel 5.6 but (I'm still working)
 
 `"zofe/rapyd": "2.6.*"` for Laravel 5.6 (initial support)
 
-..ehm.. i was busy for a some time..  
+..ehm.. I was busy for some time..  
 
 `"zofe/rapyd": "2.2.*"` for Laravel 5.2  
 `"zofe/rapyd": "2.1.*"` for Laravel 5.1  
