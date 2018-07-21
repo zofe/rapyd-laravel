@@ -34,6 +34,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::any('/form',         'DemoController@anyForm');
         Route::any('/advanced-form','DemoController@anyAdvancedform');
         Route::any('/styled-form',  'DemoController@anyStyledform');
+        Route::any('/edit',         'DemoController@anyEdit');
         Route::any('/data-tree',    'DemoController@anyDatatree');
         Route::any('/menuedit',     'DemoController@anyMenuedit');
         Route::get('/nudegrid',     'DemoController@getNudegrid');

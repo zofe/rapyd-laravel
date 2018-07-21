@@ -244,10 +244,10 @@ class DemoController extends Controller
         $form->add('body','Body', 'redactor');
 
         //belongs to
-        $form->add('author_id','Author','select')->options(Author::lists('firstname', 'id')->all());
+        $form->add('author_id','Author','select')->options(Author::pluck('firstname', 'id')->all());
 
         //belongs to many (field name must be the relation name)
-        $form->add('categories','Categories','checkboxgroup')->options(Category::lists('name', 'id')->all());
+        $form->add('categories','Categories','checkboxgroup')->options(Category::pluck('name', 'id')->all());
         $form->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
         $form->add('color','Color','colorpicker');
         $form->add('public','Public','checkbox');
@@ -269,7 +269,7 @@ class DemoController extends Controller
         $form->add('title','Title', 'text')->rule('required|min:5');
 
         //simple autocomplete on options (built as local json array)
-        $form->add('author_id','Author','autocomplete')->options(Author::lists('firstname', 'id')->all());
+        $form->add('author_id','Author','autocomplete')->options(Author::pluck('firstname', 'id')->all());
 
         //autocomplete with relation.field to manage a belongsToMany
         $form->add('author.fullname','Author','autocomplete')->search(array("firstname", "lastname"));
@@ -321,7 +321,7 @@ class DemoController extends Controller
         $edit->add('body','Body', 'redactor');
         $edit->add('detail.note','Note', 'textarea')->attributes(array('rows'=>2));
         $edit->add('detail.note_tags','Note tags', 'text');
-        $edit->add('author_id','Author','select')->options(Author::lists("firstname", "id")->all());
+        $edit->add('author_id','Author','select')->options(Author::pluck("firstname", "id")->all());
         $edit->add('publication_date','Date','date')->format('d/m/Y', 'it');
         $edit->add('photo','Photo', 'image')->move('uploads/demo/')->fit(240, 160)->preview(120,80);
         $edit->add('public','Public','checkbox');
