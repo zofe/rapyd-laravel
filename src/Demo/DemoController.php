@@ -51,7 +51,7 @@ class DemoController extends Controller
             $table->increments('id');
             $table->integer('article_id')->unsigned();
             $table->text('note');
-            $table->string('note_tags', 200);
+            $table->string('note_tags', 200)->nullable();
         });
         \Schema::table("demo_comments", function ($table) {
             $table->create();
