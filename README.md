@@ -25,41 +25,26 @@ Thanks to Mihai Berende for having done it already
 
 ## Install in Laravel 5.6, .. 5.2, 5.1, 5.0, 4.*
 
-dev-master should work with laravel 5.6 but (I'm still working)   
 
-1. To `composer.json` add:  
+require the packege in your Laravel >= 5.6  
+`$ composer require zofe/rapyd`
 
-`"zofe/rapyd": "2.6.*"` for Laravel 5.6 (initial support)
+then publish assets:  
+`$ php artisan vendor:publish`  
 
-..ehm.. I was busy for some time..  
+you can also require a specific version:
 
-`"zofe/rapyd": "2.2.*"` for Laravel 5.2  
-`"zofe/rapyd": "2.1.*"` for Laravel 5.1  
-`"zofe/rapyd": "2.0.*"` for Laravel 5.0  
-`"zofe/rapyd": "1.3.*"` for Laravel 4.*  
-
-
-2. run `$ composer require zofe/rapyd`
+`zofe/rapyd:"2.2.*"` for Laravel 5.2  
+`zofe/rapyd:"2.1.*"` for Laravel 5.1  
+`zofe/rapyd:"2.0.*"` for Laravel 5.0
 
 
-3. add this in the "provider" array on your config/app.php:  
- `Zofe\Rapyd\RapydServiceProvider::class,`  
-  or for < 5.1  
- `'Zofe\Rapyd\RapydServiceProvider',`
+
+note: for Laravel <=5.4 you need to add the provider in your config/app.php:
+
+`Zofe\Rapyd\RapydServiceProvider::class` 
 
 
-4. then publish assets:  
- `$ php artisan vendor:publish`  
-  or for < 5.0  
- `$ php artisan asset:publish zofe/rapyd`  
- `$ php artisan config:publish zofe/rapyd`
-
-
-5. (optional) enable demo, uncomment the route:  
-```php
-#  /app/Http/rapyd.php
-// Route::controller('rapyd-demo','\Zofe\Rapyd\Demo\DemoController');
-```
 
 ## DataGrid
 
