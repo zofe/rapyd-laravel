@@ -40,7 +40,8 @@
     <code>
         <?php echo htmlentities('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.4/riot+compiler.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/riot@3.11/riot+compiler.min.js"></script>
         {!! Rapyd::scripts() !!}
         <script>riot.mount("*")</script>
         ..

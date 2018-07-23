@@ -64,7 +64,8 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.4/riot+compiler.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/riot@3.11/riot+compiler.min.js"></script>
 {!! Rapyd::scripts() !!}
 <script>riot.mount('*')</script>
 
