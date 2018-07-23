@@ -21,7 +21,7 @@ class Numberrange extends Number
     {
         $output = "";
 
-        if (parent::build() === false) {
+        if (Field::build() === false) {
             return;
         }
 
@@ -42,8 +42,8 @@ class Numberrange extends Number
             case "create":
             case "modify":
 
-                $lower = Form::number($this->name . '[]', @$this->values[0], $this->attributes);
-                $upper = Form::number($this->name . '[]', @$this->values[1], $this->attributes);
+                $lower = Form::number($this->name . '[from]', @$this->values[0], $this->attributes);
+                $upper = Form::number($this->name . '[to]', @$this->values[1], $this->attributes);
 
                 $output = '
                             <div id="range_' . $this->name . '_container">
