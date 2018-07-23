@@ -372,7 +372,7 @@ class DemoController extends Controller
         $grid->add('title','Title', true);
         $grid->edit('/rapyd-demo/nudeedit', 'Edit','modify|delete');
         $grid->paginate(10);
-        return $grid;
+        return response($grid)->header('Content-Type', 'text/html');
     }
     
     public function anyNudeedit()
@@ -384,7 +384,7 @@ class DemoController extends Controller
         $edit->label('Edit Article');
         $edit->add('title','Title', 'text')->rule('required|min:5');
         $edit->add('public','Public','checkbox');
-        return $edit->view();
+        return response($edit->view())->header('Content-Type', 'text/html');
     }
     
     
