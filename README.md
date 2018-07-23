@@ -41,7 +41,7 @@ dev-master should work with laravel 5.6 but (I'm still working)
 `"zofe/rapyd": "1.3.*"` for Laravel 4.*  
 
 
-2. run `$ composer update zofe/rapyd`
+2. run `$ composer require zofe/rapyd`
 
 
 3. add this in the "provider" array on your config/app.php:  
