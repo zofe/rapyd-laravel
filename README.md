@@ -45,6 +45,46 @@ note: for Laravel <=5.4 you need to add the provider in your config/app.php:
 `Zofe\Rapyd\RapydServiceProvider::class` 
 
 
+## DataSet
+
+DataSet is a simple presenter, it build a super-collection, a pagination and orderby links.
+You can start from tablename, a query, a model, o just an array.
+
+ in a controller 
+ 
+```php
+   $set = \DataSet::source("tablename")->paginate(10)->getSet();
+   
+   $set = \DataSet::source(DB::table('users')->select('name', 'email'))->paginate(10)->getSet();  
+                      
+   $set = \DataSet::source(new Article)->paginate(10)->getSet();
+   
+   $set = \DataSet::source(Article::with('author'))->paginate(10)->getSet();
+                       
+   $set = \DataSet::source($multidimensional_array)->paginate(10)->getSet();
+```
+
+in a view you can just write
+
+```php
+<p>
+    //cycle
+    @foreach ($dataset->data as $item)
+
+        {{ $item->title }}<br />
+        {{ $item->author->name }}<br />
+
+    @endforeach
+    
+
+    //pagination
+    {{ $dataset->links() }} <br />
+
+    
+    //sort link
+    {{ $dataset->orderbyLink('title', 'asc') }} <br />
+</p>
+```
 
 ## DataGrid
 
