@@ -371,13 +371,18 @@ abstract class Field extends Widget
 
                     break;
 
+                case $this->relation instanceof \Illuminate\Database\Eloquent\Relations\HasMany:
+                    $this->value = $this->relation->get()->isEmpty() ? '' : $this->relation->get();
+
+                    break;
+
                 //es. "comments" for "Article"
                 default:
                     //'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
                     //'Illuminate\Database\Eloquent\Relations\HasMany':
                     //polimorphic, etc..
                     throw new \InvalidArgumentException("The field {$this->db_name} is a " . $methodClass
-                        . " but Rapyd can handle only BelongsToMany, BelongsTo, and HasOne");
+                        . " but Rapyd can handle only BelongsToMany, BelongsTo, HasOne and HasMany");
                     break;
             }
         } elseif ((isset($this->model)) && (Input::get($this->name) === null) && ($this->model->offsetExists($this->db_name))) {
