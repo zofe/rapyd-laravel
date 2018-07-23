@@ -30,10 +30,10 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('/set',          'DemoController@getSet');
         Route::get('/grid',         'DemoController@getGrid');
         Route::get('/filter',       'DemoController@getFilter');
-        Route::get('/custom-filter','DemoController@getCustomfilter');
+        Route::get('/customfilter','DemoController@getCustomfilter');
         Route::any('/form',         'DemoController@anyForm');
-        Route::any('/advanced-form','DemoController@anyAdvancedform');
-        Route::any('/styled-form',  'DemoController@anyStyledform');
+        Route::any('/advancedform','DemoController@anyAdvancedform');
+        Route::any('/styledform',  'DemoController@anyStyledform');
         Route::any('/edit',         'DemoController@anyEdit');
         Route::any('/data-tree',    'DemoController@anyDatatree');
         Route::any('/menuedit',     'DemoController@anyMenuedit');
