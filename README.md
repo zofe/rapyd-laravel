@@ -69,7 +69,7 @@ in a view you can just write
 ```php
 <p>
     //cycle
-    @foreach ($dataset->data as $item)
+    @foreach ($set->data as $item)
 
         {{ $item->title }}<br />
         {{ $item->author->name }}<br />
@@ -78,11 +78,11 @@ in a view you can just write
     
 
     //pagination
-    {{ $dataset->links() }} <br />
+    {{ $set->links() }} <br />
 
     
     //sort link
-    {{ $dataset->orderbyLink('title', 'asc') }} <br />
+    {{ $set->orderbyLink('title', 'asc') }} <br />
 </p>
 ```
 
