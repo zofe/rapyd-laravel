@@ -25,11 +25,11 @@ class RapydServiceProvider extends ServiceProvider
 
 
         $this->publishes([
-            __DIR__.'/routes.php' => base_path('/routes/rapyd.php'),
+            __DIR__.'/routes.php' => base_path().'/routes/rapyd.php',
         ], 'routes');
 
 
-        $this->loadRoutesFrom(base_path('/routes/rapyd.php'));
+        $this->loadRoutesFrom(base_path().'/routes/rapyd.php');
 
 
         if (! $this->app->routesAreCached()) {

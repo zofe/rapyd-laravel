@@ -17,16 +17,12 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
  
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
  
-## A couple of minutes of your time 
 
-I came from an era where there was mutual appreciation among programmers, I would like to use two minutes of your time to recognize my usefulness and my experience on linkedin, if you use this library and benefit from it.. please link-me and write a short review.  
-Thanks to Mihai Berende for having done it already  
-[me@linkedin](https://www.linkedin.com/in/feliceostuni/)
 
 ## Install in Laravel 5.6, .. 5.2, 5.1, 5.0, 4.*
 
 
-require the packege in your Laravel >= 5.6  
+require the package in your Laravel >= 5.6  
 `$ composer require zofe/rapyd`
 
 then publish assets:  
@@ -39,11 +35,16 @@ you can also require a specific version:
 `zofe/rapyd:"2.0.*"` for Laravel 5.0
 
 
-
 note: for Laravel <=5.4 you need to add the provider in your config/app.php:
 
 `Zofe\Rapyd\RapydServiceProvider::class` 
 
+
+## A couple of minutes of your time before you start
+
+I came from an era where there was mutual appreciation among programmers, if you use this library and benefit from it join-me on Linkedin and write a short review.  
+Thanks to Mihai Berende for having done it already  
+[me@linkedin](https://www.linkedin.com/in/feliceostuni/)
 
 ## DataSet
 
