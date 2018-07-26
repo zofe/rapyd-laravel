@@ -29,18 +29,11 @@ class RapydServiceProvider extends ServiceProvider
         ], 'routes');
 
 
-        $this->loadRoutesFrom(base_path().'/routes/rapyd.php');
-
-
-        if (! $this->app->routesAreCached()) {
-            require __DIR__.'/routes.php';
-        }
-        
-        if (file_exists($file = app_path('/Http/rapyd.php')))
+        if (file_exists(base_path().'/routes/rapyd.php'))
         {
-            include $file;
+            $this->loadRoutesFrom(base_path().'/routes/rapyd.php');
         } else {
-            include __DIR__ . '/routes.php';
+            $this->loadRoutesFrom(__DIR__.'/routes.php');
         }
        
         include __DIR__ . '/macro.php';
