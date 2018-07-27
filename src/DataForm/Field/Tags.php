@@ -16,7 +16,7 @@ class Tags extends Field
     public $remote;
     public $separator = "&nbsp;";
     public $serialization_sep = ",";
-    public $local_options;
+    public $local_options = [];
 
     public $record_id;
     public $record_label;
