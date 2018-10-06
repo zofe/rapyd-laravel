@@ -25,6 +25,7 @@ class Autocomplete extends Field
     public $parent_id = '';
 
     public $min_chars = '2';
+    public $limit = 5;
     public $clause = "where";
     public $is_local;
     public $description;
@@ -56,6 +57,12 @@ class Autocomplete extends Field
     public function minChars($len)
     {
         $this->min_chars = $len;
+        return $this;
+    }
+
+    public function limit($limit)
+    {
+        $this->limit = $limit;
         return $this;
     }
 
@@ -183,7 +190,8 @@ class Autocomplete extends Field
                                     });
                                 }
                             }
-                        }
+                        },
+                        limit: {$this->limit}
                     });
                     blod_{$this->name}.valueCache = {};
                     blod_{$this->name}.initialize();
@@ -191,6 +199,7 @@ class Autocomplete extends Field
                     $('#th_{$this->name} .typeahead').typeahead({
                         highlight: true,
                         minLength: {$this->min_chars},
+                        limit: {$this->limit}
                     }, {
                         displayKey: '{$this->record_label}',
                         name: '{$this->name}',
@@ -251,7 +260,8 @@ acp;
                     $('#th_{$this->name} .typeahead').typeahead({
                          hint: true,
                          highlight: true,
-                         minLength: {$this->min_chars}
+                         minLength: {$this->min_chars},
+                         limit: {$this->limit}
                     },
                     {
                         name: '{$this->name}',
