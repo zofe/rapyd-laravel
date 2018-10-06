@@ -272,7 +272,7 @@ class DemoController extends Controller
         $form->add('author_id','Author','autocomplete')->options(Author::pluck('firstname', 'id')->all());
 
         //autocomplete with relation.field to manage a belongsToMany
-        $form->add('author.fullname','Author','autocomplete')->search(array("firstname", "lastname"));
+        $form->add('author.fullname','Author','autocomplete')->search(array("firstname", "lastname"))->limit(5);
 
         //autocomplete with relation.field,  returned key,  custom remote ajax call (see at bottom)
         $form->add('author.firstname','Author','autocomplete')->remote(null, "id", "/rapyd-demo/authorlist");
