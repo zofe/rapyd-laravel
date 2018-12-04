@@ -42,6 +42,11 @@ class DataFilter extends DataForm
         return $ins;
     }
 
+    public function getResetUrl()
+    {
+        return $this->reset_url;
+    }
+
     protected function table($table)
     {
         $this->query = DB::table($table);
@@ -71,6 +76,8 @@ class DataFilter extends DataForm
             Persistence::clear();
         }
     }
+
+
 
     protected function process()
     {
