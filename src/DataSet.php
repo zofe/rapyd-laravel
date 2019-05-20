@@ -36,7 +36,7 @@ class DataSet extends Widget
     protected $type;
     protected $limit;
     protected $total_rows;
-    protected $orderby;
+    protected $orderby = array();
     protected $orderby_uri_asc;
     protected $orderby_uri_desc;
 
