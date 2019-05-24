@@ -11,8 +11,7 @@ rapyd-laravel
 This is a pool of presentation and editing widgets (Grids and Forms) for laravel.  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.  
   
- Main Website: [rapyd.com](http://www.rapyd.com)  
- Demo: [rapyd.com/demo](http://www.rapyd.com/demo)  
+ 
  Documentation: [Wiki](https://github.com/zofe/rapyd-laravel/wiki)  
  
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
