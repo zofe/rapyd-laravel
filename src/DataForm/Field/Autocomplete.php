@@ -15,7 +15,7 @@ class Autocomplete extends Field
 
     public $remote;
 
-    public $local_options;
+    public $local_options = [];
 
     public $record_id;
     public $record_label;
