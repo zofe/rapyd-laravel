@@ -228,7 +228,7 @@ class File extends Field
             $this->file->move($this->path, $filename);
             $this->saved = $this->path. $filename;
         }
-        \Event::fire('rapyd.uploaded.'.$this->name);
+        \Event::dispatch('rapyd.uploaded.'.$this->name);
 
         return true;
     }
