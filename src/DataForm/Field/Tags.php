@@ -175,6 +175,7 @@ class Tags extends Field
                     var blod_{$this->name} = new Bloodhound({
                         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('{$this->name}'),
                         queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        limit: 10,
                         remote: '{$this->remote}?q=%QUERY'
                     });
                     blod_{$this->name}.initialize();
