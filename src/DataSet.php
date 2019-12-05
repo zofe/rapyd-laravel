@@ -230,7 +230,7 @@ class DataSet extends Widget
 
             case "array":
                 //orderby
-                if (isset($this->orderby)) {
+                if (!empty($this->orderby)) {
                     list($field, $direction) = $this->orderby;
                     $column = array();
                     foreach ($this->source as $key => $row) {
@@ -267,7 +267,7 @@ class DataSet extends Widget
             case "query":
             case "model":
                 //orderby
-                if (isset($this->orderby)) {
+                if (!empty($this->orderby)) {
                     $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1]);
                 }
 
