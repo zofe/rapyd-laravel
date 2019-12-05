@@ -184,7 +184,7 @@ class DataSet extends Widget
 
                 // Calculate page variable.
                 // $limit is set to only export a subset
-                if (!empty($this->limit)) {
+                if (isset($this->limit)) {
                     $limit = $this->limit;
                     $current_page = $this->url->value('page'.$this->cid, 0);
                     $offset = (max($current_page-1,0)) * $limit;
@@ -267,7 +267,7 @@ class DataSet extends Widget
             case "query":
             case "model":
                 //orderby
-                if (isset($this->orderby)) {
+                if (!empty($this->orderby)) {
                     $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1]);
                 }
 
