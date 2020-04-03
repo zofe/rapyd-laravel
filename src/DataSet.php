@@ -267,8 +267,8 @@ class DataSet extends Widget
             case "query":
             case "model":
                 //orderby
-                if (isset($this->orderby)) {
-                    $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1]);
+                if (isset($this->orderby[0])) {
+                    $this->query = $this->query->orderBy($this->orderby[0], $this->orderby[1] ?? 'asc');
                 }
 
                 //limit-offset
