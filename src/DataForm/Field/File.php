@@ -35,7 +35,7 @@ class File extends Field
     protected function fileProcess()
     {
         if ($this->saved) {
-//            if (!$this->file)  $this->file = Input::file($this->name);
+//            if (!$this->file)  $this->file = \Request::file($this->name);
             if ($this->file_callable) {
                 $callable = $this->file_callable;
                 $callable($this);
@@ -47,7 +47,7 @@ class File extends Field
     public function rule($rule)
     {
         //we should consider rules only on upload
-        if (Input::hasFile($this->name)) {
+        if (\Request::hasFile($this->name)) {
             parent::rule($rule);
         }
 
@@ -73,8 +73,8 @@ class File extends Field
 
         if ((($this->action == "update") || ($this->action == "insert"))) {
 
-            if (Input::hasFile($this->name)) {
-                $this->file = Input::file($this->name);
+            if (\Request::hasFile($this->name)) {
+                $this->file = \Request::file($this->name);
 
                 $filename = ($this->filename!='') ?  $this->filename : $this->file->getClientOriginalName();
 
@@ -124,7 +124,7 @@ class File extends Field
             } else {
 
                 //unlink
-                if (Input::get($this->name . "_remove")) {
+                if (\Request::get($this->name . "_remove")) {
                     $this->path =  $this->parseString($this->path);
                     if ($this->unlink_file) {
                         @unlink(public_path().'/'.$this->path.$this->old_value);
@@ -282,7 +282,7 @@ class File extends Field
                 if ($this->old_value) {
                     $output .= '<div class="clearfix">';
                     $output .= link_to($this->web_path.$this->value, $this->value). "&nbsp;";
-                    $output .= Form::checkbox($this->name.'_remove', 1, (bool) Input::get($this->name.'_remove'))." ".trans('rapyd::rapyd.delete')." <br/>\n";
+                    $output .= Form::checkbox($this->name.'_remove', 1, (bool) \Request::get($this->name.'_remove'))." ".trans('rapyd::rapyd.delete')." <br/>\n";
                     $output .= '</div>';
                 }
                 $output .= Form::file($this->name, $this->attributes);

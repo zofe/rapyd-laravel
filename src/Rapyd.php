@@ -155,7 +155,7 @@ class Rapyd
 
     public static function qs($value, $default = false)
     {
-        if ($value == 'id' && !Input::has('id')) {
+        if ($value == 'id' && !\Request::has('id')) {
             $value = 'show|modify|delete|do_delete|update';
         }
         $url = new Url();
