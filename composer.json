@@ -35,7 +35,7 @@
         }
     },
     "require-dev": {
-        "laravel/framework": "5.6.*",
+        "illuminate/support": "~6.0",
         "orchestra/testbench": "3.6.*",
         "phpunit/phpunit": "7.*",
         "php-coveralls/php-coveralls": "^1.0"
