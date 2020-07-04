@@ -18,16 +18,17 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
  
 
 
-## Install in Laravel 5.6, .. 5.2, 5.1, 5.0, 4.*
+## Install in Laravel 5.6, .. 5.2, 5.1, 5.0, 4.*  (note dev-master in now trying to support laravel 6)
 
 
-require the package in your Laravel >= 5.6  
+require the package in your Laravel 
 `$ composer require zofe/rapyd`
 
 then publish assets:  
 `$ php artisan vendor:publish`  
 
 you can also require a specific version:
+
 
 `zofe/rapyd:"2.2.*"` for Laravel 5.2  
 `zofe/rapyd:"2.1.*"` for Laravel 5.1  

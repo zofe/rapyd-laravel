@@ -132,7 +132,7 @@ abstract class Field extends Widget
             $this->name = ($name != $relation) ? $relation . "_" . $name : $name;
 
             if (is_a(@$this->relation, 'Illuminate\Database\Eloquent\Relations\BelongsTo')){
-                $this->db_name = $this->relation->getForeignKey();
+                $this->db_name = $this->relation->getForeignKeyName();
             } else {
                 $this->db_name = $name;
             }
@@ -360,7 +360,7 @@ abstract class Field extends Widget
                     break;
                 //es. "author" per "Article"
                 case $this->relation instanceof \Illuminate\Database\Eloquent\Relations\BelongsTo:
-                    $fk = $this->relation->getForeignKey(); //value I need is the ForeingKey
+                    $fk = $this->relation->getForeignKeyName(); //value I need is the ForeingKey
                     $this->value = $this->model->getAttribute($fk);
                     break;
 
