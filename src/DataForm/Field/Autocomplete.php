@@ -157,8 +157,8 @@ class Autocomplete extends Field
             case "create":
             case "modify":
 
-                if (Input::get("auto_".$this->name)) {
-                    $autocomplete = Input::get("auto_".$this->name);
+                if (\Request::get("auto_".$this->name)) {
+                    $autocomplete = \Request::get("auto_".$this->name);
                 } elseif ($this->relation != null) {
                     $name = $this->rel_field;
                     $autocomplete = @$this->relation->get()->first()->$name;

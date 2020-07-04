@@ -51,7 +51,7 @@ class DataTree extends DataGrid
         // because sometimes we have more than a tree widget on the same page
         // but just one save
 
-        if (\Request::method() == 'POST' && \Input::get($this->name)) {
+        if (\Request::method() == 'POST' && \Request::get($this->name)) {
             $this->lockAndSave();
         }
 
@@ -94,7 +94,7 @@ class DataTree extends DataGrid
         // - the orthodox will send a json string
         // - the ajax version will send an array
 
-        $var = \Input::get($this->name);
+        $var = \Request::get($this->name);
         if (is_string($var)) {
             $var = json_decode($var, true);
         }
