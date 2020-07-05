@@ -30,6 +30,8 @@ then publish assets:
 
 you can also require a specific version:
 
+`zofe/rapyd:"7.*"` for Laravel 7  
+`zofe/rapyd:"6.*"` for Laravel 6  
 
 `zofe/rapyd:"2.8.*"` for Laravel 5.8  
 ...    
