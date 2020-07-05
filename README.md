@@ -18,8 +18,7 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
  
 
 
-## Install in Laravel 5.8 .. 5.0, 4.*  (note dev-master in now trying to support laravel 6)
-
+## Install in Laravel 7, 6, 5.8 .. 5.0, 4.*
 
 require the package in your Laravel 
 `$ composer require zofe/rapyd`
