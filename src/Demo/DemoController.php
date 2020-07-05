@@ -40,7 +40,7 @@ class DemoController extends Controller
             $table->increments('id');
             $table->integer('author_id')->unsigned();
             $table->string('title', 200);
-            $table->text('body');
+            $table->text('body')->nullable();
             $table->string('photo', 200)->nullable();
             $table->boolean('public');
             $table->timestamp('publication_date');
