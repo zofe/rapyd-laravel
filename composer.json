@@ -11,10 +11,10 @@
     ],
     "require": {
         "php": ">=7.1",
-        "illuminate/support": "~6.0",
-        "laravelcollective/html": "^6.0.0",
+        "illuminate/support": "~7.0",
+        "laravelcollective/html": "^7.0.0",
         "intervention/image": "2.*",
-        "zofe/burp": "^3.1.1"
+        "zofe/burp": "^3.1.2"
     },
     "suggest": {
         "baum/baum": "Allows to use the DataTree widget"
@@ -35,7 +35,7 @@
         }
     },
     "require-dev": {
-        "illuminate/support": "~6.0",
+        "illuminate/support": "~7.0",
         "orchestra/testbench": "3.6.*",
         "phpunit/phpunit": "7.*",
         "php-coveralls/php-coveralls": "^1.0"
