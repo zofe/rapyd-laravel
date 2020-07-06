@@ -43,6 +43,11 @@ note: for Laravel <=5.4 you need to add the provider in your config/app.php:
 `Zofe\Rapyd\RapydServiceProvider::class` 
 
 
+## how to 
+
+just go to `/rapyd-demo` for a bit of demos of all widgets.  
+then you'll be able to populate some data (be sure chat db connection env/config is valid)
+
 ## A couple of minutes of your time before you start
 
 I came from an era where there was mutual appreciation among programmers, if you use this library and benefit from it join-me on Linkedin and write a short review.  
