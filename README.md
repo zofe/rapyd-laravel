@@ -46,7 +46,7 @@ note: for Laravel <=5.4 you need to add the provider in your config/app.php:
 ## how to 
 
 just go to `/rapyd-demo` for a bit of demos of all widgets.  
-then you'll be able to populate some data (be sure chat db connection env/config is valid)
+Then you'll be able to populate some data (be sure that db connection env/config is valid)
 
 ## A couple of minutes of your time before you start
 
