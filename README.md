@@ -13,7 +13,7 @@ Nothing to "generate", just some classes to let you develop and maintain CRUD ba
   
  
  Documentation: [Wiki](https://github.com/zofe/rapyd-laravel/wiki)   
- Demo: [Wiki](https://rapyd.dev/rapyd-demo)  
+ Demo: [rapyd.dev](https://rapyd.dev/rapyd-demo)  
  
  
 ![rapyd laravel](https://raw.github.com/zofe/rapyd-laravel/master/public/assets/rapyd-laravel.png)
