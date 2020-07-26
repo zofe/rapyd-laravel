@@ -10,6 +10,7 @@
     <link href="//fonts.googleapis.com/css?family=Bitter" rel="stylesheet" type="text/css" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
     
     {!! Rapyd::styles(true) !!}
 </head>
@@ -31,6 +32,7 @@
 <div id="wrap">
 
     <div class="container">
+        <a class="github-fork-ribbon" href="https://github.com/zofe/rapyd-laravel" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
 
         <br />
 
