@@ -74,8 +74,12 @@ class Tags extends Field
 
             if ($this->is_refill) {
                 $values = explode($this->serialization_sep, $this->value);
-                $entity = get_class($this->relation->getRelated());
-                $related = $entity::whereIn($this->record_id, $values)->get();
+                $entity = get_class($this->relation->getRelated());				
+				if (!empty($values[0])) {
+                    $related = $entity::whereIn($this->record_id, $values)->get();
+                }else{
+                    $related = array();
+                }				
             } else {
                 $related = $this->relation->get();
             }
