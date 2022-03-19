@@ -1,1 +1,3 @@
 public/assets/* linguist-vendored
+
+*.js linguist-detectable=false
