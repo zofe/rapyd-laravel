@@ -15,7 +15,7 @@ rapyd-laravel
 
 https://github.com/zofe/rapyd-livewire
 
-The reason is that [livewire](https://laravel-livewire.com/) has proven to be a great foundation for building responsive widgets, simplifying them and making them testable.
+The reason is that [livewire](https://laravel-livewire.com/) has proven to be a great foundation for building reactive widgets for laravel, simplifying them and making them testable.
 
 However there is still the need to have a library (on top of laravel) that has the building blocks to quickly build our applications in a robust and orderly way. Especially admin boards.
 
