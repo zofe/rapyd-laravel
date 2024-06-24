@@ -34,4 +34,7 @@
     </div>
     <br />
 @else
+ <div class="btn-toolbar" role="toolbar">
+ <div class="pull-left">&nbsp</div>
+ <div class="pull-right">&nbsp</div></div>
 @endif
